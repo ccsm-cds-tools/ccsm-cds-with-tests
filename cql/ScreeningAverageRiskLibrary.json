@@ -1,0 +1,2490 @@
+{
+   "library" : {
+      "annotation" : [ {
+         "translatorOptions" : "",
+         "type" : "CqlToElmInfo"
+      } ],
+      "identifier" : {
+         "id" : "ScreeningAverageRiskLibrary",
+         "version" : "1.0.0"
+      },
+      "schemaIdentifier" : {
+         "id" : "urn:hl7-org:elm",
+         "version" : "r1"
+      },
+      "usings" : {
+         "def" : [ {
+            "localIdentifier" : "System",
+            "uri" : "urn:hl7-org:elm-types:r1"
+         }, {
+            "localIdentifier" : "FHIR",
+            "uri" : "http://hl7.org/fhir",
+            "version" : "4.0.1"
+         } ]
+      },
+      "includes" : {
+         "def" : [ {
+            "localIdentifier" : "FHIRHelpers",
+            "path" : "FHIRHelpers",
+            "version" : "4.0.1"
+         }, {
+            "localIdentifier" : "C3F",
+            "path" : "CDSConnectCommonsforFHIRv401",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Common",
+            "path" : "CCSMCommonFunctions",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Entry",
+            "path" : "TopLevelScreeningLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Dash",
+            "path" : "DisplayCervicalCancerMedicalHistory",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Symptomatic",
+            "path" : "ScreeningSymptomaticLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "DexExposure",
+            "path" : "ScreeningDesExposureLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Immunocompromised",
+            "path" : "ScreeningImmunocompromisedLibrary",
+            "version" : "1.0.0"
+         } ]
+      },
+      "parameters" : {
+         "def" : [ {
+            "name" : "MinimumScreeningAge",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+               "value" : "21",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "CytologyTestingCadence",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 3,
+               "unit" : "years",
+               "type" : "Quantity"
+            }
+         }, {
+            "name" : "PrimaryHpvTestingCadence",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 5,
+               "unit" : "years",
+               "type" : "Quantity"
+            }
+         }, {
+            "name" : "CotestingCadence",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 5,
+               "unit" : "years",
+               "type" : "Quantity"
+            }
+         }, {
+            "name" : "AllowGradeDExclusion",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+               "value" : "true",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "AllowGradeDRecommendation",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+               "value" : "true",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "GradeDAdequatePriorScreeningLookback",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 10,
+               "unit" : "years",
+               "type" : "Quantity"
+            }
+         } ]
+      },
+      "contexts" : {
+         "def" : [ {
+            "name" : "Patient"
+         } ]
+      },
+      "statements" : {
+         "def" : [ {
+            "name" : "Patient",
+            "context" : "Patient",
+            "expression" : {
+               "type" : "SingletonFrom",
+               "operand" : {
+                  "dataType" : "{http://hl7.org/fhir}Patient",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Patient",
+                  "type" : "Retrieve"
+               }
+            }
+         }, {
+            "name" : "IsIncluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "name" : "MinimumScreeningAge",
+                           "type" : "ParameterRef"
+                        } ]
+                     }, {
+                        "type" : "LessOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "65",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "AllowGradeDRecommendation",
+                        "type" : "ParameterRef"
+                     }, {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "65",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  } ]
+               }, {
+                  "name" : "FemaleorTransgenderMale",
+                  "libraryName" : "Entry",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ExcludedBecauseSymptomatic",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "IsIncludedAndNotExcluded",
+               "libraryName" : "Symptomatic",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "ExcludedBecauseDesExposure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "IsIncludedAndNotExcluded",
+               "libraryName" : "DexExposure",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "ExcludedBecauseImmunocompromised",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "IsIncludedAndNotExcluded",
+               "libraryName" : "Immunocompromised",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "HasHighGradePreCancerCervicalLesion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "CervicalPrecancerDisorders",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasCervicalCancerDiagnoses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "CervicalCancerDiagnoses",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "Cin2OrCin3HistologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "HistologyDiagnosticReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Contains",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "H",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "CIN2",
+                           "libraryName" : "Dash",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  }, {
+                     "type" : "Contains",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "H",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "CIN3",
+                           "libraryName" : "Dash",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "HasRecentAbnormalScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalScreening",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "HasRecentAbnormalHistology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalHistology",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "Excluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "ExcludedBecauseSymptomatic",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "ExcludedBecauseDesExposure",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "name" : "ExcludedBecauseImmunocompromised",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "name" : "HasHighGradePreCancerCervicalLesion",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "HasCervicalCancerDiagnoses",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "Cin2OrCin3HistologyResults",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }, {
+                     "name" : "HasRecentAbnormalScreening",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "HasRecentAbnormalHistology",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "IsIncludedAndNotExcluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsIncluded",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "Excluded",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "Age21Through29",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "21",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "LessOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "29",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "Age30Through65",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "30",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "LessOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "65",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "AgeOver65",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Greater",
+               "operand" : [ {
+                  "precision" : "Year",
+                  "type" : "CalculateAge",
+                  "operand" : {
+                     "path" : "birthDate.value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "value" : "65",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "NilmCytologyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "NilmCytologyReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Cytology",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentNilmCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "NilmCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Last",
+                  "source" : {
+                     "name" : "NilmCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "type",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 200,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "DateOfMostRecentNilmCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "path" : "date",
+               "type" : "Property",
+               "source" : {
+                  "name" : "MostRecentNilmCytology",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasRecentNilmCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "After",
+               "operand" : [ {
+                  "name" : "DateOfMostRecentNilmCytology",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "type" : "Now"
+                  }, {
+                     "name" : "CytologyTestingCadence",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "NegativeHpvReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "NegativeHpvReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "hrHPV",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentNegativeHpvTest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "NegativeHpvReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Last",
+                  "source" : {
+                     "name" : "NegativeHpvReports",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "type",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 200,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "DateOfMostRecentNegativeHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "path" : "date",
+               "type" : "Property",
+               "source" : {
+                  "name" : "MostRecentNegativeHpvTest",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasRecentNegativeHpvTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "After",
+               "operand" : [ {
+                  "name" : "DateOfMostRecentNegativeHpv",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "type" : "Now"
+                  }, {
+                     "name" : "PrimaryHpvTestingCadence",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "NegativeCotests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "NilmCytologyReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeHpvReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "AssociateDiagnosticReports",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "C",
+                           "type" : "AliasRef"
+                        }, {
+                           "name" : "H",
+                           "type" : "AliasRef"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "path" : "encounter",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }, {
+                           "path" : "encounter",
+                           "scope" : "H",
+                           "type" : "Property"
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "type" : "PositionOf",
+                           "pattern" : {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Coalesce",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "R",
+                                       "expression" : {
+                                          "path" : "basedOn",
+                                          "scope" : "C",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "where" : {
+                                       "type" : "Equal",
+                                       "operand" : [ {
+                                          "name" : "ToString",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "path" : "type",
+                                             "scope" : "R",
+                                             "type" : "Property"
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "ServiceRequest",
+                                          "type" : "Literal"
+                                       } ]
+                                    },
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "reference",
+                                          "scope" : "R",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 } ]
+                              } ]
+                           },
+                           "string" : {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Coalesce",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "R",
+                                       "expression" : {
+                                          "path" : "basedOn",
+                                          "scope" : "H",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "where" : {
+                                       "type" : "Equal",
+                                       "operand" : [ {
+                                          "name" : "ToString",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "path" : "type",
+                                             "scope" : "R",
+                                             "type" : "Property"
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "ServiceRequest",
+                                          "type" : "Literal"
+                                       } ]
+                                    },
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "reference",
+                                          "scope" : "R",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 } ]
+                              } ]
+                           }
+                        }, {
+                           "type" : "Negate",
+                           "operand" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "1",
+                              "type" : "Literal"
+                           }
+                        } ]
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cotesting with hrHPV and Cervical Cytology",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "MostRecentDiagnosticReport",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "name" : "C",
+                                    "type" : "AliasRef"
+                                 }, {
+                                    "name" : "H",
+                                    "type" : "AliasRef"
+                                 } ]
+                              } ]
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentNegativeCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "NegativeCotests",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Last",
+                  "source" : {
+                     "name" : "NegativeCotests",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "type",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 200,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "DateOfMostRecentNegativeCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "path" : "date",
+               "type" : "Property",
+               "source" : {
+                  "name" : "MostRecentNegativeCotest",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasRecentNegativeCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "After",
+               "operand" : [ {
+                  "name" : "DateOfMostRecentNegativeCotest",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "type" : "Now"
+                  }, {
+                     "name" : "CotestingCadence",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "ProposedDateOfNextCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfMostRecentNilmCytology",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyTestingCadence",
+                              "type" : "ParameterRef"
+                           } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "type" : "Add",
+                     "operand" : [ {
+                        "name" : "DateOfMostRecentNilmCytology",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "CytologyTestingCadence",
+                        "type" : "ParameterRef"
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "Now"
+                  }
+               },
+               "else" : {
+                  "type" : "Now"
+               }
+            }
+         }, {
+            "name" : "ProposedDateOfNextHpvTest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfMostRecentNegativeHpv",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "PrimaryHpvTestingCadence",
+                              "type" : "ParameterRef"
+                           } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "type" : "Add",
+                     "operand" : [ {
+                        "name" : "DateOfMostRecentNegativeHpv",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "PrimaryHpvTestingCadence",
+                        "type" : "ParameterRef"
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "Now"
+                  }
+               },
+               "else" : {
+                  "type" : "Now"
+               }
+            }
+         }, {
+            "name" : "ProposedDateOfNextCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CotestingCadence",
+                              "type" : "ParameterRef"
+                           } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "type" : "Add",
+                     "operand" : [ {
+                        "name" : "DateOfMostRecentNegativeCotest",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "CotestingCadence",
+                        "type" : "ParameterRef"
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "Now"
+                  }
+               },
+               "else" : {
+                  "type" : "Now"
+               }
+            }
+         }, {
+            "name" : "LastScreeningType",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "path" : "type",
+               "type" : "Property",
+               "source" : {
+                  "type" : "Last",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "T",
+                        "expression" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "MostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "MostRecentNegativeHpvTest",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "MostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "sort" : {
+                        "by" : [ {
+                           "direction" : "asc",
+                           "path" : "date",
+                           "type" : "ByColumn"
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "ProposedScreeningDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "LastScreeningType",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "name" : "ProposedDateOfNextCytology",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "LastScreeningType",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "hrHPV",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "name" : "ProposedDateOfNextHpvTest",
+                     "type" : "ExpressionRef"
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cotesting with hrHPV and Cervical Cytology",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     },
+                     "then" : {
+                        "name" : "ProposedDateOfNextCotest",
+                        "type" : "ExpressionRef"
+                     },
+                     "else" : {
+                        "type" : "ToDateTime",
+                        "operand" : {
+                           "type" : "Today"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "CervicalCytologyTestsForGradeD",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "AllowGradeDRecommendation",
+                     "type" : "ParameterRef"
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "C",
+                     "expression" : {
+                        "dataType" : "{http://hl7.org/fhir}DiagnosticReport",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
+                        "codeProperty" : "code",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Pap Test",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "C",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "cC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "NILM",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }
+                              }
+                           }
+                        }, {
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "name" : "DiagnosticReportDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "C",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "type" : "Today"
+                                 }, {
+                                    "name" : "GradeDAdequatePriorScreeningLookback",
+                                    "type" : "ParameterRef"
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }
+                        }, {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "final",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "amended",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "corrected",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "appended",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "return" : {
+                     "expression" : {
+                        "type" : "Tuple",
+                        "element" : [ {
+                           "name" : "type",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cervical Cytology",
+                              "type" : "Literal"
+                           }
+                        }, {
+                           "name" : "date",
+                           "value" : {
+                              "name" : "DiagnosticReportDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "C",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        } ]
+                     }
+                  },
+                  "sort" : {
+                     "by" : [ {
+                        "direction" : "asc",
+                        "path" : "date",
+                        "type" : "ByColumn"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "HasThreeNegativeCytologyTestsForGradeD",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "CervicalCytologyTestsForGradeD",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "After",
+                  "operand" : [ {
+                     "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                     "type" : "As",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Last",
+                           "source" : {
+                              "name" : "CervicalCytologyTestsForGradeD",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  }, {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "type" : "Now"
+                     }, {
+                        "value" : 5,
+                        "unit" : "years",
+                        "type" : "Quantity"
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "HpvTestsForGradeD",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "AllowGradeDRecommendation",
+                     "type" : "ParameterRef"
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "H",
+                     "expression" : {
+                        "dataType" : "{http://hl7.org/fhir}DiagnosticReport",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
+                        "codeProperty" : "code",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "HPV Test",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "H",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "cC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Negative HPV Finding",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }
+                              }
+                           }
+                        }, {
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "name" : "DiagnosticReportDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "H",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "type" : "Today"
+                                 }, {
+                                    "name" : "GradeDAdequatePriorScreeningLookback",
+                                    "type" : "ParameterRef"
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "H",
+                              "type" : "Property"
+                           }
+                        }, {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "final",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "amended",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "corrected",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "appended",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "return" : {
+                     "expression" : {
+                        "type" : "Tuple",
+                        "element" : [ {
+                           "name" : "type",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "hrHPV",
+                              "type" : "Literal"
+                           }
+                        }, {
+                           "name" : "date",
+                           "value" : {
+                              "name" : "DiagnosticReportDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "H",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        } ]
+                     }
+                  },
+                  "sort" : {
+                     "by" : [ {
+                        "direction" : "asc",
+                        "path" : "date",
+                        "type" : "ByColumn"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "HasTwoNegativeHpvTestsForGradeD",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "HpvTestsForGradeD",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "After",
+                  "operand" : [ {
+                     "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                     "type" : "As",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Last",
+                           "source" : {
+                              "name" : "HpvTestsForGradeD",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  }, {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "type" : "Now"
+                     }, {
+                        "value" : 5,
+                        "unit" : "years",
+                        "type" : "Quantity"
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "AdequatelyScreened",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "name" : "HasThreeNegativeCytologyTestsForGradeD",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "HasTwoNegativeHpvTestsForGradeD",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "NotAdequatelyScreened",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "name" : "AdequatelyScreened",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "RecommendImmediateCervicalCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ProposedDateOfNextCytology",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Now"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cervical Cytology",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "Age21Through29",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "Age30Through65",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "AllowGradeDRecommendation",
+                              "type" : "ParameterRef"
+                           }, {
+                              "name" : "AgeOver65",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "NotAdequatelyScreened",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "RecommendImmediatePrimaryHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ProposedDateOfNextHpvTest",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Now"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "hrHPV",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "Age30Through65",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "AllowGradeDRecommendation",
+                              "type" : "ParameterRef"
+                           }, {
+                              "name" : "AgeOver65",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "NotAdequatelyScreened",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "RecommendImmediateCotesting",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ProposedDateOfNextCotest",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Now"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cotesting with hrHPV and Cervical Cytology",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "LastScreeningType",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "Age30Through65",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "AllowGradeDRecommendation",
+                              "type" : "ParameterRef"
+                           }, {
+                              "name" : "AgeOver65",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "NotAdequatelyScreened",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "HasRemovalOfCervixProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "RemovalOfCervixProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasAbsenceOfCervixDiagnoses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "AbsenceOfCervixDiagnoses",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasAbsenceOfCervixObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "AbsenceOfCervixObservations",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "AbsenceOrRemovalOfCervix",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "name" : "HasRemovalOfCervixProcedures",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "HasAbsenceOfCervixDiagnoses",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "HasAbsenceOfCervixObservations",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "AllowGradeDExclusion",
+                           "type" : "ParameterRef"
+                        }, {
+                           "name" : "AbsenceOrRemovalOfCervix",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.",
+                     "type" : "Literal"
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "AgeOver65",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "then" : {
+                        "type" : "If",
+                        "condition" : {
+                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "AllowGradeDRecommendation",
+                              "type" : "ParameterRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "If",
+                           "condition" : {
+                              "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                              "type" : "As",
+                              "operand" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Or",
+                                    "operand" : [ {
+                                       "name" : "RecommendImmediateCervicalCytology",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "name" : "RecommendImmediatePrimaryHpv",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "name" : "RecommendImmediateCotesting",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }
+                           },
+                           "then" : {
+                              "type" : "If",
+                              "condition" : {
+                                 "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                                 "type" : "As",
+                                 "operand" : {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "Equal",
+                                       "operand" : [ {
+                                          "name" : "LastScreeningType",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "",
+                                          "type" : "Literal"
+                                       } ]
+                                    }
+                                 }
+                              },
+                              "then" : {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "type" : "Concatenate",
+                                             "operand" : [ {
+                                                "type" : "Concatenate",
+                                                "operand" : [ {
+                                                   "type" : "Concatenate",
+                                                   "operand" : [ {
+                                                      "type" : "Concatenate",
+                                                      "operand" : [ {
+                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                         "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ",
+                                                         "type" : "Literal"
+                                                      }, {
+                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                         "value" : "Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ",
+                                                         "type" : "Literal"
+                                                      } ]
+                                                   }, {
+                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                      "value" : "2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ",
+                                                      "type" : "Literal"
+                                                   } ]
+                                                }, {
+                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                   "value" : "3) two consecutive negative cotesting results within 10 years prior to the end of screening, with the most recent test occurring within 5 years. ",
+                                                   "type" : "Literal"
+                                                } ]
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "It appears that this patient is on a screening regimen that includes ",
+                                                "type" : "Literal"
+                                             } ]
+                                          }, {
+                                             "name" : "LastScreeningType",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ". To meet \"adequate testing criteria\", ",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "name" : "LastScreeningType",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : " is recommended.",
+                                    "type" : "Literal"
+                                 } ]
+                              },
+                              "else" : {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ",
+                                             "type" : "Literal"
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "3) two consecutive negative cotesting results within 10 years prior to the end of screening, with the most recent test occurring within 5 years. ",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "To meet \"adequate testing criteria\", a 1) cervical cytology test or, 2) hrHPV test, or 3) a cotest (which includes a cervical cytology test and a hrHPV test) is recommended.",
+                                    "type" : "Literal"
+                                 } ]
+                              }
+                           },
+                           "else" : {
+                              "type" : "If",
+                              "condition" : {
+                                 "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                                 "type" : "As",
+                                 "operand" : {
+                                    "name" : "NotAdequatelyScreened",
+                                    "type" : "ExpressionRef"
+                                 }
+                              },
+                              "then" : {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "type" : "Concatenate",
+                                             "operand" : [ {
+                                                "name" : "LastScreeningType",
+                                                "type" : "ExpressionRef"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : " is next due on ",
+                                                "type" : "Literal"
+                                             } ]
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedScreeningDate",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ". Note: ",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "name" : "LastScreeningType",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : " seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                                    "type" : "Literal"
+                                 } ]
+                              },
+                              "else" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }
+                        },
+                        "else" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
+                        }
+                     },
+                     "else" : {
+                        "type" : "If",
+                        "condition" : {
+                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                           "type" : "As",
+                           "operand" : {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "RecommendImmediateCervicalCytology",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "RecommendImmediatePrimaryHpv",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "name" : "RecommendImmediateCotesting",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        },
+                        "then" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                           "type" : "Literal"
+                        },
+                        "else" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "name" : "LastScreeningType",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : " is next due on ",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "type" : "ToString",
+                                       "operand" : {
+                                          "type" : "ToDate",
+                                          "operand" : {
+                                             "name" : "ProposedScreeningDate",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : ". Note: ",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "name" : "LastScreeningType",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : " seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "Errors",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "type" : "List"
+               }, {
+                  "name" : "Errors",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "Errors",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "NoErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "name" : "ErrorsHaveOccurred",
+                  "type" : "ExpressionRef"
+               }
+            }
+         } ]
+      }
+   }
+}
+

@@ -1,0 +1,23 @@
+---
+name: Age 21 and Under Recommendation
+
+externalData:
+- resources
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2001-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *SymptomaticInclusionCriteria
+
+results:
+  IsIncludedAndNotExcluded: true
+  IsAge21YearsOrYounger: true
+  Recommendation: 'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'

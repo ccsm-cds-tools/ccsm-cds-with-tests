@@ -1,0 +1,1887 @@
+{
+   "library" : {
+      "annotation" : [ {
+         "translatorOptions" : "",
+         "type" : "CqlToElmInfo"
+      } ],
+      "identifier" : {
+         "id" : "ScreeningImmunocompromisedLibrary",
+         "version" : "1.0.0"
+      },
+      "schemaIdentifier" : {
+         "id" : "urn:hl7-org:elm",
+         "version" : "r1"
+      },
+      "usings" : {
+         "def" : [ {
+            "localIdentifier" : "System",
+            "uri" : "urn:hl7-org:elm-types:r1"
+         }, {
+            "localIdentifier" : "FHIR",
+            "uri" : "http://hl7.org/fhir",
+            "version" : "4.0.1"
+         } ]
+      },
+      "includes" : {
+         "def" : [ {
+            "localIdentifier" : "C3F",
+            "path" : "CDSConnectCommonsforFHIRv401",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "FHIRHelpers",
+            "path" : "FHIRHelpers",
+            "version" : "4.0.1"
+         }, {
+            "localIdentifier" : "Dash",
+            "path" : "DisplayCervicalCancerMedicalHistory",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Common",
+            "path" : "CCSMCommonFunctions",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "Entry",
+            "path" : "TopLevelScreeningLibrary",
+            "version" : "1.0.0"
+         } ]
+      },
+      "parameters" : {
+         "def" : [ {
+            "name" : "CytologyWindow",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 18,
+               "unit" : "months",
+               "type" : "Quantity"
+            }
+         }, {
+            "name" : "SexualActivityLookBack",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 12,
+               "unit" : "months",
+               "type" : "Quantity"
+            }
+         } ]
+      },
+      "codeSystems" : {
+         "def" : [ {
+            "name" : "LOINC",
+            "id" : "http://loinc.org",
+            "accessLevel" : "Public"
+         } ]
+      },
+      "codes" : {
+         "def" : [ {
+            "name" : "Had Intercourse",
+            "id" : "64728-9",
+            "display" : "Have you ever had vaginal intercourse",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOINC"
+            }
+         } ]
+      },
+      "contexts" : {
+         "def" : [ {
+            "name" : "Patient"
+         } ]
+      },
+      "statements" : {
+         "def" : [ {
+            "name" : "Patient",
+            "context" : "Patient",
+            "expression" : {
+               "type" : "SingletonFrom",
+               "operand" : {
+                  "dataType" : "{http://hl7.org/fhir}Patient",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Patient",
+                  "type" : "Retrieve"
+               }
+            }
+         }, {
+            "name" : "DateOfCondition",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "strict" : false,
+                     "type" : "As",
+                     "operand" : {
+                        "path" : "onset",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "C",
+                           "type" : "OperandRef"
+                        }
+                     },
+                     "asTypeSpecifier" : {
+                        "name" : "{http://hl7.org/fhir}dateTime",
+                        "type" : "NamedTypeSpecifier"
+                     }
+                  }
+               }, {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "path" : "end",
+                     "type" : "Property",
+                     "source" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "onset",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "C",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}Period",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               }, {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "path" : "start",
+                     "type" : "Property",
+                     "source" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "onset",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "C",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}Period",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               }, {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "path" : "recordedDate",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "C",
+                        "type" : "OperandRef"
+                     }
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "C",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}Condition",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "DateOfProcedure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "strict" : false,
+                     "type" : "As",
+                     "operand" : {
+                        "path" : "performed",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "P",
+                           "type" : "OperandRef"
+                        }
+                     },
+                     "asTypeSpecifier" : {
+                        "name" : "{http://hl7.org/fhir}dateTime",
+                        "type" : "NamedTypeSpecifier"
+                     }
+                  }
+               }, {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "path" : "end",
+                     "type" : "Property",
+                     "source" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "performed",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "P",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}Period",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               }, {
+                  "path" : "value",
+                  "type" : "Property",
+                  "source" : {
+                     "path" : "start",
+                     "type" : "Property",
+                     "source" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "performed",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "P",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}Period",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "P",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}Procedure",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "Immunocompromised",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Immunocompromised",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "IsIncluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "FemaleorTransgenderMale",
+                  "libraryName" : "Entry",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "Immunocompromised",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "HasRemovalOfCervixProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "RemovalOfCervixProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasAbsenceOfCervixDiagnoses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "AbsenceOfCervixDiagnoses",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasAbsenceOfCervixObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "AbsenceOfCervixObservations",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasRecentAbnormalScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalScreening",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "HasRecentAbnormalHistology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalHistology",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "Excluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "HasRemovalOfCervixProcedures",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "HasAbsenceOfCervixDiagnoses",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HasAbsenceOfCervixObservations",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "name" : "HasRecentAbnormalScreening",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "HasRecentAbnormalHistology",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "IsIncludedAndNotExcluded",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsIncluded",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "Excluded",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressionConditions",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ImmunocompromisedConditions",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "DateOfMostRecentImmunosuppressionCondition",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DateOfCondition",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MostRecentCondition",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ImmunosuppressionConditions",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressionProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "SolidOrganTransplantProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "HematopoieticStemCellTransplantProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "DateOfMostRecentImmunosuppressionProcedure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DateOfProcedure",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MostRecentProcedure",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ImmunosuppressionProcedures",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "DateOfImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfMostRecentImmunosuppressionCondition",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfMostRecentImmunosuppressionProcedure",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "After",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentImmunosuppressionCondition",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DateOfMostRecentImmunosuppressionProcedure",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     },
+                     "then" : {
+                        "name" : "DateOfMostRecentImmunosuppressionCondition",
+                        "type" : "ExpressionRef"
+                     },
+                     "else" : {
+                        "name" : "DateOfMostRecentImmunosuppressionProcedure",
+                        "type" : "ExpressionRef"
+                     }
+                  },
+                  "else" : {
+                     "name" : "DateOfMostRecentImmunosuppressionCondition",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfMostRecentImmunosuppressionProcedure",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "name" : "DateOfMostRecentImmunosuppressionProcedure",
+                     "type" : "ExpressionRef"
+                  },
+                  "else" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Null"
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "NilmCytologyReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "name" : "DiagnosticReportDate",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "R",
+                        "type" : "AliasRef"
+                     } ]
+                  }, {
+                     "name" : "DateOfImmunosuppressionOnset",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "DiagnosticReport",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Indexer",
+                     "operand" : [ {
+                        "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "1",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Indexer",
+                     "operand" : [ {
+                        "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "1",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "2",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Indexer",
+                     "operand" : [ {
+                        "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "2",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "CytologySequenceIntact",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     },
+                     "then" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyWindow",
+                                 "type" : "ParameterRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyWindow",
+                                 "type" : "ParameterRef"
+                              } ]
+                           } ]
+                        } ]
+                     },
+                     "else" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyWindow",
+                              "type" : "ParameterRef"
+                           } ]
+                        } ]
+                     }
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Before",
+                           "operand" : [ {
+                              "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "type" : "Today"
+                                 }, {
+                                    "name" : "CytologyWindow",
+                                    "type" : "ParameterRef"
+                                 } ]
+                              }
+                           } ]
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "value" : "false",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "value" : "true",
+                        "type" : "Literal"
+                     }
+                  }
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "Under21",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Less",
+               "operand" : [ {
+                  "precision" : "Year",
+                  "type" : "CalculateAge",
+                  "operand" : {
+                     "path" : "birthDate.value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "value" : "21",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "Age21Through29",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "21",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "LessOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "29",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "Age30AndOlder",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "precision" : "Year",
+                  "type" : "CalculateAge",
+                  "operand" : {
+                     "path" : "birthDate.value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "value" : "30",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "ObservationsOfSexualActivity",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Verified",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ObservationLookBack",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "Obs",
+                        "expression" : {
+                           "dataType" : "{http://hl7.org/fhir}Observation",
+                           "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                           "codeProperty" : "code",
+                           "codeComparator" : "~",
+                           "type" : "Retrieve",
+                           "codes" : {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "Had Intercourse",
+                                 "type" : "CodeRef"
+                              }
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "Contains",
+                        "operand" : [ {
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "value",
+                                    "scope" : "Obs",
+                                    "type" : "Property"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "Yes",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }, {
+                     "name" : "SexualActivityLookBack",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "RecentOnsetSexualActivity",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "ObservationsOfSexualActivity",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "NoCytologySinceSexualActivityOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "type" : "Exists",
+                  "operand" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "C",
+                        "expression" : {
+                           "name" : "CervicalCytologyReports",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "After",
+                        "operand" : [ {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "C",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "name" : "ObservationDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "MostRecent",
+                              "libraryName" : "C3F",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "ObservationsOfSexualActivity",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NeedFirstOfThreeAnnualCytologyTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "IsIncludedAndNotExcluded",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "Under21",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "name" : "RecentOnsetSexualActivity",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "NoCytologySinceSexualActivityOnset",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "IsIncludedAndNotExcluded",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "Age21Through29",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "Age30AndOlder",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "name" : "CytologySequenceIntact",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                                 "value" : "false",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        } ]
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "true",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "NeedSecondOfThreeAnnualCytologyTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "name" : "CytologySequenceIntact",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "true",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "NeedThirdOfThreeAnnualCytologyTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "name" : "CytologySequenceIntact",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "true",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "CompletedAnnualCytologyTestSequence",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               }, {
+                  "name" : "CytologySequenceIntact",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "DateOfLastCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Last",
+                     "source" : {
+                        "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeHpvReportsSinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "HpvDiagnosticReports",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Contains",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Negative HPV Finding",
+                           "libraryName" : "Dash",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  }, {
+                     "type" : "After",
+                     "operand" : [ {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "R",
+                           "type" : "AliasRef"
+                        } ]
+                     }, {
+                        "name" : "DateOfImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     } ]
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "DiagnosticReport",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "LastCytologyWasCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "H",
+                     "expression" : {
+                        "name" : "NegativeHpvReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "H",
+                           "type" : "Property"
+                        }, {
+                           "lowClosed" : true,
+                           "highClosed" : true,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "name" : "DateOfLastCytology",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "name" : "DateOfLastCytology",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfLastCytology",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "TestingCadence",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "CompletedAnnualCytologyTestSequence",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "LastCytologyWasCotest",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "Age30AndOlder",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
+                  }
+               },
+               "then" : {
+                  "value" : 3,
+                  "unit" : "years",
+                  "type" : "Quantity"
+               },
+               "else" : {
+                  "value" : 12,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               }
+            }
+         }, {
+            "name" : "ProposedDateOfNextScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfLastCytology",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfLastCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "TestingCadence",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "type" : "Add",
+                     "operand" : [ {
+                        "name" : "DateOfLastCytology",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "TestingCadence",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "Now"
+                  }
+               },
+               "else" : {
+                  "type" : "Now"
+               }
+            }
+         }, {
+            "name" : "ProposeImmediateTesting",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "SameOrBefore",
+                  "operand" : [ {
+                     "name" : "ProposedDateOfNextScreening",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "type" : "Today"
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "ProposeImmediateTesting",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "Under21",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "Age21Through29",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Per CDC guidelines, Cervical Cytology screening is indicated.",
+                     "type" : "Literal"
+                  },
+                  "else" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).",
+                     "type" : "Literal"
+                  }
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "Under21",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "Age21Through29",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "type" : "Concatenate",
+                     "operand" : [ {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical cytology screening is next due on ",
+                           "type" : "Literal"
+                        }, {
+                           "type" : "ToString",
+                           "operand" : {
+                              "type" : "ToDate",
+                              "operand" : {
+                                 "name" : "ProposedDateOfNextScreening",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : ".",
+                        "type" : "Literal"
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "LastCytologyWasCotest",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "then" : {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cotesting with a cervical cytology test and a hrHPV test is next due on ",
+                              "type" : "Literal"
+                           }, {
+                              "type" : "ToString",
+                              "operand" : {
+                                 "type" : "ToDate",
+                                 "operand" : {
+                                    "name" : "ProposedDateOfNextScreening",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : ".",
+                           "type" : "Literal"
+                        } ]
+                     },
+                     "else" : {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cervical cytology screening is next due on ",
+                              "type" : "Literal"
+                           }, {
+                              "type" : "ToString",
+                              "operand" : {
+                                 "type" : "ToDate",
+                                 "operand" : {
+                                    "name" : "ProposedDateOfNextScreening",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : ".",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendImmediateCervicalCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ProposeImmediateTesting",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "RecommendImmediateCotesting",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "ProposeImmediateTesting",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "Age30AndOlder",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "Errors",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "type" : "List"
+               }, {
+                  "name" : "Errors",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "Errors",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "NoErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "name" : "ErrorsHaveOccurred",
+                  "type" : "ExpressionRef"
+               }
+            }
+         } ]
+      }
+   }
+}
+

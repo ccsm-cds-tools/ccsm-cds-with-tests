@@ -1,0 +1,26 @@
+---
+name: Error, patient exposed but too young
+
+externalData:
+- resources
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1990-01-01
+-
+  $import: *DesExposureInclusionCriteria
+
+results:
+  BornOnOrBeforeBirthdayThreshold: false
+  HasDesExposureDiagnoses: true
+  HasDesExposureObservations: true
+  RecentlyRespondedYesToDesExposureQuestion: true
+  WasExposedToDesInUtero: true
+  IsIncluded: false
+  Excluded: false
+  IsIncludedAndNotExcluded: false
+  Errors:
+  - 'There are indications that the patient was exposed to DES in utero but was born after 1980-01-01; please review the patient record for consistency.'

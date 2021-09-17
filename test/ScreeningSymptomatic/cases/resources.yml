@@ -1,0 +1,140 @@
+reusable_resources:
+- &SymptomaticInclusionCriteria
+  -
+    resourceType: Condition
+    code: SNOMED#312984006 Abnormal uterine bleeding unrelated to menstrual cycle (disorder)
+    clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#recurrence Recurrence
+    recordedDate: 2021-06-23
+  -
+    resourceType: Encounter
+    status: in-progress
+    period:
+      start: 2021-06-23
+    reasonCode: SNOMED#312984006 Abnormal uterine bleeding unrelated to menstrual cycle (disorder)
+  -
+    resourceType: Observation
+    code: SNOMED#301822002 Abnormal vaginal bleeding (finding)
+    status: corrected
+    effectiveDateTime: 2021-06-23
+  -
+    resourceType: Observation
+    code: http://OUR-PLACEHOLDER-URL.com#AUVBQ Is the patient experiencing abnormal uterine or vaginal bleeding today?
+    status: final
+    valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
+    effectiveDateTime: 2021-06-23
+- &NilmCytologyReportsWithin12Months
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectiveDateTime: 2021-05-01
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectivePeriod:
+      start: 2021-05-01
+      end: 2021-05-01
+- &NegativeHpvReportsWithin12Months
+  - resourceType: DiagnosticReport
+    code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+    status: final
+    conclusionCode:
+    - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+    effectiveDateTime: 2021-05-01
+  - resourceType: DiagnosticReport
+    code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+    status: final
+    conclusionCode:
+    - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+    effectivePeriod:
+      start: 2021-05-01
+      end: 2021-05-01
+- &NilmCytologyReportsWithin3Years
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectiveDateTime: 2020-05-01
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectivePeriod:
+      start: 2020-05-01
+      end: 2020-05-01
+- &NegativeHpvReportsWithin3Years
+  - resourceType: DiagnosticReport
+    code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+    effectiveDateTime: 2020-05-01
+  - resourceType: DiagnosticReport
+    code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+    effectivePeriod:
+      start: 2020-05-01
+      end: 2020-05-01
+- &NonCoincidentNilmCytologyReports
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectivePeriod:
+      start: 2020-01-28
+      end: 2020-01-28
+    encounter:
+      reference: 'Encounter/42'
+    basedOn:
+    -
+      type: 'ServiceRequest'
+      reference: 'ServiceRequest/42'
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    effectivePeriod:
+      start: 2020-01-28
+      end: 2020-01-28
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    encounter:
+      reference: 'Encounter/42'
+  - resourceType: DiagnosticReport
+    code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+    status: amended
+    conclusionCode:
+    - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+    basedOn:
+    -
+      type: 'ServiceRequest'
+      reference: 'ServiceRequest/42'
+- &VisibleCervicalOrVaginalLesions
+  -
+    resourceType: Condition
+    code: SNOMED#37610005 Inflammation of cervix (disorder)
+    clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#recurrence Recurrence
+    recordedDate: 2021-06-23
+  -
+    resourceType: Observation
+    code: SNOMED#289517005 Vaginal lesion (finding)
+    status: corrected
+    effectiveDateTime: 2021-06-23
+  -
+    resourceType: Observation
+    code: http://OUR-PLACEHOLDER-URL.com#VUVLQ Does the patient have visible uterine or vaginal lesions?
+    status: final
+    valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
+    effectiveDateTime: 2021-06-23

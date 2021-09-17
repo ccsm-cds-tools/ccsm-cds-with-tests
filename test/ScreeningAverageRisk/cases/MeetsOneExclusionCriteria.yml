@@ -1,0 +1,19 @@
+---
+name: Patient Meets One Exclusion Criteria
+
+externalData:
+- resources
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+-
+  $iterate: *ExclusionCriteria
+
+results:
+  IsIncluded: true
+  Excluded: true
+  IsIncludedAndNotExcluded: false
