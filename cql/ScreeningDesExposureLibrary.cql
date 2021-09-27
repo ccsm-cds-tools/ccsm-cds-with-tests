@@ -92,9 +92,11 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults:
+// LEFT OFF HERE
+
+define Cin2OrCin3HistologyResults: // High Grade Or Cancer Histology Results
   Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or
+    where H.conclusionCode includes ToConcept(Dash."CIN2") or // Follow-Up: We potentially could look within a High-Grade Value Set
       H.conclusionCode includes ToConcept(Dash."CIN3")
 
 define HasRecentAbnormalScreening:
@@ -102,6 +104,10 @@ define HasRecentAbnormalScreening:
 
 define HasRecentAbnormalHistology:
   Dash.HasRecentAbnormalHistology
+
+// Add Histologic AIS
+// Add Histologic Cancer
+// Cross-check with other logic paths
 
 define Excluded:
   HasHighGradePreCancerCervicalLesion or
@@ -120,7 +126,7 @@ define IsIncludedAndNotExcluded:
 define HasNilmCytologyWithinLast12Months:
   Dash.HasNilmCytologyWithinLast12Months
 
-define NilmCytologyWithinLast12Months:
+define NilmCytologyWithinLast12Months: // TODO: We can probably take this from the Dashboard
   Common.LookBack(Dash.NilmCytologyReports, 12 months)
 
 define MostRecentNilmCytologyWithinPastYear:

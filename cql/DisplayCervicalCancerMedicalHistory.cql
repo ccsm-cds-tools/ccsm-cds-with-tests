@@ -167,7 +167,7 @@ define SystemicLupusErythematosusDiagnoses:
 define HematopoieticStemCellTransplantDiagnoses:
   [Condition: "Hematopoietic stem cell transplant"]
 
-define IrritableBowelSyndromeDiagnoses:
+define IrritableBowelSyndromeDiagnoses: // Inflammatory Bowel Disease
   [Condition: "ICD10CM Value Set for Crohn's Disease"] union
   [Condition: "SNOMED Value Set for Crohn's Disease"] union
   [Condition: "ICD10CM Value Set for Ulcerative Colitis"] union
@@ -192,7 +192,8 @@ define ImmunocompromisedConditions:
   HematopoieticStemCellTransplantDiagnoses union
   IrritableBowelSyndromeDiagnoses union
   RheumatoidArthritisDiagnoses union
-  ChronicGraftVersusHostDiseaseDiagnoses
+  ChronicGraftVersusHostDiseaseDiagnoses // Follow up about inclusion with ImmunocompromisedConditions
+  // GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
@@ -205,6 +206,7 @@ define PertinentConditions:
   PregnancyDiagnoses union
   ImmunocompromisedConditions union
   AbnormalUterineOrVaginalBleedingDiagnoses
+  // Add Both Graft Versus Host Diagnoses
 
 define PertinentConditionsSummary:
   (PertinentConditions) C
@@ -220,6 +222,8 @@ define PertinentConditionsSummary:
 // PERTINENT OBSERVATIONS
 //------------------------------------------------------------------------------
 // Allow status of final, amended, corrected with a lookback of 12 months
+
+// Combine with Conditions
 
 define AbnormalUterineOrVaginalBleedingObservations:
   C3F.ObservationLookBack(
@@ -268,7 +272,8 @@ define PertinentObservations:
   PregnancyObservations union
   DesExposureObservations union
   AbsenceOfCervixObservations union
-  PregnancyObservations
+  // Add Questions Responses Displayed in human readable way.
+  PregnancyObservations // Remove
 
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
@@ -424,6 +429,8 @@ define RemovalOfCervixProcedures:
     [Procedure: "Removal of Cervix Procedures"]
   )
 
+  // Follow up about cervical biopsy procedures
+
 define PertinentProcedures:
   HematopoieticStemCellTransplantProcedures union
   SolidOrganTransplantProcedures union
@@ -455,7 +462,7 @@ define HpvDiagnosticReports:
 
 define NegativeHpvReports:
   HpvDiagnosticReports R
-    where R.conclusionCode includes ToConcept("Negative HPV Finding")
+    where R.conclusionCode includes ToConcept("Negative HPV Finding") // TODO: Also look for "Negative" SNOMED code
 
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
@@ -465,7 +472,7 @@ define CervicalCytologyReports:
     )
   )
 
-define NilmCytologyReports:
+define NilmCytologyReports: // Make sure this is being referenced correctly in LP1
   CervicalCytologyReports R
     where AnyTrue(
       (R.conclusionCode) cC return cC ~ "NILM"
@@ -517,6 +524,7 @@ define DiagnosticReportsSummary:
 // PERTINENT ENCOUNTERS
 //------------------------------------------------------------------------------
 
+// TODO: Add expression to PertinentConditions
 define AbnormalUterineOrVaginalBleedingEncounters:
   Common.RelevantEncounterStatus(
     [Encounter] E
@@ -530,18 +538,25 @@ define AbnormalUterineOrVaginalBleedingEncounters:
 // HPV IMMUNIZATIONS
 //------------------------------------------------------------------------------
 
+// TODO: Add HPV Immunizations
+
 //------------------------------------------------------------------------------
 // CLINICIAN PROVIDED INFORMATION
 //------------------------------------------------------------------------------
 
+// Add Questions to Dashboard (conditions)
+
 define ResponsesToAbnormalBleedingQuestion:
   [Observation: "Abnormal Uterine or Vaginal Bleeding Question"]
+  // 12 month Lookback
 
 define ResponsesToVisibleLesionQuestion:
   [Observation: "Visible Uterine or Vaginal Lesion Question"]
+  // 12 month Lookback
 
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
+  // No Lookback
 
 //------------------------------------------------------------------------------
 // FLAGS
@@ -655,8 +670,9 @@ define CervicalCancerScreeningAndMedicalHistory:
 {
   Age: PatientAge,
   Conditions: PertinentConditionsSummary,
-  Observations: PertinentObservationsSummary,
+  Observations: PertinentObservationsSummary, // Group within Conditions
   Medications: PertinentMedicationsSummary,
   Procedures: PertinentProceduresSummary,
   DiagnosticReports: DiagnosticReportsSummary
+  // TODO: Add Immunizations
 }
