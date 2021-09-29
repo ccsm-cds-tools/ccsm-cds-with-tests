@@ -17,7 +17,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "ASCCP Recommendation"
 * relatedArtifact[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-* library = Canonical(ManagementLibrary|1.0)
+* library = Canonical(ManagementLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Top-level action just includes inclusion and exclusion criteria
 // -----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ Usage: #definition
 * action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
 * action[=].action[=].documentation[=].label = "ASCCP Recommendation"
 * action[=].action[=].documentation[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0)
+* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #2: Rare Abnormalities
 // -----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "RareAbnormalityPresent"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ManageCervicalRareAbnormalities|1.0)
+* action[=].action[=].definitionCanonical = Canonical(ManageCervicalRareAbnormalities|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #3: Common Abnormalities
 // -----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "CommonAbnormalityPresent"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ManageCervicalCommonAbnormalities|1.0)
+* action[=].action[=].definitionCanonical = Canonical(ManageCervicalCommonAbnormalities|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #4: Handle Errors
 // -----------------------------------------------------------------------------
@@ -84,4 +84,4 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0)
+* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)

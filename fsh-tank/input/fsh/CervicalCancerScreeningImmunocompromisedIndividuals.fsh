@@ -27,7 +27,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "Immunocompromised"
 * relatedArtifact[=].display = "Moscicki, A.B., et al. Guidelines for Cervical Cancer Screening Immunosuppressed Women without HIV Infection (2019)"
-* library = Canonical(ScreeningImmunocompromisedLibrary|1.0)
+* library = Canonical(ScreeningImmunocompromisedLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Top-level action just includes inclusion and exclusion criteria
 // -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ Usage: #definition
 * action[=].action[+].title = "Display pertinent medical history"
 * action[=].action[=].description = "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0)
+* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #2: Screening recommendation text
 // -----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningImmunocompromisedLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0.0)
 * action[=].action[=].dynamicValue[+].path = "payload" // this is the CommunicationRequest.payload element
 * action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "RecommendationText"
@@ -90,7 +90,7 @@ Usage: #definition
 * action[=].action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].action[=].condition[=].expression.expression = "RecommendImmediateCervicalCytology"
 * action[=].action[=].action[=].condition[=].expression.reference = "Library/ScreeningImmunocompromisedLibrary|1.0"
-* action[=].action[=].action[=].definitionCanonical = Canonical(CervicalCytologyScreeningRecommendation|1.0)
+* action[=].action[=].action[=].definitionCanonical = Canonical(CervicalCytologyScreeningRecommendation|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #3.2: Cotesting (cytology + HPV)
 // -----------------------------------------------------------------------------
@@ -101,14 +101,14 @@ Usage: #definition
 * action[=].action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].action[=].condition[=].expression.expression = "RecommendImmediateCotesting"
 * action[=].action[=].action[=].condition[=].expression.reference = "Library/ScreeningImmunocompromisedLibrary|1.0"
-* action[=].action[=].action[=].definitionCanonical = Canonical(CotestingScreeningRecommendation|1.0)
+* action[=].action[=].action[=].definitionCanonical = Canonical(CotestingScreeningRecommendation|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #3.3: Ask for more information
 // -----------------------------------------------------------------------------
 * action[=].action[=].action[+].title = "Provide more information"
 * action[=].action[=].action[=].description = "Brief description of the action"
 * action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].action[=].definitionCanonical = Canonical(ProvideMoreInformation|1.0)
+* action[=].action[=].action[=].definitionCanonical = Canonical(ProvideMoreInformation|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #4: Handle Errors
 // -----------------------------------------------------------------------------
@@ -119,4 +119,4 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningImmunocompromisedLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0)
+* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)

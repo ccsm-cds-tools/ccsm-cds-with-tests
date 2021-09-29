@@ -17,7 +17,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation" 
 * relatedArtifact[=].label = "ASCCP Recommendation"
 * relatedArtifact[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-* library = Canonical(ManagementLibrary|1.0)
+* library = Canonical(ManagementLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #1: Rare Cytology Results
 // -----------------------------------------------------------------------------
@@ -87,4 +87,4 @@ Usage: #definition
 * action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].condition[=].expression.expression = "SpecialPopulation"
 * action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].definitionCanonical = Canonical(ManageCervicalSpecialPopulations|1.0)
+* action[=].definitionCanonical = Canonical(ManageCervicalSpecialPopulations|1.0.0)

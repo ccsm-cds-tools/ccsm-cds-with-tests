@@ -20,11 +20,11 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "USPSTF Recommendation"
 * relatedArtifact[=].display = "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-* library = Canonical(DashboardLibrary|1.0)
+* library = Canonical(DashboardLibrary|1.0.0)
 * kind = $RRTYPE#CommunicationRequest "CommunicationRequest"
 * intent = $RINTENT#proposal "Proposal"
 * priority = $RPRIOR#routine "Routine"
 * dynamicValue[+].path = "payload" // this is the CommunicationRequest.payload element
 * dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* dynamicValue[=].expression.expression = "Cervical Cancer Screening and Management Summary"
-* dynamicValue[=].expression.reference = "Library/DashboardLibrary|1.0"
+* dynamicValue[=].expression.expression = "CervicalCancerScreeningAndMedicalHistory"
+* dynamicValue[=].expression.reference = "Library/DisplayCervicalCancerMedicalHistory|1.0"
