@@ -24,6 +24,8 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 // CODE SYSTEMS, VALUE SETS, AND CODES
 //------------------------------------------------------------------------------
 
+// TODO: Crosscheck valuesets with value set spreadsheet
+
 codesystem "LOINC": 'http://loinc.org'
 codesystem "SNOMED-CT": 'http://snomed.info/sct'
 codesystem "RXNORM": 'http://www.nlm.nih.gov/research/umls/rxnorm'
@@ -167,7 +169,7 @@ define SystemicLupusErythematosusDiagnoses:
 define HematopoieticStemCellTransplantDiagnoses:
   [Condition: "Hematopoietic stem cell transplant"]
 
-define IrritableBowelSyndromeDiagnoses: // Inflammatory Bowel Disease
+define IrritableBowelSyndromeDiagnoses: // TODO: Update name to Inflammatory Bowel Disease
   [Condition: "ICD10CM Value Set for Crohn's Disease"] union
   [Condition: "SNOMED Value Set for Crohn's Disease"] union
   [Condition: "ICD10CM Value Set for Ulcerative Colitis"] union
@@ -192,8 +194,8 @@ define ImmunocompromisedConditions:
   HematopoieticStemCellTransplantDiagnoses union
   IrritableBowelSyndromeDiagnoses union
   RheumatoidArthritisDiagnoses union
-  ChronicGraftVersusHostDiseaseDiagnoses // Follow up about inclusion with ImmunocompromisedConditions
-  // GenitalGraftVersusHostDiseaseDiagnoses
+  ChronicGraftVersusHostDiseaseDiagnoses union // NOTE: Follow up about GVHD after review of Logic Path 3
+  GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
@@ -206,7 +208,6 @@ define PertinentConditions:
   PregnancyDiagnoses union
   ImmunocompromisedConditions union
   AbnormalUterineOrVaginalBleedingDiagnoses
-  // Add Both Graft Versus Host Diagnoses
 
 define PertinentConditionsSummary:
   (PertinentConditions) C
@@ -222,8 +223,6 @@ define PertinentConditionsSummary:
 // PERTINENT OBSERVATIONS
 //------------------------------------------------------------------------------
 // Allow status of final, amended, corrected with a lookback of 12 months
-
-// Combine with Conditions
 
 define AbnormalUterineOrVaginalBleedingObservations:
   C3F.ObservationLookBack(
@@ -271,9 +270,7 @@ define PertinentObservations:
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
-  AbsenceOfCervixObservations union
-  // Add Questions Responses Displayed in human readable way.
-  PregnancyObservations // Remove
+  AbsenceOfCervixObservations
 
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
@@ -429,7 +426,7 @@ define RemovalOfCervixProcedures:
     [Procedure: "Removal of Cervix Procedures"]
   )
 
-  // Follow up about cervical biopsy procedures
+// NOTE: Follow up about cervical biopsy procedures
 
 define PertinentProcedures:
   HematopoieticStemCellTransplantProcedures union
@@ -544,19 +541,18 @@ define AbnormalUterineOrVaginalBleedingEncounters:
 // CLINICIAN PROVIDED INFORMATION
 //------------------------------------------------------------------------------
 
-// Add Questions to Dashboard (conditions)
+// TODO: Add all 3 Questions to Dashboard (PertinentObservations)
 
 define ResponsesToAbnormalBleedingQuestion:
   [Observation: "Abnormal Uterine or Vaginal Bleeding Question"]
-  // 12 month Lookback
+  // TODO: Add 12 month Lookback
 
 define ResponsesToVisibleLesionQuestion:
   [Observation: "Visible Uterine or Vaginal Lesion Question"]
-  // 12 month Lookback
+  // TODO: Add 12 month Lookback
 
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
-  // No Lookback
 
 //------------------------------------------------------------------------------
 // FLAGS

@@ -114,13 +114,13 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define NilmCytologyReports: // TODO: Only take most recent result
+define NilmCytologyReports: // TODO: Only take most recent result, and check to see if it's NILM
   Dash.NilmCytologyReports
 
 define HasNilmCytologyWithinLast12Months:
   Dash.HasNilmCytologyWithinLast12Months
 
-// TODO: Only take most recent result
+// TODO: Only take most recent result, check to see if it's negative.
 define NegativeHpvReports: // TODO: Consider Pulling concept from dashboard
   Dash.HpvDiagnosticReports R
     where R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
