@@ -469,7 +469,7 @@ define CervicalCytologyReports:
     )
   )
 
-define NilmCytologyReports: // Make sure this is being referenced correctly in LP1
+define NilmCytologyReports:
   CervicalCytologyReports R
     where AnyTrue(
       (R.conclusionCode) cC return cC ~ "NILM"
@@ -521,7 +521,7 @@ define DiagnosticReportsSummary:
 // PERTINENT ENCOUNTERS
 //------------------------------------------------------------------------------
 
-// TODO: Add expression to PertinentConditions
+// TODO: Add this expression to PertinentConditions
 define AbnormalUterineOrVaginalBleedingEncounters:
   Common.RelevantEncounterStatus(
     [Encounter] E
@@ -666,7 +666,7 @@ define CervicalCancerScreeningAndMedicalHistory:
 {
   Age: PatientAge,
   Conditions: PertinentConditionsSummary,
-  Observations: PertinentObservationsSummary, // Group within Conditions
+  Observations: PertinentObservationsSummary,
   Medications: PertinentMedicationsSummary,
   Procedures: PertinentProceduresSummary,
   DiagnosticReports: DiagnosticReportsSummary
