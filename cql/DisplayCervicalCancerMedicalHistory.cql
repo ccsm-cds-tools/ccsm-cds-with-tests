@@ -184,8 +184,12 @@ define ChronicGraftVersusHostDiseaseDiagnoses:
   [Condition: "Chronic GvHD ICD-9 Code"] union
   [Condition: "Chronic GvHD ICD-10 Code"]
 
+// TODO: Add "ChronicGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
+
 define GenitalGraftVersusHostDiseaseDiagnoses:
   [Condition: "Diagnosis of Genital GvHD"]
+
+// TODO: Add "GenitalGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
 
 define ImmunocompromisedConditions:
   HivDiagnoses union
@@ -616,7 +620,7 @@ define DiagnosisOfChronicGraftVersusHostDisease:
 define DiagnosisOfGenitalGraftVersusHostDisease:
   Exists(GenitalGraftVersusHostDiseaseDiagnoses)
 
-define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant:
+define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant: // TODO: Arthritis -> Rheumatoid Arthritus or RA; IBD not IBS - Change after changing expression name.
   (
     Exists(IrritableBowelSyndromeDiagnoses) or
     Exists(RheumatoidArthritisDiagnoses)

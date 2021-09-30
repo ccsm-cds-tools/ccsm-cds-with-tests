@@ -92,8 +92,6 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-// LEFT OFF HERE
-
 define Cin2OrCin3HistologyResults: // TODO: Rename to "High Grade Or Cancer Histology Results"
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or // NOTE: Follow-up - We potentially could look within a High-Grade Value Set
@@ -141,7 +139,9 @@ define RecommendImmediateCervicalCytology:
   IsIncludedAndNotExcluded and
   not HasNilmCytologyWithinLast12Months
 
-define RecommendationText:
+// TODO: Remove above logic. Result will be just recommendation text and IsIncludedAndNotExcluded.
+
+define RecommendationText: // TODO: Update RecommendationText
   if RecommendImmediateCervicalCytology then
     'Per the "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention, cervical cytology screening is indicated. Tissue sampling should include collection of endocervical and ectocervical cells, as well as those from vaginal fornices.'
   else if IsIncludedAndNotExcluded and Exists(ProposedDateOfNextCytology) then
@@ -153,7 +153,7 @@ define RecommendationText:
 // ERRORS
 //------------------------------------------------------------------------------
 
-define ErrorDesExposureButTooYoung:
+define ErrorDesExposureButTooYoung: // TODO: Remove error. This will never happen.
   if WasExposedToDesInUtero and not BornOnOrBeforeBirthdayThreshold then
     'There are indications that the patient was exposed to DES in utero but was born after ' + ToString(ToDate(BirthdayThreshold)) + '; please review the patient record for consistency.'
   else

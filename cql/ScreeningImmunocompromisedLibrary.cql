@@ -29,14 +29,14 @@ include TopLevelScreeningLibrary version '1.0.0' called Entry
 codesystem "LOINC": 'http://loinc.org'
 
 // Standard codes
-code "Had Intercourse": '64728-9' from "LOINC" display 'Have you ever had vaginal intercourse'
+code "Had Intercourse": '64728-9' from "LOINC" display 'Have you ever had vaginal intercourse' // TODO: This criteria was deleted. Remove here in L3.
 
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
 
 parameter CytologyWindow default 18 months
-parameter SexualActivityLookBack default 12 months
+parameter SexualActivityLookBack default 12 months // TODO: Remove. Sexual Activity is no longer a factor.
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
