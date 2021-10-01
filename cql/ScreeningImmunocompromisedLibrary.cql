@@ -151,7 +151,7 @@ define DateOfMostRecentImmunosuppressionProcedure:
     )
   )
 
-define DateOfImmunosuppressionOnset:
+define DateOfImmunosuppressionOnset: // TODO: Handle this in more elegant way with respect to most recent "distinct" evidence
   if DateOfMostRecentImmunosuppressionCondition is not null then
     if DateOfMostRecentImmunosuppressionProcedure is not null then
       if DateOfMostRecentImmunosuppressionCondition after DateOfMostRecentImmunosuppressionProcedure then
@@ -196,14 +196,14 @@ define DateOfThirdNilmCytologyAfterImmunosuppressionOnset:
 define CytologySequenceIntact:
   if DateOfFirstNilmCytologyAfterImmunosuppressionOnset is not null then
     if DateOfSecondNilmCytologyAfterImmunosuppressionOnset is not null then
-      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then
+      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then // NOTE: Check to see if we need to lookback from Today()
         DateOfFirstNilmCytologyAfterImmunosuppressionOnset >  
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
           and
         DateOfSecondNilmCytologyAfterImmunosuppressionOnset >
           DateOfThirdNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
       else
-        DateOfFirstNilmCytologyAfterImmunosuppressionOnset >
+        DateOfFirstNilmCytologyAfterImmunosuppressionOnset > // TODO: Add Today() - CytologyWindow logic 
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
     else
       if DateOfFirstNilmCytologyAfterImmunosuppressionOnset before Today() - CytologyWindow then
@@ -213,7 +213,7 @@ define CytologySequenceIntact:
   else
     false
 
-define Under21:
+define Under21: // TODO: Remove
   AgeInYears() < 21
 
 define Age21Through29:
@@ -222,7 +222,7 @@ define Age21Through29:
 define Age30AndOlder:
   AgeInYears() >= 30
 
-define ObservationsOfSexualActivity:
+define ObservationsOfSexualActivity: // TODO: Remove from L3
   C3F.Verified(
     C3F.ObservationLookBack(
       [Observation: "Had Intercourse"] Obs
@@ -231,10 +231,10 @@ define ObservationsOfSexualActivity:
     )
   )
 
-define RecentOnsetSexualActivity:
+define RecentOnsetSexualActivity: // TODO: Remove from L3
   Exists(ObservationsOfSexualActivity)
 
-define NoCytologySinceSexualActivityOnset:
+define NoCytologySinceSexualActivityOnset: // TODO: Remove from L3
   not Exists(
     Dash.CervicalCytologyReports C
       where Common.DiagnosticReportDate(C) after
@@ -247,7 +247,7 @@ define NoCytologySinceSexualActivityOnset:
 
 define NeedFirstOfThreeAnnualCytologyTests:
   if (
-    (
+    ( // TODO: Remove first clause
       IsIncludedAndNotExcluded and
       Under21 and 
       RecentOnsetSexualActivity and
@@ -311,6 +311,7 @@ define LastCytologyWasCotest:
   Exists(
     NegativeHpvReportsSinceImmunosuppressionOnset H
       where H.date within 1 day of DateOfLastCytology
+      // TODO: Update to match the way cotest is defined in Dashboard (including check for same encounter and same service request)
   )
 
 define TestingCadence:
@@ -318,7 +319,7 @@ define TestingCadence:
     CompletedAnnualCytologyTestSequence or
     (
       LastCytologyWasCotest and
-      Age30AndOlder
+      Age30AndOlder // NOTE: Follow-up about people 21-30 who may have received a cotest.
     )
   ) then 3 years
   else 12 months
@@ -338,23 +339,23 @@ define ProposeImmediateTesting:
 
 define RecommendationText:
   if ProposeImmediateTesting then
-    if Under21 or Age21Through29 then
+    if Under21 or Age21Through29 then // TODO: Remove Under21
       'Per CDC guidelines, Cervical Cytology screening is indicated.'
     else
       'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
   else
-    if Under21 or Age21Through29 then
+    if Under21 or Age21Through29 then // TODO: Remove Under21
       'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
     else
       if LastCytologyWasCotest then
         'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
       else
-        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' // NOTE: Check in about adding option for recommending a cotest.
 
-define RecommendImmediateCervicalCytology:
+define RecommendImmediateCervicalCytology: // NOTE: Check to see if this can be deleted.
   ProposeImmediateTesting
 
-define RecommendImmediateCotesting:
+define RecommendImmediateCotesting: // NOTE: Check to see if this can be deleted.
   ProposeImmediateTesting and
   Age30AndOlder
 

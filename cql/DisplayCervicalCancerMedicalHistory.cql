@@ -191,7 +191,7 @@ define GenitalGraftVersusHostDiseaseDiagnoses:
 
 // TODO: Add "GenitalGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
 
-define ImmunocompromisedConditions:
+define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic
   HivDiagnoses union
   SolidOrganTransplantDiagnoses union
   SystemicLupusErythematosusDiagnoses union
@@ -632,7 +632,9 @@ define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant: // TODO: Arthritis -> Rh
     Exists(ImmunosuppressantMedicationStatements)
   )
 
-define Immunocompromised:
+// TODO: Add MostRecentDistinctImmunocompromisedCondition
+
+define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocompromised condition is diagnosed.
   DiagnosisOfHiv or
   DiagnosisOfSolidOrganTransplant or
   ProcedureForSolidOrganTransplant or

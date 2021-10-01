@@ -315,7 +315,7 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
       AllowGradeDExclusion and
-      AbsenceOrRemovalOfCervix
+      AbsenceOrRemovalOfCervix // TODO: Make sure that Included group does not have high grade history
     ) then
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'
     else
@@ -390,6 +390,9 @@ define AbsenceOrRemovalOfCervix:
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or 
   HasAbsenceOfCervixObservations
+
+// TODO: Add AbsenceOrRemovalOfCervix And NOT history of high grade precancer / cancer
+
 
 //------------------------------------------------------------------------------
 // GRADE D RECOMMENDATION: ADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
