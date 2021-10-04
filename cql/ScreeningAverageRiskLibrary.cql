@@ -93,7 +93,7 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults:
+define Cin2OrCin3HistologyResults: // TODO: Add histologic AIS and histologic Cancer. Check to see if this expression is defined elsewhere in L3.
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
       H.conclusionCode includes ToConcept(Dash."CIN3")

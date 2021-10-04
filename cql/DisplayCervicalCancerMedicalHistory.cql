@@ -191,7 +191,7 @@ define GenitalGraftVersusHostDiseaseDiagnoses:
 
 // TODO: Add "GenitalGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
 
-define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic
+define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic ("Immunocompromised" is also defined below on line 637).
   HivDiagnoses union
   SolidOrganTransplantDiagnoses union
   SystemicLupusErythematosusDiagnoses union

@@ -319,7 +319,7 @@ define TestingCadence:
     CompletedAnnualCytologyTestSequence or
     (
       LastCytologyWasCotest and
-      Age30AndOlder // NOTE: Follow-up about people 21-30 who may have received a cotest.
+      Age30AndOlder
     )
   ) then 3 years
   else 12 months
