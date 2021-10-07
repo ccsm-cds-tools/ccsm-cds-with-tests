@@ -98,6 +98,12 @@ define Cin2OrCin3HistologyResults: // TODO: Add histologic AIS and histologic Ca
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
       H.conclusionCode includes ToConcept(Dash."CIN3")
 
+// TODO: Combine high grade / cancererous history exclusions so that they can be reused elsewhere.
+// define HighGradePrecancerOrCancer:
+//   HasHighGradePreCancerCervicalLesion or
+//   HasCervicalCancerDiagnoses or
+//   exists(Cin2OrCin3HistologyResults)
+
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 
@@ -130,7 +136,7 @@ define Age30Through65:
 define AgeOver65:
   AgeInYears() > 65
 
-define NilmCytologyReports:
+define NilmCytologyReports: // TODO: Re-write to take most recent cytology test and check for NILM.
   Dash.NilmCytologyReports R
       return {
         type: 'Cervical Cytology',
@@ -144,16 +150,19 @@ define MostRecentNilmCytology:
   else
     {
       type: '',
-      date: Now() - 200 years
+      date: Now() - 200 years // NOTE: May want to re-write this.
     }
 
 define DateOfMostRecentNilmCytology:
   MostRecentNilmCytology.date
 
+// TODO: Use this method to refactor without dummy MostRecentNilmCytology object:
 define HasRecentNilmCytology:
+  // if DateOfMostRecentNilmCytology is not null then
   DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
+  // else, false
 
-define NegativeHpvReports:
+define NegativeHpvReports: // TODO: Re-write to take most recent and then check for positive.
   Dash.NegativeHpvReports R
     return {
       type: 'hrHPV',
@@ -176,8 +185,8 @@ define DateOfMostRecentNegativeHpv:
 define HasRecentNegativeHpvTests:
   DateOfMostRecentNegativeHpv after Now() - PrimaryHpvTestingCadence
 
-define NegativeCotests:
-  from Dash."NilmCytologyReports" C, Dash."NegativeHpvReports" H
+define NegativeCotests: // NOTE: Find where this appears elsewhere in L3, refer to that expression here.
+  from Dash."NilmCytologyReports" C, Dash."NegativeHpvReports" H // TODO: Look at all cytology and HPV, find most recent of each, check if they are cotests, check if they are both negative/NILM
   where
     (
       Common.AssociateDiagnosticReports(C, H) or
@@ -187,7 +196,7 @@ define NegativeCotests:
         Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
       ) != -1
     )
-  return {
+  return { // TODO: Add HPV and cytology keys with boolean values representing whether they are negative or NILM
       type: 'Cotesting with hrHPV and Cervical Cytology',
       date: Common.DiagnosticReportDate(
         Common.MostRecentDiagnosticReport({C,H})
@@ -315,7 +324,7 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
       AllowGradeDExclusion and
-      AbsenceOrRemovalOfCervix // TODO: Make sure that Included group does not have high grade history
+      AbsenceOrRemovalOfCervix // TODO: Make sure that Included group does not have high grade history: // and not HighGradeHistoryOfCancerOrPrecancer
     ) then
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'
     else
@@ -377,6 +386,8 @@ define NoErrorsHaveOccurred:
 // GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX
 //------------------------------------------------------------------------------
 
+// TODO: Modify name above to AbsenceOrRemovalOfCervix without history of high grade cancer / precancer
+
 define HasRemovalOfCervixProcedures:
   Exists(Dash.RemovalOfCervixProcedures)
 
@@ -386,13 +397,12 @@ define HasAbsenceOfCervixDiagnoses:
 define HasAbsenceOfCervixObservations:
   Exists(Dash.AbsenceOfCervixObservations)
 
-define AbsenceOrRemovalOfCervix:
+define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be able to consolidate.
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or 
   HasAbsenceOfCervixObservations
 
 // TODO: Add AbsenceOrRemovalOfCervix And NOT history of high grade precancer / cancer
-
 
 //------------------------------------------------------------------------------
 // GRADE D RECOMMENDATION: ADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
@@ -426,7 +436,7 @@ define CervicalCytologyTestsForGradeD:
 
 define HasThreeNegativeCytologyTestsForGradeD:
   Count(CervicalCytologyTestsForGradeD) >= 3 and
-  Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years
+  Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
 
 define HpvTestsForGradeD:
   if AllowGradeDRecommendation then
