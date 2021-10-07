@@ -169,7 +169,7 @@ define SystemicLupusErythematosusDiagnoses:
 define HematopoieticStemCellTransplantDiagnoses:
   [Condition: "Hematopoietic stem cell transplant"]
 
-define IrritableBowelSyndromeDiagnoses: // TODO: Update name to Inflammatory Bowel Disease
+define InflammatoryBowelDisease:
   [Condition: "ICD10CM Value Set for Crohn's Disease"] union
   [Condition: "SNOMED Value Set for Crohn's Disease"] union
   [Condition: "ICD10CM Value Set for Ulcerative Colitis"] union
@@ -196,7 +196,7 @@ define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic ("
   SolidOrganTransplantDiagnoses union
   SystemicLupusErythematosusDiagnoses union
   HematopoieticStemCellTransplantDiagnoses union
-  IrritableBowelSyndromeDiagnoses union
+  InflammatoryBowelDisease union
   RheumatoidArthritisDiagnoses union
   ChronicGraftVersusHostDiseaseDiagnoses union // NOTE: Follow up about GVHD after review of Logic Path 3
   GenitalGraftVersusHostDiseaseDiagnoses
@@ -622,7 +622,7 @@ define DiagnosisOfGenitalGraftVersusHostDisease:
 
 define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant: // TODO: Arthritis -> Rheumatoid Arthritus or RA; IBD not IBS - Change after changing expression name.
   (
-    Exists(IrritableBowelSyndromeDiagnoses) or
+    Exists(InflammatoryBowelDisease) or
     Exists(RheumatoidArthritisDiagnoses)
   ) and
   (
