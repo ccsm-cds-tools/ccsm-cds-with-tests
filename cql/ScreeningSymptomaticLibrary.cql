@@ -121,9 +121,8 @@ define HasNilmCytologyWithinLast12Months:
   Dash.HasNilmCytologyWithinLast12Months
 
 // TODO: Only take most recent result, check to see if it's negative.
-define NegativeHpvReports: // TODO: May be a redundant expression. Consider pulling concept from dashboard
-  Dash.HpvDiagnosticReports R
-    where R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
+define NegativeHpvReports:
+  Dash.NegativeHpvReports
 
 // TODO: Replace to only take most recent results before filtering for NILM/Negative
 define CoincidentNilmCytologyAndNegativeHpvReports:
