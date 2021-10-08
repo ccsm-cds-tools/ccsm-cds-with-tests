@@ -645,6 +645,11 @@ define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocomp
   DiagnosisOfGenitalGraftVersusHostDisease or
   DiagnosisOfIbsOrArthritisAndOnImmunosuppressant
 
+// TODO: There are 9 immunocompromised conditions.
+//      Can each condition have it’s own respective expression called OldestConditionX?
+//      And then MostRecentDistinctImmunocompromisedCondition would coelesce all of the OldestConditionX expressions and just take the most recent.
+// Each of immuncompromised events could be an object with date and "type"
+
 define Flags:
   {
     HasRecentAbnormalScreening,

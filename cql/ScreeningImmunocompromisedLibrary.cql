@@ -151,7 +151,7 @@ define DateOfMostRecentImmunosuppressionProcedure:
     )
   )
 
-define DateOfImmunosuppressionOnset: // TODO: Handle this in more elegant way with respect to most recent "distinct" evidence
+define DateOfImmunosuppressionOnset: // TODO: Handle this in more elegant way with respect to most recent "distinct" evidence (see Immunocompromised code in Dashboard).
   if DateOfMostRecentImmunosuppressionCondition is not null then
     if DateOfMostRecentImmunosuppressionProcedure is not null then
       if DateOfMostRecentImmunosuppressionCondition after DateOfMostRecentImmunosuppressionProcedure then

@@ -144,6 +144,11 @@ define NilmCytologyReports: // TODO: Re-write to take most recent cytology test 
       }
       sort by date
 
+// NOTE: Re-write order of operations (for use in several logic paths):
+    // - Dash.cytology
+    // - Most recent
+    // - Check for nilm
+
 define MostRecentNilmCytology:
   if Exists(NilmCytologyReports) then
     Last(NilmCytologyReports)
@@ -436,6 +441,7 @@ define CervicalCytologyTestsForGradeD:
 
 define HasThreeNegativeCytologyTestsForGradeD:
   Count(CervicalCytologyTestsForGradeD) >= 3 and
+  // TODO: Check if CervicalCytologyTestsForGradeD exists before doing date comparison so that else statement above can be removed.
   Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
 
 define HpvTestsForGradeD:
