@@ -331,6 +331,7 @@ define RecommendationText:
       AllowGradeDExclusion and
       AbsenceOrRemovalOfCervix // TODO: Make sure that Included group does not have high grade history: // and not HighGradeHistoryOfCancerOrPrecancer
     ) then
+      // NOTE: Revisit whether we want to remove "negative recommendation" here
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'
     else
       if AgeOver65 then
@@ -357,7 +358,7 @@ define RecommendationText:
               LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) +
               '. Note: ' + LastScreeningType + ' seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
             else
-              ''
+              '' // NOTE: Follow-up about adding "negative recommendation".
         else
           ''
       else // Age 65 or younger
