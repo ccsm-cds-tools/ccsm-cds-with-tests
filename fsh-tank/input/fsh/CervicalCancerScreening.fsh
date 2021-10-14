@@ -40,7 +40,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "USPSTF Recommendation"
 * relatedArtifact[=].display = "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-* library = Canonical(TopLevelScreeningLibrary|1.0)
+* library = Canonical(TopLevelScreeningLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Top-level action just includes inclusion and exclusion criteria
 // -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningSymptomaticIndividuals|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningSymptomaticIndividuals|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #2: Individuals with Exposure to DES
 // -----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningDesExposure|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningDesExposure|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #3: Immunocompromised Individuals
 // -----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningImmunocompromisedIndividuals|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningImmunocompromisedIndividuals|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #4: Average Risk Individuals
 // -----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningAverageRisk|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningAverageRisk|1.0.0)
 // -----------------------------------------------------------------------------
 // Sub-action #5: 
 // -----------------------------------------------------------------------------
@@ -125,5 +125,5 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0)
+* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)
 // TODO: Add dynamic value for error message

@@ -21,7 +21,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "USPSTF Recommendation"
 * relatedArtifact[=].display = "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-* library = Canonical(TopLevelScreeningLibrary|1.0)
+* library = Canonical(TopLevelScreeningLibrary|1.0.0)
 * kind = $RRTYPE#ServiceRequest "ServiceRequest"
 * intent = $RINTENT#proposal "Proposal"
 * priority = $RPRIOR#routine "Routine"
