@@ -35,6 +35,8 @@ codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
 codesystem "NULL FLAVOR": 'http://terminology.hl7.org/CodeSystem/v3-NullFlavor'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
+// TODO: Cross-check value sets and codes with value set spreadsheet
+
 valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
@@ -54,11 +56,13 @@ code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometri
 code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
 code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
 code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
-code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)'
+code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
 code "HPV16+": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)'
 code "HPV18+": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)'
+// TODO: Add SNOMED code for HPV16+ DNA
+// TODO: Add SNOMED code for HPV18+ DNA
 code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
 code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
@@ -67,7 +71,7 @@ code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of 
 
 // Local codes
 code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
-code "Histiocytes": 'HISTIOCYTES' from "LOCAL" display 'Histiocytes'
+code "Histiocytes": 'HISTIOCYTES' from "LOCAL" display 'Histiocytes' // TODO: Update code
 
 //------------------------------------------------------------------------------
 // PARAMETERS
@@ -157,6 +161,8 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       when c in Dash."Diagnosis of Cervical cancer" then {text: 'Cancer', rank: 6}
       else {text: 'ALL', rank: 0}
     end
+
+// LEFT OFF HERE
 
 //------------------------------------------------------------------------------
 // INCLUSIONS
