@@ -177,6 +177,8 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 //     OR Diagnosis of Cervical cancer 
 //     OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)"
 
+// TODO: Update comments above to reflect updated L2
+
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 
@@ -203,7 +205,7 @@ define IsIncluded:
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
     Exists(Cin2OrCin3HistologyResults) or
-    Exists(AisOrCancerHistologyResults)
+    Exists(AisOrCancerHistologyResults) // TODO: Update this once the L2 is updated again
   )
 
 //------------------------------------------------------------------------------
@@ -314,7 +316,7 @@ define SortedCytologyReports:
 // Edge Cases:
 // DONE: 1. HPV but no cytology (solution: just use HPV)
 // TODO: 2. Cytology but no HPV (no solution: display error)
-// TODO: 3. HPV and Cytology, but Cytology is more recent (display warning)
+// NOTE: This is being updated based on "gaps" document
 
 define MostRecentCytologyCotest:
   Coalesce(
