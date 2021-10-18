@@ -129,8 +129,8 @@ define function HpvInterpretation(conclusions List<System.Concept>):
     case
       when c ~ Dash."Negative HPV Finding" then {text: 'HPV-negative', rank: 1}
       when c ~ Dash."Positive HPV Finding" then {text: 'HPV-positive', rank: 2}
-      when c ~ "HPV16+" then {text: 'HPV16+', rank: 3}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 4}
+      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
+      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
       else {text: 'ALL', rank: 0}
     end
 
@@ -570,6 +570,8 @@ define CytologyInterpretedAsAtypicalEndometrialCells:
     (MostRecentCytologyReport.allConclusions) aC
       return aC ~ "Atypical Endometrial Cells"
   )
+
+// NOTE: LEFT OFF HERE
 
 define CytologyInterpretedAsAtypicalEndocervicalCells:
   AnyTrue(
