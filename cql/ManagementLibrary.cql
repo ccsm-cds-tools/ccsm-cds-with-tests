@@ -162,8 +162,6 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       else {text: 'ALL', rank: 0}
     end
 
-// LEFT OFF HERE
-
 //------------------------------------------------------------------------------
 // INCLUSIONS
 //------------------------------------------------------------------------------
@@ -542,6 +540,8 @@ define ThirdMostRecentCytologyResultAfterTreatment:
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #1: Rare Cytology
+
+// LEFT OFF HERE
 
 define MostRecentCytologyReport:
   if Count(SortedCytologyReports) > 0 then
