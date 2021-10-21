@@ -178,6 +178,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 //     OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)"
 
 // TODO: Update comments above to reflect updated L2
+// TODO: Do this for other Logic Paths
 
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
@@ -572,8 +573,6 @@ define CytologyInterpretedAsAtypicalEndometrialCells:
     (MostRecentCytologyReport.allConclusions) aC
       return aC ~ "Atypical Endometrial Cells"
   )
-
-// NOTE: LEFT OFF HERE
 
 define CytologyInterpretedAsAtypicalEndocervicalCells:
   AnyTrue(
