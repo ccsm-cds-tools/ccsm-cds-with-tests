@@ -194,8 +194,8 @@ define Cin2OrCin3HistologyResults:
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
       H.conclusionCode includes ToConcept(Dash."CIN3")
 
-define AisOrCancerHistologyResults:
-  Dash.HistologyDiagnosticReports H
+define AisOrCancerHistologyResults: // TODO: High-grade histology value set
+  Dash.HistologyDiagnosticReports H // NOTE: Also shows up in screening
     where H.conclusionCode in "AIS" or
       H.conclusionCode in Dash."Diagnosis of Cervical cancer"
 
@@ -249,7 +249,7 @@ define SortedHpvReports:
 
 define MostRecentHpvReport:
   if Count(SortedHpvReports) > 0 then
-    if SortedHpvReports[0].date within 5 years of Today() then
+    if SortedHpvReports[0].date within 5 years of Today() then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
       SortedHpvReports[0]
     else
       null
@@ -258,7 +258,7 @@ define MostRecentHpvReport:
 
 define SecondMostRecentHpvReport:
   if Count(SortedHpvReports) > 1 then
-    if SortedHpvReports[1].date within 5 years of MostRecentHpvReport.date then
+    if SortedHpvReports[1].date within 5 years of MostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
       SortedHpvReports[1]
     else
       null
@@ -267,7 +267,7 @@ define SecondMostRecentHpvReport:
 
 define ThirdMostRecentHpvReport:
   if Count(SortedHpvReports) > 2 then
-    if SortedHpvReports[2].date within 5 years of SecondMostRecentHpvReport.date then
+    if SortedHpvReports[2].date within 5 years of SecondMostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
       SortedHpvReports[2]
     else
       null
@@ -276,7 +276,7 @@ define ThirdMostRecentHpvReport:
 
 define FourthMostRecentHpvReport:
   if Count(SortedHpvReports) > 3 then
-    if SortedHpvReports[3].date within 5 years of ThirdMostRecentHpvReport.date then
+    if SortedHpvReports[3].date within 5 years of ThirdMostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
       SortedHpvReports[3]
     else
       null
@@ -410,7 +410,7 @@ define MostRecentBiopsyReport:
 define MostRecentBiopsyResult:
   MostRecentBiopsyReport.riskTableInput
 
-define ReferringHpvResult:
+define ReferringHpvResult: // TODO: Convert 1 month to a parameter (for all tests)
   if MostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
     MostRecentHpvResult
   else if SecondMostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
@@ -1768,7 +1768,7 @@ define GeneralScreeningManagementRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
-define LookUpTable2:
+define LookUpTable2: // NOTE: What about the multiple negative cotests referenced in Table 2b and 2c?
   RiskTableLookup.GetSurveillanceManagement(
     ThirdMostRecentHpvResult,
     ThirdMostRecentCytologyCotestResult,
@@ -1785,7 +1785,7 @@ define SurveillanceManagementRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
 // Table 3
-define LookUpTable3:
+define LookUpTable3: // NOTE: What about history going further back?
   RiskTableLookup.GetColposcopyResultsManagement(
     ReferringHpvResult,
     ReferringCytologyResult,
