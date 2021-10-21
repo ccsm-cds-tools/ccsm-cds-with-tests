@@ -52,7 +52,7 @@ Usage: #definition
 * action[=].action[=].description = "Make screening recommendations for symptomatic individuals"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0.0)
-* action[=].action[=].dynamicValue[+].path = "payload" // this is the CommunicationRequest.payload element
+* action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
 * action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "Recommendation"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningSymptomaticLibrary|1.0"

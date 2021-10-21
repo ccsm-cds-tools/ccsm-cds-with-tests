@@ -68,7 +68,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0.0)
-* action[=].action[=].dynamicValue[+].path = "payload" // this is the CommunicationRequest.payload element
+* action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
 * action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "RecommendationText"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
