@@ -2763,6 +2763,216 @@
                } ]
             }
          }, {
+            "name" : "PertinentEncounters",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "AbnormalUterineOrVaginalBleedingEncounters",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "PertinentEncountersSummary",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "name" : "PertinentEncounters",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "Reason",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "path" : "reasonCode",
+                                 "scope" : "E",
+                                 "type" : "Property"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "Status",
+                        "value" : {
+                           "path" : "status",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     }, {
+                        "name" : "Start",
+                        "value" : {
+                           "name" : "DateTimeText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "start",
+                              "type" : "Property",
+                              "source" : {
+                                 "strict" : false,
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "period",
+                                    "scope" : "E",
+                                    "type" : "Property"
+                                 },
+                                 "asTypeSpecifier" : {
+                                    "name" : "{http://hl7.org/fhir}Period",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }
+                           } ]
+                        }
+                     }, {
+                        "name" : "End",
+                        "value" : {
+                           "name" : "DateTimeText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "end",
+                              "type" : "Property",
+                              "source" : {
+                                 "strict" : false,
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "period",
+                                    "scope" : "E",
+                                    "type" : "Property"
+                                 },
+                                 "asTypeSpecifier" : {
+                                    "name" : "{http://hl7.org/fhir}Period",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }
+                           } ]
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HrHPVImmunizations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Immunization",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Immunization",
+               "codeProperty" : "vaccineCode",
+               "codeComparator" : "in",
+               "type" : "Retrieve",
+               "codes" : {
+                  "name" : "HPV Immunization",
+                  "type" : "ValueSetRef"
+               }
+            }
+         }, {
+            "name" : "PertinentImmunizations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HrHPVImmunizations",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "PertinentImmunizationsSummary",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "I",
+                  "expression" : {
+                     "name" : "PertinentImmunizations",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "Name",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "vaccineCode",
+                              "scope" : "I",
+                              "type" : "Property"
+                           } ]
+                        }
+                     }, {
+                        "name" : "Status",
+                        "value" : {
+                           "path" : "status",
+                           "scope" : "I",
+                           "type" : "Property"
+                        }
+                     }, {
+                        "name" : "AdministrationDate",
+                        "value" : {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "asType" : "{http://hl7.org/fhir}string",
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "occurrence",
+                                    "scope" : "I",
+                                    "type" : "Property"
+                                 }
+                              } ]
+                           }, {
+                              "name" : "DateTimeText",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "asType" : "{http://hl7.org/fhir}dateTime",
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "occurrence",
+                                    "scope" : "I",
+                                    "type" : "Property"
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "ExpirationDate",
+                        "value" : {
+                           "name" : "DateText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "expirationDate",
+                              "scope" : "I",
+                              "type" : "Property"
+                           } ]
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "ResponsesToAbnormalBleedingQuestion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3293,6 +3503,18 @@
                   "name" : "DiagnosticReports",
                   "value" : {
                      "name" : "DiagnosticReportsSummary",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "Encounter",
+                  "value" : {
+                     "name" : "PertinentEncountersSummary",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "Immunization",
+                  "value" : {
+                     "name" : "PertinentImmunizationsSummary",
                      "type" : "ExpressionRef"
                   }
                } ]

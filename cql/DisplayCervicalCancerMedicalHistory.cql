@@ -527,7 +527,6 @@ define DiagnosticReportsSummary:
 // PERTINENT ENCOUNTERS
 //------------------------------------------------------------------------------
 
-// TODO: Add this expression to PertinentConditions
 define AbnormalUterineOrVaginalBleedingEncounters:
   Common.RelevantEncounterStatus(
     [Encounter] E
@@ -537,11 +536,39 @@ define AbnormalUterineOrVaginalBleedingEncounters:
       )
   )
 
+define PertinentEncounters:
+  AbnormalUterineOrVaginalBleedingEncounters
+
+define PertinentEncountersSummary:
+  (PertinentEncounters) E
+  return {
+    Reason: Common.ConceptText(E.reasonCode[0]),
+    Status: E.status,
+    Start: Common.DateTimeText((E.period as FHIR.Period)."start"),
+    End: Common.DateTimeText((E.period as FHIR.Period)."end")
+  }
+
 //------------------------------------------------------------------------------
 // HPV IMMUNIZATIONS
 //------------------------------------------------------------------------------
 
-// TODO: Add HPV Immunizations
+define HrHPVImmunizations:
+  [Immunization: "HPV Immunization"]
+
+define PertinentImmunizations:
+  HrHPVImmunizations
+
+define PertinentImmunizationsSummary:
+  (PertinentImmunizations) I
+  return {
+    Name: Common.ConceptText(I.vaccineCode),
+    Status: I.status,
+    AdministrationDate: Coalesce(
+      I.occurrence,
+      Common.DateTimeText(I.occurrence)
+    ),
+    ExpirationDate: Common.DateText(I.expirationDate)
+  }
 
 //------------------------------------------------------------------------------
 // CLINICIAN PROVIDED INFORMATION
@@ -682,6 +709,7 @@ define CervicalCancerScreeningAndMedicalHistory:
   Observations: PertinentObservationsSummary,
   Medications: PertinentMedicationsSummary,
   Procedures: PertinentProceduresSummary,
-  DiagnosticReports: DiagnosticReportsSummary
-  // TODO: Add Immunizations
+  DiagnosticReports: DiagnosticReportsSummary,
+  Encounters: PertinentEncountersSummary,
+  Immunizations: PertinentImmunizationsSummary
 }
