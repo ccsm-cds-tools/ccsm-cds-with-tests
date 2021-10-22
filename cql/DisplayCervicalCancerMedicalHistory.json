@@ -2197,35 +2197,69 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "Contains",
+                  "type" : "Or",
                   "operand" : [ {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "X",
-                        "expression" : {
-                           "path" : "conclusionCode",
-                           "scope" : "R",
-                           "type" : "Property"
+                     "type" : "Contains",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
                         }
-                     } ],
-                     "return" : {
-                        "distinct" : false,
-                        "expression" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "X",
-                              "type" : "AliasRef"
-                           } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Negative HPV Finding",
+                           "type" : "CodeRef"
                         }
-                     }
+                     } ]
                   }, {
-                     "type" : "ToConcept",
-                     "operand" : {
-                        "name" : "Negative HPV Finding",
-                        "type" : "CodeRef"
-                     }
+                     "type" : "Contains",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Negative",
+                           "type" : "CodeRef"
+                        }
+                     } ]
                   } ]
                }
             }

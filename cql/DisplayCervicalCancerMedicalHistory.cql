@@ -463,8 +463,10 @@ define HpvDiagnosticReports:
 
 define NegativeHpvReports:
   HpvDiagnosticReports R
-    where R.conclusionCode includes ToConcept("Negative HPV Finding") // TODO: Also look for "Negative" SNOMED code
-
+    where(
+      R.conclusionCode includes ToConcept("Negative HPV Finding") or
+      R.conclusionCode includes ToConcept("Negative")
+    )
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
