@@ -541,8 +541,6 @@ define ThirdMostRecentCytologyResultAfterTreatment:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #1: Rare Cytology
 
-// LEFT OFF HERE
-
 define MostRecentCytologyReport:
   if Count(SortedCytologyReports) > 0 then
     SortedCytologyReports[0]
@@ -692,7 +690,7 @@ define HistologyInterpretedAsCin2Cin3AisOrCancer:
 
 define AnyHpvSinceMostRecentCytology:
   Exists(
-    (SortedBiopsyReports) B
+    (SortedBiopsyReports) B // NOTE: Should this be referencing SortedHPVReports?
       where B.date >= MostRecentCytologyReport.date - 1 day
   )
 
@@ -705,6 +703,8 @@ define NegativeOrUnknownHpvCotest:
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
+
+// LEFT OFF HERE (Discuss note above before moving on)
 
 define PositiveHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
