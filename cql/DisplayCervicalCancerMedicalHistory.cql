@@ -117,11 +117,10 @@ parameter AbnormalTestLookbackPeriod default 8 years
 
 context Patient
 
-// 1. Age (calculated from date of birth)
-
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
 //------------------------------------------------------------------------------
+// Age (calculated from date of birth)
 
 define PatientAge:
   AgeInYears()
@@ -129,7 +128,8 @@ define PatientAge:
 //------------------------------------------------------------------------------
 // PERTINENT CONDITIONS
 //------------------------------------------------------------------------------
-// Allow all clinical statues and no lookback restriction
+// Conditions relevant to cervical cancer
+//    Allow all clinical statues and no lookback restriction
 
 define CervicalCancerDiagnoses:
   [Condition: "Diagnosis of Cervical cancer"]
@@ -289,10 +289,11 @@ define PertinentObservationsSummary:
 //------------------------------------------------------------------------------
 // PERTINENT MEDICATIONS
 //------------------------------------------------------------------------------
-// Medication Request (completed) < 6 months ago
-// Medication Dispense (completed) < 6 months ago
-// Medication Administration (completed) < 6 months ago
-// Medication Statement (active) < 6 months ago
+// Medications relevant to cervical cancer (e.g., immunosuppressant treatment)
+//    Medication Request (completed) < 6 months ago
+//    Medication Dispense (completed) < 6 months ago
+//    Medication Administration (completed) < 6 months ago
+//    Medication Statement (active) < 6 months ago
 
 define ImmunosuppressantMedicationRequests:
   Common.CompletedMedicationRequest(
@@ -395,7 +396,8 @@ define PertinentMedicationsSummary:
 //------------------------------------------------------------------------------
 // PERTINENT PROCEDURES
 //------------------------------------------------------------------------------
-// With status of completed
+// Procedures relevant to cervical cancer (completed)
+//     With status of completed
 
 define HematopoieticStemCellTransplantProcedures:
   C3F.Completed(
@@ -451,7 +453,8 @@ define PertinentProceduresSummary:
 //------------------------------------------------------------------------------
 // PERTINENT DIAGNOSTIC REPORTS
 //------------------------------------------------------------------------------
-// Status of (final, amended, corrected, appended).
+// Diagnostic reports relevant to cervical cancer
+//    Status of (final, amended, corrected, appended).
 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
@@ -551,6 +554,7 @@ define PertinentEncountersSummary:
 //------------------------------------------------------------------------------
 // HPV IMMUNIZATIONS
 //------------------------------------------------------------------------------
+// hrHPV immunization
 
 define HrHPVImmunizations:
   [Immunization: "HPV Immunization"]
