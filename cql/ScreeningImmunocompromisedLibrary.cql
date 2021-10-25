@@ -65,24 +65,26 @@ define function DateOfProcedure(P Procedure):
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Sex at birth = Female 
-// OR Gender identity = Transgender Male 
+//    OR Gender identity = Transgender Male 
 // AND "Immunocompromised", which is defined as: 
-//   HIV  
-//     OR Solid Organ Transplant Diagnosis Codes  
-//     OR Solid Organ Transplant procedure (completed) 
-//     OR Diagnosis of Systemic Lupus Erythematosus (SLE)
-//     OR Diagnosis of Hematopoietic Stem Cell Transplant (HSCT)  
-//     OR Hematopoietic Stem Cell Transplant procedure (completed) 
-//     OR Genital Graft versus Host Disease 
-//     OR Chronic Graft versus Host Disease 
+//   Diagnosis of HIV  
+//   OR Solid Organ Transplant Diagnosis Codes  
+//   OR Solid Organ Transplant procedure (completed) 
+//   OR Diagnosis of Systemic Lupus Erythematosus (SLE)
+//   OR Diagnosis of Hematopoietic Stem Cell Transplant (HSCT)  
+//   OR Hematopoietic Stem Cell Transplant procedure (completed) 
+//   OR Genital Graft versus Host Disease (GvHD)
+//      AFTER Hematopoietic Stem Cell Transplant procedure (completed)
+//   OR Chronic Graft versus Host Disease (GvHD)
+//      AFTER Hematopoietic Stem Cell Transplant procedure (completed)
 //   OR 
-//     Diagnosis of Inflammatory Bowel Disease 
-//       OR Diagnosis of Rheumatoid Arthritis 
+//     Diagnosis of Inflammatory Bowel Disease (IBD)
+//        OR Diagnosis of Rheumatoid Arthritis (RA)
 //     AND
-//       Immunosuppressant, Request (completed) 
-//         OR Immunosuppressant, Dispensed (completed) 
-//         OR Immunosuppressant, Administration (completed) 
-//         OR Immunosuppressant, Statement (active)
+//        Immunosuppressant Medication for IBD or RA, Request (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Dispensed (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Administration (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Statement (active)
 
 define Immunocompromised:
   Dash.Immunocompromised
@@ -94,7 +96,7 @@ define IsIncluded:
 //------------------------------------------------------------------------------
 // EXCLUSIONS
 //------------------------------------------------------------------------------
-// Removal of cervix (completed)
+// Removal of cervix procedures (completed)
 // OR Diagnosis of Absence of cervix
 // OR Absence of cervix observation (final, amended, corrected)
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)

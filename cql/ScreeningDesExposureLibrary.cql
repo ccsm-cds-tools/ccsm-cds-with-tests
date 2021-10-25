@@ -43,13 +43,13 @@ context Patient
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Sex at birth = Female
-//   OR Gender identity = Transgender Male 
+//    OR Gender identity = Transgender Male 
 // AND 
-// Age >= 40 years old 
+// Date of Birth AFTER 01/01/1980
 // AND
-// Diagnosis of In Utero Exposure to DES  (accept all clinicalStatus values)
-//   OR In utero exposure to DES observation (final, amended, corrected) 
-//   OR response to "Did the patient experience in utero exposure to diethylstilbesterol (DES)?" = "Yes"
+// Diagnosis of DES Exposure In Utero (accept all clinicalStatus values)
+//    OR DES Exposure In Utero observation (final, amended, corrected)
+//    OR response to "Did the patient experience diethylstilbesterol (DES) exposure in utero?" = "Yes"
 
 define BornOnOrBeforeBirthdayThreshold:
   Patient.birthDate occurs before or on BirthdayThreshold
@@ -82,7 +82,7 @@ define IsIncluded:
 //------------------------------------------------------------------------------
 // Diagnosis of High grade pre-cancerous cervical lesion 
 // OR Diagnosis of Cervical cancer 
-// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)"
+// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic cancer”
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)
 // OR Abnormal histology result <= 7 years ago (7 years is a parameter in Dash)
 
