@@ -274,7 +274,12 @@ define PertinentObservations:
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
-  AbsenceOfCervixObservations
+  AbsenceOfCervixObservations union
+  // Clinician-provided Observations:
+  ResponsesToAbnormalBleedingQuestion union
+  ResponsesToVisibleLesionQuestion union
+  ResponsesToDesExposureQuestion
+
 
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
@@ -578,15 +583,17 @@ define PertinentImmunizationsSummary:
 // CLINICIAN PROVIDED INFORMATION
 //------------------------------------------------------------------------------
 
-// TODO: Add all 3 Questions to Dashboard (PertinentObservations)
-
 define ResponsesToAbnormalBleedingQuestion:
-  [Observation: "Abnormal Uterine or Vaginal Bleeding Question"]
-  // TODO: Add 12 month Lookback
+  C3F.ObservationLookBack(
+    [Observation: "Abnormal Uterine or Vaginal Bleeding Question"],
+    12 months
+  )
 
 define ResponsesToVisibleLesionQuestion:
-  [Observation: "Visible Uterine or Vaginal Lesion Question"]
-  // TODO: Add 12 month Lookback
+  C3F.ObservationLookBack(
+    [Observation: "Visible Uterine or Vaginal Lesion Question"],
+    12 months
+  )
 
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]

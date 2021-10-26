@@ -1168,6 +1168,78 @@
                } ]
             }
          }, {
+            "name" : "ResponsesToAbnormalBleedingQuestion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ObservationLookBack",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Observation",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Abnormal Uterine or Vaginal Bleeding Question",
+                        "type" : "CodeRef"
+                     }
+                  }
+               }, {
+                  "value" : 12,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               } ]
+            }
+         }, {
+            "name" : "ResponsesToVisibleLesionQuestion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ObservationLookBack",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Observation",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Visible Uterine or Vaginal Lesion Question",
+                        "type" : "CodeRef"
+                     }
+                  }
+               }, {
+                  "value" : 12,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               } ]
+            }
+         }, {
+            "name" : "ResponsesToDesExposureQuestion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Observation",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+               "codeProperty" : "code",
+               "codeComparator" : "~",
+               "type" : "Retrieve",
+               "codes" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "DES Exposure Question",
+                     "type" : "CodeRef"
+                  }
+               }
+            }
+         }, {
             "name" : "PertinentObservations",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1178,25 +1250,43 @@
                   "operand" : [ {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "AbnormalUterineOrVaginalBleedingObservations",
-                        "type" : "ExpressionRef"
+                        "type" : "Union",
+                        "operand" : [ {
+                           "name" : "AbnormalUterineOrVaginalBleedingObservations",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "CervicalOrVaginalLesionObservations",
+                           "type" : "ExpressionRef"
+                        } ]
                      }, {
-                        "name" : "CervicalOrVaginalLesionObservations",
-                        "type" : "ExpressionRef"
+                        "type" : "Union",
+                        "operand" : [ {
+                           "name" : "PregnancyObservations",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "DesExposureObservations",
+                           "type" : "ExpressionRef"
+                        } ]
                      } ]
                   }, {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "PregnancyObservations",
+                        "name" : "AbsenceOfCervixObservations",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "DesExposureObservations",
+                        "name" : "ResponsesToAbnormalBleedingQuestion",
                         "type" : "ExpressionRef"
                      } ]
                   } ]
                }, {
-                  "name" : "AbsenceOfCervixObservations",
-                  "type" : "ExpressionRef"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "ResponsesToVisibleLesionQuestion",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ResponsesToDesExposureQuestion",
+                     "type" : "ExpressionRef"
+                  } ]
                } ]
             }
          }, {
@@ -2969,60 +3059,6 @@
                            } ]
                         }
                      } ]
-                  }
-               }
-            }
-         }, {
-            "name" : "ResponsesToAbnormalBleedingQuestion",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "dataType" : "{http://hl7.org/fhir}Observation",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-               "codeProperty" : "code",
-               "codeComparator" : "~",
-               "type" : "Retrieve",
-               "codes" : {
-                  "type" : "ToList",
-                  "operand" : {
-                     "name" : "Abnormal Uterine or Vaginal Bleeding Question",
-                     "type" : "CodeRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "ResponsesToVisibleLesionQuestion",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "dataType" : "{http://hl7.org/fhir}Observation",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-               "codeProperty" : "code",
-               "codeComparator" : "~",
-               "type" : "Retrieve",
-               "codes" : {
-                  "type" : "ToList",
-                  "operand" : {
-                     "name" : "Visible Uterine or Vaginal Lesion Question",
-                     "type" : "CodeRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "ResponsesToDesExposureQuestion",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "dataType" : "{http://hl7.org/fhir}Observation",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-               "codeProperty" : "code",
-               "codeComparator" : "~",
-               "type" : "Retrieve",
-               "codes" : {
-                  "type" : "ToList",
-                  "operand" : {
-                     "name" : "DES Exposure Question",
-                     "type" : "CodeRef"
                   }
                }
             }
