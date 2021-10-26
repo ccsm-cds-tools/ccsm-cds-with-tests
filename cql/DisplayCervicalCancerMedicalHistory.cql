@@ -87,7 +87,6 @@ code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History o
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
-code "Colposcopy": '176786003' from "SNOMED-CT" display 'Colposcopy of cervix (procedure)' // TODO: Revisit in progress clinical  concept
 code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy report' // A.K.A. "Histology tests"
 code "Positive": '10828004' from "SNOMED-CT" display 'Positive (qualifier value)'
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
