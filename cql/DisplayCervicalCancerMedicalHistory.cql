@@ -659,7 +659,7 @@ define DiagnosisOfChronicGraftVersusHostDisease:
 define DiagnosisOfGenitalGraftVersusHostDisease:
   Exists(GenitalGraftVersusHostDiseaseDiagnoses)
 
-define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant: // TODO: Arthritis -> Rheumatoid Arthritus or RA; IBD not IBS - Change after changing expression name.
+define DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
   (
     Exists(InflammatoryBowelDisease) or
     Exists(RheumatoidArthritisDiagnoses)
@@ -682,7 +682,7 @@ define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocomp
   ProcedureForHematopoieticStemCellTransplant or
   DiagnosisOfChronicGraftVersusHostDisease or
   DiagnosisOfGenitalGraftVersusHostDisease or
-  DiagnosisOfIbsOrArthritisAndOnImmunosuppressant
+  DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
 
 // TODO: There are 9 immunocompromised conditions.
 //      Can each condition have it’s own respective expression called OldestConditionX?
