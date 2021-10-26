@@ -74,7 +74,7 @@ define IsIncluded:
 // OR Included and not excluded from screening logic for Immunocompromised individuals
 // OR Diagnosis of High grade pre-cancerous cervical lesion 
 // OR Diagnosis of Cervical cancer 
-// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)"
+// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic Cancer”
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)
 // OR Abnormal histology result <= 7 years ago (7 years is a parameter in Dash)
 
@@ -391,6 +391,15 @@ define NoErrorsHaveOccurred:
 //------------------------------------------------------------------------------
 // GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX
 //------------------------------------------------------------------------------
+// Do not screen if cervix has been removed and the patient does not have a history of high-grade cervical precancer or cancer
+
+// IF
+//    Removal of cervix procedure (completed)
+//    OR Diagnosis of Absence of cervix
+//    OR Absence of cervix observation
+// AND NOT Diagnosis of High grade pre-cancerous cervical lesion
+//    OR Diagnosis of Cervical cancer
+//    OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic cancer”
 
 // TODO: Modify name above to AbsenceOrRemovalOfCervix without history of high grade cancer / precancer
 
@@ -411,8 +420,9 @@ define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be
 // TODO: Add AbsenceOrRemovalOfCervix And NOT history of high grade precancer / cancer
 
 //------------------------------------------------------------------------------
-// GRADE D RECOMMENDATION: ADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
+// GRADE D RECOMMENDATION: INADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
 //------------------------------------------------------------------------------
+// Enables women older than 65 to be screened if they have not had adequate prior screening and are not at high risk for CC.
 
 define NotAdequatelyScreened:
   not AdequatelyScreened

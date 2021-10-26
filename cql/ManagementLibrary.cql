@@ -162,20 +162,21 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       else {text: 'ALL', rank: 0}
     end
 
-// LEFT OFF HERE
-
 //------------------------------------------------------------------------------
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
 // AND
-//   MOST RECENT hrHPV test FOUND <= 7 years ago AND the result = "Positive"
-//     OR MOST RECENT Cervical Cytology FOUND <= 7 years ago AND the result <> "NILM"
-//   OR
-//   Diagnosis of High grade pre-cancerous cervical lesion 
-//     OR Diagnosis of Cervical cancer 
-//     OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)"
+//   INCLUSION #1: Abnormal cervical cancer screening test within the last 7 years
+//       hrHPV result = "Positive"
+//       OR Cervical Cytology result not equal to "NILM"
+//       OR Cervical Histology result not equal to "Negative"
+//       <= 7 years ago
+//   OR INCLUSION #2: Includes women who have been "diagnosed" with a high-grade precancerous lesion or cervical cancer
+//       Diagnosis of High grade pre-cancerous cervical lesion 
+//       OR Diagnosis of Cervical cancer 
+//       OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)" or "histologic AIS" or "histologic cancer"
 
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
@@ -210,6 +211,7 @@ define IsIncluded:
 // EXCLUSIONS
 //------------------------------------------------------------------------------
 // None
+// Upon more detailed review of 2012 ASCCP Management Guidelines, may modify exclusion criteria
 
 define Excluded:
   false
