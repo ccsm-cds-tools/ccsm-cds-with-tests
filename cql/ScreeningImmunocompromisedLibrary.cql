@@ -43,25 +43,6 @@ parameter SexualActivityLookBack default 12 months // TODO: Remove. Sexual Activ
 context Patient
 
 //------------------------------------------------------------------------------
-// FUNCTIONS
-//------------------------------------------------------------------------------
-
-define function DateOfCondition(C Condition):
-  Coalesce(
-    (C.onset as FHIR.dateTime).value,
-    (C.onset as FHIR.Period)."end".value,
-    (C.onset as FHIR.Period)."start".value,
-    C.recordedDate.value
-  )
-
-define function DateOfProcedure(P Procedure):
-  Coalesce(
-    (P.performed as FHIR.dateTime).value,
-    (P.performed as FHIR.Period)."end".value,
-    (P.performed as FHIR.Period)."start".value
-  )
-
-//------------------------------------------------------------------------------
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Sex at birth = Female 
@@ -136,7 +117,7 @@ define ImmunosuppressionConditions:
   Dash.ImmunocompromisedConditions
 
 define DateOfMostRecentImmunosuppressionCondition:
-  DateOfCondition(
+  Common.ConditionDate(
     C3F.MostRecentCondition(
       ImmunosuppressionConditions
     )
@@ -147,7 +128,7 @@ define ImmunosuppressionProcedures:
   Dash.HematopoieticStemCellTransplantProcedures
 
 define DateOfMostRecentImmunosuppressionProcedure:
-  DateOfProcedure(
+  Common.ProcedureDate(
     C3F.MostRecentProcedure(
       ImmunosuppressionProcedures
     )

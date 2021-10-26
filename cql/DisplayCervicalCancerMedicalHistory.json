@@ -641,6 +641,57 @@
                }
             }
          }, {
+            "name" : "HematopoieticStemCellTransplantProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Completed",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Hematopoietic Stem Cell Transplant Procedures",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "SNOMED Value Set for Hemopoietic Stem Cell Transplantation",
+                        "type" : "ValueSetRef"
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ProcedureDate",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "OldestProcedure",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "HematopoieticStemCellTransplantProcedures",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "InflammatoryBowelDisease",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -770,6 +821,36 @@
                } ]
             }
          }, {
+            "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "ChronicGraftVersusHostDiseaseDiagnoses",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "name" : "ConditionDate",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "C",
+                        "type" : "AliasRef"
+                     } ]
+                  }, {
+                     "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
+                     "type" : "ExpressionRef"
+                  } ]
+               }
+            }
+         }, {
             "name" : "GenitalGraftVersusHostDiseaseDiagnoses",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -785,6 +866,36 @@
                      "name" : "Diagnosis of Genital GvHD",
                      "type" : "CodeRef"
                   }
+               }
+            }
+         }, {
+            "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "GenitalGraftVersusHostDiseaseDiagnoses",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "name" : "ConditionDate",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "C",
+                        "type" : "AliasRef"
+                     } ]
+                  }, {
+                     "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
+                     "type" : "ExpressionRef"
+                  } ]
                }
             }
          }, {
@@ -829,10 +940,10 @@
                }, {
                   "type" : "Union",
                   "operand" : [ {
-                     "name" : "ChronicGraftVersusHostDiseaseDiagnoses",
+                     "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
                      "type" : "ExpressionRef"
                   }, {
-                     "name" : "GenitalGraftVersusHostDiseaseDiagnoses",
+                     "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
                      "type" : "ExpressionRef"
                   } ]
                } ]
@@ -1987,39 +2098,6 @@
                      "type" : "ByColumn"
                   } ]
                }
-            }
-         }, {
-            "name" : "HematopoieticStemCellTransplantProcedures",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Completed",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}Procedure",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                     "codeProperty" : "code",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Hematopoietic Stem Cell Transplant Procedures",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "dataType" : "{http://hl7.org/fhir}Procedure",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                     "codeProperty" : "code",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "SNOMED Value Set for Hemopoietic Stem Cell Transplantation",
-                        "type" : "ValueSetRef"
-                     }
-                  } ]
-               } ]
             }
          }, {
             "name" : "SolidOrganTransplantProcedures",
@@ -3334,24 +3412,24 @@
                }
             }
          }, {
-            "name" : "DiagnosisOfChronicGraftVersusHostDisease",
+            "name" : "DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Exists",
                "operand" : {
-                  "name" : "ChronicGraftVersusHostDiseaseDiagnoses",
+                  "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
                   "type" : "ExpressionRef"
                }
             }
          }, {
-            "name" : "DiagnosisOfGenitalGraftVersusHostDisease",
+            "name" : "DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Exists",
                "operand" : {
-                  "name" : "GenitalGraftVersusHostDiseaseDiagnoses",
+                  "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
                   "type" : "ExpressionRef"
                }
             }
@@ -3455,11 +3533,11 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "DiagnosisOfChronicGraftVersusHostDisease",
+                        "name" : "DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
                         "type" : "ExpressionRef"
                      } ]
                   }, {
-                     "name" : "DiagnosisOfGenitalGraftVersusHostDisease",
+                     "name" : "DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
                      "type" : "ExpressionRef"
                   } ]
                }, {

@@ -133,6 +133,29 @@ define function Abatement(c FHIR.Condition):
     (c.abatement as FHIR.string).value
   })
 
+define function ConditionDate(C Condition):
+  Coalesce(
+    (C.onset as FHIR.dateTime).value,
+    (C.onset as FHIR.Period)."end".value,
+    (C.onset as FHIR.Period)."start".value,
+    C.recordedDate.value
+  )
+
+/**
+ * The oldest condition.  For each Condition, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: onsetDateTime, onsetPeriod.start, assertedDate, onsetPeriod.end.
+ * The found date will be used to compare Conditions and determine the oldest one.
+ * @param CondList - a list of Conditions
+ * @returns {Condition} the oldest Condition from the list, or null if null was passed in
+ */
+define function OldestCondition(CondList List<Condition>):
+  First(CondList C sort by Coalesce(
+    (onset as FHIR.dateTime).value,
+    (onset as FHIR.Period)."start".value,
+    recordedDate.value,
+    (onset as FHIR.Period)."end".value)
+  )
+
 /*******************************************************************************
  * END: Code adapted from "Factors to Consider in Managing Chronic Pain: A Pain 
  * Management Summary"
@@ -315,4 +338,18 @@ define function ProcedureDateString(p FHIR.Procedure):
     DateTimeText(p.performed as FHIR.dateTime),
     DateTimeText((p.performed as FHIR.Period)."end"),
     DateTimeText((p.performed as FHIR.Period)."start")
+  )
+
+  /**
+ * The oldest procedure.  For each Procedure, this algorithm will use the Coalesce function, which returns the
+ * first non-null result from these fields: performedDateTime, performedPeriod.end, performedPeriod.start.
+ * The found date will be used to compare Procedures and determine the oldest one.
+ * @param ProcList - a list of Procedures
+ * @returns {Procedure} the oldest Procedure from the list, or null if null was passed in
+ */
+define function OldestProcedure(ProcList List<Procedure>):
+  First(ProcList P sort by Coalesce(
+    (performed as FHIR.dateTime).value,
+    (performed as FHIR.Period)."end".value,
+    (performed as FHIR.Period)."start".value)
   )

@@ -168,6 +168,13 @@ define SystemicLupusErythematosusDiagnoses:
 define HematopoieticStemCellTransplantDiagnoses:
   [Condition: "Hematopoietic stem cell transplant"]
 
+define DateOfFirstHematopoieticStemCellTransplantProcedure:
+  Common.ProcedureDate(
+    Common.OldestProcedure(
+      HematopoieticStemCellTransplantProcedures
+    )
+  )
+
 define InflammatoryBowelDisease:
   [Condition: "ICD10CM Value Set for Crohn's Disease"] union
   [Condition: "SNOMED Value Set for Crohn's Disease"] union
@@ -183,22 +190,26 @@ define ChronicGraftVersusHostDiseaseDiagnoses:
   [Condition: "Chronic GvHD ICD-9 Code"] union
   [Condition: "Chronic GvHD ICD-10 Code"]
 
-// TODO: Add "ChronicGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
+define ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell:
+  ChronicGraftVersusHostDiseaseDiagnoses C 
+  where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define GenitalGraftVersusHostDiseaseDiagnoses:
   [Condition: "Diagnosis of Genital GvHD"]
 
-// TODO: Add "GenitalGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
+define GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell:
+  GenitalGraftVersusHostDiseaseDiagnoses C 
+  where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
-define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic ("Immunocompromised" is also defined below on line 637).
+define ImmunocompromisedConditions:
   HivDiagnoses union
   SolidOrganTransplantDiagnoses union
   SystemicLupusErythematosusDiagnoses union
   HematopoieticStemCellTransplantDiagnoses union
   InflammatoryBowelDisease union
   RheumatoidArthritisDiagnoses union
-  ChronicGraftVersusHostDiseaseDiagnoses union // NOTE: Follow up about GVHD after review of Logic Path 3
-  GenitalGraftVersusHostDiseaseDiagnoses
+  ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell union
+  GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
@@ -653,11 +664,11 @@ define DiagnosisOfHematopoieticStemCellTransplant:
 define ProcedureForHematopoieticStemCellTransplant:
   Exists(HematopoieticStemCellTransplantProcedures)
 
-define DiagnosisOfChronicGraftVersusHostDisease:
-  Exists(ChronicGraftVersusHostDiseaseDiagnoses)
+define DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell:
+  Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell)
 
-define DiagnosisOfGenitalGraftVersusHostDisease:
-  Exists(GenitalGraftVersusHostDiseaseDiagnoses)
+define DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell:
+  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell)
 
 define DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
   (
@@ -680,8 +691,8 @@ define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocomp
   DiagnosisOfSystemicLupusErythematosus or
   DiagnosisOfHematopoieticStemCellTransplant or
   ProcedureForHematopoieticStemCellTransplant or
-  DiagnosisOfChronicGraftVersusHostDisease or
-  DiagnosisOfGenitalGraftVersusHostDisease or
+  DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell or
+  DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell or
   DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
 
 // TODO: There are 9 immunocompromised conditions.
