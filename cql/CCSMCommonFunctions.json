@@ -1073,6 +1073,33 @@
                }
             } ]
          }, {
+            "name" : "DateOfFirstCondition",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "name" : "ConditionDate",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "OldestCondition",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "CondList",
+                     "type" : "OperandRef"
+                  } ]
+               } ]
+            },
+            "operand" : [ {
+               "name" : "CondList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Condition",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
             "name" : "DiagnosticReportDateString",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2891,7 +2918,7 @@
                               "path" : "value",
                               "type" : "Property",
                               "source" : {
-                                 "path" : "end",
+                                 "path" : "start",
                                  "type" : "Property",
                                  "source" : {
                                     "strict" : false,
@@ -2910,7 +2937,7 @@
                               "path" : "value",
                               "type" : "Property",
                               "source" : {
-                                 "path" : "start",
+                                 "path" : "end",
                                  "type" : "Property",
                                  "source" : {
                                     "strict" : false,
@@ -2930,6 +2957,33 @@
                      } ]
                   }
                }
+            },
+            "operand" : [ {
+               "name" : "ProcList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Procedure",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
+            "name" : "DateOfFirstProcedure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "name" : "ProcedureDate",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "OldestProcedure",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ProcList",
+                     "type" : "OperandRef"
+                  } ]
+               } ]
             },
             "operand" : [ {
                "name" : "ProcList",

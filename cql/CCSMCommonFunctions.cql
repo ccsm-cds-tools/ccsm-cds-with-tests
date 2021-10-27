@@ -156,6 +156,21 @@ define function OldestCondition(CondList List<Condition>):
     (onset as FHIR.Period)."end".value)
   )
 
+/**
+ * Date of the oldest condition in a list.  For each Condition, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: onsetDateTime, onsetPeriod.start, assertedDate, onsetPeriod.end.
+ * The found date will be used to compare Conditions and determine the oldest one. The date of the oldest Condition
+ * will be returned.
+ * @param CondList - a list of Conditions
+ * @returns {System.String} the text representation of the Condition's date
+ */
+define function DateOfFirstCondition(CondList List<Condition>):
+  ConditionDate(
+    OldestCondition(
+      CondList
+    )
+  )
+
 /*******************************************************************************
  * END: Code adapted from "Factors to Consider in Managing Chronic Pain: A Pain 
  * Management Summary"
@@ -342,7 +357,7 @@ define function ProcedureDateString(p FHIR.Procedure):
 
   /**
  * The oldest procedure.  For each Procedure, this algorithm will use the Coalesce function, which returns the
- * first non-null result from these fields: performedDateTime, performedPeriod.end, performedPeriod.start.
+ * first non-null result from these fields: performedDateTime, performedPeriod.start, performedPeriod.end.
  * The found date will be used to compare Procedures and determine the oldest one.
  * @param ProcList - a list of Procedures
  * @returns {Procedure} the oldest Procedure from the list, or null if null was passed in
@@ -350,6 +365,21 @@ define function ProcedureDateString(p FHIR.Procedure):
 define function OldestProcedure(ProcList List<Procedure>):
   First(ProcList P sort by Coalesce(
     (performed as FHIR.dateTime).value,
-    (performed as FHIR.Period)."end".value,
-    (performed as FHIR.Period)."start".value)
+    (performed as FHIR.Period)."start".value,
+    (performed as FHIR.Period)."end".value)
+  )
+
+/**
+ * Date of the oldest procedure in a list.  For each Procedure, this algorithm will use the Coalesce function, which returns the
+ * first non-null result from these fields: performedDateTime, performedPeriod.end, performedPeriod.start.
+ * The found date will be used to compare Procedures and determine the oldest one. The date of the oldest Procedure
+ * will be returned.
+ * @param ProcList - a list of Procedures
+ * @returns {System.String} the text representation of the Procedure's date
+ */
+define function DateOfFirstProcedure(ProcList List<Procedure>):
+  ProcedureDate(
+    OldestProcedure(
+      ProcList
+    )
   )

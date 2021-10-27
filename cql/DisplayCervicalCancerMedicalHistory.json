@@ -641,57 +641,6 @@
                }
             }
          }, {
-            "name" : "HematopoieticStemCellTransplantProcedures",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Completed",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}Procedure",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                     "codeProperty" : "code",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Hematopoietic Stem Cell Transplant Procedures",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "dataType" : "{http://hl7.org/fhir}Procedure",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                     "codeProperty" : "code",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "SNOMED Value Set for Hemopoietic Stem Cell Transplantation",
-                        "type" : "ValueSetRef"
-                     }
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ProcedureDate",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "OldestProcedure",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "HematopoieticStemCellTransplantProcedures",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "InflammatoryBowelDisease",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -774,6 +723,202 @@
                } ]
             }
          }, {
+            "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "InflammatoryBowelDisease",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "RheumatoidArthritisDiagnoses",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressantMedicationRequests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "CompletedMedicationRequest",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MedicationRequestLookBack",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}MedicationRequest",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+                     "codeProperty" : "medication",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "name" : "MedicationLookbackPeriod",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressantMedicationDispenses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "CompletedMedicationDispense",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MedicationDispenseLookBack",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}MedicationDispense",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
+                     "codeProperty" : "medication",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "name" : "MedicationLookbackPeriod",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressantMedicationAdministrations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "CompletedMedicationAdministration",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "LookBack",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}MedicationAdministration",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+                     "codeProperty" : "medication",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "name" : "MedicationLookbackPeriod",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "ImmunosuppressantMedicationStatements",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ActiveMedicationStatement",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MedicationStatementLookBack",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}MedicationStatement",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+                     "codeProperty" : "medication",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "name" : "MedicationLookbackPeriod",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "OnImmunosuppressant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "ImmunosuppressantMedicationRequests",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "ImmunosuppressantMedicationDispenses",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }, {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "ImmunosuppressantMedicationAdministrations",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "ImmunosuppressantMedicationStatements",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "OnImmunosuppressant",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "name" : "{http://hl7.org/fhir}Condition",
+                        "type" : "NamedTypeSpecifier"
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "ChronicGraftVersusHostDiseaseDiagnoses",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -818,6 +963,52 @@
                         "type" : "CodeRef"
                      }
                   }
+               } ]
+            }
+         }, {
+            "name" : "HematopoieticStemCellTransplantProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Completed",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Hematopoietic Stem Cell Transplant Procedures",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "SNOMED Value Set for Hemopoietic Stem Cell Transplantation",
+                        "type" : "ValueSetRef"
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DateOfFirstProcedure",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HematopoieticStemCellTransplantProcedures",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -940,10 +1131,10 @@
                }, {
                   "type" : "Union",
                   "operand" : [ {
-                     "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                     "name" : "ChronicGraftVersusHostDiseaseDiagnoses",
                      "type" : "ExpressionRef"
                   }, {
-                     "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                     "name" : "GenitalGraftVersusHostDiseaseDiagnoses",
                      "type" : "ExpressionRef"
                   } ]
                } ]
@@ -1476,118 +1667,6 @@
                      }
                   } ]
                }
-            }
-         }, {
-            "name" : "ImmunosuppressantMedicationRequests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "CompletedMedicationRequest",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MedicationRequestLookBack",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationRequest",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "name" : "MedicationLookbackPeriod",
-                     "type" : "ParameterRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "ImmunosuppressantMedicationDispenses",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "CompletedMedicationDispense",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MedicationDispenseLookBack",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationDispense",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "name" : "MedicationLookbackPeriod",
-                     "type" : "ParameterRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "ImmunosuppressantMedicationAdministrations",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "CompletedMedicationAdministration",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "LookBack",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationAdministration",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "name" : "MedicationLookbackPeriod",
-                     "type" : "ParameterRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "ImmunosuppressantMedicationStatements",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ActiveMedicationStatement",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MedicationStatementLookBack",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationStatement",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "name" : "MedicationLookbackPeriod",
-                     "type" : "ParameterRef"
-                  } ]
-               } ]
             }
          }, {
             "name" : "PertinentMedicationRequests",
@@ -2133,6 +2212,20 @@
                } ]
             }
          }, {
+            "name" : "ImmunocompromisedProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "HematopoieticStemCellTransplantProcedures",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SolidOrganTransplantProcedures",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "ColposcopyProcedures",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2234,23 +2327,18 @@
                "operand" : [ {
                   "type" : "Union",
                   "operand" : [ {
-                     "type" : "Union",
-                     "operand" : [ {
-                        "name" : "HematopoieticStemCellTransplantProcedures",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "SolidOrganTransplantProcedures",
-                        "type" : "ExpressionRef"
-                     } ]
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "ColposcopyProcedures",
+                        "expression" : {
+                           "name" : "ImmunocompromisedProcedures",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ]
                   }, {
-                     "type" : "Union",
-                     "operand" : [ {
-                        "name" : "ColposcopyProcedures",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "CervicalExcisionProcedures",
-                        "type" : "ExpressionRef"
-                     } ]
+                     "name" : "CervicalExcisionProcedures",
+                     "type" : "ExpressionRef"
                   } ]
                }, {
                   "type" : "Union",
@@ -3346,150 +3434,6 @@
                }
             }
          }, {
-            "name" : "DiagnosisOfHiv",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "HivDiagnoses",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfSolidOrganTransplant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "SolidOrganTransplantDiagnoses",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "ProcedureForSolidOrganTransplant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "SolidOrganTransplantProcedures",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfSystemicLupusErythematosus",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "SystemicLupusErythematosusDiagnoses",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfHematopoieticStemCellTransplant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "HematopoieticStemCellTransplantDiagnoses",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "ProcedureForHematopoieticStemCellTransplant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "HematopoieticStemCellTransplantProcedures",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "InflammatoryBowelDisease",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "RheumatoidArthritisDiagnoses",
-                        "type" : "ExpressionRef"
-                     }
-                  } ]
-               }, {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Or",
-                     "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "ImmunosuppressantMedicationRequests",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "ImmunosuppressantMedicationDispenses",
-                              "type" : "ExpressionRef"
-                           }
-                        } ]
-                     }, {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "ImmunosuppressantMedicationAdministrations",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }, {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "ImmunosuppressantMedicationStatements",
-                        "type" : "ExpressionRef"
-                     }
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "Immunocompromised",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3510,40 +3454,455 @@
                                  "operand" : [ {
                                     "type" : "Or",
                                     "operand" : [ {
-                                       "name" : "DiagnosisOfHiv",
-                                       "type" : "ExpressionRef"
+                                       "type" : "Exists",
+                                       "operand" : {
+                                          "name" : "HivDiagnoses",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }, {
-                                       "name" : "DiagnosisOfSolidOrganTransplant",
-                                       "type" : "ExpressionRef"
+                                       "type" : "Exists",
+                                       "operand" : {
+                                          "name" : "SolidOrganTransplantDiagnoses",
+                                          "type" : "ExpressionRef"
+                                       }
                                     } ]
                                  }, {
-                                    "name" : "ProcedureForSolidOrganTransplant",
-                                    "type" : "ExpressionRef"
+                                    "type" : "Exists",
+                                    "operand" : {
+                                       "name" : "SolidOrganTransplantProcedures",
+                                       "type" : "ExpressionRef"
+                                    }
                                  } ]
                               }, {
-                                 "name" : "DiagnosisOfSystemicLupusErythematosus",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Exists",
+                                 "operand" : {
+                                    "name" : "SystemicLupusErythematosusDiagnoses",
+                                    "type" : "ExpressionRef"
+                                 }
                               } ]
                            }, {
-                              "name" : "DiagnosisOfHematopoieticStemCellTransplant",
-                              "type" : "ExpressionRef"
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "HematopoieticStemCellTransplantDiagnoses",
+                                 "type" : "ExpressionRef"
+                              }
                            } ]
                         }, {
-                           "name" : "ProcedureForHematopoieticStemCellTransplant",
-                           "type" : "ExpressionRef"
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "HematopoieticStemCellTransplantProcedures",
+                              "type" : "ExpressionRef"
+                           }
                         } ]
                      }, {
-                        "name" : "DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
-                        "type" : "ExpressionRef"
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                           "type" : "ExpressionRef"
+                        }
                      } ]
                   }, {
-                     "name" : "DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
-                     "type" : "ExpressionRef"
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                        "type" : "ExpressionRef"
+                     }
                   } ]
                }, {
-                  "name" : "DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant",
-                  "type" : "ExpressionRef"
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
+                     "type" : "ExpressionRef"
+                  }
                } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfHiv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of HIV",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "HivDiagnoses",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfSolidOrganTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of Solid Organ Transplant",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "SolidOrganTransplantDiagnoses",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstProcedureForSolidOrganTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Procedure For Solid Organ Transplant",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstProcedure",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "SolidOrganTransplantProcedures",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfSystemicLupusErythematosus",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of Systemic Lupus Erythematosus",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "SystemicLupusErythematosusDiagnoses",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of Hematopoietic Stem Cell Transplant",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "HematopoieticStemCellTransplantDiagnoses",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Procedure For Hematopoietic Stem Cell Transplant",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstHematopoieticStemCellTransplantProcedure",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of Chronic Graft Versus Host Disease After Stem Cell",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of Genital Graft Versus Host Disease After Stem Cell",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Diagnosis Of IBD Or Rheumatoid Arthritis And On Immunosuppressant",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstCondition",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "DistinctImmunocompromisedEvents",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "type" : "Union",
+                        "operand" : [ {
+                           "type" : "Union",
+                           "operand" : [ {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "FirstDiagnosisOfHiv",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "FirstDiagnosisOfSolidOrganTransplant",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "Union",
+                           "operand" : [ {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "FirstProcedureForSolidOrganTransplant",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "FirstDiagnosisOfSystemicLupusErythematosus",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Union",
+                        "operand" : [ {
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  } ]
+               }, {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "SortedDistinctImmunocompromisedEvents",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "name" : "DistinctImmunocompromisedEvents",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "scope" : "E",
+                        "type" : "Property"
+                     }
+                  }
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "type",
+                        "value" : {
+                           "path" : "type",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "path" : "date",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentDistinctImmunocompromisedEvent",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "name" : "SortedDistinctImmunocompromisedEvents",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "MostRecentDistinctImmunocompromisedEventDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "path" : "date",
+               "type" : "Property",
+               "source" : {
+                  "name" : "MostRecentDistinctImmunocompromisedEvent",
+                  "type" : "ExpressionRef"
+               }
             }
          }, {
             "name" : "Flags",

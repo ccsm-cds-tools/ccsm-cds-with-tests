@@ -168,13 +168,6 @@ define SystemicLupusErythematosusDiagnoses:
 define HematopoieticStemCellTransplantDiagnoses:
   [Condition: "Hematopoietic stem cell transplant"]
 
-define DateOfFirstHematopoieticStemCellTransplantProcedure:
-  Common.ProcedureDate(
-    Common.OldestProcedure(
-      HematopoieticStemCellTransplantProcedures
-    )
-  )
-
 define InflammatoryBowelDisease:
   [Condition: "ICD10CM Value Set for Crohn's Disease"] union
   [Condition: "SNOMED Value Set for Crohn's Disease"] union
@@ -184,6 +177,16 @@ define InflammatoryBowelDisease:
 define RheumatoidArthritisDiagnoses:
   [Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"] union
   [Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"]
+
+define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses:
+  InflammatoryBowelDisease union
+  RheumatoidArthritisDiagnoses
+
+define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant:
+  if OnImmunosuppressant then
+    InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses
+  else
+    null
 
 define ChronicGraftVersusHostDiseaseDiagnoses:
   [Condition: "Chronic Graft versus Host Disease"] union
@@ -208,8 +211,8 @@ define ImmunocompromisedConditions:
   HematopoieticStemCellTransplantDiagnoses union
   InflammatoryBowelDisease union
   RheumatoidArthritisDiagnoses union
-  ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell union
-  GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell
+  ChronicGraftVersusHostDiseaseDiagnoses union
+  GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
@@ -342,6 +345,12 @@ define ImmunosuppressantMedicationStatements:
     )
   )
 
+define OnImmunosuppressant:
+  Exists(ImmunosuppressantMedicationRequests) or
+  Exists(ImmunosuppressantMedicationDispenses) or
+  Exists(ImmunosuppressantMedicationAdministrations) or
+  Exists(ImmunosuppressantMedicationStatements)
+
 define PertinentMedicationRequests:
   ImmunosuppressantMedicationRequests
 
@@ -420,11 +429,18 @@ define HematopoieticStemCellTransplantProcedures:
     [Procedure: "SNOMED Value Set for Hemopoietic Stem Cell Transplantation"]
   )
 
+define DateOfFirstHematopoieticStemCellTransplantProcedure:
+  Common.DateOfFirstProcedure(HematopoieticStemCellTransplantProcedures)
+ 
 define SolidOrganTransplantProcedures:
   C3F.Completed(
     [Procedure: "Solid Organ Transplant Procedure Codes"] union
     [Procedure: "Kidney Transplant"]
   )
+
+define ImmunocompromisedProcedures:
+  HematopoieticStemCellTransplantProcedures union
+  SolidOrganTransplantProcedures
 
 define ColposcopyProcedures:
   C3F.Completed(
@@ -450,8 +466,7 @@ define RemovalOfCervixProcedures:
 // NOTE: Follow up about cervical biopsy procedures
 
 define PertinentProcedures:
-  HematopoieticStemCellTransplantProcedures union
-  SolidOrganTransplantProcedures union
+  ImmunocompromisedProcedures
   ColposcopyProcedures union
   CervicalExcisionProcedures union
   CervicalAblationProcedures union
@@ -646,59 +661,99 @@ define RecentAbnormalHistology:
 define HasRecentAbnormalHistology:
   Exists(RecentAbnormalHistology)
 
-define DiagnosisOfHiv:
-  Exists(HivDiagnoses)
+define Immunocompromised:
+  Exists(HivDiagnoses) or 
+  Exists(SolidOrganTransplantDiagnoses) or
+  Exists(SolidOrganTransplantProcedures) or
+  Exists(SystemicLupusErythematosusDiagnoses) or 
+  Exists(HematopoieticStemCellTransplantDiagnoses) or
+  Exists(HematopoieticStemCellTransplantProcedures) or
+  Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell) or
+  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell) or 
+  Exists(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
 
-define DiagnosisOfSolidOrganTransplant:
-  Exists(SolidOrganTransplantDiagnoses)
+// Logic to determine most recent distinct immunocompromised event:
 
-define ProcedureForSolidOrganTransplant:
-  Exists(SolidOrganTransplantProcedures)
+define FirstDiagnosisOfHiv:
+  {
+    type: 'Diagnosis Of HIV',
+    date: Common.DateOfFirstCondition(HivDiagnoses)
+  }
 
-define DiagnosisOfSystemicLupusErythematosus:
-  Exists(SystemicLupusErythematosusDiagnoses)
+define FirstDiagnosisOfSolidOrganTransplant:
+  {
+    type: 'Diagnosis Of Solid Organ Transplant',
+    date: Common.DateOfFirstCondition(SolidOrganTransplantDiagnoses)
+  }
 
-define DiagnosisOfHematopoieticStemCellTransplant:
-  Exists(HematopoieticStemCellTransplantDiagnoses)
+define FirstProcedureForSolidOrganTransplant:
+  {
+    type: 'Procedure For Solid Organ Transplant',
+    date: Common.DateOfFirstProcedure(SolidOrganTransplantProcedures)
+  }
 
-define ProcedureForHematopoieticStemCellTransplant:
-  Exists(HematopoieticStemCellTransplantProcedures)
+define FirstDiagnosisOfSystemicLupusErythematosus:
+  {
+    type: 'Diagnosis Of Systemic Lupus Erythematosus',
+    date: Common.DateOfFirstCondition(SystemicLupusErythematosusDiagnoses)
+  }
 
-define DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell:
-  Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell)
+define FirstDiagnosisOfHematopoieticStemCellTransplant:
+  {
+    type: 'Diagnosis Of Hematopoietic Stem Cell Transplant',
+    date: Common.DateOfFirstCondition(HematopoieticStemCellTransplantDiagnoses)
+  }
 
-define DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell:
-  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell)
+define FirstProcedureForHematopoieticStemCellTransplant:
+  {
+    type: 'Procedure For Hematopoietic Stem Cell Transplant',
+    date: DateOfFirstHematopoieticStemCellTransplantProcedure
+  }
 
-define DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
-  (
-    Exists(InflammatoryBowelDisease) or
-    Exists(RheumatoidArthritisDiagnoses)
-  ) and
-  (
-    Exists(ImmunosuppressantMedicationRequests) or
-    Exists(ImmunosuppressantMedicationDispenses) or
-    Exists(ImmunosuppressantMedicationAdministrations) or
-    Exists(ImmunosuppressantMedicationStatements)
-  )
+define FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell:
+  {
+    type: 'Diagnosis Of Chronic Graft Versus Host Disease After Stem Cell',
+    date: Common.DateOfFirstCondition(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell)
+  }
 
-// TODO: Add MostRecentDistinctImmunocompromisedCondition
+define FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell:
+  {
+    type: 'Diagnosis Of Genital Graft Versus Host Disease After Stem Cell',
+    date: Common.DateOfFirstCondition(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell)
+  }
 
-define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocompromised condition is diagnosed.
-  DiagnosisOfHiv or
-  DiagnosisOfSolidOrganTransplant or
-  ProcedureForSolidOrganTransplant or
-  DiagnosisOfSystemicLupusErythematosus or
-  DiagnosisOfHematopoieticStemCellTransplant or
-  ProcedureForHematopoieticStemCellTransplant or
-  DiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell or
-  DiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell or
-  DiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
+define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
+  {
+    type: 'Diagnosis Of IBD Or Rheumatoid Arthritis And On Immunosuppressant',
+    date: Common.DateOfFirstCondition(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
+  }
 
-// TODO: There are 9 immunocompromised conditions.
-//      Can each condition have it’s own respective expression called OldestConditionX?
-//      And then MostRecentDistinctImmunocompromisedCondition would coelesce all of the OldestConditionX expressions and just take the most recent.
-// Each of immuncompromised events could be an object with date and "type"
+define DistinctImmunocompromisedEvents:
+  FirstDiagnosisOfHiv union
+  FirstDiagnosisOfSolidOrganTransplant union
+  FirstProcedureForSolidOrganTransplant union
+  FirstDiagnosisOfSystemicLupusErythematosus union
+  FirstDiagnosisOfHematopoieticStemCellTransplant union
+  FirstProcedureForHematopoieticStemCellTransplant union
+  FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell union
+  FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell union
+  FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
+
+define SortedDistinctImmunocompromisedEvents:
+  DistinctImmunocompromisedEvents E
+    where 
+      E.date is not null
+    return {
+      type: E.type,
+      date: E.date
+    }
+    sort by date
+
+define MostRecentDistinctImmunocompromisedEvent:
+  Last(SortedDistinctImmunocompromisedEvents)
+
+define MostRecentDistinctImmunocompromisedEventDate:
+  MostRecentDistinctImmunocompromisedEvent.date
 
 define Flags:
   {

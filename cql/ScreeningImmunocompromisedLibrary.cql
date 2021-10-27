@@ -113,41 +113,8 @@ define IsIncludedAndNotExcluded:
   IsIncluded and
   not Excluded
 
-define ImmunosuppressionConditions:
-  Dash.ImmunocompromisedConditions
-
-define DateOfMostRecentImmunosuppressionCondition:
-  Common.ConditionDate(
-    C3F.MostRecentCondition(
-      ImmunosuppressionConditions
-    )
-  )
-
-define ImmunosuppressionProcedures:
-  Dash.SolidOrganTransplantProcedures union
-  Dash.HematopoieticStemCellTransplantProcedures
-
-define DateOfMostRecentImmunosuppressionProcedure:
-  Common.ProcedureDate(
-    C3F.MostRecentProcedure(
-      ImmunosuppressionProcedures
-    )
-  )
-
-define DateOfImmunosuppressionOnset: // TODO: Handle this in more elegant way with respect to most recent "distinct" evidence (see Immunocompromised code in Dashboard).
-  if DateOfMostRecentImmunosuppressionCondition is not null then
-    if DateOfMostRecentImmunosuppressionProcedure is not null then
-      if DateOfMostRecentImmunosuppressionCondition after DateOfMostRecentImmunosuppressionProcedure then
-        DateOfMostRecentImmunosuppressionCondition
-      else
-        DateOfMostRecentImmunosuppressionProcedure
-    else
-      DateOfMostRecentImmunosuppressionCondition
-  else
-    if DateOfMostRecentImmunosuppressionProcedure is not null then
-      DateOfMostRecentImmunosuppressionProcedure
-    else
-      null
+define DateOfImmunosuppressionOnset:
+  Dash.MostRecentDistinctImmunocompromisedEventDate
 
 define NilmCytologyReportsSinceImmunosuppressionOnset:
   Dash.NilmCytologyReports R
