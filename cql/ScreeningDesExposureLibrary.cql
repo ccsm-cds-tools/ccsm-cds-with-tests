@@ -104,7 +104,7 @@ define HasRecentAbnormalHistology:
   Dash.HasRecentAbnormalHistology
 
 // TODO: Add "Histologic AIS" and "Histologic Cancer" to exclusions
-// NOTE: Cross-check that this is added for other logic paths
+// NOTE: Cross-check that this is added for other logic paths. Maybe make this a common expression in Dashboard.
 
 define Excluded:
   HasHighGradePreCancerCervicalLesion or
@@ -120,49 +120,24 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define HasNilmCytologyWithinLast12Months:
-  Dash.HasNilmCytologyWithinLast12Months
-
-define NilmCytologyWithinLast12Months: // TODO: We can probably take this from the Dashboard
-  Common.LookBack(Dash.NilmCytologyReports, 12 months)
-
-define MostRecentNilmCytologyWithinPastYear:
-  Common.MostRecentDiagnosticReport(NilmCytologyWithinLast12Months)
-
-define DateOfRecentNilmCytology:
-  Common.DiagnosticReportDate(MostRecentNilmCytologyWithinPastYear)
-
-define ProposedDateOfNextCytology:
-  DateOfRecentNilmCytology + 1 year
-
-define RecommendImmediateCervicalCytology:
-  IsIncludedAndNotExcluded and
-  not HasNilmCytologyWithinLast12Months
-
-// TODO: Remove above logic. Result will be just recommendation text and IsIncludedAndNotExcluded.
-
-define RecommendationText: // TODO: Update RecommendationText
-  if RecommendImmediateCervicalCytology then
-    'Per the "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention, cervical cytology screening is indicated. Tissue sampling should include collection of endocervical and ectocervical cells, as well as those from vaginal fornices.'
-  else if IsIncludedAndNotExcluded and Exists(ProposedDateOfNextCytology) then
-    'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextCytology)) + '.'
+define RecommendationText:
+  if IsIncludedAndNotExcluded then
+    'Consider individualized care for this patient due to a gap in evidence-based care recommendations for individuals with DES exposure in utero. Previous guidelines (i.e., "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention”) recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
   else
-    ''
+    null // NOTE: Discuss whether we want a "lack of recommendation" to appear as an empty string or as null (this is not consistent throughout logic paths).
+
+define Citation:
+  if RecommendationText is not null then
+    'Antenatal Exposure to DES: Lessons Learned...Future Concerns'
+  else
+    null
 
 //------------------------------------------------------------------------------
 // ERRORS
 //------------------------------------------------------------------------------
 
-define ErrorDesExposureButTooYoung: // TODO: Remove error. This will never happen.
-  if WasExposedToDesInUtero and not BornOnOrBeforeBirthdayThreshold then
-    'There are indications that the patient was exposed to DES in utero but was born after ' + ToString(ToDate(BirthdayThreshold)) + '; please review the patient record for consistency.'
-  else
-    null
-
 define Errors:
-  {
-    ErrorDesExposureButTooYoung
-  } union
+  {} union
   Dash.Errors
 
 define ErrorsHaveOccurred:
