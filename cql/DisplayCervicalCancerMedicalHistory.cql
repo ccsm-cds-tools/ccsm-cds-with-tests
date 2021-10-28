@@ -730,10 +730,10 @@ define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
 
 define DistinctImmunocompromisedEvents:
   FirstDiagnosisOfHiv union
-  FirstDiagnosisOfSolidOrganTransplant union
+  FirstDiagnosisOfSolidOrganTransplant union // TODO: Combine both SolidOrganTransplant events
   FirstProcedureForSolidOrganTransplant union
   FirstDiagnosisOfSystemicLupusErythematosus union
-  FirstDiagnosisOfHematopoieticStemCellTransplant union
+  FirstDiagnosisOfHematopoieticStemCellTransplant union // TODO: Combine both HematopoieticStemCellTransplant events
   FirstProcedureForHematopoieticStemCellTransplant union
   FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell union
   FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell union
