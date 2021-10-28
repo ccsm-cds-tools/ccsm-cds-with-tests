@@ -508,10 +508,10 @@ define CervicalCytologyReports:
   )
 
 define MostRecentCytologyReport:
-  {Common.MostRecentDiagnosticReport(CervicalCytologyReports)}
+  {Common.MostRecentDiagnosticReport(CervicalCytologyReports)} // TODO: Make singleton
 
-define MostRecentNilmCytology:
-  MostRecentCytologyReport R
+define MostRecentNilmCytology: // TODO: Re-write so that this doesn't require a list (if/else to see if any exist, if so return most recent)
+  (MostRecentCytologyReport) R
     where AnyTrue(
       (R.conclusionCode) cC return cC ~ "NILM"
     )

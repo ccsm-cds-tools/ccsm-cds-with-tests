@@ -144,7 +144,9 @@ define NilmCytologyReports:
     }
     sort by date
 
-define MostRecentNilmCytology:
+// TODO: Try upgrading cql-execution engine to resolve issue
+
+define MostRecentNilmCytology: // TODO: Add logic from above expression into this expression (combine the two)
   if Exists(NilmCytologyReports) then
     Last(NilmCytologyReports)
   else
@@ -176,7 +178,7 @@ define MostRecentNegativeHpvTest:
   else
     {
       type: '',
-      date: Now() - 200 years // TODO: Could re-write similarly to cytology
+      date: Now() - 200 years // TODO: Could re-write similarly to cytology; See if we can replace with null after cql-execution update
     }
 
 define DateOfMostRecentNegativeHpv:
