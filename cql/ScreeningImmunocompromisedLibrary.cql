@@ -167,7 +167,7 @@ define Under21: // TODO: Remove
   AgeInYears() < 21
 
 define Age21Through29:
-  AgeInYears() between 21 and 29
+  AgeInYears() between 21 and 29 // TODO: QUESTION: Will this omit people between 29 and 30? Seems so according to CQL spec
 
 define Age30AndOlder:
   AgeInYears() >= 30
@@ -289,23 +289,32 @@ define ProposeImmediateTesting:
 
 define RecommendationText:
   if ProposeImmediateTesting then
-    if Under21 or Age21Through29 then // TODO: Remove Under21
-      'Per CDC guidelines, Cervical Cytology screening is indicated.'
-    else
-      'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
-  else
-    if Under21 or Age21Through29 then // TODO: Remove Under21
-      'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
-    else
-      if LastCytologyWasCotest then
-        'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
-      else
-        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' // NOTE: Check in about adding option for recommending a cotest.
+    case
+      when Age21Through29 then 
+        'Per CDC guidelines, Cervical Cytology screening is indicated.'
+      when Age30AndOlder then
+        'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
+      else // No recommendation for Age < 21
+        '' 
+    end
+  else // Propose Future Testing
+    case 
+      when Age21Through29 then 
+        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+      when Age30AndOlder then
+        if LastCytologyWasCotest then
+          'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+        else
+          'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' // NOTE: Check in about adding option for recommending a cotest.
+      else // No recommendation for Age < 21
+        ''
+    end
 
-define RecommendImmediateCervicalCytology: // NOTE: Check to see if this can be deleted.
-  ProposeImmediateTesting
+define RecommendImmediateCervicalCytology:
+  ProposeImmediateTesting and
+  (Age21Through29 or Age30AndOlder)
 
-define RecommendImmediateCotesting: // NOTE: Check to see if this can be deleted.
+define RecommendImmediateCotesting:
   ProposeImmediateTesting and
   Age30AndOlder
 

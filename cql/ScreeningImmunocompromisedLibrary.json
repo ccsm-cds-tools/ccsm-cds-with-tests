@@ -1377,107 +1377,42 @@
                   }
                },
                "then" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "Under21",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "Age21Through29",
-                           "type" : "ExpressionRef"
-                        } ]
+                  "type" : "Case",
+                  "caseItem" : [ {
+                     "when" : {
+                        "name" : "Age21Through29",
+                        "type" : "ExpressionRef"
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Per CDC guidelines, Cervical Cytology screening is indicated.",
+                        "type" : "Literal"
                      }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Per CDC guidelines, Cervical Cytology screening is indicated.",
-                     "type" : "Literal"
-                  },
+                  }, {
+                     "when" : {
+                        "name" : "Age30AndOlder",
+                        "type" : "ExpressionRef"
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).",
+                        "type" : "Literal"
+                     }
+                  } ],
                   "else" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).",
+                     "value" : "",
                      "type" : "Literal"
                   }
                },
                "else" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "Under21",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "Age21Through29",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }
-                  },
-                  "then" : {
-                     "type" : "Concatenate",
-                     "operand" : [ {
-                        "type" : "Concatenate",
-                        "operand" : [ {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical cytology screening is next due on ",
-                           "type" : "Literal"
-                        }, {
-                           "type" : "ToString",
-                           "operand" : {
-                              "type" : "ToDate",
-                              "operand" : {
-                                 "name" : "ProposedDateOfNextScreening",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        } ]
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : ".",
-                        "type" : "Literal"
-                     } ]
-                  },
-                  "else" : {
-                     "type" : "If",
-                     "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "name" : "LastCytologyWasCotest",
-                           "type" : "ExpressionRef"
-                        }
+                  "type" : "Case",
+                  "caseItem" : [ {
+                     "when" : {
+                        "name" : "Age21Through29",
+                        "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "type" : "Concatenate",
-                        "operand" : [ {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cotesting with a cervical cytology test and a hrHPV test is next due on ",
-                              "type" : "Literal"
-                           }, {
-                              "type" : "ToString",
-                              "operand" : {
-                                 "type" : "ToDate",
-                                 "operand" : {
-                                    "name" : "ProposedDateOfNextScreening",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : ".",
-                           "type" : "Literal"
-                        } ]
-                     },
-                     "else" : {
                         "type" : "Concatenate",
                         "operand" : [ {
                            "type" : "Concatenate",
@@ -1501,6 +1436,75 @@
                            "type" : "Literal"
                         } ]
                      }
+                  }, {
+                     "when" : {
+                        "name" : "Age30AndOlder",
+                        "type" : "ExpressionRef"
+                     },
+                     "then" : {
+                        "type" : "If",
+                        "condition" : {
+                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "LastCytologyWasCotest",
+                              "type" : "ExpressionRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Cotesting with a cervical cytology test and a hrHPV test is next due on ",
+                                 "type" : "Literal"
+                              }, {
+                                 "type" : "ToString",
+                                 "operand" : {
+                                    "type" : "ToDate",
+                                    "operand" : {
+                                       "name" : "ProposedDateOfNextScreening",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : ".",
+                              "type" : "Literal"
+                           } ]
+                        },
+                        "else" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Cervical cytology screening is next due on ",
+                                 "type" : "Literal"
+                              }, {
+                                 "type" : "ToString",
+                                 "operand" : {
+                                    "type" : "ToDate",
+                                    "operand" : {
+                                       "name" : "ProposedDateOfNextScreening",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : ".",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }
+                  } ],
+                  "else" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "",
+                     "type" : "Literal"
                   }
                }
             }
@@ -1509,8 +1513,20 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ProposeImmediateTesting",
-               "type" : "ExpressionRef"
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "ProposeImmediateTesting",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "name" : "Age21Through29",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "Age30AndOlder",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
             }
          }, {
             "name" : "RecommendImmediateCotesting",
