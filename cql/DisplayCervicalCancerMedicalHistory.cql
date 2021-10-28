@@ -263,24 +263,19 @@ define PregnancyObservations:
       [Observation: "Pregnancy Status"] P
         where P.value ~ "Patient currently pregnant"
     ),
-    42 weeks // NOTE: Changing 12 months to 42 weeks
+    42 weeks
   )
 
 define DesExposureObservations:
   // C3F.ObservationLookBack(
     C3F.Verified(
       [Observation: "In utero exposure to DES"]
-    )//,
-    // 12 months // NOTE: Removing lookback since it doesn't make sense here
-  // )
+    )
 
 define AbsenceOfCervixObservations:
-  // C3F.ObservationLookBack(
     C3F.Verified(
       [Observation: "Absence of cervix observation"]
-    )//,
-    // 12 months // NOTE: Removing lookback since it doesn't make sense here
-  // )
+    )
 
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
