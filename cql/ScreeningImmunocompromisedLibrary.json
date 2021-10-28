@@ -64,24 +64,6 @@
             }
          } ]
       },
-      "codeSystems" : {
-         "def" : [ {
-            "name" : "LOINC",
-            "id" : "http://loinc.org",
-            "accessLevel" : "Public"
-         } ]
-      },
-      "codes" : {
-         "def" : [ {
-            "name" : "Had Intercourse",
-            "id" : "64728-9",
-            "display" : "Have you ever had vaginal intercourse",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "LOINC"
-            }
-         } ]
-      },
       "contexts" : {
          "def" : [ {
             "name" : "Patient"
@@ -584,29 +566,6 @@
                }
             }
          }, {
-            "name" : "Under21",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Less",
-               "operand" : [ {
-                  "precision" : "Year",
-                  "type" : "CalculateAge",
-                  "operand" : {
-                     "path" : "birthDate.value",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "Patient",
-                        "type" : "ExpressionRef"
-                     }
-                  }
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "value" : "21",
-                  "type" : "Literal"
-               } ]
-            }
-         }, {
             "name" : "Age21Through29",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -674,129 +633,6 @@
                } ]
             }
          }, {
-            "name" : "ObservationsOfSexualActivity",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Verified",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ObservationLookBack",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "Obs",
-                        "expression" : {
-                           "dataType" : "{http://hl7.org/fhir}Observation",
-                           "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                           "codeProperty" : "code",
-                           "codeComparator" : "~",
-                           "type" : "Retrieve",
-                           "codes" : {
-                              "type" : "ToList",
-                              "operand" : {
-                                 "name" : "Had Intercourse",
-                                 "type" : "CodeRef"
-                              }
-                           }
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "where" : {
-                        "type" : "Contains",
-                        "operand" : [ {
-                           "type" : "ToList",
-                           "operand" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "asType" : "{http://hl7.org/fhir}CodeableConcept",
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "value",
-                                    "scope" : "Obs",
-                                    "type" : "Property"
-                                 }
-                              } ]
-                           }
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Yes",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }, {
-                     "name" : "SexualActivityLookBack",
-                     "type" : "ParameterRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "RecentOnsetSexualActivity",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "ObservationsOfSexualActivity",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "NoCytologySinceSexualActivityOnset",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Not",
-               "operand" : {
-                  "type" : "Exists",
-                  "operand" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "C",
-                        "expression" : {
-                           "name" : "CervicalCytologyReports",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "where" : {
-                        "type" : "After",
-                        "operand" : [ {
-                           "name" : "DiagnosticReportDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "C",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "name" : "ObservationDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "MostRecent",
-                              "libraryName" : "C3F",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "ObservationsOfSexualActivity",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           } ]
-                        } ]
-                     }
-                  }
-               }
-            }
-         }, {
             "name" : "NeedFirstOfThreeAnnualCytologyTests",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -806,63 +642,39 @@
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "Or",
+                     "type" : "And",
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "name" : "IsIncludedAndNotExcluded",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "name" : "Under21",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "name" : "RecentOnsetSexualActivity",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }, {
-                           "name" : "NoCytologySinceSexualActivityOnset",
+                           "name" : "IsIncludedAndNotExcluded",
                            "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "IsIncludedAndNotExcluded",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "name" : "Age21Through29",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "name" : "Age30AndOlder",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           } ]
                         }, {
                            "type" : "Or",
                            "operand" : [ {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
-                                 "type" : "ExpressionRef"
-                              }
+                              "name" : "Age21Through29",
+                              "type" : "ExpressionRef"
                            }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "CytologySequenceIntact",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                 "value" : "false",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "Age30AndOlder",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "CytologySequenceIntact",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                              "value" : "false",
+                              "type" : "Literal"
                            } ]
                         } ]
                      } ]

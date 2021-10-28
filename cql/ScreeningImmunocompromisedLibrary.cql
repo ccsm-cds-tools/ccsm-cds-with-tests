@@ -23,20 +23,10 @@ include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
-// CODE SYSTEMS, VALUE SETS, AND CODES
-//------------------------------------------------------------------------------
-
-codesystem "LOINC": 'http://loinc.org'
-
-// Standard codes
-code "Had Intercourse": '64728-9' from "LOINC" display 'Have you ever had vaginal intercourse' // TODO: This criteria was deleted. Remove here in L3.
-
-//------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
 
 parameter CytologyWindow default 18 months
-parameter SexualActivityLookBack default 12 months // TODO: Remove. Sexual Activity is no longer a factor.
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -163,56 +153,22 @@ define CytologySequenceIntact:
   else
     false
 
-define Under21: // TODO: Remove
-  AgeInYears() < 21
-
 define Age21Through29:
   AgeInYears() between 21 and 29 // TODO: QUESTION: Will this omit people between 29 and 30? Seems so according to CQL spec
 
 define Age30AndOlder:
   AgeInYears() >= 30
 
-define ObservationsOfSexualActivity: // TODO: Remove from L3
-  C3F.Verified(
-    C3F.ObservationLookBack(
-      [Observation: "Had Intercourse"] Obs
-        where Obs.value includes ToConcept(Dash."Yes"),
-      SexualActivityLookBack
-    )
-  )
-
-define RecentOnsetSexualActivity: // TODO: Remove from L3
-  Exists(ObservationsOfSexualActivity)
-
-define NoCytologySinceSexualActivityOnset: // TODO: Remove from L3
-  not Exists(
-    Dash.CervicalCytologyReports C
-      where Common.DiagnosticReportDate(C) after
-      Common.ObservationDate(
-        C3F.MostRecent(
-          ObservationsOfSexualActivity
-        )
-      )
-  )
-
 define NeedFirstOfThreeAnnualCytologyTests:
   if (
-    ( // TODO: Remove first clause
-      IsIncludedAndNotExcluded and
-      Under21 and 
-      RecentOnsetSexualActivity and
-      NoCytologySinceSexualActivityOnset
-    ) or
+    IsIncludedAndNotExcluded and
     (
-      IsIncludedAndNotExcluded and
-      (
-        Age21Through29 or
-        Age30AndOlder
-      ) and
-      (
-        DateOfFirstNilmCytologyAfterImmunosuppressionOnset is null or
-        CytologySequenceIntact = false
-      )
+      Age21Through29 or
+      Age30AndOlder
+    ) and
+    (
+      DateOfFirstNilmCytologyAfterImmunosuppressionOnset is null or
+      CytologySequenceIntact = false
     )
   ) then true
   else false
