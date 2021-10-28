@@ -1862,7 +1862,7 @@ define CommonAbnormalityRecommendation:
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
 
-define ManagementRecommendation:
+define ManagementRecommendation: // NOTE: Should we call this RecommendationText for consistency with other logic paths?
   Coalesce(
     SpecialPopulationRecommendation,
     RareAbnormalityRecommendation,
