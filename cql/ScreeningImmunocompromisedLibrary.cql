@@ -136,15 +136,17 @@ define DateOfThirdNilmCytologyAfterImmunosuppressionOnset:
 define CytologySequenceIntact:
   if DateOfFirstNilmCytologyAfterImmunosuppressionOnset is not null then
     if DateOfSecondNilmCytologyAfterImmunosuppressionOnset is not null then
-      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then // NOTE: Check to see if we need to lookback from Today()
+      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then
         DateOfFirstNilmCytologyAfterImmunosuppressionOnset >  
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
-          and
+        and
         DateOfSecondNilmCytologyAfterImmunosuppressionOnset >
           DateOfThirdNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
       else
-        DateOfFirstNilmCytologyAfterImmunosuppressionOnset > // TODO: Add Today() - CytologyWindow logic 
+        DateOfFirstNilmCytologyAfterImmunosuppressionOnset >
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
+        and
+        DateOfSecondNilmCytologyAfterImmunosuppressionOnset > (Today() - CytologyWindow)
     else
       if DateOfFirstNilmCytologyAfterImmunosuppressionOnset before Today() - CytologyWindow then
         false

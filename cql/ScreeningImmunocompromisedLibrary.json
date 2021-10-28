@@ -54,14 +54,6 @@
                "unit" : "months",
                "type" : "Quantity"
             }
-         }, {
-            "name" : "SexualActivityLookBack",
-            "accessLevel" : "Public",
-            "default" : {
-               "value" : 12,
-               "unit" : "months",
-               "type" : "Quantity"
-            }
          } ]
       },
       "contexts" : {
@@ -507,18 +499,38 @@
                         } ]
                      },
                      "else" : {
-                        "type" : "Greater",
+                        "type" : "And",
                         "operand" : [ {
-                           "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
-                           "type" : "ExpressionRef"
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyWindow",
+                                 "type" : "ParameterRef"
+                              } ]
+                           } ]
                         }, {
-                           "type" : "Subtract",
+                           "type" : "Greater",
                            "operand" : [ {
                               "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
                               "type" : "ExpressionRef"
                            }, {
-                              "name" : "CytologyWindow",
-                              "type" : "ParameterRef"
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "type" : "Today"
+                                 }, {
+                                    "name" : "CytologyWindow",
+                                    "type" : "ParameterRef"
+                                 } ]
+                              }
                            } ]
                         } ]
                      }
