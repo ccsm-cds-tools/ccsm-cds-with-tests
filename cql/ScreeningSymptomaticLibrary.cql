@@ -114,18 +114,16 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define NilmCytologyReports: // TODO: Only take most recent result, and check to see if it's NILM
-  Dash.NilmCytologyReports
+define NilmCytologyReports:
+  Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
   Dash.HasNilmCytologyWithinLast12Months
 
-// TODO: Only take most recent result, check to see if it's negative.
 define NegativeHpvReports:
-  Dash.NegativeHpvReports
+  Dash.MostRecentNegativeHpv
 
-// TODO: Replace to only take most recent results before filtering for NILM/Negative
-define CoincidentNilmCytologyAndNegativeHpvReports:
+define CoincidentNilmCytologyAndNegativeHpvReports: // TODO: Generalize this by creating a function to determine if two reports are a cotest
   from "NilmCytologyReports" C, "NegativeHpvReports" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
@@ -181,7 +179,7 @@ define VisibleLesionRecommendation:
 define ElseRecommendation:
   'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
 
-define Recommendation:
+define Recommendation: // NOTE: Should we call this RecommendationText for consistency with other logic paths?
   if IsIncludedAndNotExcluded then
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation

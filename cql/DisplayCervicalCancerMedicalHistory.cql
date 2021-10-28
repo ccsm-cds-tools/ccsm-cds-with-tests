@@ -489,12 +489,16 @@ define HpvDiagnosticReports:
     )
   )
 
-define NegativeHpvReports:
-  HpvDiagnosticReports R
-    where(
+define MostRecentHpvReport:
+  {Common.MostRecentDiagnosticReport(HpvDiagnosticReports)}
+
+define MostRecentNegativeHpv:
+  MostRecentHpvReport R
+    where (
       R.conclusionCode includes ToConcept("Negative HPV Finding") or
       R.conclusionCode includes ToConcept("Negative")
     )
+
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
@@ -503,14 +507,23 @@ define CervicalCytologyReports:
     )
   )
 
-define NilmCytologyReports:
+define MostRecentCytologyReport:
+  {Common.MostRecentDiagnosticReport(CervicalCytologyReports)}
+
+define MostRecentNilmCytology:
+  MostRecentCytologyReport R
+    where AnyTrue(
+      (R.conclusionCode) cC return cC ~ "NILM"
+    )
+
+define NilmCytologyReports: // NOTE: This is now only used in LP3. Can we edit LP3 to use the same "most recent" logic defined above?
   CervicalCytologyReports R
     where AnyTrue(
       (R.conclusionCode) cC return cC ~ "NILM"
     )
 
 define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack(NilmCytologyReports, 12 months))
+  Exists(Common.LookBack(MostRecentNilmCytology, 12 months))
 
 define HistologyDiagnosticReports:
   Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])

@@ -136,18 +136,13 @@ define Age30Through65:
 define AgeOver65:
   AgeInYears() > 65
 
-define NilmCytologyReports: // TODO: Re-write to take most recent cytology test and check for NILM.
-  Dash.NilmCytologyReports R
-      return {
-        type: 'Cervical Cytology',
-        date: Common.DiagnosticReportDate(R)
-      }
-      sort by date
-
-// NOTE: Re-write order of operations (for use in several logic paths):
-    // - Dash.cytology
-    // - Most recent
-    // - Check for nilm
+define NilmCytologyReports:
+  Dash.MostRecentNilmCytology R
+    return {
+      type: 'Cervical Cytology',
+      date: Common.DiagnosticReportDate(R)
+    }
+    sort by date
 
 define MostRecentNilmCytology:
   if Exists(NilmCytologyReports) then
@@ -167,8 +162,8 @@ define HasRecentNilmCytology:
   DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
   // else, false
 
-define NegativeHpvReports: // TODO: Re-write to take most recent and then check for positive.
-  Dash.NegativeHpvReports R
+define NegativeHpvReports:
+  Dash.MostRecentNegativeHpv R
     return {
       type: 'hrHPV',
       date: Common.DiagnosticReportDate(R)
@@ -181,7 +176,7 @@ define MostRecentNegativeHpvTest:
   else
     {
       type: '',
-      date: Now() - 200 years
+      date: Now() - 200 years // TODO: Could re-write similarly to cytology
     }
 
 define DateOfMostRecentNegativeHpv:
@@ -191,7 +186,7 @@ define HasRecentNegativeHpvTests:
   DateOfMostRecentNegativeHpv after Now() - PrimaryHpvTestingCadence
 
 define NegativeCotests: // NOTE: Find where this appears elsewhere in L3, refer to that expression here.
-  from Dash."NilmCytologyReports" C, Dash."NegativeHpvReports" H // TODO: Look at all cytology and HPV, find most recent of each, check if they are cotests, check if they are both negative/NILM
+  from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
   where
     (
       Common.AssociateDiagnosticReports(C, H) or
@@ -431,7 +426,7 @@ define AdequatelyScreened:
   HasThreeNegativeCytologyTestsForGradeD or
   HasTwoNegativeHpvTestsForGradeD
 
-define CervicalCytologyTestsForGradeD:
+define CervicalCytologyTestsForGradeD: // NOTE: Do we need to add "most recent" check before taking all NILMs here?
   if AllowGradeDRecommendation then
     [DiagnosticReport: Dash."Pap Test"] C
       where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and 
@@ -455,7 +450,7 @@ define HasThreeNegativeCytologyTestsForGradeD:
   // TODO: Check if CervicalCytologyTestsForGradeD exists before doing date comparison so that else statement above can be removed.
   Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
 
-define HpvTestsForGradeD:
+define HpvTestsForGradeD: // NOTE: Do we need to add "most recent" check before taking all Negative tests here?
   if AllowGradeDRecommendation then
     [DiagnosticReport: Dash."HPV Test"] H
       where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding") and

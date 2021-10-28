@@ -2431,7 +2431,23 @@
                } ]
             }
          }, {
-            "name" : "NegativeHpvReports",
+            "name" : "MostRecentHpvReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "name" : "MostRecentDiagnosticReport",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "HpvDiagnosticReports",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "MostRecentNegativeHpv",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2439,7 +2455,7 @@
                "source" : [ {
                   "alias" : "R",
                   "expression" : {
-                     "name" : "HpvDiagnosticReports",
+                     "name" : "MostRecentHpvReport",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -2540,6 +2556,72 @@
                } ]
             }
          }, {
+            "name" : "MostRecentCytologyReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "name" : "MostRecentDiagnosticReport",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "CervicalCytologyReports",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "MostRecentNilmCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "MostRecentCytologyReport",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "cC",
+                        "expression" : {
+                           "path" : "conclusionCode",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "cC",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "NILM",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "NilmCytologyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2600,7 +2682,7 @@
                   "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "name" : "NilmCytologyReports",
+                     "name" : "MostRecentNilmCytology",
                      "type" : "ExpressionRef"
                   }, {
                      "value" : 12,

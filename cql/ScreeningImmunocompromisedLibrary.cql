@@ -106,7 +106,7 @@ define IsIncludedAndNotExcluded:
 define DateOfImmunosuppressionOnset:
   Dash.MostRecentDistinctImmunocompromisedEventDate
 
-define NilmCytologyReportsSinceImmunosuppressionOnset:
+define NilmCytologyReportsSinceImmunosuppressionOnset: // NOTE: Do these need to include the "Most Recent" logic?
   Dash.NilmCytologyReports R
     where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
     return {
