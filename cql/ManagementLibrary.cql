@@ -690,7 +690,7 @@ define HistologyInterpretedAsCin2Cin3AisOrCancer:
 
 define AnyHpvSinceMostRecentCytology:
   Exists(
-    (SortedBiopsyReports) B // NOTE: Should this be referencing SortedHPVReports?
+    (SortedBiopsyReports) B // TODO: Change this to SortedHPVReports
       where B.date >= MostRecentCytologyReport.date - 1 day
   )
 
@@ -703,8 +703,6 @@ define NegativeOrUnknownHpvCotest:
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
-
-// LEFT OFF HERE (Discuss note above before moving on)
 
 define PositiveHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
@@ -772,11 +770,11 @@ define RecommendationForRareCytology:
         text: 'For patients with atypical endometrial cells specified, initial evaluation limited to endometrial and endocervical sampling is preferred, with colposcopy acceptable at the time of initial evaluation. If colposcopy was deferred and no endometrial pathology is identified, additional evaluation with colposcopy is then recommended.'
       }
     when (
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
+      MostRecentCytologyReportWasWithinPastFiveYears and // TODO: This should be AGC or Atypical endometrial cells
+      CytologyInterpretedAsAgcOrAis and 
       not CytologyInterpretedAsAtypicalEndometrialCells and
       (
-        MostRecentBiopsyReport.date >= Now() - 1 year and
+        MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1 year lookback
         MostRecentBiopsyReport.date <= MostRecentCytologyReport.date + 1 year
       ) and
       not HistologyInterpretedAsCin2Cin3AisOrCancer
@@ -790,14 +788,17 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsAgcOrAis and
       (
         CytologyInterpretedAsEndocervicalAis or
-        CytologyInterpretedAsAgc or
+        // CytologyInterpretedAsAgc or // TODO: Delete this line
         CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
       )
+      // TODO: Need to add logic for " AND cervical histology <> “invasive disease” "
+      // NOTE: Discuss how "Invasive Disease" is defined
     ) then
       {
         action: null,
         text: 'For patients with atypical glandular or endocervical cells “favor neoplasia” or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
       }
+    // LEFT OFF HERE
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
