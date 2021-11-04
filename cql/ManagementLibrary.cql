@@ -78,6 +78,7 @@ code "Histiocytes": 'HISTIOCYTES' from "LOCAL" display 'Histiocytes' // TODO: Up
 //------------------------------------------------------------------------------
 
 parameter BiopsyLookbackPeriod default 25 years
+// TODO: Add parameter to exclude people who are symptomatic
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -214,6 +215,7 @@ define IsIncluded:
 
 define Excluded:
   false
+  // TODO: Add parameter to exclude symptomatic people
 
 //------------------------------------------------------------------------------
 // CDS ACTIONS
@@ -798,7 +800,6 @@ define RecommendationForRareCytology:
         action: null,
         text: 'For patients with atypical glandular or endocervical cells “favor neoplasia” or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
       }
-    // LEFT OFF HERE
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
@@ -829,6 +830,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
+        // TODO: Update this Recommendation text and remove "DISPLAY" from beginning of text
         text: 'DISPLAY If a positive HPV test with partial genotyping is positive for HPV 16 or HPV 18, direct referral for colposcopy is recommended (BII).'
       }
     when (
@@ -848,7 +850,7 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsNilm and
       (
         not AnyHpvSinceMostRecentCytology or
-        NegativeOrUnknownHpvCotest
+        NegativeOrUnknownHpvCotest // TODO: Don't include Negative 
       )
     ) then
       {
@@ -857,6 +859,7 @@ define RecommendationForRareCytology:
       }
     when (
       HasPremenopausalObservation and
+      // TODO: Add NOT Symptomatic
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsBenignEndometrialCells or
@@ -947,6 +950,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
       null
   end
 
+// LEFT OFF HERE
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #3: Managing Histology Results
 
