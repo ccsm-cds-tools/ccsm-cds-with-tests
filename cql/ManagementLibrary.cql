@@ -869,7 +869,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'No further evaluation is recommended (BII).'
+        text: 'No further evaluation is recommended (BII).' // TODO: Update recommendation text (G.4)
       }
     when (
       HasPostmenopausalObservation and
@@ -878,7 +878,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'Endometrial assessment is recommended (BII).'
+        text: 'Endometrial assessment is recommended (BII).' // TODO: Update recommendation text (G.4)
       }
     when (
       AbsenceOrRemovalOfCervix and
@@ -887,7 +887,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'No further evaluation is recommended (BII).'
+        text: 'No further evaluation is recommended (BII).' // TODO: Update recommendation text (G.4)
       }
     else
       null
