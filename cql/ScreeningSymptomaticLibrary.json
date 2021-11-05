@@ -288,9 +288,24 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "HasNilmCytologyWithinLast12Months",
-               "libraryName" : "Dash",
-               "type" : "ExpressionRef"
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "LookBack",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "MostRecentNilmCytology",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "value" : 12,
+                     "unit" : "months",
+                     "type" : "Quantity"
+                  } ]
+               }
             }
          }, {
             "name" : "MostRecentNegativeHpv",

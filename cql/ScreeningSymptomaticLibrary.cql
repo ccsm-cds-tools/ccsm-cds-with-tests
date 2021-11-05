@@ -118,7 +118,7 @@ define MostRecentNilmCytology:
   Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
-  Dash.HasNilmCytologyWithinLast12Months
+  Exists(Common.LookBack(Dash.MostRecentNilmCytology, 12 months))
 
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv

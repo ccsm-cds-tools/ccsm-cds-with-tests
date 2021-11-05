@@ -522,9 +522,6 @@ define NilmCytologyReports: // NOTE: This is now only used in LP3. Can we edit L
       (R.conclusionCode) cC return cC ~ "NILM"
     )
 
-define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack(MostRecentNilmCytology, 12 months))
-
 define HistologyDiagnosticReports:
   Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])
 
