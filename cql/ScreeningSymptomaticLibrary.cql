@@ -114,17 +114,18 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define NilmCytologyReports:
+define MostRecentNilmCytology:
   Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
   Dash.HasNilmCytologyWithinLast12Months
 
-define NegativeHpvReports:
+define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
 
-define CoincidentNilmCytologyAndNegativeHpvReports: // TODO: Generalize this by creating a function to determine if two reports are a cotest
-  from "NilmCytologyReports" C, "NegativeHpvReports" H
+// TODO: Look into moving this to the dashboard (it is used by other logic paths)
+define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: // TODO: Generalize this by creating a function to determine if two reports are a cotest
+  from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
     Common.DiagnosticReportDate(H) within 3 years of Today() and
@@ -138,7 +139,7 @@ define CoincidentNilmCytologyAndNegativeHpvReports: // TODO: Generalize this by 
     )
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
-  Exists(CoincidentNilmCytologyAndNegativeHpvReports)
+  Exists(MostRecentCoincidentNilmCytologyAndNegativeHpvReport)
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(

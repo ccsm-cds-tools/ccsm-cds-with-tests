@@ -275,7 +275,7 @@
                } ]
             }
          }, {
-            "name" : "NilmCytologyReports",
+            "name" : "MostRecentNilmCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -293,7 +293,7 @@
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "NegativeHpvReports",
+            "name" : "MostRecentNegativeHpv",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -302,7 +302,7 @@
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "CoincidentNilmCytologyAndNegativeHpvReports",
+            "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -310,13 +310,13 @@
                "source" : [ {
                   "alias" : "C",
                   "expression" : {
-                     "name" : "NilmCytologyReports",
+                     "name" : "MostRecentNilmCytology",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "alias" : "H",
                   "expression" : {
-                     "name" : "NegativeHpvReports",
+                     "name" : "MostRecentNegativeHpv",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -754,8 +754,11 @@
             "expression" : {
                "type" : "Exists",
                "operand" : {
-                  "name" : "CoincidentNilmCytologyAndNegativeHpvReports",
-                  "type" : "ExpressionRef"
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
+                     "type" : "ExpressionRef"
+                  }
                }
             }
          }, {

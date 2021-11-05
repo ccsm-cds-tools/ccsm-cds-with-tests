@@ -136,19 +136,12 @@ define Age30Through65:
 define AgeOver65:
   AgeInYears() > 65
 
-define NilmCytologyReports:
-  Dash.MostRecentNilmCytology R
-    return {
-      type: 'Cervical Cytology',
-      date: Common.DiagnosticReportDate(R)
-    }
-    sort by date
-
-// TODO: Try upgrading cql-execution engine to resolve issue
-
 define MostRecentNilmCytology: // TODO: Add logic from above expression into this expression (combine the two)
-  if Exists(NilmCytologyReports) then
-    Last(NilmCytologyReports)
+  if Exists(Dash.MostRecentNilmCytology) then
+    {
+      type: 'Cervical Cytology',
+      date: Common.DiagnosticReportDate(Dash.MostRecentNilmCytology)
+    }
   else
     {
       type: '',
@@ -164,17 +157,12 @@ define HasRecentNilmCytology:
   DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
   // else, false
 
-define NegativeHpvReports:
-  Dash.MostRecentNegativeHpv R
-    return {
-      type: 'hrHPV',
-      date: Common.DiagnosticReportDate(R)
-    }
-    sort by date
-
 define MostRecentNegativeHpvTest:
-  if Exists(NegativeHpvReports) then
-    Last(NegativeHpvReports)
+  if Exists(Dash.MostRecentNegativeHpv) then
+    {
+      type: 'hrHPV',
+      date: Common.DiagnosticReportDate(Dash.MostRecentNegativeHpv)
+    }
   else
     {
       type: '',
@@ -204,7 +192,6 @@ define NegativeCotests: // NOTE: Find where this appears elsewhere in L3, refer 
         Common.MostRecentDiagnosticReport({C,H})
       )
     }
-    sort by date
 
 define MostRecentNegativeCotest:
   if Exists(NegativeCotests) then

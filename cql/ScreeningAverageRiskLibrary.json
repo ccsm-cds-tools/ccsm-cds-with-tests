@@ -545,53 +545,6 @@
                } ]
             }
          }, {
-            "name" : "NilmCytologyReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "MostRecentNilmCytology",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Cytology",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "DiagnosticReportDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "R",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
             "name" : "MostRecentNilmCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -603,17 +556,37 @@
                   "operand" : {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "NilmCytologyReports",
-                        "type" : "ExpressionRef"
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "MostRecentNilmCytology",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
                      }
                   }
                },
                "then" : {
-                  "type" : "Last",
-                  "source" : {
-                     "name" : "NilmCytologyReports",
-                     "type" : "ExpressionRef"
-                  }
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "type",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentNilmCytology",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  } ]
                },
                "else" : {
                   "type" : "Tuple",
@@ -671,53 +644,6 @@
                } ]
             }
          }, {
-            "name" : "NegativeHpvReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "MostRecentNegativeHpv",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "hrHPV",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "DiagnosticReportDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "R",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
             "name" : "MostRecentNegativeHpvTest",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -729,17 +655,37 @@
                   "operand" : {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "NegativeHpvReports",
-                        "type" : "ExpressionRef"
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "MostRecentNegativeHpv",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
                      }
                   }
                },
                "then" : {
-                  "type" : "Last",
-                  "source" : {
-                     "name" : "NegativeHpvReports",
-                     "type" : "ExpressionRef"
-                  }
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "type",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "hrHPV",
+                        "type" : "Literal"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentNegativeHpv",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  } ]
                },
                "else" : {
                   "type" : "Tuple",
@@ -984,13 +930,6 @@
                         }
                      } ]
                   }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
                }
             }
          }, {
@@ -1005,16 +944,22 @@
                   "operand" : {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "NegativeCotests",
-                        "type" : "ExpressionRef"
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "NegativeCotests",
+                           "type" : "ExpressionRef"
+                        }
                      }
                   }
                },
                "then" : {
                   "type" : "Last",
                   "source" : {
-                     "name" : "NegativeCotests",
-                     "type" : "ExpressionRef"
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "NegativeCotests",
+                        "type" : "ExpressionRef"
+                     }
                   }
                },
                "else" : {

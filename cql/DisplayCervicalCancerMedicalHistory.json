@@ -2435,15 +2435,12 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "List",
-               "element" : [ {
-                  "name" : "MostRecentDiagnosticReport",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "HpvDiagnosticReports",
-                     "type" : "ExpressionRef"
-                  } ]
+               "name" : "MostRecentDiagnosticReport",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HpvDiagnosticReports",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -2560,15 +2557,12 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "List",
-               "element" : [ {
-                  "name" : "MostRecentDiagnosticReport",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "CervicalCytologyReports",
-                     "type" : "ExpressionRef"
-                  } ]
+               "name" : "MostRecentDiagnosticReport",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "CervicalCytologyReports",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -2682,8 +2676,11 @@
                   "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "name" : "MostRecentNilmCytology",
-                     "type" : "ExpressionRef"
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "MostRecentNilmCytology",
+                        "type" : "ExpressionRef"
+                     }
                   }, {
                      "value" : 12,
                      "unit" : "months",
