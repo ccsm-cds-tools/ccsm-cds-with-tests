@@ -2616,56 +2616,6 @@
                }
             }
          }, {
-            "name" : "NilmCytologyReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "CervicalCytologyReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "cC",
-                        "expression" : {
-                           "path" : "conclusionCode",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "cC",
-                                 "type" : "AliasRef"
-                              } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "NILM",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               }
-            }
-         }, {
             "name" : "HistologyDiagnosticReports",
             "context" : "Patient",
             "accessLevel" : "Public",

@@ -210,7 +210,21 @@
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+            "name" : "RecentCytologyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "SortedDiagnosticReports",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "CervicalCytologyReports",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -218,8 +232,7 @@
                "source" : [ {
                   "alias" : "R",
                   "expression" : {
-                     "name" : "NilmCytologyReports",
-                     "libraryName" : "Dash",
+                     "name" : "RecentCytologyReports",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -238,7 +251,370 @@
                      "name" : "DateOfImmunosuppressionOnset",
                      "type" : "ExpressionRef"
                   } ]
+               }
+            }
+         }, {
+            "name" : "OneNilmCytologySinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "type" : "Indexer",
+                           "operand" : [ {
+                              "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }
+                  }
                },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "cC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "NILM",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "asType" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "TwoNilmCytologiesSinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "OneNilmCytologySinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "cC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "NILM",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "asType" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "ThreeNilmCytologiesSinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "TwoNilmCytologiesSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "2",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "cC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "NILM",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "asType" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "ThreeNilmCytologiesSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "List",
+                     "element" : [ {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "2",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "TwoNilmCytologiesSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "List",
+                     "element" : [ {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }
+               } ],
+               "else" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "OneNilmCytologySinceImmunosuppressionOnset",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "NilmCytologyReportsSinceImmunosuppressionOnset",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
                "return" : {
                   "expression" : {
                      "type" : "Tuple",

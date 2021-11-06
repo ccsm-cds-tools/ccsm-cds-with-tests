@@ -199,12 +199,17 @@ define function DiagnosticReportDate(d FHIR.DiagnosticReport):
     (d.effective as FHIR.Period)."start".value
   )
 
+define function SortedDiagnosticReports(ReportList List<FHIR.DiagnosticReport>):
+  ReportList R sort by Coalesce(
+    (effective as FHIR.Period)."end".value,
+    (effective as FHIR.dateTime).value,
+    (effective as FHIR.Period)."start".value
+  )
+
 define function MostRecentDiagnosticReport(ReportList List<FHIR.DiagnosticReport>):
   Last(
-    ReportList R sort by Coalesce(
-      (effective as FHIR.Period)."end".value,
-      (effective as FHIR.dateTime).value,
-      (effective as FHIR.Period)."start".value
+    SortedDiagnosticReports(
+      ReportList
     )
   )
 

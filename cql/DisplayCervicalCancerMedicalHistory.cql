@@ -516,12 +516,6 @@ define MostRecentNilmCytology:
       (R.conclusionCode) cC return cC ~ "NILM"
     )
 
-define NilmCytologyReports: // NOTE: This is now only used in LP3. Can we edit LP3 to use the same "most recent" logic defined above?
-  CervicalCytologyReports R
-    where AnyTrue(
-      (R.conclusionCode) cC return cC ~ "NILM"
-    )
-
 define HistologyDiagnosticReports:
   Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])
 

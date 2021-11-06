@@ -1278,49 +1278,31 @@
                }
             } ]
          }, {
-            "name" : "MostRecentDiagnosticReport",
+            "name" : "SortedDiagnosticReports",
             "context" : "Patient",
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "Last",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "R",
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "ReportList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "type" : "ByExpression",
                      "expression" : {
-                        "name" : "ReportList",
-                        "type" : "OperandRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "sort" : {
-                     "by" : [ {
-                        "direction" : "asc",
-                        "type" : "ByExpression",
-                        "expression" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "path" : "value",
-                              "type" : "Property",
-                              "source" : {
-                                 "path" : "end",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "strict" : false,
-                                    "type" : "As",
-                                    "operand" : {
-                                       "name" : "effective",
-                                       "type" : "IdentifierRef"
-                                    },
-                                    "asTypeSpecifier" : {
-                                       "name" : "{http://hl7.org/fhir}Period",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }
-                              }
-                           }, {
-                              "path" : "value",
+                        "type" : "Coalesce",
+                        "operand" : [ {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "end",
                               "type" : "Property",
                               "source" : {
                                  "strict" : false,
@@ -1330,33 +1312,74 @@
                                     "type" : "IdentifierRef"
                                  },
                                  "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}dateTime",
+                                    "name" : "{http://hl7.org/fhir}Period",
                                     "type" : "NamedTypeSpecifier"
                                  }
                               }
-                           }, {
-                              "path" : "value",
+                           }
+                        }, {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "strict" : false,
+                              "type" : "As",
+                              "operand" : {
+                                 "name" : "effective",
+                                 "type" : "IdentifierRef"
+                              },
+                              "asTypeSpecifier" : {
+                                 "name" : "{http://hl7.org/fhir}dateTime",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           }
+                        }, {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "start",
                               "type" : "Property",
                               "source" : {
-                                 "path" : "start",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "strict" : false,
-                                    "type" : "As",
-                                    "operand" : {
-                                       "name" : "effective",
-                                       "type" : "IdentifierRef"
-                                    },
-                                    "asTypeSpecifier" : {
-                                       "name" : "{http://hl7.org/fhir}Period",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
+                                 "strict" : false,
+                                 "type" : "As",
+                                 "operand" : {
+                                    "name" : "effective",
+                                    "type" : "IdentifierRef"
+                                 },
+                                 "asTypeSpecifier" : {
+                                    "name" : "{http://hl7.org/fhir}Period",
+                                    "type" : "NamedTypeSpecifier"
                                  }
                               }
-                           } ]
-                        }
-                     } ]
+                           }
+                        } ]
+                     }
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "ReportList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                     "type" : "NamedTypeSpecifier"
                   }
+               }
+            } ]
+         }, {
+            "name" : "MostRecentDiagnosticReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "name" : "SortedDiagnosticReports",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ReportList",
+                     "type" : "OperandRef"
+                  } ]
                }
             },
             "operand" : [ {

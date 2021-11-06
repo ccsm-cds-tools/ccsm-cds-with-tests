@@ -106,9 +106,51 @@ define IsIncludedAndNotExcluded:
 define DateOfImmunosuppressionOnset:
   Dash.MostRecentDistinctImmunocompromisedEventDate
 
-define NilmCytologyReportsSinceImmunosuppressionOnset: // NOTE: Do these need to include the "Most Recent" logic?
-  Dash.NilmCytologyReports R
+define RecentCytologyReports: 
+  Common.SortedDiagnosticReports(Dash.CervicalCytologyReports)
+
+define RecentCytologyReportsSinceImmunosuppressionOnset:
+  RecentCytologyReports R
     where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
+
+// NOTE: We should discuss this new logic. I believe it aligns with the L2, but I want to make sure it aligns with the intent of the guideline.
+// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment.
+define OneNilmCytologySinceImmunosuppressionOnset:
+  if (RecentCytologyReportsSinceImmunosuppressionOnset[0] is not null) then 
+    (RecentCytologyReportsSinceImmunosuppressionOnset[0]) R
+      where AnyTrue(
+        (R.conclusionCode) cC return cC ~ Dash."NILM"
+    )
+  else null
+
+define TwoNilmCytologiesSinceImmunosuppressionOnset:
+  if Exists(OneNilmCytologySinceImmunosuppressionOnset) then
+    (RecentCytologyReportsSinceImmunosuppressionOnset[1]) R
+      where AnyTrue(
+        (R.conclusionCode) cC return cC ~ Dash."NILM"
+    )
+  else null
+
+define ThreeNilmCytologiesSinceImmunosuppressionOnset:
+  if Exists(TwoNilmCytologiesSinceImmunosuppressionOnset) then
+    (RecentCytologyReportsSinceImmunosuppressionOnset[2]) R
+      where AnyTrue(
+        (R.conclusionCode) cC return cC ~ Dash."NILM"
+    )
+  else null
+
+define RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm:
+  case
+    when Exists(ThreeNilmCytologiesSinceImmunosuppressionOnset)
+      then {RecentCytologyReportsSinceImmunosuppressionOnset[0], RecentCytologyReportsSinceImmunosuppressionOnset[1], RecentCytologyReportsSinceImmunosuppressionOnset[2]}
+    when Exists(TwoNilmCytologiesSinceImmunosuppressionOnset)
+      then {RecentCytologyReportsSinceImmunosuppressionOnset[0], RecentCytologyReportsSinceImmunosuppressionOnset[1]}
+    else
+      OneNilmCytologySinceImmunosuppressionOnset
+  end
+
+define NilmCytologyReportsSinceImmunosuppressionOnset:
+  RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm R
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
