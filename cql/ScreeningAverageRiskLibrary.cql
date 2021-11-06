@@ -132,7 +132,7 @@ define Age30Through65:
 define AgeOver65:
   AgeInYears() > 65
 
-define MostRecentNilmCytology: // TODO: Add logic from above expression into this expression (combine the two)
+define MostRecentNilmCytology:
   if Exists(Dash.MostRecentNilmCytology) then
     {
       type: 'Cervical Cytology',
@@ -148,6 +148,7 @@ define DateOfMostRecentNilmCytology:
   MostRecentNilmCytology.date
 
 // TODO: Use this method to refactor without dummy MostRecentNilmCytology object:
+// NOTE: Right now this is only used here
 define HasRecentNilmCytology:
   // if DateOfMostRecentNilmCytology is not null then
   DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
@@ -309,7 +310,12 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
       AllowGradeDExclusion and
-      AbsenceOrRemovalOfCervix // TODO: Make sure that Included group does not have high grade history: // and not HighGradeHistoryOfCancerOrPrecancer
+      AbsenceOrRemovalOfCervix and not
+      (
+        HasHighGradePreCancerCervicalLesion or
+        HasCervicalCancerDiagnoses or
+        Exists(HighGradeOrCancerHistologyResults)
+      )
     ) then
       // NOTE: Revisit whether we want to remove "negative recommendation" here
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'

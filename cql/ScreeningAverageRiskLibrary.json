@@ -2145,11 +2145,35 @@
                      "operand" : {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "AllowGradeDExclusion",
-                           "type" : "ParameterRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "AllowGradeDExclusion",
+                              "type" : "ParameterRef"
+                           }, {
+                              "name" : "AbsenceOrRemovalOfCervix",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "AbsenceOrRemovalOfCervix",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "HasHighGradePreCancerCervicalLesion",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "HasCervicalCancerDiagnoses",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "type" : "Exists",
+                                 "operand" : {
+                                    "name" : "HighGradeOrCancerHistologyResults",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
                         } ]
                      }
                   },
