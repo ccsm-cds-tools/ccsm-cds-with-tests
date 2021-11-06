@@ -100,12 +100,6 @@ define HighGradeOrCancerHistologyResults:
       H.conclusionCode in Dash."AIS" or
       H.conclusionCode in Dash."Histologic cancer"
 
-// TODO: Combine high grade / cancererous history exclusions so that they can be reused elsewhere.
-// define HighGradePrecancerOrCancer:
-//   HasHighGradePreCancerCervicalLesion or
-//   HasCervicalCancerDiagnoses or
-//   exists(Cin2OrCin3HistologyResults)
-
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 

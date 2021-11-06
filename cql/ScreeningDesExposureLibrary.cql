@@ -105,8 +105,6 @@ define HasRecentAbnormalScreening:
 define HasRecentAbnormalHistology:
   Dash.HasRecentAbnormalHistology
 
-// NOTE: Cross-check that "Histologic AIS" and "Histologic Cancer" are added for other logic paths. Maybe make this a common expression in Dashboard.
-
 define Excluded:
   HasHighGradePreCancerCervicalLesion or
   HasCervicalCancerDiagnoses or
