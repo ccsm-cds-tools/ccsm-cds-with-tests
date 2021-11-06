@@ -123,8 +123,8 @@ define HasNilmCytologyWithinLast12Months:
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
 
-// TODO: Look into moving this to the dashboard (it is used by other logic paths)
-define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: // TODO: Generalize this by creating a function to determine if two reports are a cotest
+// TODO: Look into moving this to the dashboard (it is used by other logic paths). May be able to generalize this by creating a function to determine if two reports are a cotest.
+define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: 
   from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
@@ -180,7 +180,7 @@ define VisibleLesionRecommendation:
 define ElseRecommendation:
   'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
 
-define Recommendation: // NOTE: Should we call this RecommendationText for consistency with other logic paths?
+define Recommendation:
   if IsIncludedAndNotExcluded then
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
