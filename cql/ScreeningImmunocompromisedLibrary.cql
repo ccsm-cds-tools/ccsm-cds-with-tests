@@ -114,7 +114,7 @@ define RecentCytologyReportsSinceImmunosuppressionOnset:
     where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
 
 // NOTE: We should discuss this new logic. I believe it aligns with the L2, but I want to make sure it aligns with the intent of the guideline.
-// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment.
+// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment without loops/recursion.
 define OneNilmCytologySinceImmunosuppressionOnset:
   if (RecentCytologyReportsSinceImmunosuppressionOnset[0] is not null) then 
     (RecentCytologyReportsSinceImmunosuppressionOnset[0]) R
@@ -198,7 +198,7 @@ define CytologySequenceIntact:
     false
 
 define Age21Through29:
-  AgeInYears() between 21 and 29 // TODO: QUESTION: Will this omit people between 29 and 30? Seems so according to CQL spec
+  AgeInYears() between 21 and 29 // TODO: QUESTION: Will this omit people between 29 and 30? Seems so according to CQL spec. Should this be between 21 and 30?
 
 define Age30AndOlder:
   AgeInYears() >= 30
@@ -257,11 +257,12 @@ define NegativeHpvReportsSinceImmunosuppressionOnset:
     }
     sort by date
 
+// NOTE: Do we also want to make sure the cotest did not come with a positive HPV?
 define LastCytologyWasCotest:
   Exists(
     NegativeHpvReportsSinceImmunosuppressionOnset H
       where H.date within 1 day of DateOfLastCytology
-      // TODO: Update to match the way cotest is defined in Dashboard (including check for same encounter and same service request)
+      // TODO: Update to match the way cotest is defined in other logic paths (including check for same encounter and same service request)
   )
 
 define TestingCadence:
