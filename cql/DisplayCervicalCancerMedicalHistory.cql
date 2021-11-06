@@ -691,6 +691,23 @@ define FirstProcedureForSolidOrganTransplant:
     date: Common.DateOfFirstProcedure(SolidOrganTransplantProcedures)
   }
 
+define FirstSolidOrganTransplant:
+  if FirstDiagnosisOfSolidOrganTransplant.date is not null then
+    if FirstProcedureForSolidOrganTransplant.date is not null then
+      First(
+        (FirstDiagnosisOfSolidOrganTransplant union
+        FirstProcedureForSolidOrganTransplant) T 
+          return {
+            type: T.type,
+            date: T.date
+          }
+          sort by date
+      )
+    else 
+      FirstDiagnosisOfSolidOrganTransplant
+  else 
+    FirstProcedureForSolidOrganTransplant
+
 define FirstDiagnosisOfSystemicLupusErythematosus:
   {
     type: 'Diagnosis Of Systemic Lupus Erythematosus',
@@ -708,6 +725,22 @@ define FirstProcedureForHematopoieticStemCellTransplant:
     type: 'Procedure For Hematopoietic Stem Cell Transplant',
     date: DateOfFirstHematopoieticStemCellTransplantProcedure
   }
+
+define FirstHematopoieticStemCellTransplant:
+  if FirstDiagnosisOfHematopoieticStemCellTransplant.date is not null then
+    if FirstProcedureForHematopoieticStemCellTransplant is not null then
+      First(
+        (FirstDiagnosisOfHematopoieticStemCellTransplant union
+        FirstProcedureForHematopoieticStemCellTransplant) T 
+          return {
+            type: T.type,
+            date: T.date
+          }
+          sort by date
+      )
+    else
+      FirstDiagnosisOfHematopoieticStemCellTransplant
+  else FirstProcedureForHematopoieticStemCellTransplant
 
 define FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell:
   {
@@ -729,11 +762,9 @@ define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
 
 define DistinctImmunocompromisedEvents:
   FirstDiagnosisOfHiv union
-  FirstDiagnosisOfSolidOrganTransplant union // TODO: Combine both SolidOrganTransplant events
-  FirstProcedureForSolidOrganTransplant union
+  FirstSolidOrganTransplant union
   FirstDiagnosisOfSystemicLupusErythematosus union
-  FirstDiagnosisOfHematopoieticStemCellTransplant union // TODO: Combine both HematopoieticStemCellTransplant events
-  FirstProcedureForHematopoieticStemCellTransplant union
+  FirstHematopoieticStemCellTransplant union
   FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell union
   FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell union
   FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant

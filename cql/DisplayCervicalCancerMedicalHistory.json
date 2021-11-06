@@ -3601,6 +3601,113 @@
                } ]
             }
          }, {
+            "name" : "FirstSolidOrganTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "FirstDiagnosisOfSolidOrganTransplant",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "FirstProcedureForSolidOrganTransplant",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "First",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "T",
+                           "expression" : {
+                              "type" : "Union",
+                              "operand" : [ {
+                                 "type" : "ToList",
+                                 "operand" : {
+                                    "name" : "FirstDiagnosisOfSolidOrganTransplant",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "type" : "ToList",
+                                 "operand" : {
+                                    "name" : "FirstProcedureForSolidOrganTransplant",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "type",
+                                 "value" : {
+                                    "path" : "type",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              }, {
+                                 "name" : "date",
+                                 "value" : {
+                                    "path" : "date",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              } ]
+                           }
+                        },
+                        "sort" : {
+                           "by" : [ {
+                              "direction" : "asc",
+                              "path" : "date",
+                              "type" : "ByColumn"
+                           } ]
+                        }
+                     }
+                  },
+                  "else" : {
+                     "name" : "FirstDiagnosisOfSolidOrganTransplant",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "name" : "FirstProcedureForSolidOrganTransplant",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
             "name" : "FirstDiagnosisOfSystemicLupusErythematosus",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3672,6 +3779,109 @@
                      "type" : "ExpressionRef"
                   }
                } ]
+            }
+         }, {
+            "name" : "FirstHematopoieticStemCellTransplant",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "First",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "T",
+                           "expression" : {
+                              "type" : "Union",
+                              "operand" : [ {
+                                 "type" : "ToList",
+                                 "operand" : {
+                                    "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "type" : "ToList",
+                                 "operand" : {
+                                    "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "type",
+                                 "value" : {
+                                    "path" : "type",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              }, {
+                                 "name" : "date",
+                                 "value" : {
+                                    "path" : "date",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              } ]
+                           }
+                        },
+                        "sort" : {
+                           "by" : [ {
+                              "direction" : "asc",
+                              "path" : "date",
+                              "type" : "ByColumn"
+                           } ]
+                        }
+                     }
+                  },
+                  "else" : {
+                     "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                  "type" : "ExpressionRef"
+               }
             }
          }, {
             "name" : "FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell",
@@ -3764,48 +3974,30 @@
                      "operand" : [ {
                         "type" : "Union",
                         "operand" : [ {
-                           "type" : "Union",
-                           "operand" : [ {
-                              "type" : "ToList",
-                              "operand" : {
-                                 "name" : "FirstDiagnosisOfHiv",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "type" : "ToList",
-                              "operand" : {
-                                 "name" : "FirstDiagnosisOfSolidOrganTransplant",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "FirstDiagnosisOfHiv",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
-                           "type" : "Union",
-                           "operand" : [ {
-                              "type" : "ToList",
-                              "operand" : {
-                                 "name" : "FirstProcedureForSolidOrganTransplant",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "type" : "ToList",
-                              "operand" : {
-                                 "name" : "FirstDiagnosisOfSystemicLupusErythematosus",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "FirstSolidOrganTransplant",
+                              "type" : "ExpressionRef"
+                           }
                         } ]
                      }, {
                         "type" : "Union",
                         "operand" : [ {
                            "type" : "ToList",
                            "operand" : {
-                              "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                              "name" : "FirstDiagnosisOfSystemicLupusErythematosus",
                               "type" : "ExpressionRef"
                            }
                         }, {
                            "type" : "ToList",
                            "operand" : {
-                              "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                              "name" : "FirstHematopoieticStemCellTransplant",
                               "type" : "ExpressionRef"
                            }
                         } ]
