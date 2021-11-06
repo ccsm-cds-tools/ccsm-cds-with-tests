@@ -37,7 +37,6 @@ codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 // TODO: Cross-check value sets and codes with value set spreadsheet
 
-valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
@@ -157,8 +156,8 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       when c ~ "CIN1" then {text: 'CIN1', rank: 2}
       when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
       when c ~ Dash."CIN3" then {text: 'CIN3', rank: 4}
-      when c in "AIS" then {text: 'AIS', rank: 5}
-      when c in Dash."Diagnosis of Cervical cancer" then {text: 'Cancer', rank: 6}
+      when c in Dash."AIS" then {text: 'AIS', rank: 5}
+      when c in Dash."Histologic cancer" then {text: 'Cancer', rank: 6}
       else {text: 'ALL', rank: 0}
     end
 
@@ -194,8 +193,8 @@ define Cin2OrCin3HistologyResults:
 
 define AisOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H
-    where H.conclusionCode in "AIS" or
-      H.conclusionCode in Dash."Diagnosis of Cervical cancer"
+    where H.conclusionCode in Dash."AIS" or
+      H.conclusionCode in Dash."Histologic cancer"
 
 define IsIncluded:
   Entry.FemaleorTransgenderMale and
@@ -560,7 +559,7 @@ define CytologyInterpretedAsAgc:
 define CytologyInterpretedAsAis:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
-      return aC in "AIS"
+      return aC in Dash."AIS"
   )
 
 define CytologyInterpretedAsAgcOrAis:
@@ -673,14 +672,14 @@ define HistologyInterpretedAsAis:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC in "AIS"
+        aC in Dash."AIS"
   )
 
 define HistologyInterpretedAsCancer:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC in Dash."Diagnosis of Cervical cancer"
+        aC in Dash."Histologic cancer"
   )
 
 define HistologyInterpretedAsCin2Cin3AisOrCancer:

@@ -93,10 +93,12 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults: // TODO: Add histologic AIS and histologic Cancer. Check to see if this expression is defined elsewhere in L3.
+define HighGradeOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3")
+      H.conclusionCode includes ToConcept(Dash."CIN3") or
+      H.conclusionCode in Dash."AIS" or
+      H.conclusionCode in Dash."Histologic cancer"
 
 // TODO: Combine high grade / cancererous history exclusions so that they can be reused elsewhere.
 // define HighGradePrecancerOrCancer:
@@ -116,7 +118,7 @@ define Excluded:
   ExcludedBecauseImmunocompromised or
   HasHighGradePreCancerCervicalLesion or
   HasCervicalCancerDiagnoses or
-  Exists(Cin2OrCin3HistologyResults) or
+  Exists(HighGradeOrCancerHistologyResults) or
   HasRecentAbnormalScreening or
   HasRecentAbnormalHistology
 

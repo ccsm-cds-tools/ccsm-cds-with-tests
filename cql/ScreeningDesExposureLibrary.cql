@@ -92,10 +92,12 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults: // TODO: Rename to "High Grade Or Cancer Histology Results"
+define HighGradeOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or // NOTE: Follow-up - We potentially could look within a High-Grade Value Set
-      H.conclusionCode includes ToConcept(Dash."CIN3")
+      H.conclusionCode includes ToConcept(Dash."CIN3") or
+      H.conclusionCode in Dash."AIS" or
+      H.conclusionCode in Dash."Histologic cancer"
 
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
@@ -103,13 +105,12 @@ define HasRecentAbnormalScreening:
 define HasRecentAbnormalHistology:
   Dash.HasRecentAbnormalHistology
 
-// TODO: Add "Histologic AIS" and "Histologic Cancer" to exclusions
-// NOTE: Cross-check that this is added for other logic paths. Maybe make this a common expression in Dashboard.
+// NOTE: Cross-check that "Histologic AIS" and "Histologic Cancer" are added for other logic paths. Maybe make this a common expression in Dashboard.
 
 define Excluded:
   HasHighGradePreCancerCervicalLesion or
   HasCervicalCancerDiagnoses or
-  Exists(Cin2OrCin3HistologyResults) or
+  Exists(HighGradeOrCancerHistologyResults) or
   HasRecentAbnormalScreening or
   HasRecentAbnormalHistology
 
