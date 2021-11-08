@@ -404,6 +404,7 @@ define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be
   HasAbsenceOfCervixObservations
 
 // TODO: Add AbsenceOrRemovalOfCervix And NOT history of high grade precancer / cancer
+// NOTE: Remove logic in recommendation above if moving down here
 
 //------------------------------------------------------------------------------
 // GRADE D RECOMMENDATION: INADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
@@ -420,7 +421,7 @@ define AdequatelyScreened:
 define CervicalCytologyTestsForGradeD: // NOTE: Do we need to add "most recent" check before taking all NILMs here?
   if AllowGradeDRecommendation then
     [DiagnosticReport: Dash."Pap Test"] C
-      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and 
+      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and // TODO: Remove this line and add an error if one of these Cytology tests is not NILM indicating that management is "recommended" because of an abnormal result.
         Common.DiagnosticReportDate(C) > Today() - GradeDAdequatePriorScreeningLookback and
         C.status.value in List{'final', 'amended', 'corrected', 'appended'}
       return {

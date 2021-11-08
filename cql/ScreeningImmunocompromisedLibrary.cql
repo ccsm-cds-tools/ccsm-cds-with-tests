@@ -115,6 +115,7 @@ define RecentCytologyReportsSinceImmunosuppressionOnset:
 
 // NOTE: We should discuss this new logic. I believe it aligns with the L2, but I want to make sure it aligns with the intent of the guideline.
 // NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment without loops/recursion.
+// NOTE: After discussion with Dave, should a positive test throw an error?
 define OneNilmCytologySinceImmunosuppressionOnset:
   if (RecentCytologyReportsSinceImmunosuppressionOnset[0] is not null) then 
     (RecentCytologyReportsSinceImmunosuppressionOnset[0]) R
@@ -250,7 +251,7 @@ define NegativeHpvReportsSinceImmunosuppressionOnset:
   Dash.HpvDiagnosticReports R
     where
       R.conclusionCode includes ToConcept(Dash."Negative HPV Finding") and
-      Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
+      Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset // NOTE: We can remove this - it is redundant.
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
