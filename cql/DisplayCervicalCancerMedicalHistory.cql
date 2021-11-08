@@ -460,8 +460,6 @@ define RemovalOfCervixProcedures:
     [Procedure: "Removal of Cervix Procedures"]
   )
 
-// NOTE: Follow up about cervical biopsy procedures
-
 define PertinentProcedures:
   ImmunocompromisedProcedures
   ColposcopyProcedures union

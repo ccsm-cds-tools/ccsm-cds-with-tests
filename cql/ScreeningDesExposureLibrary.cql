@@ -94,7 +94,7 @@ define HasCervicalCancerDiagnoses:
 
 define HighGradeOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or // NOTE: Follow-up - We potentially could look within a High-Grade Value Set
+    where H.conclusionCode includes ToConcept(Dash."CIN2") or
       H.conclusionCode includes ToConcept(Dash."CIN3") or
       H.conclusionCode in Dash."AIS" or
       H.conclusionCode in Dash."Histologic cancer"
