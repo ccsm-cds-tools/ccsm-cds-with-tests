@@ -1861,7 +1861,7 @@ define WhichTableMadeTheRecommendation:
 define CommonAbnormalityRecommendation:
   {
     action: CommonAbnormalityRecommendationText,
-    text: CommonAbnormalityRecommendationText + ' is recommended.'
+    text: CommonAbnormalityRecommendationText + ' is recommended.' // TODO: Follow up with L2 team about expanding recommendation text for common abnormality follow-ups to include J.1 Recommendation
   }
 
 //------------------------------------------------------------------------------
