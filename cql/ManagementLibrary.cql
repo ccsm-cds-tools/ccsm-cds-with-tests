@@ -190,6 +190,7 @@ define Cin2OrCin3HistologyResults:
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
       H.conclusionCode includes ToConcept(Dash."CIN3")
+// TODO: Add "Histologic HSIL, unspecified"
 
 define AisOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H

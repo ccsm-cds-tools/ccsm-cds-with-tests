@@ -99,6 +99,7 @@ define HighGradeOrCancerHistologyResults:
       H.conclusionCode includes ToConcept(Dash."CIN3") or
       H.conclusionCode in Dash."AIS" or
       H.conclusionCode in Dash."Histologic cancer"
+// TODO: Add "Histologic HSIL, unspecified"
 
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
