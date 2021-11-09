@@ -294,7 +294,7 @@ define RecommendationText:
       when Age30AndOlder then
         'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
       else // No recommendation for Age < 21
-        '' 
+        null
     end
   else // Propose Future Testing
     case 
@@ -306,7 +306,7 @@ define RecommendationText:
         else
           'Per CDC guidelines, cervical cancer screening using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
       else // No recommendation for Age < 21
-        ''
+        null
     end
 
 define RecommendImmediateCervicalCytology:

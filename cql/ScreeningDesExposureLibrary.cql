@@ -124,7 +124,7 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     'Consider individualized care for this patient due to a gap in evidence-based care recommendations for individuals with DES exposure in utero. Previous guidelines (i.e., "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention”) recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
   else
-    null // NOTE: Discuss whether we want a "lack of recommendation" to appear as an empty string or as null (this is not consistent throughout logic paths).
+    null
 
 define Citation:
   if RecommendationText is not null then
