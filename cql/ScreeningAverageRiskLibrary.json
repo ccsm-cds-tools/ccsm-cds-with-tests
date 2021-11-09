@@ -283,36 +283,71 @@
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Contains",
+                           "type" : "Or",
                            "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "X",
-                                 "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "H",
-                                    "type" : "Property"
+                              "type" : "Contains",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "H",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
                                  }
-                              } ],
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "X",
-                                       "type" : "AliasRef"
-                                    } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN2",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
                                  }
-                              }
+                              } ]
                            }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "CIN2",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
+                              "type" : "Contains",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "H",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN3",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
                            } ]
                         }, {
                            "type" : "Contains",
@@ -341,7 +376,7 @@
                            }, {
                               "type" : "ToConcept",
                               "operand" : {
-                                 "name" : "CIN3",
+                                 "name" : "HSIL, Unspecified",
                                  "libraryName" : "Dash",
                                  "type" : "CodeRef"
                               }

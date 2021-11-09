@@ -62,7 +62,6 @@ code "HPV16+": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomav
 code "HPV18+": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)'
 // TODO: Add SNOMED code for HPV16+ DNA
 // TODO: Add SNOMED code for HPV18+ DNA
-code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
 code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
@@ -186,15 +185,12 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults:
+define HighGradeOrCancerHistologyResults:
   Dash.HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3")
-// TODO: Add "Histologic HSIL, unspecified"
-
-define AisOrCancerHistologyResults:
-  Dash.HistologyDiagnosticReports H
-    where H.conclusionCode in Dash."AIS" or
+      H.conclusionCode includes ToConcept(Dash."CIN3") or
+      H.conclusionCode includes ToConcept(Dash."HSIL, Unspecified") or
+      H.conclusionCode in Dash."AIS" or
       H.conclusionCode in Dash."Histologic cancer"
 
 define IsIncluded:
@@ -203,8 +199,7 @@ define IsIncluded:
     HasRecentAbnormalScreening or 
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(Cin2OrCin3HistologyResults) or
-    Exists(AisOrCancerHistologyResults)
+    Exists(HighGradeOrCancerHistologyResults)
   )
 
 //------------------------------------------------------------------------------
@@ -955,7 +950,7 @@ define HistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "HSIL, Unspecified"
+        aC ~ Dash."HSIL, Unspecified"
   )
 
 define HistologyInterpretedAsCin1:
@@ -1245,7 +1240,7 @@ define MostRecentHsilHistologyWithinLastTwoYears:
       AnyTrue(
         (B.allConclusions) aC
           return
-            aC ~ "HSIL, Unspecified" or
+            aC ~ Dash."HSIL, Unspecified" or
             aC ~ Dash."CIN2" or
             aC ~ Dash."CIN3"
       )
@@ -1285,7 +1280,7 @@ define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "HSIL, Unspecified"
+        aC ~ Dash."HSIL, Unspecified"
   )
 
 define TwoMostRecentBiopsyReportsWithin12monthsApart:

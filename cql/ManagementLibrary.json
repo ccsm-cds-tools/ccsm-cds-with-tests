@@ -244,14 +244,6 @@
                "name" : "SNOMED-CT"
             }
          }, {
-            "name" : "HSIL, Unspecified",
-            "id" : "22725004",
-            "display" : "High-grade squamous intraepithelial lesion (morphologic abnormality)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
             "name" : "Biopsy Normal",
             "id" : "165324008",
             "display" : "Biopsy result normal (finding)",
@@ -1216,7 +1208,7 @@
                }
             }
          }, {
-            "name" : "Cin2OrCin3HistologyResults",
+            "name" : "HighGradeOrCancerHistologyResults",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1233,119 +1225,140 @@
                "where" : {
                   "type" : "Or",
                   "operand" : [ {
-                     "type" : "Contains",
+                     "type" : "Or",
                      "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Contains",
                               "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "H",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN2",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
                               } ]
-                           }
-                        }
+                           }, {
+                              "type" : "Contains",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "H",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN3",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Contains",
+                           "operand" : [ {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "X",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "H",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "return" : {
+                                 "distinct" : false,
+                                 "expression" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "X",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }
+                              }
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HSIL, Unspecified",
+                                 "libraryName" : "Dash",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        } ]
                      }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "CIN2",
+                        "type" : "AnyInValueSet",
+                        "codes" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "X",
+                              "expression" : {
+                                 "path" : "conclusionCode",
+                                 "scope" : "H",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "X",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }
+                           }
+                        },
+                        "valueset" : {
+                           "name" : "AIS",
                            "libraryName" : "Dash",
-                           "type" : "CodeRef"
+                           "type" : "ValueSetRef"
                         }
                      } ]
-                  }, {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "CIN3",
-                           "libraryName" : "Dash",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  } ]
-               }
-            }
-         }, {
-            "name" : "AisOrCancerHistologyResults",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "HistologyDiagnosticReports",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     },
-                     "valueset" : {
-                        "name" : "AIS",
-                        "libraryName" : "Dash",
-                        "type" : "ValueSetRef"
-                     }
                   }, {
                      "type" : "AnyInValueSet",
                      "codes" : {
@@ -1396,29 +1409,20 @@
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "HasRecentAbnormalScreening",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "HasHighGradePreCancerCervicalLesion",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "HasRecentAbnormalScreening",
+                           "type" : "ExpressionRef"
                         }, {
-                           "name" : "HasCervicalCancerDiagnoses",
+                           "name" : "HasHighGradePreCancerCervicalLesion",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "Cin2OrCin3HistologyResults",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "HasCervicalCancerDiagnoses",
+                        "type" : "ExpressionRef"
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "AisOrCancerHistologyResults",
+                        "name" : "HighGradeOrCancerHistologyResults",
                         "type" : "ExpressionRef"
                      }
                   } ]
@@ -6846,6 +6850,7 @@
                            "type" : "ToConcept",
                            "operand" : {
                               "name" : "HSIL, Unspecified",
+                              "libraryName" : "Dash",
                               "type" : "CodeRef"
                            }
                         } ]
@@ -8695,6 +8700,7 @@
                                           "type" : "ToConcept",
                                           "operand" : {
                                              "name" : "HSIL, Unspecified",
+                                             "libraryName" : "Dash",
                                              "type" : "CodeRef"
                                           }
                                        } ]
@@ -9016,6 +9022,7 @@
                            "type" : "ToConcept",
                            "operand" : {
                               "name" : "HSIL, Unspecified",
+                              "libraryName" : "Dash",
                               "type" : "CodeRef"
                            }
                         } ]
