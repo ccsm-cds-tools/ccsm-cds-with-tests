@@ -184,7 +184,7 @@ define NegativeCotests: // NOTE: Find where this appears elsewhere in L3, refer 
         Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
       ) != -1
     )
-  return { // TODO: Add HPV and cytology keys with boolean values representing whether they are negative or NILM
+  return {
       type: 'Cotesting with hrHPV and Cervical Cytology',
       date: Common.DiagnosticReportDate(
         Common.MostRecentDiagnosticReport({C,H})
