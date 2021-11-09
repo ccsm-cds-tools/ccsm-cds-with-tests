@@ -1271,6 +1271,36 @@
                }
             }
          }, {
+            "name" : "LastCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "DiagnosticReportDate",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "C",
+                        "type" : "AliasRef"
+                     } ]
+                  }, {
+                     "name" : "DateOfLastCytology",
+                     "type" : "ExpressionRef"
+                  } ]
+               }
+            }
+         }, {
             "name" : "CoincidentHpvTests",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1283,57 +1313,31 @@
                      "libraryName" : "Dash",
                      "type" : "ExpressionRef"
                   }
+               }, {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "LastCytology",
+                     "type" : "ExpressionRef"
+                  }
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "And",
+                  "name" : "CoincidentDiagnosticReports",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
                   "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "name" : "DiagnosticReportDate",
-                        "libraryName" : "Common",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "name" : "R",
-                           "type" : "AliasRef"
-                        } ]
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "name" : "DateOfLastCytology",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "name" : "DateOfLastCytology",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
+                     "name" : "R",
+                     "type" : "AliasRef"
                   }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "DateOfLastCytology",
-                           "type" : "ExpressionRef"
-                        }
-                     }
+                     "name" : "C",
+                     "type" : "AliasRef"
                   } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "R",
+                     "type" : "AliasRef"
+                  }
                }
             }
          }, {

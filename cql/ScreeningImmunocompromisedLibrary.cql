@@ -247,9 +247,14 @@ define DateOfLastCytology:
   else
     null
 
+define LastCytology:
+  RecentCytologyReportsSinceImmunosuppressionOnset C 
+    where Common.DiagnosticReportDate(C) ~ DateOfLastCytology
+
 define CoincidentHpvTests:
-  Dash.HpvDiagnosticReports R
-    where Common.DiagnosticReportDate(R) within 1 day of DateOfLastCytology // TODO: Update to match the way cotest is defined in other logic paths (including check for same encounter and same service request)
+  from Dash.HpvDiagnosticReports R, LastCytology C
+    where Common.CoincidentDiagnosticReports(R, C)
+    return R
 
 define NegativeCotests:
   CoincidentHpvTests R

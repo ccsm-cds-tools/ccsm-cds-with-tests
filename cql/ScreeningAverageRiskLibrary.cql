@@ -162,18 +162,11 @@ define DateOfMostRecentNegativeHpv:
   else 
     null
 
-define MostRecentNegativeCotest: // NOTE: Consolidate "Cotesting" logic throughout L3
+define MostRecentNegativeCotest:
   if Exists(MostRecentNilmCytology) and Exists(MostRecentNegativeHpvTest) then
     from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
     where
-      (
-        Common.AssociateDiagnosticReports(C, H) or
-        C.encounter = H.encounter or
-        PositionOf(
-          Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference),
-          Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
-        ) != -1
-      )
+        Common.CoincidentDiagnosticReports(C, H)
     return {
         type: 'Cotesting with hrHPV and Cervical Cytology',
         date: Common.DiagnosticReportDate(

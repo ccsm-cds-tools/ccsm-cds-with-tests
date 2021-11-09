@@ -2176,6 +2176,160 @@
                }
             } ]
          }, {
+            "name" : "CoincidentDiagnosticReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "AssociateDiagnosticReports",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "d1",
+                              "type" : "OperandRef"
+                           }, {
+                              "name" : "d2",
+                              "type" : "OperandRef"
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "path" : "encounter",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "d1",
+                                 "type" : "OperandRef"
+                              }
+                           }, {
+                              "path" : "encounter",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "d2",
+                                 "type" : "OperandRef"
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "R",
+                                 "expression" : {
+                                    "path" : "basedOn",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "d1",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "name" : "ToString",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "type",
+                                       "scope" : "R",
+                                       "type" : "Property"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ServiceRequest",
+                                    "type" : "Literal"
+                                 } ]
+                              },
+                              "return" : {
+                                 "expression" : {
+                                    "path" : "reference",
+                                    "scope" : "R",
+                                    "type" : "Property"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "R",
+                                 "expression" : {
+                                    "path" : "basedOn",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "d2",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "name" : "ToString",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "type",
+                                       "scope" : "R",
+                                       "type" : "Property"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ServiceRequest",
+                                    "type" : "Literal"
+                                 } ]
+                              },
+                              "return" : {
+                                 "expression" : {
+                                    "path" : "reference",
+                                    "scope" : "R",
+                                    "type" : "Property"
+                                 }
+                              }
+                           } ]
+                        } ]
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "true",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            },
+            "operand" : [ {
+               "name" : "d1",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "d2",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "RelevantEncounterStatus",
             "context" : "Patient",
             "accessLevel" : "Public",

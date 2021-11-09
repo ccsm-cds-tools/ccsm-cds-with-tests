@@ -241,6 +241,19 @@ define function AssociateDiagnosticReports(d1 FHIR.DiagnosticReport, d2 FHIR.Dia
   else
     false
 
+define function CoincidentDiagnosticReports(d1 FHIR.DiagnosticReport, d2 FHIR.DiagnosticReport):
+  if (
+    AssociateDiagnosticReports(d1, d2) or
+    d1.encounter = d2.encounter or
+    (
+      Coalesce((d1.basedOn) R where R.type = 'ServiceRequest' return R.reference) =
+      Coalesce((d2.basedOn) R where R.type = 'ServiceRequest' return R.reference)
+    )
+  ) then
+    true
+  else
+    false
+
 
 /*******************************************************************************
 * Encounter Functions

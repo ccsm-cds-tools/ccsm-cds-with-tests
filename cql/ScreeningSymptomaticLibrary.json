@@ -634,111 +634,15 @@
                         } ]
                      } ]
                   }, {
-                     "type" : "Or",
+                     "name" : "CoincidentDiagnosticReports",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
                      "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "AssociateDiagnosticReports",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "C",
-                              "type" : "AliasRef"
-                           }, {
-                              "name" : "H",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "path" : "encounter",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "path" : "encounter",
-                              "scope" : "H",
-                              "type" : "Property"
-                           } ]
-                        } ]
+                        "name" : "C",
+                        "type" : "AliasRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "R",
-                                 "expression" : {
-                                    "path" : "basedOn",
-                                    "scope" : "C",
-                                    "type" : "Property"
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "where" : {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "name" : "ToString",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "type",
-                                       "scope" : "R",
-                                       "type" : "Property"
-                                    } ]
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ServiceRequest",
-                                    "type" : "Literal"
-                                 } ]
-                              },
-                              "return" : {
-                                 "expression" : {
-                                    "path" : "reference",
-                                    "scope" : "R",
-                                    "type" : "Property"
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "R",
-                                 "expression" : {
-                                    "path" : "basedOn",
-                                    "scope" : "H",
-                                    "type" : "Property"
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "where" : {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "name" : "ToString",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "type",
-                                       "scope" : "R",
-                                       "type" : "Property"
-                                    } ]
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ServiceRequest",
-                                    "type" : "Literal"
-                                 } ]
-                              },
-                              "return" : {
-                                 "expression" : {
-                                    "path" : "reference",
-                                    "scope" : "R",
-                                    "type" : "Property"
-                                 }
-                              }
-                           } ]
-                        } ]
+                        "name" : "H",
+                        "type" : "AliasRef"
                      } ]
                   } ]
                },

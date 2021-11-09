@@ -123,20 +123,12 @@ define HasNilmCytologyWithinLast12Months:
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
 
-// TODO: Look into moving this to the dashboard (it is used by other logic paths). May be able to generalize this by creating a function to determine if two reports are a cotest.
 define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: 
   from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
     Common.DiagnosticReportDate(H) within 3 years of Today() and
-    (
-      Common.AssociateDiagnosticReports(C, H) or
-      C.encounter = H.encounter or
-      (
-        Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference) =
-        Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
-      )
-    )
+    Common.CoincidentDiagnosticReports(C, H)
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
   Exists(MostRecentCoincidentNilmCytologyAndNegativeHpvReport)
