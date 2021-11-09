@@ -307,7 +307,7 @@ define RecommendationText:
         if LastCytologyWasCotest then
           'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
         else
-          'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' // TODO: Add language from above to allow option for recommending a cotest.
+          'Per CDC guidelines, cervical cancer screening using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
       else // No recommendation for Age < 21
         ''
     end
