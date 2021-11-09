@@ -311,12 +311,7 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
       AllowGradeDExclusion and
-      AbsenceOrRemovalOfCervix and not
-      (
-        HasHighGradePreCancerCervicalLesion or
-        HasCervicalCancerDiagnoses or
-        Exists(HighGradeOrCancerHistologyResults)
-      )
+      AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer
     ) then
       // NOTE: Revisit whether we want to remove "negative recommendation" here
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'
@@ -439,7 +434,7 @@ define NoErrorsHaveOccurred:
   not ErrorsHaveOccurred
 
 //------------------------------------------------------------------------------
-// GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX
+// GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX WITHOUT HISTORY OF HIGH GRADE PRECANCER OR CANCER
 //------------------------------------------------------------------------------
 // Do not screen if cervix has been removed and the patient does not have a history of high-grade cervical precancer or cancer
 
@@ -451,8 +446,6 @@ define NoErrorsHaveOccurred:
 //    OR Diagnosis of Cervical cancer
 //    OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic cancer”
 
-// TODO: Modify name above to AbsenceOrRemovalOfCervix without history of high grade cancer / precancer
-
 define HasRemovalOfCervixProcedures:
   Exists(Dash.RemovalOfCervixProcedures)
 
@@ -462,13 +455,18 @@ define HasAbsenceOfCervixDiagnoses:
 define HasAbsenceOfCervixObservations:
   Exists(Dash.AbsenceOfCervixObservations)
 
-define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be able to consolidate.
+define AbsenceOrRemovalOfCervix:
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or 
   HasAbsenceOfCervixObservations
 
-// TODO: Add AbsenceOrRemovalOfCervix And NOT history of high grade precancer / cancer
-// NOTE: Remove logic in recommendation above if moving down here
+define AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer:
+  AbsenceOrRemovalOfCervix and not
+  (
+    HasHighGradePreCancerCervicalLesion or
+    HasCervicalCancerDiagnoses or
+    Exists(HighGradeOrCancerHistologyResults)
+  )
 
 //------------------------------------------------------------------------------
 // GRADE D RECOMMENDATION: INADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65

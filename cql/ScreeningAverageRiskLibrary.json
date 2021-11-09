@@ -2131,6 +2131,38 @@
                } ]
             }
          }, {
+            "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "AbsenceOrRemovalOfCervix",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "name" : "HasHighGradePreCancerCervicalLesion",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "HasCervicalCancerDiagnoses",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "HighGradeOrCancerHistologyResults",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "RecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2152,35 +2184,11 @@
                      "operand" : {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "AllowGradeDExclusion",
-                              "type" : "ParameterRef"
-                           }, {
-                              "name" : "AbsenceOrRemovalOfCervix",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "AllowGradeDExclusion",
+                           "type" : "ParameterRef"
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "HasHighGradePreCancerCervicalLesion",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "name" : "HasCervicalCancerDiagnoses",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "type" : "Exists",
-                                 "operand" : {
-                                    "name" : "HighGradeOrCancerHistologyResults",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ]
-                           }
+                           "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
+                           "type" : "ExpressionRef"
                         } ]
                      }
                   },
