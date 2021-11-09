@@ -180,7 +180,7 @@ define VisibleLesionRecommendation:
 define ElseRecommendation:
   'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
 
-define Recommendation:
+define RecommendationText:
   if IsIncludedAndNotExcluded then
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
@@ -192,7 +192,7 @@ define Recommendation:
   else null
 
 define Citation:
-  if Recommendation is not null then
+  if RecommendationText is not null then
     'ASCCP Clinical Practice Statement, "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding," Published: February 7, 2017'
   else
     null
