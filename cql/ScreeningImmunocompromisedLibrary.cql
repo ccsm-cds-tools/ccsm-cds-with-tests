@@ -199,7 +199,7 @@ define CytologySequenceIntact:
     false
 
 define Age21Through29:
-  AgeInYears() between 21 and 29 // TODO: QUESTION: Will this omit people between 29 and 30? Seems so according to CQL spec. Should this be between 21 and 30?
+  AgeInYears() between 21 and 29
 
 define Age30AndOlder:
   AgeInYears() >= 30
