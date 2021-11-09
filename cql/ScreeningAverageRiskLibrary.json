@@ -1453,64 +1453,26 @@
                   "where" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "And",
+                        "type" : "Greater",
                         "operand" : [ {
-                           "type" : "AnyTrue",
-                           "source" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "cC",
-                                 "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "C",
-                                    "type" : "Property"
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "return" : {
-                                 "expression" : {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "cC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "NILM",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 }
-                              }
-                           }
-                        }, {
-                           "type" : "Greater",
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "DiagnosticReportDate",
-                              "libraryName" : "Common",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "C",
-                                 "type" : "AliasRef"
-                              } ]
-                           }, {
-                              "type" : "ToDateTime",
-                              "operand" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "type" : "Today"
-                                 }, {
-                                    "name" : "GradeDAdequatePriorScreeningLookback",
-                                    "type" : "ParameterRef"
-                                 } ]
-                              }
+                              "name" : "C",
+                              "type" : "AliasRef"
                            } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Today"
+                              }, {
+                                 "name" : "GradeDAdequatePriorScreeningLookback",
+                                 "type" : "ParameterRef"
+                              } ]
+                           }
                         } ]
                      }, {
                         "type" : "In",

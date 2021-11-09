@@ -423,8 +423,8 @@ define CervicalCytologyTestsForGradeD: // NOTE: Do we need to add "most recent" 
   if AllowGradeDRecommendation then
     [DiagnosticReport: Dash."Pap Test"] C
       where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and // TODO: Remove this line and add an error if one of these Cytology tests is not NILM indicating that management is "recommended" because of an abnormal result.
-        Common.DiagnosticReportDate(C) > Today() - GradeDAdequatePriorScreeningLookback and
-        C.status.value in List{'final', 'amended', 'corrected', 'appended'}
+        Common.LookBack(C, GradeDAdequatePriorScreeningLookback) and
+        CompletedDiagnosticReport(C)
       return {
         type: 'Cervical Cytology',
         date: Common.DiagnosticReportDate(C)
@@ -447,8 +447,8 @@ define HpvTestsForGradeD: // NOTE: Do we need to add "most recent" check before 
   if AllowGradeDRecommendation then
     [DiagnosticReport: Dash."HPV Test"] H
       where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding") and
-        Common.DiagnosticReportDate(H) > Today() - GradeDAdequatePriorScreeningLookback and
-        H.status.value in List{'final', 'amended', 'corrected', 'appended'}
+        Common.LookBack(H, GradeDAdequatePriorScreeningLookback) and
+        CompletedDiagnosticReport(H)
       return {
         type: 'hrHPV',
         date: Common.DiagnosticReportDate(H)
