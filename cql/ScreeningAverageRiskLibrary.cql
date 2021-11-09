@@ -365,9 +365,72 @@ define RecommendationText:
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorMissingCytologyResult:
+  if (
+      Exists(CervicalCytologyTestsForGradeDUnfiltered) and
+      (
+        AnyTrue(
+          (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) ~ 0
+      )
+    ) then
+      'A cytology test was found with no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorUnexpectedCytologyResult:
+    if (
+      ErrorMissingCytologyResult is null and
+      AnyTrue(
+        (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
+          return aC !~ Dash."NILM"
+      )
+    ) then
+      'A Cytology test was found with a non-NILM result. Consider cervical cancer management.'
+    else
+      null
+
+define ErrorMissingHpvResult:
+  if (
+      Exists(HpvTestsForGradeDUnfiltered) and
+      (
+        AnyTrue(
+          (HpvTestsForGradeDUnfiltered.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(HpvTestsForGradeDUnfiltered.conclusionCode) ~ 0
+      )
+    ) then
+      'An hrHPV test was found with no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorUnexpectedHpvResult:
+    if (
+      ErrorMissingHpvResult is null and
+      AnyTrue(
+        (HpvTestsForGradeDUnfiltered.conclusionCode) aC
+          return aC !~ Dash."Negative HPV Finding"
+      )
+    ) then
+      'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
+    else
+      null
+    
 define Errors:
-  {} union
-  Dash.Errors
+  {
+    ErrorMissingCytologyResult,
+    ErrorUnexpectedCytologyResult,
+    ErrorMissingHpvResult,
+    ErrorUnexpectedHpvResult
+  } 
+  except { null }
+  union
+    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)
@@ -419,12 +482,18 @@ define AdequatelyScreened:
   HasThreeNegativeCytologyTestsForGradeD or
   HasTwoNegativeHpvTestsForGradeD
 
-define CervicalCytologyTestsForGradeD: // NOTE: Do we need to add "most recent" check before taking all NILMs here?
+define CervicalCytologyTestsForGradeDUnfiltered:
+  Common.CompletedDiagnosticReport(
+    Common.LookBack(
+      [DiagnosticReport: Dash."Pap Test"],
+      GradeDAdequatePriorScreeningLookback
+    )
+  )
+
+define CervicalCytologyTestsForGradeD:
   if AllowGradeDRecommendation then
-    [DiagnosticReport: Dash."Pap Test"] C
-      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and // TODO: Remove this line and add an error if one of these Cytology tests is not NILM indicating that management is "recommended" because of an abnormal result.
-        Common.LookBack(C, GradeDAdequatePriorScreeningLookback) and
-        CompletedDiagnosticReport(C)
+    CervicalCytologyTestsForGradeDUnfiltered C
+      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM")
       return {
         type: 'Cervical Cytology',
         date: Common.DiagnosticReportDate(C)
@@ -443,12 +512,18 @@ define HasThreeNegativeCytologyTestsForGradeD:
   // TODO: Check if CervicalCytologyTestsForGradeD exists before doing date comparison so that else statement above can be removed.
   Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
 
-define HpvTestsForGradeD: // NOTE: Do we need to add "most recent" check before taking all Negative tests here?
+define HpvTestsForGradeDUnfiltered:
+  Common.CompletedDiagnosticReport(
+    Common.LookBack(
+      [DiagnosticReport: Dash."HPV Test"],
+      GradeDAdequatePriorScreeningLookback
+    )
+  )
+
+define HpvTestsForGradeD:
   if AllowGradeDRecommendation then
-    [DiagnosticReport: Dash."HPV Test"] H
-      where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding") and
-        Common.LookBack(H, GradeDAdequatePriorScreeningLookback) and
-        CompletedDiagnosticReport(H)
+    HpvTestsForGradeDUnfiltered H
+      where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding")
       return {
         type: 'hrHPV',
         date: Common.DiagnosticReportDate(H)

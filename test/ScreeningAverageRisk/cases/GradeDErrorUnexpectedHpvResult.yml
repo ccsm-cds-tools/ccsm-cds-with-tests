@@ -1,0 +1,27 @@
+---
+name: Grade D Error Unexpected HPV Result
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1950-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2020-05-01
+
+results:
+  AgeOver65: true
+  ErrorMissingHpvResult: null
+  ErrorUnexpectedHpvResult: 'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
+  Errors: ['An hrHPV test was found with a non-NILM result. Consider cervical cancer management.']
+  
