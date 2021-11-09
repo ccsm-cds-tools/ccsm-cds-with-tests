@@ -26,16 +26,16 @@ RuleSet: ManagementActions
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "Recommend Colposcopy"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ColposcopyActivityDefinition|1.0)
+* action[=].action[=].definitionCanonical = Canonical(ColposcopyActivityDefinition|1.0.0)
 * action[=].action[+].title = "Surveillance"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "Recommend Surveillance"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(SurveillanceActivityDefinition|1.0)
+* action[=].action[=].definitionCanonical = Canonical(SurveillanceActivityDefinition|1.0.0)
 * action[=].action[+].title = "Treatment"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "Recommend Treatment"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(TreatmentActivityDefinition|1.0)
+* action[=].action[=].definitionCanonical = Canonical(TreatmentActivityDefinition|1.0.0)

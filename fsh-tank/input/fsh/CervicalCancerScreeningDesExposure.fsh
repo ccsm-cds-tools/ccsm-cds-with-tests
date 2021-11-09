@@ -28,7 +28,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation"
 * relatedArtifact[=].label = "In utero DES exposure"
 * relatedArtifact[=].display = "NCI DES and Cancer (May 2020)"
-* library = Canonical(ScreeningDesExposureLibrary|1.0)
+* library = Canonical(ScreeningDesExposureLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Top-level action just includes inclusion and exclusion criteria
 // -----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ Usage: #definition
 * action[=].action[+].title = "Display pertinent medical history"
 * action[=].action[=].description = "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0)
+* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #2: Screening recommendation text
 // -----------------------------------------------------------------------------
@@ -67,8 +67,8 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0)
-* action[=].action[=].dynamicValue[+].path = "payload" // this is the CommunicationRequest.payload element
+* action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0.0)
+* action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
 * action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "RecommendationText"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
@@ -86,7 +86,7 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendImmediateCervicalCytology"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCytologyScreeningRecommendation|1.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCytologyScreeningRecommendation|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #3: Handle Errors
 // -----------------------------------------------------------------------------
@@ -97,4 +97,4 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningDesExposureLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0)
+* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)
