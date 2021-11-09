@@ -500,17 +500,15 @@ define CervicalCytologyTestsForGradeD:
       }
       sort by date
   else
-    {
-      {
-        type: null,
-        date: null
-      }
-    }
+    null
 
+// NOTE: Discuss removal of 5 year lookback here
 define HasThreeNegativeCytologyTestsForGradeD:
-  Count(CervicalCytologyTestsForGradeD) >= 3 and
-  // TODO: Check if CervicalCytologyTestsForGradeD exists before doing date comparison so that else statement above can be removed.
-  Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
+  if Exists(CervicalCytologyTestsForGradeD) then
+    Count(CervicalCytologyTestsForGradeD) >= 3 and
+    Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years // TODO: Remove 5 year lookback for cytology
+  else 
+    false
 
 define HpvTestsForGradeDUnfiltered:
   Common.CompletedDiagnosticReport(
@@ -530,13 +528,12 @@ define HpvTestsForGradeD:
       }
       sort by date
   else
-    {
-      {
-        type: null,
-        date: null
-      }
-    }
+    null
 
+ // NOTE: Discuss logic for 5 year lookback here (similarly to cytology above)
 define HasTwoNegativeHpvTestsForGradeD:
-  Count(HpvTestsForGradeD) >= 2 and
-  Last(HpvTestsForGradeD).date after Now() - 5 years
+  if Exists(HpvTestsForGradeD) then
+    Count(HpvTestsForGradeD) >= 2 and
+    Last(HpvTestsForGradeD).date after Now() - 5 years
+  else
+    false

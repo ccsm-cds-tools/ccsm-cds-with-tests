@@ -1540,21 +1540,29 @@
                   }
                },
                "else" : {
-                  "type" : "List",
-                  "element" : [ {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "type",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     } ]
-                  } ]
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "type",
+                           "type" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "date",
+                           "type" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
                }
             }
          }, {
@@ -1562,26 +1570,36 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "GreaterOrEqual",
-                  "operand" : [ {
-                     "type" : "Count",
-                     "source" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "name" : "CervicalCytologyTestsForGradeD",
                         "type" : "ExpressionRef"
                      }
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "3",
-                     "type" : "Literal"
-                  } ]
-               }, {
-                  "type" : "After",
+                  }
+               },
+               "then" : {
+                  "type" : "And",
                   "operand" : [ {
-                     "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
-                     "type" : "As",
-                     "operand" : {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "CervicalCytologyTestsForGradeD",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "3",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "After",
+                     "operand" : [ {
                         "path" : "date",
                         "type" : "Property",
                         "source" : {
@@ -1591,18 +1609,23 @@
                               "type" : "ExpressionRef"
                            }
                         }
-                     }
-                  }, {
-                     "type" : "Subtract",
-                     "operand" : [ {
-                        "type" : "Now"
                      }, {
-                        "value" : 5,
-                        "unit" : "years",
-                        "type" : "Quantity"
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 5,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
                      } ]
                   } ]
-               } ]
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
             }
          }, {
             "name" : "HpvTestsForGradeDUnfiltered",
@@ -1726,21 +1749,29 @@
                   }
                },
                "else" : {
-                  "type" : "List",
-                  "element" : [ {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "type",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     } ]
-                  } ]
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "type",
+                           "type" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "date",
+                           "type" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
                }
             }
          }, {
@@ -1748,26 +1779,36 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "GreaterOrEqual",
-                  "operand" : [ {
-                     "type" : "Count",
-                     "source" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "name" : "HpvTestsForGradeD",
                         "type" : "ExpressionRef"
                      }
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "2",
-                     "type" : "Literal"
-                  } ]
-               }, {
-                  "type" : "After",
+                  }
+               },
+               "then" : {
+                  "type" : "And",
                   "operand" : [ {
-                     "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
-                     "type" : "As",
-                     "operand" : {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "HpvTestsForGradeD",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "2",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "After",
+                     "operand" : [ {
                         "path" : "date",
                         "type" : "Property",
                         "source" : {
@@ -1777,18 +1818,23 @@
                               "type" : "ExpressionRef"
                            }
                         }
-                     }
-                  }, {
-                     "type" : "Subtract",
-                     "operand" : [ {
-                        "type" : "Now"
                      }, {
-                        "value" : 5,
-                        "unit" : "years",
-                        "type" : "Quantity"
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 5,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
                      } ]
                   } ]
-               } ]
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
             }
          }, {
             "name" : "AdequatelyScreened",
@@ -2441,48 +2487,6 @@
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
                   "value" : "",
                   "type" : "Literal"
-               }
-            }
-         }, {
-            "name" : "DEBUG",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Flatten",
-               "operand" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "$this",
-                     "expression" : {
-                        "name" : "CervicalCytologyTestsForGradeDUnfiltered",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "where" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "conclusionCode",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "$this",
-                              "type" : "AliasRef"
-                           }
-                        }
-                     }
-                  },
-                  "return" : {
-                     "distinct" : false,
-                     "expression" : {
-                        "path" : "conclusionCode",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "$this",
-                           "type" : "AliasRef"
-                        }
-                     }
-                  }
                }
             }
          }, {
