@@ -1271,7 +1271,7 @@
                }
             }
          }, {
-            "name" : "NegativeHpvReportsSinceImmunosuppressionOnset",
+            "name" : "CoincidentHpvTests",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1288,39 +1288,7 @@
                "where" : {
                   "type" : "And",
                   "operand" : [ {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "R",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Negative HPV Finding",
-                           "libraryName" : "Dash",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  }, {
-                     "type" : "After",
+                     "type" : "In",
                      "operand" : [ {
                         "name" : "DiagnosticReportDate",
                         "libraryName" : "Common",
@@ -1330,9 +1298,89 @@
                            "type" : "AliasRef"
                         } ]
                      }, {
-                        "name" : "DateOfImmunosuppressionOnset",
-                        "type" : "ExpressionRef"
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "name" : "DateOfLastCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfLastCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        }
                      } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfLastCytology",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "NegativeCotests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "CoincidentHpvTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Contains",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "X",
+                        "expression" : {
+                           "path" : "conclusionCode",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "X",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }
+                  }, {
+                     "type" : "ToConcept",
+                     "operand" : {
+                        "name" : "Negative HPV Finding",
+                        "libraryName" : "Dash",
+                        "type" : "CodeRef"
+                     }
                   } ]
                },
                "return" : {
@@ -1358,13 +1406,6 @@
                         }
                      } ]
                   }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
                }
             }
          }, {
@@ -1374,61 +1415,8 @@
             "expression" : {
                "type" : "Exists",
                "operand" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "H",
-                     "expression" : {
-                        "name" : "NegativeHpvReportsSinceImmunosuppressionOnset",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "scope" : "H",
-                           "type" : "Property"
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : true,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "name" : "DateOfLastCytology",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "day",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "name" : "DateOfLastCytology",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "day",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "DateOfLastCytology",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ]
-                  }
+                  "name" : "NegativeCotests",
+                  "type" : "ExpressionRef"
                }
             }
          }, {
@@ -1743,17 +1731,309 @@
                } ]
             }
          }, {
+            "name" : "ErrorCotestWithMissingHpvResult",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "CoincidentHpvTests",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "aC",
+                                 "expression" : {
+                                    "type" : "Flatten",
+                                    "operand" : {
+                                       "type" : "Query",
+                                       "source" : [ {
+                                          "alias" : "$this",
+                                          "expression" : {
+                                             "name" : "CoincidentHpvTests",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ],
+                                       "where" : {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "conclusionCode",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "$this",
+                                                   "type" : "AliasRef"
+                                                }
+                                             }
+                                          }
+                                       },
+                                       "return" : {
+                                          "distinct" : false,
+                                          "expression" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    }
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    }
+                                 }
+                              }
+                           }
+                        }, {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "type" : "Count",
+                              "source" : {
+                                 "type" : "Flatten",
+                                 "operand" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "$this",
+                                       "expression" : {
+                                          "name" : "CoincidentHpvTests",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    } ],
+                                    "where" : {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    },
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "path" : "conclusionCode",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "$this",
+                                             "type" : "AliasRef"
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "An hrHPV test found as part of a cotest contained no result. Please review patient record to resolve.",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "ErrorCotestWithNonNegativeHpvResult",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "ErrorCotestWithMissingHpvResult",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "type" : "Flatten",
+                                 "operand" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "$this",
+                                       "expression" : {
+                                          "name" : "CoincidentHpvTests",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    } ],
+                                    "where" : {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    },
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "path" : "conclusionCode",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "$this",
+                                             "type" : "AliasRef"
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Negative HPV Finding",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
             "name" : "Errors",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Union",
                "operand" : [ {
-                  "type" : "List"
+                  "type" : "Except",
+                  "operand" : [ {
+                     "type" : "List",
+                     "element" : [ {
+                        "name" : "ErrorCotestWithMissingHpvResult",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "ErrorCotestWithNonNegativeHpvResult",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "X",
+                        "expression" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "type" : "Null"
+                           } ]
+                        }
+                     } ],
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "X",
+                              "type" : "AliasRef"
+                           }
+                        }
+                     }
+                  } ]
                }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "X",
+                     "expression" : {
+                        "name" : "Errors",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "return" : {
+                     "distinct" : false,
+                     "expression" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "X",
+                           "type" : "AliasRef"
+                        }
+                     }
+                  }
                } ]
             }
          }, {

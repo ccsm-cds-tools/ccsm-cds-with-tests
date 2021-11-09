@@ -114,7 +114,7 @@ define RecentCytologyReportsSinceImmunosuppressionOnset:
     where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
 
 // NOTE: We should discuss this new logic. I believe it aligns with the L2, but I want to make sure it aligns with the intent of the guideline.
-// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment without loops/recursion.
+// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment without loops/recursion. We could modify this so that a non-negative test throws an error.
 // NOTE: After discussion with Dave, should a positive test throw an error?
 define OneNilmCytologySinceImmunosuppressionOnset:
   if (RecentCytologyReportsSinceImmunosuppressionOnset[0] is not null) then 
@@ -247,24 +247,21 @@ define DateOfLastCytology:
   else
     null
 
-define NegativeHpvReportsSinceImmunosuppressionOnset:
+define CoincidentHpvTests:
   Dash.HpvDiagnosticReports R
+    where Common.DiagnosticReportDate(R) within 1 day of DateOfLastCytology // TODO: Update to match the way cotest is defined in other logic paths (including check for same encounter and same service request)
+
+define NegativeCotests:
+  CoincidentHpvTests R
     where
-      R.conclusionCode includes ToConcept(Dash."Negative HPV Finding") and
-      Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset // NOTE: We can remove this - it is redundant.
+      R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
     }
-    sort by date
 
-// NOTE: Do we also want to make sure the cotest did not come with a positive HPV?
 define LastCytologyWasCotest:
-  Exists(
-    NegativeHpvReportsSinceImmunosuppressionOnset H
-      where H.date within 1 day of DateOfLastCytology
-      // TODO: Update to match the way cotest is defined in other logic paths (including check for same encounter and same service request)
-  )
+  Exists(NegativeCotests)
 
 define TestingCadence:
   if (
@@ -324,9 +321,42 @@ define RecommendImmediateCotesting:
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorCotestWithMissingHpvResult:
+  if (
+      Exists(CoincidentHpvTests) and
+      (
+        AnyTrue(
+          (CoincidentHpvTests.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(CoincidentHpvTests.conclusionCode) ~ 0
+      )
+    ) then
+      'An hrHPV test found as part of a cotest contained no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorCotestWithNonNegativeHpvResult:
+  if (
+    ErrorCotestWithMissingHpvResult is null and
+    AnyTrue(
+      (CoincidentHpvTests.conclusionCode) aC
+        return aC !~ Dash."Negative HPV Finding"
+    )
+  ) then
+    'An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.'
+  else
+    null
+
 define Errors:
-  {} union
-  Dash.Errors
+  {
+    ErrorCotestWithMissingHpvResult,
+    ErrorCotestWithNonNegativeHpvResult
+  } 
+  except { null }
+  union
+    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)
