@@ -140,20 +140,12 @@ define MostRecentNilmCytology:
       date: Common.DiagnosticReportDate(Dash.MostRecentNilmCytology)
     }
   else
-    {
-      type: '',
-      date: Now() - 200 years // NOTE: May want to re-write this.
-    }
+    null
 
 define DateOfMostRecentNilmCytology:
-  MostRecentNilmCytology.date
-
-// TODO: Use this method to refactor without dummy MostRecentNilmCytology object:
-// NOTE: Right now this is only used here
-define HasRecentNilmCytology:
-  // if DateOfMostRecentNilmCytology is not null then
-  DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
-  // else, false
+  if Exists(MostRecentNilmCytology) then
+    MostRecentNilmCytology.date
+  else null
 
 define MostRecentNegativeHpvTest:
   if Exists(Dash.MostRecentNegativeHpv) then
@@ -162,49 +154,40 @@ define MostRecentNegativeHpvTest:
       date: Common.DiagnosticReportDate(Dash.MostRecentNegativeHpv)
     }
   else
-    {
-      type: '',
-      date: Now() - 200 years // TODO: Could re-write similarly to cytology; See if we can replace with null after cql-execution update
-    }
+    null 
 
 define DateOfMostRecentNegativeHpv:
-  MostRecentNegativeHpvTest.date
+  if Exists(MostRecentNegativeHpvTest) then 
+    MostRecentNegativeHpvTest.date
+  else 
+    null
 
-define HasRecentNegativeHpvTests:
-  DateOfMostRecentNegativeHpv after Now() - PrimaryHpvTestingCadence
-
-define NegativeCotests: // NOTE: Find where this appears elsewhere in L3, refer to that expression here.
-  from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
-  where
-    (
-      Common.AssociateDiagnosticReports(C, H) or
-      C.encounter = H.encounter or
-      PositionOf(
-        Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference),
-        Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
-      ) != -1
-    )
-  return {
-      type: 'Cotesting with hrHPV and Cervical Cytology',
-      date: Common.DiagnosticReportDate(
-        Common.MostRecentDiagnosticReport({C,H})
+define MostRecentNegativeCotest: // NOTE: Consolidate "Cotesting" logic throughout L3
+  if Exists(MostRecentNilmCytology) and Exists(MostRecentNegativeHpvTest) then
+    from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
+    where
+      (
+        Common.AssociateDiagnosticReports(C, H) or
+        C.encounter = H.encounter or
+        PositionOf(
+          Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference),
+          Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
+        ) != -1
       )
-    }
-
-define MostRecentNegativeCotest:
-  if Exists(NegativeCotests) then
-    Last(NegativeCotests)
-  else
-    {
-      type: '',
-      date: Now() - 200 years
-    }
+    return {
+        type: 'Cotesting with hrHPV and Cervical Cytology',
+        date: Common.DiagnosticReportDate(
+          Common.MostRecentDiagnosticReport({C,H})
+        )
+      }
+    else
+      null
 
 define DateOfMostRecentNegativeCotest:
-  MostRecentNegativeCotest.date
-
-define HasRecentNegativeCotest:
-  DateOfMostRecentNegativeCotest after Now() - CotestingCadence
+  if Exists(MostRecentNegativeCotest) then 
+    MostRecentNegativeCotest.date
+  else 
+    null
 
 define ProposedDateOfNextCytology:
   if DateOfMostRecentNilmCytology is not null then
@@ -233,14 +216,21 @@ define ProposedDateOfNextCotest:
   else
     Now()
 
+define RecentScreenings:
+  {
+    MostRecentNilmCytology,
+    MostRecentNegativeHpvTest,
+    MostRecentNegativeCotest
+  }
+  except { null }
+
 define LastScreeningType:
-  Last(
-    ({
-      MostRecentNilmCytology,
-      MostRecentNegativeHpvTest,
-      MostRecentNegativeCotest
-    }) T sort by date
-  ).type
+  if Exists(RecentScreenings) then 
+    Last(
+      (RecentScreenings) T sort by date
+    ).type
+  else 
+    '' // Indicates that no recent screening was found
 
 define ProposedScreeningDate:
   if LastScreeningType = 'Cervical Cytology' then
