@@ -950,7 +950,6 @@ define RecommendationForExceptionsToColposcopyThreshold:
       null
   end
 
-// LEFT OFF HERE
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #3: Managing Histology Results
 
@@ -1020,13 +1019,13 @@ define SecondMostRecentHistologyInterpretedAsNormal:
   )
 
 define MostRecentBiopsyReportWasWithinPast18months:
-  MostRecentBiopsyReport.date >= Now() - 18 months
+  MostRecentBiopsyReport.date >= Now() - 18 months // TODO: Change to 12 months to align with udpated L2.
 
 define MostRecentBiopsyReportWasBetween12and18monthsAgo:
   MostRecentBiopsyReport.date >= Now() - 18 months and
   MostRecentBiopsyReport.date < Now() - 12 months
 
-define TwoMostRecentBiopsyReportsWithin18monthsApart:
+define TwoMostRecentBiopsyReportsWithin18monthsApart: // TODO: Change to 12 months to align with udpated L2.
   SecondMostRecentBiopsyReport.date within 18 months of MostRecentBiopsyReport.date
 
 define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
@@ -1067,6 +1066,7 @@ define RecommendationForHistologyResults:
         text: 'Treatment is recommended, unless the patient\'s concerns about the effect of treatment on future pregnancy outweigh concerns about cancer (BII). Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded (EIII). When treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable (BI). Outside of the setting of a clinical research trial, nonsurgical therapies, including topical agents, therapeutic vaccines, and other biologics, are unacceptable for the treatment of histologic HSIL (CIN 2 or CIN 3) (DIII). Hysterectomy is unacceptable as primary therapy solely for the treatment of histologic HSIL (CIN 2, CIN 3, or unqualified) (EII). When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in the following circumstances as defined by the WHO: (a) the lesion extends into the canal and (b) when the lesion covers more than 75% of the surface area of the ectocervix or extends beyond the cryotip being used.97 Additional situations for which cryotherapy is not recommended include the following: (a) the squamocolumnar junction or the upper limit of any lesion is not fully visualized; (b) endocervical canal sample is diagnosed as CIN 2+ or CIN that cannot be graded; (c) after previous treatment for CIN 2+; (d) in the setting of inadequate biopsies of the cervix to confirm histologic diagnosis; and (e) if cancer is suspected (EIII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII).'
       }
     // NOTE: Check back about adding I.3 Recommendations. We will need to answer question about how to represent "Future Pregnancy Concerns." This will likely be a question in the Dashboard.
+// NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     when (
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
@@ -1080,7 +1080,6 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'For cytology showing HSIL, but biopsy showing histologic LSIL (CIN 1) or less, either an immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year is acceptable, provided in the latter case that the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2 (BII).'
       }
-    // NOTE: LEFT OFF HERE
     when (
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
@@ -1094,12 +1093,13 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'If the colposcopic examination can fully visualize the squamocolumnar junction and the upper limit of any lesion and that the endocervical sampling, if collected, is negative, observation at 1 year with HPV-based testing is recommended; a diagnostic excisional procedure is not recommended (BII).'
       }
+// NOTE: Review above I.4 logic once I.4 L2 is done being built out--------------------------------------------
     when (
       AgeInYears() >= 25 and
-      MostRecentBiopsyReportWasWithinPast18months and
+      MostRecentBiopsyReportWasWithinPast18months and // TODO: Change to 12 month lookback to align with L2. Write a test case for somebody who had a colposcopy between 12 - 18 months ago - what recommendation is given?
       HistologyInterpretedAsCin1 and
       SecondMostRecentHistologyInterpretedAsCin1 and
-      TwoMostRecentBiopsyReportsWithin18monthsApart
+      TwoMostRecentBiopsyReportsWithin18monthsApart // TODO: Change to 12 month lookback to align with L2.
     ) then
       {
         action: null,
@@ -1155,6 +1155,8 @@ define MostRecentPrecedingHistologyIntepretedAsHsil:
         aC ~ Dash."CIN3"
   )
 
+// TODO: Add Sub-section Headers (J.1, J.2, ..)
+// NOTE: LEFT OFF HERE
 define RecommendationForSurveillanceAfterAbnormalities:
   case
     when (
@@ -1168,6 +1170,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       }
     else
       null
+  // TODO: Add new logic from Rare Abnormality #4 L2
   end
 
 define RareAbnormalityRecommendation:
@@ -1302,7 +1305,7 @@ define TwoMostRecentBiopsyReportsWithin12monthsApart:
 define RecommendationForPatientsYoungerThan25:
   case
     when (
-      AgeInYears() < 25 and
+      AgeInYears() < 25 and // NOTE: Revisit whether this should state < 25 or 21 - 24
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsHsil or
