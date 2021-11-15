@@ -185,21 +185,13 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define HighGradeOrCancerHistologyResults:
-  Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3") or
-      H.conclusionCode includes ToConcept(Dash."HSIL, Unspecified") or
-      H.conclusionCode in Dash."AIS" or
-      H.conclusionCode in Dash."Histologic cancer"
-
 define IsIncluded:
   Entry.FemaleorTransgenderMale and
   (
     HasRecentAbnormalScreening or 
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(HighGradeOrCancerHistologyResults)
+    Exists(Dash.HighGradeOrCancerHistologyResults)
   )
 
 //------------------------------------------------------------------------------

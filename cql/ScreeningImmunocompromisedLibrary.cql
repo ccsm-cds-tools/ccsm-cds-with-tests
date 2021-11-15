@@ -113,41 +113,47 @@ define RecentCytologyReportsSinceImmunosuppressionOnset:
   RecentCytologyReports R
     where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
 
-// NOTE: We should discuss this new logic. I believe it aligns with the L2, but I want to make sure it aligns with the intent of the guideline.
-// NOTE: I think there should be a cleaner way to way to write this, but I can't think of one at the moment without loops/recursion. We could modify this so that a non-negative test throws an error.
-// NOTE: After discussion with Dave, should a positive test throw an error?
 define OneNilmCytologySinceImmunosuppressionOnset:
-  if (RecentCytologyReportsSinceImmunosuppressionOnset[0] is not null) then 
-    (RecentCytologyReportsSinceImmunosuppressionOnset[0]) R
-      where AnyTrue(
-        (R.conclusionCode) cC return cC ~ Dash."NILM"
-    )
-  else null
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 0 and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[0].conclusionCode) cC 
+    return cC ~ Dash."NILM"
+  )
 
 define TwoNilmCytologiesSinceImmunosuppressionOnset:
-  if Exists(OneNilmCytologySinceImmunosuppressionOnset) then
-    (RecentCytologyReportsSinceImmunosuppressionOnset[1]) R
-      where AnyTrue(
-        (R.conclusionCode) cC return cC ~ Dash."NILM"
-    )
-  else null
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 1 and
+  OneNilmCytologySinceImmunosuppressionOnset and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[1].conclusionCode) cC 
+    return cC ~ Dash."NILM"
+  )
 
 define ThreeNilmCytologiesSinceImmunosuppressionOnset:
-  if Exists(TwoNilmCytologiesSinceImmunosuppressionOnset) then
-    (RecentCytologyReportsSinceImmunosuppressionOnset[2]) R
-      where AnyTrue(
-        (R.conclusionCode) cC return cC ~ Dash."NILM"
-    )
-  else null
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 2 and
+  TwoNilmCytologiesSinceImmunosuppressionOnset and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[2].conclusionCode) cC 
+    return cC ~ Dash."NILM"
+  )
 
 define RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm:
   case
-    when Exists(ThreeNilmCytologiesSinceImmunosuppressionOnset)
-      then {RecentCytologyReportsSinceImmunosuppressionOnset[0], RecentCytologyReportsSinceImmunosuppressionOnset[1], RecentCytologyReportsSinceImmunosuppressionOnset[2]}
-    when Exists(TwoNilmCytologiesSinceImmunosuppressionOnset)
-      then {RecentCytologyReportsSinceImmunosuppressionOnset[0], RecentCytologyReportsSinceImmunosuppressionOnset[1]}
-    else
-      OneNilmCytologySinceImmunosuppressionOnset
+    when ThreeNilmCytologiesSinceImmunosuppressionOnset then
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0],
+        RecentCytologyReportsSinceImmunosuppressionOnset[1], 
+        RecentCytologyReportsSinceImmunosuppressionOnset[2]
+      }
+    when TwoNilmCytologiesSinceImmunosuppressionOnset then 
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0], 
+        RecentCytologyReportsSinceImmunosuppressionOnset[1]
+      }
+    when OneNilmCytologySinceImmunosuppressionOnset then
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0]
+      }
+    else null
   end
 
 define NilmCytologyReportsSinceImmunosuppressionOnset:
@@ -159,19 +165,19 @@ define NilmCytologyReportsSinceImmunosuppressionOnset:
     sort by date
 
 define DateOfFirstNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 0 then 
+  if OneNilmCytologySinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[0].date
   else 
     null
 
 define DateOfSecondNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 1 then 
+  if TwoNilmCytologiesSinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[1].date
   else 
     null
 
 define DateOfThirdNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 2 then 
+  if ThreeNilmCytologiesSinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[2].date
   else 
     null

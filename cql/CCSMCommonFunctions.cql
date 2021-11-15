@@ -83,6 +83,15 @@ define function RangeObject(r FHIR.Range):
       High: QuantityText(r.high)
     }
 
+define function ObservationDate(o FHIR.Observation):
+  Coalesce(
+    (o.effective as FHIR.dateTime).value,
+    (o.effective as FHIR.instant).value,
+    (o.effective as FHIR.Period)."end".value,
+    (o.effective as FHIR.Period)."start".value,
+    (o.issued as FHIR.instant).value
+  )
+
 // Returns a text representation of a date associated with an Observation, preferring `effectiveDateTime`, then
 // `effectivePeriod.start`, then `issued`.
 // @param o - a FHIR Observation to get the text date from
@@ -133,6 +142,15 @@ define function Abatement(c FHIR.Condition):
     (c.abatement as FHIR.string).value
   })
 
+/*******************************************************************************
+ * END: Code adapted from "Factors to Consider in Managing Chronic Pain: A Pain 
+ * Management Summary"
+*******************************************************************************/
+
+/*******************************************************************************
+* DiagnosticReport Functions
+*******************************************************************************/
+
 define function ConditionDate(C Condition):
   Coalesce(
     (C.onset as FHIR.dateTime).value,
@@ -170,12 +188,6 @@ define function DateOfFirstCondition(CondList List<Condition>):
       CondList
     )
   )
-
-/*******************************************************************************
- * END: Code adapted from "Factors to Consider in Managing Chronic Pain: A Pain 
- * Management Summary"
-*******************************************************************************/
-
 
 /*******************************************************************************
 * DiagnosticReport Functions
@@ -340,14 +352,7 @@ define function CompletedMedicationRequest(MedList List<MedicationRequest>):
 * Observation Functions
 *******************************************************************************/
 
-define function ObservationDate(o FHIR.Observation):
-  Coalesce(
-    (o.effective as FHIR.dateTime).value,
-    (o.effective as FHIR.instant).value,
-    (o.effective as FHIR.Period)."end".value,
-    (o.effective as FHIR.Period)."start".value,
-    (o.issued as FHIR.instant).value
-  )
+
 
 
 /*******************************************************************************

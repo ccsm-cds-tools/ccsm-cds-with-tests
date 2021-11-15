@@ -93,14 +93,6 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define HighGradeOrCancerHistologyResults:
-  Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3") or
-      H.conclusionCode includes ToConcept(Dash."HSIL, Unspecified") or
-      H.conclusionCode in Dash."AIS" or
-      H.conclusionCode in Dash."Histologic cancer"
-
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 
@@ -113,7 +105,7 @@ define Excluded:
   ExcludedBecauseImmunocompromised or
   HasHighGradePreCancerCervicalLesion or
   HasCervicalCancerDiagnoses or
-  Exists(HighGradeOrCancerHistologyResults) or
+  Exists(Dash.HighGradeOrCancerHistologyResults) or
   HasRecentAbnormalScreening or
   HasRecentAbnormalHistology
 
@@ -223,7 +215,7 @@ define LastScreeningType:
       (RecentScreenings) T sort by date
     ).type
   else 
-    '' // Indicates that no recent screening was found
+    'n/a' // Indicates that no recent screening was found
 
 define ProposedScreeningDate:
   if LastScreeningType = 'Cervical Cytology' then
@@ -241,7 +233,7 @@ define RecommendImmediateCervicalCytology:
     ProposedDateOfNextCytology = Now() and
     (
       LastScreeningType = 'Cervical Cytology' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age21Through29 or
@@ -260,7 +252,7 @@ define RecommendImmediatePrimaryHpv:
     ProposedDateOfNextHpvTest = Now() and
     (
       LastScreeningType = 'hrHPV' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age30Through65 or
@@ -278,7 +270,7 @@ define RecommendImmediateCotesting:
     ProposedDateOfNextCotest = Now() and
     (
       LastScreeningType = 'Cotesting with hrHPV and Cervical Cytology' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age30Through65 or
@@ -305,7 +297,7 @@ define RecommendationText:
             RecommendImmediatePrimaryHpv or
             RecommendImmediateCotesting
           ) then
-            if LastScreeningType != '' then
+            if LastScreeningType != 'n/a' then
               'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' + 
               'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' + 
               '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' + 
@@ -447,7 +439,7 @@ define AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer:
   (
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(HighGradeOrCancerHistologyResults)
+    Exists(Dash.HighGradeOrCancerHistologyResults)
   )
 
 //------------------------------------------------------------------------------

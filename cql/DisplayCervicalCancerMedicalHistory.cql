@@ -270,7 +270,6 @@ define PregnancyObservations:
   )
 
 define DesExposureObservations:
-  // C3F.ObservationLookBack(
     C3F.Verified(
       [Observation: "In utero exposure to DES"]
     )
@@ -551,10 +550,20 @@ define HistologyDiagnosticReportsSummary:
   }
 
 define DiagnosticReportsSummary:
-  (HpvDiagnosticReportsSummary
-  union CervicalCytologyReportsSummary
-  union HistologyDiagnosticReportsSummary) D
+  (
+    HpvDiagnosticReportsSummary union 
+    CervicalCytologyReportsSummary union
+    HistologyDiagnosticReportsSummary
+  ) D
   sort by Date desc
+
+define HighGradeOrCancerHistologyResults:
+  HistologyDiagnosticReports H
+    where H.conclusionCode includes ToConcept("CIN2") or
+      H.conclusionCode includes ToConcept("CIN3") or
+      H.conclusionCode includes ToConcept("HSIL, Unspecified") or
+      H.conclusionCode in "AIS" or
+      H.conclusionCode in "Histologic cancer"
 
 //------------------------------------------------------------------------------
 // PERTINENT ENCOUNTERS
@@ -696,13 +705,15 @@ define FirstSolidOrganTransplant:
   if FirstDiagnosisOfSolidOrganTransplant.date is not null then
     if FirstProcedureForSolidOrganTransplant.date is not null then
       First(
-        (FirstDiagnosisOfSolidOrganTransplant union
-        FirstProcedureForSolidOrganTransplant) T 
-          return {
-            type: T.type,
-            date: T.date
-          }
-          sort by date
+        (
+          FirstDiagnosisOfSolidOrganTransplant union
+          FirstProcedureForSolidOrganTransplant
+        ) T 
+        return {
+          type: T.type,
+          date: T.date
+        }
+        sort by date
       )
     else 
       FirstDiagnosisOfSolidOrganTransplant
@@ -731,13 +742,15 @@ define FirstHematopoieticStemCellTransplant:
   if FirstDiagnosisOfHematopoieticStemCellTransplant.date is not null then
     if FirstProcedureForHematopoieticStemCellTransplant is not null then
       First(
-        (FirstDiagnosisOfHematopoieticStemCellTransplant union
-        FirstProcedureForHematopoieticStemCellTransplant) T 
-          return {
-            type: T.type,
-            date: T.date
-          }
-          sort by date
+        (
+          FirstDiagnosisOfHematopoieticStemCellTransplant union
+          FirstProcedureForHematopoieticStemCellTransplant
+        ) T 
+        return {
+          type: T.type,
+          date: T.date
+        }
+        sort by date
       )
     else
       FirstDiagnosisOfHematopoieticStemCellTransplant
