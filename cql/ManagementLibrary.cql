@@ -1156,7 +1156,6 @@ define MostRecentPrecedingHistologyIntepretedAsHsil:
   )
 
 // TODO: Add Sub-section Headers (J.1, J.2, ..)
-// NOTE: LEFT OFF HERE
 define RecommendationForSurveillanceAfterAbnormalities:
   case
     when (
@@ -1166,11 +1165,11 @@ define RecommendationForSurveillanceAfterAbnormalities:
     ) then
       {
         action: null,
-        text: 'After treatment, hrHPV-based testing at 6 months is referred regardless of the margin status of the excisional specimen (BII).'
+        text: 'After treatment, hrHPV-based testing at 6 months is referred regardless of the margin status of the excisional specimen (BII).' // TODO: Update recommendation text
       }
     else
       null
-  // TODO: Add new logic from Rare Abnormality #4 L2
+  // TODO: Add new logic from Rare Abnormality #4 L2 once L2 is updated
   end
 
 define RareAbnormalityRecommendation:
@@ -1316,9 +1315,9 @@ define RecommendationForPatientsYoungerThan25:
     ) then
       {
         action: 'Colposcopy',
-        text: 'Colposcopy is recommended.'
+        text: 'Colposcopy is recommended.' // TODO: Add updated text for this recommendation
       }
-    when (
+    when ( // TODO: Rephrase how this is written to match updated L2. Add test cases for 21 - 25 population.
       AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
@@ -1352,7 +1351,7 @@ define RecommendationForPatientsYoungerThan25:
         action: 'Colposcopy',
         text: 'Colposcopy is recommended.'
       }
-    when (
+    when ( // TODO: This should also be rephrased to match how it is written in the updated L2
       AgeInYears() < 25 and
       MostRecentCytologyReportWasBetween12and18monthsAgo and
       (
@@ -1390,7 +1389,8 @@ define RecommendationForPatientsYoungerThan25:
         action: null,
         text: 'Repeat Cervical Cytology is next due on ' + ToString(ToDate(MostRecentCytologyReport.date + 12 months)) + '.'
       }
-    when (
+// NOTE: LEFT OFF HERE (Discussing the below two statements) [In L2: "If reflex hrHPV testing for ASC-US is performed and the results are negative, repeat cytology in 3 years is recommended (BII)."]
+    when ( // NOTE: Discuss whether we can remove this statement and combine it's logic with the one below
       AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       MostRecentCytologyCotestResult = 'ASC-US' and
@@ -1410,7 +1410,7 @@ define RecommendationForPatientsYoungerThan25:
     ) then
       {
         action: 'Cytology',
-        text: 'Repeat Cervical Cytology testing alone.'
+        text: 'Repeat Cervical Cytology testing alone.' // TODO: Update text
       }
     when (
       AgeInYears() < 25 and
