@@ -1157,6 +1157,7 @@ define MostRecentPrecedingHistologyIntepretedAsHsil:
 
 // TODO: Add Sub-section Headers (J.1, J.2, ..)
 define RecommendationForSurveillanceAfterAbnormalities:
+  // TODO: Add J.1 Language to Common Abnormality "Follow-up" recommendations
   case
     when (
       HasCervicalExcisionOrAblativeProceduresInLast25years and
@@ -1389,8 +1390,7 @@ define RecommendationForPatientsYoungerThan25:
         action: null,
         text: 'Repeat Cervical Cytology is next due on ' + ToString(ToDate(MostRecentCytologyReport.date + 12 months)) + '.'
       }
-// NOTE: LEFT OFF HERE (Discussing the below two statements) [In L2: "If reflex hrHPV testing for ASC-US is performed and the results are negative, repeat cytology in 3 years is recommended (BII)."]
-    when ( // NOTE: Discuss whether we can remove this statement and combine it's logic with the one below
+    when ( // TODO: We can combine the two expressions below
       AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       MostRecentCytologyCotestResult = 'ASC-US' and
@@ -1410,7 +1410,7 @@ define RecommendationForPatientsYoungerThan25:
     ) then
       {
         action: 'Cytology',
-        text: 'Repeat Cervical Cytology testing alone.' // TODO: Update text
+        text: 'Repeat Cervical Cytology testing alone.' // TODO: Update text to match L2
       }
     when (
       AgeInYears() < 25 and
@@ -1542,7 +1542,7 @@ define RecommendationForPregnantPatients:
     ) then
       {
         action: null,
-        text: 'Refer to ASCCP management guidelines for considerations during patient pregnancy.'
+        text: 'Refer to ASCCP management guidelines for considerations during patient pregnancy.' // TODO: Update text to add highlighted text in L2
       }
     when (
       AgeInYears() >= 25 and
@@ -1551,7 +1551,7 @@ define RecommendationForPregnantPatients:
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: 'Follow recommendations for Common Abnormalities to determine management.'
+        text: 'Follow recommendations for Common Abnormalities to determine management.' // TODO: Update text to add highlighted text in L2
       }
     when (
       AgeInYears() >= 25 and
@@ -1560,8 +1560,9 @@ define RecommendationForPregnantPatients:
     ) then
       {
         action: null,
-        text: 'Surveillance colposcopy and testing is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.'
+        text: 'Surveillance colposcopy and testing is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.' // TODO: Update recommendation
       }
+    // Add Case for AIS result that happened during pregnancy (last case of K.2)
     else
       null
   end
@@ -1585,12 +1586,12 @@ define RecommendationForImmunosuppressedPatients:
       (
         (
           MostRecentHpvResult = 'HPV-positive' and
-          MostRecentCytologyCotestResult = 'ACS-US' and
+          MostRecentCytologyCotestResult = 'ACS-US' and // TODO: Should this be ASC-US? Make sure this is consistent and aligns with what is in the risk tables.
           MostRecentCytologyReportWasWithinPastFiveYears
         ) or
         (
           MostRecentCytologyReportWasWithinPastFiveYears and
-          MostRecentCytologyReport.riskTableInput in {'LSIL','HSIL','ASC-H','AGC'}
+          MostRecentCytologyReport.riskTableInput in {'LSIL','HSIL','ASC-H','AGC'} // TODO: Add AIS
         ) or
         (
           MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+'} and
@@ -1600,32 +1601,34 @@ define RecommendationForImmunosuppressedPatients:
     ) then
       {
         action: null,
-        text: 'Colposcopy is recommended.'
+        text: 'Colposcopy is recommended.' // TODO: Update recommendation text
       }
     when (
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
-      MostRecentHpvResult is null and
+      // MostRecentHpvResult is null and // TODO: Remove this line.
       MostRecentCytologyReport.riskTableInput = 'ACS-US'
     ) then
       {
         action: null,
-        text: 'Repeat cytology in 6 to 12 months.'
+        text: 'Repeat cytology in 6 to 12 months.' // TODO: Update recommendation text
       }
     when (
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
       MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','HSIL','ASC-H','AGC'} and
       SecondMostRecentCytologyReport.riskTableInput = 'ACS-US' and
-      TwoMostRecentCytologyReportsWithin2yearsApart
+      TwoMostRecentCytologyReportsWithin2yearsApart // TODO: Make this 18 months
     ) then
       {
         action: null,
-        text: 'Colposcopy is recommended'
+        text: 'Colposcopy is recommended' // TODO: Update recommendation text
       }
     else
       null
   end
+
+// NOTE: LEFT OFF HERE ------------
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.4 Managing Patients After Hysterectomy
