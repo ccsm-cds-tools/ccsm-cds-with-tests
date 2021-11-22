@@ -810,8 +810,47 @@ define Flags:
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorDiagnosticReportWithNoConclusonCodes:
+  if (
+      Exists(DiagnosticReportsSummary) and
+      DiagnosticReportsSummary.Value is null
+    ) then
+      'A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorHistologyWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then 
+    'A histology test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorCytologyyWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then
+    'A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorHpvWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then
+    'An HPV test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
 define Errors:
-  {} 
+  {
+    ErrorDiagnosticReportWithNoConclusonCodes
+  //   ErrorHistologyWithUnexpectedCode,
+  //   ErrorCytologyyWithUnexpectedCode,
+  //   ErrorHpvWithUnexpectedCode
+  } 
+  except {null}
   // TODO: DiagnosticReports without conclusionCodes
   // TODO: Histology with a code that isn't one we expect
   // TODO: Cervical Cytology with a code we don't expect

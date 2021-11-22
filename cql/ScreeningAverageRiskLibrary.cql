@@ -39,7 +39,7 @@ parameter PrimaryHpvTestingCadence default 5 years
 parameter CotestingCadence default 5 years
 parameter AllowGradeDExclusion default true
 parameter AllowGradeDRecommendation default true
-parameter GradeDAdequatePriorScreeningLookback default 10 years
+parameter GradeDAdequatePriorScreeningLookback default 10 years // TODO: We may want to change to 11 years to allow for wiggle room - Pending discussion with L2
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
