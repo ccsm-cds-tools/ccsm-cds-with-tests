@@ -502,7 +502,6 @@ define HpvTestsForGradeD:
   else
     null
 
- // NOTE: Discuss logic for 5 year lookback here (similarly to cytology above)
 define HasTwoNegativeHpvTestsForGradeD:
   if Exists(HpvTestsForGradeD) then
     Count(HpvTestsForGradeD) >= 2 and

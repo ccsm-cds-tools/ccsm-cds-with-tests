@@ -336,7 +336,7 @@ define ErrorCotestWithMissingHpvResult:
   if (
       Exists(CoincidentHpvTests) and
       (
-        AnyTrue(
+        AllTrue(
           (CoincidentHpvTests.conclusionCode) aC
             return aC is null
         )
