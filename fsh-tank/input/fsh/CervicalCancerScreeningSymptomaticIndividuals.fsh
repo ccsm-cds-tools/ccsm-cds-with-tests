@@ -54,7 +54,7 @@ Usage: #definition
 * action[=].action[=].definitionCanonical = Canonical(CommunicateUnstructuredRecommendations|1.0.0)
 * action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
 * action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].dynamicValue[=].expression.expression = "Recommendation"
+* action[=].action[=].dynamicValue[=].expression.expression = "RecommendationText"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningSymptomaticLibrary|1.0"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"

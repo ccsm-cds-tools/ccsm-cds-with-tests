@@ -83,6 +83,15 @@ define function RangeObject(r FHIR.Range):
       High: QuantityText(r.high)
     }
 
+define function ObservationDate(o FHIR.Observation):
+  Coalesce(
+    (o.effective as FHIR.dateTime).value,
+    (o.effective as FHIR.instant).value,
+    (o.effective as FHIR.Period)."end".value,
+    (o.effective as FHIR.Period)."start".value,
+    (o.issued as FHIR.instant).value
+  )
+
 // Returns a text representation of a date associated with an Observation, preferring `effectiveDateTime`, then
 // `effectivePeriod.start`, then `issued`.
 // @param o - a FHIR Observation to get the text date from
@@ -138,6 +147,47 @@ define function Abatement(c FHIR.Condition):
  * Management Summary"
 *******************************************************************************/
 
+/*******************************************************************************
+* DiagnosticReport Functions
+*******************************************************************************/
+
+define function ConditionDate(C Condition):
+  Coalesce(
+    (C.onset as FHIR.dateTime).value,
+    (C.onset as FHIR.Period)."end".value,
+    (C.onset as FHIR.Period)."start".value,
+    C.recordedDate.value
+  )
+
+/**
+ * The oldest condition.  For each Condition, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: onsetDateTime, onsetPeriod.start, assertedDate, onsetPeriod.end.
+ * The found date will be used to compare Conditions and determine the oldest one.
+ * @param CondList - a list of Conditions
+ * @returns {Condition} the oldest Condition from the list, or null if null was passed in
+ */
+define function OldestCondition(CondList List<Condition>):
+  First(CondList C sort by Coalesce(
+    (onset as FHIR.dateTime).value,
+    (onset as FHIR.Period)."start".value,
+    recordedDate.value,
+    (onset as FHIR.Period)."end".value)
+  )
+
+/**
+ * Date of the oldest condition in a list.  For each Condition, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: onsetDateTime, onsetPeriod.start, assertedDate, onsetPeriod.end.
+ * The found date will be used to compare Conditions and determine the oldest one. The date of the oldest Condition
+ * will be returned.
+ * @param CondList - a list of Conditions
+ * @returns {System.String} the text representation of the Condition's date
+ */
+define function DateOfFirstCondition(CondList List<Condition>):
+  ConditionDate(
+    OldestCondition(
+      CondList
+    )
+  )
 
 /*******************************************************************************
 * DiagnosticReport Functions
@@ -161,12 +211,17 @@ define function DiagnosticReportDate(d FHIR.DiagnosticReport):
     (d.effective as FHIR.Period)."start".value
   )
 
+define function SortedDiagnosticReports(ReportList List<FHIR.DiagnosticReport>):
+  ReportList R sort by Coalesce(
+    (effective as FHIR.Period)."end".value,
+    (effective as FHIR.dateTime).value,
+    (effective as FHIR.Period)."start".value
+  )
+
 define function MostRecentDiagnosticReport(ReportList List<FHIR.DiagnosticReport>):
   Last(
-    ReportList R sort by Coalesce(
-      (effective as FHIR.Period)."end".value,
-      (effective as FHIR.dateTime).value,
-      (effective as FHIR.Period)."start".value
+    SortedDiagnosticReports(
+      ReportList
     )
   )
 
@@ -193,6 +248,19 @@ define function AssociateDiagnosticReports(d1 FHIR.DiagnosticReport, d2 FHIR.Dia
     (d2.effective as FHIR.dateTime).value within 1 day of (d1.effective as FHIR.Period)."start".value or 
     (d2.effective as FHIR.dateTime).value within 1 day of (d1.effective as FHIR.Period)."end".value or
     (d1.effective as FHIR.Period) overlaps (d2.effective as FHIR.Period)
+  ) then
+    true
+  else
+    false
+
+define function CoincidentDiagnosticReports(d1 FHIR.DiagnosticReport, d2 FHIR.DiagnosticReport):
+  if (
+    AssociateDiagnosticReports(d1, d2) or
+    d1.encounter = d2.encounter or
+    (
+      Coalesce((d1.basedOn) R where R.type = 'ServiceRequest' return R.reference) =
+      Coalesce((d2.basedOn) R where R.type = 'ServiceRequest' return R.reference)
+    )
   ) then
     true
   else
@@ -284,14 +352,7 @@ define function CompletedMedicationRequest(MedList List<MedicationRequest>):
 * Observation Functions
 *******************************************************************************/
 
-define function ObservationDate(o FHIR.Observation):
-  Coalesce(
-    (o.effective as FHIR.dateTime).value,
-    (o.effective as FHIR.instant).value,
-    (o.effective as FHIR.Period)."end".value,
-    (o.effective as FHIR.Period)."start".value,
-    (o.issued as FHIR.instant).value
-  )
+
 
 
 /*******************************************************************************
@@ -315,4 +376,33 @@ define function ProcedureDateString(p FHIR.Procedure):
     DateTimeText(p.performed as FHIR.dateTime),
     DateTimeText((p.performed as FHIR.Period)."end"),
     DateTimeText((p.performed as FHIR.Period)."start")
+  )
+
+  /**
+ * The oldest procedure.  For each Procedure, this algorithm will use the Coalesce function, which returns the
+ * first non-null result from these fields: performedDateTime, performedPeriod.start, performedPeriod.end.
+ * The found date will be used to compare Procedures and determine the oldest one.
+ * @param ProcList - a list of Procedures
+ * @returns {Procedure} the oldest Procedure from the list, or null if null was passed in
+ */
+define function OldestProcedure(ProcList List<Procedure>):
+  First(ProcList P sort by Coalesce(
+    (performed as FHIR.dateTime).value,
+    (performed as FHIR.Period)."start".value,
+    (performed as FHIR.Period)."end".value)
+  )
+
+/**
+ * Date of the oldest procedure in a list.  For each Procedure, this algorithm will use the Coalesce function, which returns the
+ * first non-null result from these fields: performedDateTime, performedPeriod.end, performedPeriod.start.
+ * The found date will be used to compare Procedures and determine the oldest one. The date of the oldest Procedure
+ * will be returned.
+ * @param ProcList - a list of Procedures
+ * @returns {System.String} the text representation of the Procedure's date
+ */
+define function DateOfFirstProcedure(ProcList List<Procedure>):
+  ProcedureDate(
+    OldestProcedure(
+      ProcList
+    )
   )

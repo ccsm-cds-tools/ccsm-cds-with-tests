@@ -93,10 +93,6 @@
       },
       "valueSets" : {
          "def" : [ {
-            "name" : "AIS",
-            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259",
-            "accessLevel" : "Public"
-         }, {
             "name" : "Premenopausal",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254",
             "accessLevel" : "Public"
@@ -243,14 +239,6 @@
             "name" : "HPV18+",
             "id" : "766848007",
             "display" : "Antigen of Human papillomavirus type 18 L1 capsid protein (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "HSIL, Unspecified",
-            "id" : "22725004",
-            "display" : "High-grade squamous intraepithelial lesion (morphologic abnormality)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -1101,6 +1089,7 @@
                            },
                            "valueset" : {
                               "name" : "AIS",
+                              "libraryName" : "Dash",
                               "type" : "ValueSetRef"
                            }
                         },
@@ -1130,7 +1119,7 @@
                               "type" : "AliasRef"
                            },
                            "valueset" : {
-                              "name" : "Diagnosis of Cervical cancer",
+                              "name" : "Histologic cancer",
                               "libraryName" : "Dash",
                               "type" : "ValueSetRef"
                            }
@@ -1219,169 +1208,6 @@
                }
             }
          }, {
-            "name" : "Cin2OrCin3HistologyResults",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "HistologyDiagnosticReports",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "CIN2",
-                           "libraryName" : "Dash",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  }, {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "CIN3",
-                           "libraryName" : "Dash",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  } ]
-               }
-            }
-         }, {
-            "name" : "AisOrCancerHistologyResults",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "HistologyDiagnosticReports",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     },
-                     "valueset" : {
-                        "name" : "AIS",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     },
-                     "valueset" : {
-                        "name" : "Diagnosis of Cervical cancer",
-                        "libraryName" : "Dash",
-                        "type" : "ValueSetRef"
-                     }
-                  } ]
-               }
-            }
-         }, {
             "name" : "IsIncluded",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1398,29 +1224,21 @@
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "HasRecentAbnormalScreening",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "HasHighGradePreCancerCervicalLesion",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "HasRecentAbnormalScreening",
+                           "type" : "ExpressionRef"
                         }, {
-                           "name" : "HasCervicalCancerDiagnoses",
+                           "name" : "HasHighGradePreCancerCervicalLesion",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "Cin2OrCin3HistologyResults",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "HasCervicalCancerDiagnoses",
+                        "type" : "ExpressionRef"
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "AisOrCancerHistologyResults",
+                        "name" : "HighGradeOrCancerHistologyResults",
+                        "libraryName" : "Dash",
                         "type" : "ExpressionRef"
                      }
                   } ]
@@ -4436,6 +4254,7 @@
                         },
                         "valueset" : {
                            "name" : "AIS",
+                           "libraryName" : "Dash",
                            "type" : "ValueSetRef"
                         }
                      }
@@ -5158,6 +4977,7 @@
                         },
                         "valueset" : {
                            "name" : "AIS",
+                           "libraryName" : "Dash",
                            "type" : "ValueSetRef"
                         }
                      }
@@ -5197,7 +5017,7 @@
                            } ]
                         },
                         "valueset" : {
-                           "name" : "Diagnosis of Cervical cancer",
+                           "name" : "Histologic cancer",
                            "libraryName" : "Dash",
                            "type" : "ValueSetRef"
                         }
@@ -6846,6 +6666,7 @@
                            "type" : "ToConcept",
                            "operand" : {
                               "name" : "HSIL, Unspecified",
+                              "libraryName" : "Dash",
                               "type" : "CodeRef"
                            }
                         } ]
@@ -8695,6 +8516,7 @@
                                           "type" : "ToConcept",
                                           "operand" : {
                                              "name" : "HSIL, Unspecified",
+                                             "libraryName" : "Dash",
                                              "type" : "CodeRef"
                                           }
                                        } ]
@@ -9016,6 +8838,7 @@
                            "type" : "ToConcept",
                            "operand" : {
                               "name" : "HSIL, Unspecified",
+                              "libraryName" : "Dash",
                               "type" : "CodeRef"
                            }
                         } ]

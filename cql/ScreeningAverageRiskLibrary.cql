@@ -39,7 +39,7 @@ parameter PrimaryHpvTestingCadence default 5 years
 parameter CotestingCadence default 5 years
 parameter AllowGradeDExclusion default true
 parameter AllowGradeDRecommendation default true
-parameter GradeDAdequatePriorScreeningLookback default 10 years
+parameter GradeDAdequatePriorScreeningLookback default 10 years // TODO: We may want to change to 11 years to allow for wiggle room - Pending discussion with L2
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -74,7 +74,7 @@ define IsIncluded:
 // OR Included and not excluded from screening logic for Immunocompromised individuals
 // OR Diagnosis of High grade pre-cancerous cervical lesion 
 // OR Diagnosis of Cervical cancer 
-// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)"
+// OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic Cancer”
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)
 // OR Abnormal histology result <= 7 years ago (7 years is a parameter in Dash)
 
@@ -93,11 +93,6 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults:
-  Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3")
-
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 
@@ -110,7 +105,7 @@ define Excluded:
   ExcludedBecauseImmunocompromised or
   HasHighGradePreCancerCervicalLesion or
   HasCervicalCancerDiagnoses or
-  Exists(Cin2OrCin3HistologyResults) or
+  Exists(Dash.HighGradeOrCancerHistologyResults) or
   HasRecentAbnormalScreening or
   HasRecentAbnormalHistology
 
@@ -130,85 +125,54 @@ define Age30Through65:
 define AgeOver65:
   AgeInYears() > 65
 
-define NilmCytologyReports:
-  Dash.NilmCytologyReports R
-      return {
-        type: 'Cervical Cytology',
-        date: Common.DiagnosticReportDate(R)
-      }
-      sort by date
-
 define MostRecentNilmCytology:
-  if Exists(NilmCytologyReports) then
-    Last(NilmCytologyReports)
-  else
+  if Exists(Dash.MostRecentNilmCytology) then
     {
-      type: '',
-      date: Now() - 200 years
+      type: 'Cervical Cytology',
+      date: Common.DiagnosticReportDate(Dash.MostRecentNilmCytology)
     }
+  else
+    null
 
 define DateOfMostRecentNilmCytology:
-  MostRecentNilmCytology.date
-
-define HasRecentNilmCytology:
-  DateOfMostRecentNilmCytology after Now() - CytologyTestingCadence
-
-define NegativeHpvReports:
-  Dash.NegativeHpvReports R
-    return {
-      type: 'hrHPV',
-      date: Common.DiagnosticReportDate(R)
-    }
-    sort by date
+  if Exists(MostRecentNilmCytology) then
+    MostRecentNilmCytology.date
+  else null
 
 define MostRecentNegativeHpvTest:
-  if Exists(NegativeHpvReports) then
-    Last(NegativeHpvReports)
-  else
+  if Exists(Dash.MostRecentNegativeHpv) then
     {
-      type: '',
-      date: Now() - 200 years
+      type: 'hrHPV',
+      date: Common.DiagnosticReportDate(Dash.MostRecentNegativeHpv)
     }
+  else
+    null 
 
 define DateOfMostRecentNegativeHpv:
-  MostRecentNegativeHpvTest.date
-
-define HasRecentNegativeHpvTests:
-  DateOfMostRecentNegativeHpv after Now() - PrimaryHpvTestingCadence
-
-define NegativeCotests:
-  from Dash."NilmCytologyReports" C, Dash."NegativeHpvReports" H
-  where
-    (
-      Common.AssociateDiagnosticReports(C, H) or
-      C.encounter = H.encounter or
-      PositionOf(
-        Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference),
-        Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
-      ) != -1
-    )
-  return {
-      type: 'Cotesting with hrHPV and Cervical Cytology',
-      date: Common.DiagnosticReportDate(
-        Common.MostRecentDiagnosticReport({C,H})
-      )
-    }
-    sort by date
+  if Exists(MostRecentNegativeHpvTest) then 
+    MostRecentNegativeHpvTest.date
+  else 
+    null
 
 define MostRecentNegativeCotest:
-  if Exists(NegativeCotests) then
-    Last(NegativeCotests)
-  else
-    {
-      type: '',
-      date: Now() - 200 years
-    }
+  if Exists(MostRecentNilmCytology) and Exists(MostRecentNegativeHpvTest) then
+    from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
+    where
+        Common.CoincidentDiagnosticReports(C, H)
+    return {
+        type: 'Cotesting with hrHPV and Cervical Cytology',
+        date: Common.DiagnosticReportDate(
+          Common.MostRecentDiagnosticReport({C,H})
+        )
+      }
+    else
+      null
 
 define DateOfMostRecentNegativeCotest:
-  MostRecentNegativeCotest.date
-
-define HasRecentNegativeCotest:
-  DateOfMostRecentNegativeCotest after Now() - CotestingCadence
+  if Exists(MostRecentNegativeCotest) then 
+    MostRecentNegativeCotest.date
+  else 
+    null
 
 define ProposedDateOfNextCytology:
   if DateOfMostRecentNilmCytology is not null then
@@ -237,14 +201,21 @@ define ProposedDateOfNextCotest:
   else
     Now()
 
+define RecentScreenings:
+  {
+    MostRecentNilmCytology,
+    MostRecentNegativeHpvTest,
+    MostRecentNegativeCotest
+  }
+  except { null }
+
 define LastScreeningType:
-  Last(
-    ({
-      MostRecentNilmCytology,
-      MostRecentNegativeHpvTest,
-      MostRecentNegativeCotest
-    }) T sort by date
-  ).type
+  if Exists(RecentScreenings) then 
+    Last(
+      (RecentScreenings) T sort by date
+    ).type
+  else 
+    'n/a' // Indicates that no recent screening was found
 
 define ProposedScreeningDate:
   if LastScreeningType = 'Cervical Cytology' then
@@ -262,7 +233,7 @@ define RecommendImmediateCervicalCytology:
     ProposedDateOfNextCytology = Now() and
     (
       LastScreeningType = 'Cervical Cytology' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age21Through29 or
@@ -281,7 +252,7 @@ define RecommendImmediatePrimaryHpv:
     ProposedDateOfNextHpvTest = Now() and
     (
       LastScreeningType = 'hrHPV' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age30Through65 or
@@ -299,7 +270,7 @@ define RecommendImmediateCotesting:
     ProposedDateOfNextCotest = Now() and
     (
       LastScreeningType = 'Cotesting with hrHPV and Cervical Cytology' or
-      LastScreeningType = ''
+      LastScreeningType = 'n/a'
     ) and
     (
       Age30Through65 or
@@ -315,7 +286,7 @@ define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
       AllowGradeDExclusion and
-      AbsenceOrRemovalOfCervix
+      AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer
     ) then
       'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for this patient because they do not have a cervix and there is no evidence of high grade precancer/cancer in their medical history.'
     else
@@ -326,7 +297,7 @@ define RecommendationText:
             RecommendImmediatePrimaryHpv or
             RecommendImmediateCotesting
           ) then
-            if LastScreeningType != '' then
+            if LastScreeningType != 'n/a' then
               'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' + 
               'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' + 
               '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' + 
@@ -343,9 +314,9 @@ define RecommendationText:
               LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) +
               '. Note: ' + LastScreeningType + ' seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
             else
-              ''
+              'Per USPSTF guidelines, this patient is over 65 years of age and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.'
         else
-          ''
+          null
       else // Age 65 or younger
         if (
           RecommendImmediateCervicalCytology or
@@ -357,15 +328,78 @@ define RecommendationText:
           LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) +
           '. Note: ' + LastScreeningType + ' seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
   else
-    ''
+    null
 
 //------------------------------------------------------------------------------
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorMissingCytologyResult:
+  if (
+      Exists(CervicalCytologyTestsForGradeDUnfiltered) and
+      (
+        AnyTrue(
+          (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) ~ 0
+      )
+    ) then
+      'A cytology test was found with no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorUnexpectedCytologyResult:
+    if (
+      ErrorMissingCytologyResult is null and
+      AnyTrue(
+        (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
+          return aC !~ Dash."NILM"
+      )
+    ) then
+      'A Cytology test was found with a non-NILM result. Consider cervical cancer management.'
+    else
+      null
+
+define ErrorMissingHpvResult:
+  if (
+      Exists(HpvTestsForGradeDUnfiltered) and
+      (
+        AnyTrue(
+          (HpvTestsForGradeDUnfiltered.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(HpvTestsForGradeDUnfiltered.conclusionCode) ~ 0
+      )
+    ) then
+      'An hrHPV test was found with no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorUnexpectedHpvResult:
+    if (
+      ErrorMissingHpvResult is null and
+      AnyTrue(
+        (HpvTestsForGradeDUnfiltered.conclusionCode) aC
+          return aC !~ Dash."Negative HPV Finding"
+      )
+    ) then
+      'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
+    else
+      null
+    
 define Errors:
-  {} union
-  Dash.Errors
+  {
+    ErrorMissingCytologyResult,
+    ErrorUnexpectedCytologyResult,
+    ErrorMissingHpvResult,
+    ErrorUnexpectedHpvResult
+  } 
+  except { null }
+  union
+    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)
@@ -374,8 +408,17 @@ define NoErrorsHaveOccurred:
   not ErrorsHaveOccurred
 
 //------------------------------------------------------------------------------
-// GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX
+// GRADE D EXCLUSION: ABSENCE / REMOVAL OF CERVIX WITHOUT HISTORY OF HIGH GRADE PRECANCER OR CANCER
 //------------------------------------------------------------------------------
+// Do not screen if cervix has been removed and the patient does not have a history of high-grade cervical precancer or cancer
+
+// IF
+//    Removal of cervix procedure (completed)
+//    OR Diagnosis of Absence of cervix
+//    OR Absence of cervix observation
+// AND NOT Diagnosis of High grade pre-cancerous cervical lesion
+//    OR Diagnosis of Cervical cancer
+//    OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic cancer”
 
 define HasRemovalOfCervixProcedures:
   Exists(Dash.RemovalOfCervixProcedures)
@@ -391,9 +434,18 @@ define AbsenceOrRemovalOfCervix:
   HasAbsenceOfCervixDiagnoses or 
   HasAbsenceOfCervixObservations
 
+define AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer:
+  AbsenceOrRemovalOfCervix and not
+  (
+    HasHighGradePreCancerCervicalLesion or
+    HasCervicalCancerDiagnoses or
+    Exists(Dash.HighGradeOrCancerHistologyResults)
+  )
+
 //------------------------------------------------------------------------------
-// GRADE D RECOMMENDATION: ADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
+// GRADE D RECOMMENDATION: INADEQUATE SCREENING FOR INDIVIDUALS OLDER THAN 65
 //------------------------------------------------------------------------------
+// Enables women older than 65 to be screened if they have not had adequate prior screening and are not at high risk for CC.
 
 define NotAdequatelyScreened:
   not AdequatelyScreened
@@ -402,48 +454,57 @@ define AdequatelyScreened:
   HasThreeNegativeCytologyTestsForGradeD or
   HasTwoNegativeHpvTestsForGradeD
 
+define CervicalCytologyTestsForGradeDUnfiltered:
+  Common.CompletedDiagnosticReport(
+    Common.LookBack(
+      [DiagnosticReport: Dash."Pap Test"],
+      GradeDAdequatePriorScreeningLookback
+    )
+  )
+
 define CervicalCytologyTestsForGradeD:
   if AllowGradeDRecommendation then
-    [DiagnosticReport: Dash."Pap Test"] C
-      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM") and 
-        Common.DiagnosticReportDate(C) > Today() - GradeDAdequatePriorScreeningLookback and
-        C.status.value in List{'final', 'amended', 'corrected', 'appended'}
+    CervicalCytologyTestsForGradeDUnfiltered C
+      where AnyTrue((C.conclusionCode) cC return cC ~ Dash."NILM")
       return {
         type: 'Cervical Cytology',
         date: Common.DiagnosticReportDate(C)
       }
       sort by date
   else
-    {
-      {
-        type: null,
-        date: null
-      }
-    }
+    null
 
+// NOTE: Revisit after L3 logic is updated for those who have "aged out" of screening
 define HasThreeNegativeCytologyTestsForGradeD:
-  Count(CervicalCytologyTestsForGradeD) >= 3 and
-  Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years
+  if Exists(CervicalCytologyTestsForGradeD) then
+    Count(CervicalCytologyTestsForGradeD) >= 3 and
+    Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years
+  else 
+    false
+
+define HpvTestsForGradeDUnfiltered:
+  Common.CompletedDiagnosticReport(
+    Common.LookBack(
+      [DiagnosticReport: Dash."HPV Test"],
+      GradeDAdequatePriorScreeningLookback
+    )
+  )
 
 define HpvTestsForGradeD:
   if AllowGradeDRecommendation then
-    [DiagnosticReport: Dash."HPV Test"] H
-      where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding") and
-        Common.DiagnosticReportDate(H) > Today() - GradeDAdequatePriorScreeningLookback and
-        H.status.value in List{'final', 'amended', 'corrected', 'appended'}
+    HpvTestsForGradeDUnfiltered H
+      where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding")
       return {
         type: 'hrHPV',
         date: Common.DiagnosticReportDate(H)
       }
       sort by date
   else
-    {
-      {
-        type: null,
-        date: null
-      }
-    }
+    null
 
 define HasTwoNegativeHpvTestsForGradeD:
-  Count(HpvTestsForGradeD) >= 2 and
-  Last(HpvTestsForGradeD).date after Now() - 5 years
+  if Exists(HpvTestsForGradeD) then
+    Count(HpvTestsForGradeD) >= 2 and
+    Last(HpvTestsForGradeD).date after Now() - 5 years
+  else
+    false

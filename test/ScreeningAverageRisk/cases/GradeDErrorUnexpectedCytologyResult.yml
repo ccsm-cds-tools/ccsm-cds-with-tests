@@ -1,0 +1,26 @@
+---
+name: Grade D Error Unexpected Cytology Result
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1950-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-01-01
+
+results:
+  AgeOver65: true
+  ErrorMissingCytologyResult: null
+  ErrorUnexpectedCytologyResult: 'A Cytology test was found with a non-NILM result. Consider cervical cancer management.'
+  Errors: ['A Cytology test was found with a non-NILM result. Consider cervical cancer management.']

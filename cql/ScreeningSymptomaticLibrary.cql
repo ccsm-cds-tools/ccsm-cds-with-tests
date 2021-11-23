@@ -114,32 +114,24 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define NilmCytologyReports:
-  Dash.NilmCytologyReports
+define MostRecentNilmCytology:
+  Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
-  Dash.HasNilmCytologyWithinLast12Months
+  Exists(Common.LookBack(Dash.MostRecentNilmCytology, 12 months))
 
-define NegativeHpvReports:
-  Dash.HpvDiagnosticReports R
-    where R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
+define MostRecentNegativeHpv:
+  Dash.MostRecentNegativeHpv
 
-define CoincidentNilmCytologyAndNegativeHpvReports:
-  from "NilmCytologyReports" C, "NegativeHpvReports" H
+define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: 
+  from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
     Common.DiagnosticReportDate(H) within 3 years of Today() and
-    (
-      Common.AssociateDiagnosticReports(C, H) or
-      C.encounter = H.encounter or
-      (
-        Coalesce((C.basedOn) R where R.type = 'ServiceRequest' return R.reference) =
-        Coalesce((H.basedOn) R where R.type = 'ServiceRequest' return R.reference)
-      )
-    )
+    Common.CoincidentDiagnosticReports(C, H)
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
-  Exists(CoincidentNilmCytologyAndNegativeHpvReports)
+  Exists(MostRecentCoincidentNilmCytologyAndNegativeHpvReport)
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(
@@ -180,7 +172,7 @@ define VisibleLesionRecommendation:
 define ElseRecommendation:
   'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
 
-define Recommendation:
+define RecommendationText:
   if IsIncludedAndNotExcluded then
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
@@ -192,7 +184,7 @@ define Recommendation:
   else null
 
 define Citation:
-  if Recommendation is not null then
+  if RecommendationText is not null then
     'ASCCP Clinical Practice Statement, "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding," Published: February 7, 2017'
   else
     null
