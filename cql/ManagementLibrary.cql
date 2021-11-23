@@ -1628,8 +1628,6 @@ define RecommendationForImmunosuppressedPatients:
       null
   end
 
-// NOTE: LEFT OFF HERE ------------
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.4 Managing Patients After Hysterectomy
 
@@ -1703,7 +1701,7 @@ define HpvTestingCadence:
 define NextHpvTestingDueDate:
   MostRecentHpvReport.date + HpvTestingCadence
 
-define RecommendationForManagingPatientsAfterHysterectomy:
+define RecommendationForManagingPatientsAfterHysterectomy: // TODO: Align with L2 definition of hysterectomy for treatment.
   if CervixRemovalDate is not null then
     if MostRecentHpvReport.date < Now() - HpvTestingCadence then
       {
@@ -1715,7 +1713,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         action: null,
         text: 'hrHPV-based testing is next due on ' + ToString(ToDate(NextHpvTestingDueDate)) + '.'
       }
-  else if AbsenceOrRemovalOfCervix then
+  else if AbsenceOrRemovalOfCervix then // TODO: Throw error if date of AbsenceOrRemovalOfCervix is not found, instead of having this "catch-all" case here.
       {
         action: null,
         text: 'If hysterectomy is performed for treatment, patients should have 3 consecutive annual hrHPV-based tests before entering long-term surveillance. Long-term surveillance after treatment for histologic HSIL (CIN 2 or CIN 3) or AIS involves hrHPV-based testing at 3-year intervals for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).'
