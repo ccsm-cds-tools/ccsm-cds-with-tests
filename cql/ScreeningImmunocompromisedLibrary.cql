@@ -23,66 +23,39 @@ include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
-// CODE SYSTEMS, VALUE SETS, AND CODES
-//------------------------------------------------------------------------------
-
-codesystem "LOINC": 'http://loinc.org'
-
-// Standard codes
-code "Had Intercourse": '64728-9' from "LOINC" display 'Have you ever had vaginal intercourse' // TODO: This criteria was deleted. Remove here in L3.
-
-//------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
 
 parameter CytologyWindow default 18 months
-parameter SexualActivityLookBack default 12 months // TODO: Remove. Sexual Activity is no longer a factor.
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
 context Patient
 
 //------------------------------------------------------------------------------
-// FUNCTIONS
-//------------------------------------------------------------------------------
-
-define function DateOfCondition(C Condition):
-  Coalesce(
-    (C.onset as FHIR.dateTime).value,
-    (C.onset as FHIR.Period)."end".value,
-    (C.onset as FHIR.Period)."start".value,
-    C.recordedDate.value
-  )
-
-define function DateOfProcedure(P Procedure):
-  Coalesce(
-    (P.performed as FHIR.dateTime).value,
-    (P.performed as FHIR.Period)."end".value,
-    (P.performed as FHIR.Period)."start".value
-  )
-
-//------------------------------------------------------------------------------
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Sex at birth = Female 
-// OR Gender identity = Transgender Male 
+//    OR Gender identity = Transgender Male 
 // AND "Immunocompromised", which is defined as: 
-//   HIV  
-//     OR Solid Organ Transplant Diagnosis Codes  
-//     OR Solid Organ Transplant procedure (completed) 
-//     OR Diagnosis of Systemic Lupus Erythematosus (SLE)
-//     OR Diagnosis of Hematopoietic Stem Cell Transplant (HSCT)  
-//     OR Hematopoietic Stem Cell Transplant procedure (completed) 
-//     OR Genital Graft versus Host Disease 
-//     OR Chronic Graft versus Host Disease 
+//   Diagnosis of HIV  
+//   OR Solid Organ Transplant Diagnosis Codes  
+//   OR Solid Organ Transplant procedure (completed) 
+//   OR Diagnosis of Systemic Lupus Erythematosus (SLE)
+//   OR Diagnosis of Hematopoietic Stem Cell Transplant (HSCT)  
+//   OR Hematopoietic Stem Cell Transplant procedure (completed) 
+//   OR Genital Graft versus Host Disease (GvHD)
+//      AFTER Hematopoietic Stem Cell Transplant procedure (completed)
+//   OR Chronic Graft versus Host Disease (GvHD)
+//      AFTER Hematopoietic Stem Cell Transplant procedure (completed)
 //   OR 
-//     Diagnosis of Inflammatory Bowel Disease 
-//       OR Diagnosis of Rheumatoid Arthritis 
+//     Diagnosis of Inflammatory Bowel Disease (IBD)
+//        OR Diagnosis of Rheumatoid Arthritis (RA)
 //     AND
-//       Immunosuppressant, Request (completed) 
-//         OR Immunosuppressant, Dispensed (completed) 
-//         OR Immunosuppressant, Administration (completed) 
-//         OR Immunosuppressant, Statement (active)
+//        Immunosuppressant Medication for IBD or RA, Request (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Dispensed (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Administration (completed)
+//        OR Immunosuppressant Medication for IBD or RA, Statement (active)
 
 define Immunocompromised:
   Dash.Immunocompromised
@@ -94,7 +67,7 @@ define IsIncluded:
 //------------------------------------------------------------------------------
 // EXCLUSIONS
 //------------------------------------------------------------------------------
-// Removal of cervix (completed)
+// Removal of cervix procedures (completed)
 // OR Diagnosis of Absence of cervix
 // OR Absence of cervix observation (final, amended, corrected)
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)
@@ -130,45 +103,61 @@ define IsIncludedAndNotExcluded:
   IsIncluded and
   not Excluded
 
-define ImmunosuppressionConditions:
-  Dash.ImmunocompromisedConditions
+define DateOfImmunosuppressionOnset:
+  Dash.MostRecentDistinctImmunocompromisedEventDate
 
-define DateOfMostRecentImmunosuppressionCondition:
-  DateOfCondition(
-    C3F.MostRecentCondition(
-      ImmunosuppressionConditions
-    )
+define RecentCytologyReports: 
+  Common.SortedDiagnosticReports(Dash.CervicalCytologyReports)
+
+define RecentCytologyReportsSinceImmunosuppressionOnset:
+  RecentCytologyReports R
+    where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
+
+define OneNilmCytologySinceImmunosuppressionOnset:
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 0 and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[0].conclusionCode) cC 
+    return cC ~ Dash."NILM"
   )
 
-define ImmunosuppressionProcedures:
-  Dash.SolidOrganTransplantProcedures union
-  Dash.HematopoieticStemCellTransplantProcedures
-
-define DateOfMostRecentImmunosuppressionProcedure:
-  DateOfProcedure(
-    C3F.MostRecentProcedure(
-      ImmunosuppressionProcedures
-    )
+define TwoNilmCytologiesSinceImmunosuppressionOnset:
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 1 and
+  OneNilmCytologySinceImmunosuppressionOnset and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[1].conclusionCode) cC 
+    return cC ~ Dash."NILM"
   )
 
-define DateOfImmunosuppressionOnset: // TODO: Handle this in more elegant way with respect to most recent "distinct" evidence (see Immunocompromised code in Dashboard).
-  if DateOfMostRecentImmunosuppressionCondition is not null then
-    if DateOfMostRecentImmunosuppressionProcedure is not null then
-      if DateOfMostRecentImmunosuppressionCondition after DateOfMostRecentImmunosuppressionProcedure then
-        DateOfMostRecentImmunosuppressionCondition
-      else
-        DateOfMostRecentImmunosuppressionProcedure
-    else
-      DateOfMostRecentImmunosuppressionCondition
-  else
-    if DateOfMostRecentImmunosuppressionProcedure is not null then
-      DateOfMostRecentImmunosuppressionProcedure
-    else
-      null
+define ThreeNilmCytologiesSinceImmunosuppressionOnset:
+  Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 2 and
+  TwoNilmCytologiesSinceImmunosuppressionOnset and
+  AnyTrue(
+    (RecentCytologyReportsSinceImmunosuppressionOnset[2].conclusionCode) cC 
+    return cC ~ Dash."NILM"
+  )
+
+define RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm:
+  case
+    when ThreeNilmCytologiesSinceImmunosuppressionOnset then
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0],
+        RecentCytologyReportsSinceImmunosuppressionOnset[1], 
+        RecentCytologyReportsSinceImmunosuppressionOnset[2]
+      }
+    when TwoNilmCytologiesSinceImmunosuppressionOnset then 
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0], 
+        RecentCytologyReportsSinceImmunosuppressionOnset[1]
+      }
+    when OneNilmCytologySinceImmunosuppressionOnset then
+      {
+        RecentCytologyReportsSinceImmunosuppressionOnset[0]
+      }
+    else null
+  end
 
 define NilmCytologyReportsSinceImmunosuppressionOnset:
-  Dash.NilmCytologyReports R
-    where Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
+  RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm R
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
@@ -176,19 +165,19 @@ define NilmCytologyReportsSinceImmunosuppressionOnset:
     sort by date
 
 define DateOfFirstNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 0 then 
+  if OneNilmCytologySinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[0].date
   else 
     null
 
 define DateOfSecondNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 1 then 
+  if TwoNilmCytologiesSinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[1].date
   else 
     null
 
 define DateOfThirdNilmCytologyAfterImmunosuppressionOnset:
-  if Count(NilmCytologyReportsSinceImmunosuppressionOnset) > 2 then 
+  if ThreeNilmCytologiesSinceImmunosuppressionOnset then 
     NilmCytologyReportsSinceImmunosuppressionOnset[2].date
   else 
     null
@@ -199,12 +188,14 @@ define CytologySequenceIntact:
       if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then // NOTE: Check to see if we need to lookback from Today()
         DateOfFirstNilmCytologyAfterImmunosuppressionOnset >  
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
-          and
+        and
         DateOfSecondNilmCytologyAfterImmunosuppressionOnset >
           DateOfThirdNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
       else
         DateOfFirstNilmCytologyAfterImmunosuppressionOnset > // TODO: Add Today() - CytologyWindow logic 
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
+        and
+        DateOfSecondNilmCytologyAfterImmunosuppressionOnset > (Today() - CytologyWindow)
     else
       if DateOfFirstNilmCytologyAfterImmunosuppressionOnset before Today() - CytologyWindow then
         false
@@ -213,56 +204,22 @@ define CytologySequenceIntact:
   else
     false
 
-define Under21: // TODO: Remove
-  AgeInYears() < 21
-
 define Age21Through29:
   AgeInYears() between 21 and 29
 
 define Age30AndOlder:
   AgeInYears() >= 30
 
-define ObservationsOfSexualActivity: // TODO: Remove from L3
-  C3F.Verified(
-    C3F.ObservationLookBack(
-      [Observation: "Had Intercourse"] Obs
-        where Obs.value includes ToConcept(Dash."Yes"),
-      SexualActivityLookBack
-    )
-  )
-
-define RecentOnsetSexualActivity: // TODO: Remove from L3
-  Exists(ObservationsOfSexualActivity)
-
-define NoCytologySinceSexualActivityOnset: // TODO: Remove from L3
-  not Exists(
-    Dash.CervicalCytologyReports C
-      where Common.DiagnosticReportDate(C) after
-      Common.ObservationDate(
-        C3F.MostRecent(
-          ObservationsOfSexualActivity
-        )
-      )
-  )
-
 define NeedFirstOfThreeAnnualCytologyTests:
   if (
-    ( // TODO: Remove first clause
-      IsIncludedAndNotExcluded and
-      Under21 and 
-      RecentOnsetSexualActivity and
-      NoCytologySinceSexualActivityOnset
-    ) or
+    IsIncludedAndNotExcluded and
     (
-      IsIncludedAndNotExcluded and
-      (
-        Age21Through29 or
-        Age30AndOlder
-      ) and
-      (
-        DateOfFirstNilmCytologyAfterImmunosuppressionOnset is null or
-        CytologySequenceIntact = false
-      )
+      Age21Through29 or
+      Age30AndOlder
+    ) and
+    (
+      DateOfFirstNilmCytologyAfterImmunosuppressionOnset is null or
+      CytologySequenceIntact = false
     )
   ) then true
   else false
@@ -296,23 +253,26 @@ define DateOfLastCytology:
   else
     null
 
-define NegativeHpvReportsSinceImmunosuppressionOnset:
-  Dash.HpvDiagnosticReports R
+define LastCytology:
+  RecentCytologyReportsSinceImmunosuppressionOnset C 
+    where Common.DiagnosticReportDate(C) ~ DateOfLastCytology
+
+define CoincidentHpvTests:
+  from Dash.HpvDiagnosticReports R, LastCytology C
+    where Common.CoincidentDiagnosticReports(R, C)
+    return R
+
+define NegativeCotests:
+  CoincidentHpvTests R
     where
-      R.conclusionCode includes ToConcept(Dash."Negative HPV Finding") and
-      Common.DiagnosticReportDate(R) after DateOfImmunosuppressionOnset
+      R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
     }
-    sort by date
 
 define LastCytologyWasCotest:
-  Exists(
-    NegativeHpvReportsSinceImmunosuppressionOnset H
-      where H.date within 1 day of DateOfLastCytology
-      // TODO: Update to match the way cotest is defined in Dashboard (including check for same encounter and same service request)
-  )
+  Exists(NegativeCotests)
 
 define TestingCadence:
   if (
@@ -339,21 +299,30 @@ define ProposeImmediateTesting:
 
 define RecommendationText:
   if ProposeImmediateTesting then
-    if Under21 or Age21Through29 then // TODO: Remove Under21
-      'Per CDC guidelines, Cervical Cytology screening is indicated.'
-    else
-      'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
-  else
-    if Under21 or Age21Through29 then // TODO: Remove Under21
-      'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
-    else
-      if LastCytologyWasCotest then
-        'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
-      else
-        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' // NOTE: Check in about adding option for recommending a cotest.
+    case
+      when Age21Through29 then 
+        'Per CDC guidelines, Cervical Cytology screening is indicated.'
+      when Age30AndOlder then
+        'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
+      else // No recommendation for Age < 21
+        null
+    end
+  else // Propose Future Testing
+    case 
+      when Age21Through29 then 
+        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+      when Age30AndOlder then
+        if LastCytologyWasCotest then
+          'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+        else
+          'Per CDC guidelines, cervical cancer screening using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+      else // No recommendation for Age < 21
+        null
+    end
 
-define RecommendImmediateCervicalCytology: // NOTE: Check to see if this can be deleted.
-  ProposeImmediateTesting
+define RecommendImmediateCervicalCytology:
+  ProposeImmediateTesting and
+  (Age21Through29 or Age30AndOlder)
 
 define RecommendImmediateCotesting: // NOTE: Check to see if this can be deleted.
   ProposeImmediateTesting and
@@ -363,9 +332,42 @@ define RecommendImmediateCotesting: // NOTE: Check to see if this can be deleted
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorCotestWithMissingHpvResult:
+  if (
+      Exists(CoincidentHpvTests) and
+      (
+        AllTrue(
+          (CoincidentHpvTests.conclusionCode) aC
+            return aC is null
+        )
+      or 
+        Count(CoincidentHpvTests.conclusionCode) ~ 0
+      )
+    ) then
+      'An hrHPV test found as part of a cotest contained no result. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorCotestWithNonNegativeHpvResult:
+  if (
+    ErrorCotestWithMissingHpvResult is null and
+    AnyTrue(
+      (CoincidentHpvTests.conclusionCode) aC
+        return aC !~ Dash."Negative HPV Finding"
+    )
+  ) then
+    'An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.'
+  else
+    null
+
 define Errors:
-  {} union
-  Dash.Errors
+  {
+    ErrorCotestWithMissingHpvResult,
+    ErrorCotestWithNonNegativeHpvResult
+  } 
+  except { null }
+  union
+    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)

@@ -37,7 +37,6 @@ codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 // TODO: Cross-check value sets and codes with value set spreadsheet
 
-valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
@@ -63,7 +62,6 @@ code "HPV16+": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomav
 code "HPV18+": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)'
 // TODO: Add SNOMED code for HPV16+ DNA
 // TODO: Add SNOMED code for HPV18+ DNA
-code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
 code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
@@ -158,8 +156,8 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       when c ~ "CIN1" then {text: 'CIN1', rank: 2}
       when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
       when c ~ Dash."CIN3" then {text: 'CIN3', rank: 4}
-      when c in "AIS" then {text: 'AIS', rank: 5}
-      when c in Dash."Diagnosis of Cervical cancer" then {text: 'Cancer', rank: 6}
+      when c in Dash."AIS" then {text: 'AIS', rank: 5}
+      when c in Dash."Histologic cancer" then {text: 'Cancer', rank: 6}
       else {text: 'ALL', rank: 0}
     end
 
@@ -169,12 +167,15 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
 // AND
-//   MOST RECENT hrHPV test FOUND <= 7 years ago AND the result = "Positive"
-//     OR MOST RECENT Cervical Cytology FOUND <= 7 years ago AND the result <> "NILM"
-//   OR
-//   Diagnosis of High grade pre-cancerous cervical lesion 
-//     OR Diagnosis of Cervical cancer 
-//     OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)"
+//   INCLUSION #1: Abnormal cervical cancer screening test within the last 7 years
+//       hrHPV result = "Positive"
+//       OR Cervical Cytology result not equal to "NILM"
+//       OR Cervical Histology result not equal to "Negative"
+//       <= 7 years ago
+//   OR INCLUSION #2: Includes women who have been "diagnosed" with a high-grade precancerous lesion or cervical cancer
+//       Diagnosis of High grade pre-cancerous cervical lesion 
+//       OR Diagnosis of Cervical cancer 
+//       OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)" or "histologic AIS" or "histologic cancer"
 
 // TODO: Update comments above to reflect updated L2
 // TODO: Do this for other Logic Paths
@@ -188,30 +189,20 @@ define HasHighGradePreCancerCervicalLesion:
 define HasCervicalCancerDiagnoses:
   Exists(Dash.CervicalCancerDiagnoses)
 
-define Cin2OrCin3HistologyResults:
-  Dash.HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept(Dash."CIN2") or
-      H.conclusionCode includes ToConcept(Dash."CIN3")
-
-define AisOrCancerHistologyResults: // TODO: High-grade histology value set
-  Dash.HistologyDiagnosticReports H // NOTE: Also shows up in screening
-    where H.conclusionCode in "AIS" or
-      H.conclusionCode in Dash."Diagnosis of Cervical cancer"
-
 define IsIncluded:
   Entry.FemaleorTransgenderMale and
   (
     HasRecentAbnormalScreening or 
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(Cin2OrCin3HistologyResults) or
-    Exists(AisOrCancerHistologyResults) // TODO: Update this once the L2 is updated again
+    Exists(Dash.HighGradeOrCancerHistologyResults)
   )
 
 //------------------------------------------------------------------------------
 // EXCLUSIONS
 //------------------------------------------------------------------------------
 // None
+// Upon more detailed review of 2012 ASCCP Management Guidelines, may modify exclusion criteria
 
 define Excluded:
   false
@@ -561,7 +552,7 @@ define CytologyInterpretedAsAgc:
 define CytologyInterpretedAsAis:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
-      return aC in "AIS"
+      return aC in Dash."AIS"
   )
 
 define CytologyInterpretedAsAgcOrAis:
@@ -674,14 +665,14 @@ define HistologyInterpretedAsAis:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC in "AIS"
+        aC in Dash."AIS"
   )
 
 define HistologyInterpretedAsCancer:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC in Dash."Diagnosis of Cervical cancer"
+        aC in Dash."Histologic cancer"
   )
 
 define HistologyInterpretedAsCin2Cin3AisOrCancer:
@@ -960,7 +951,7 @@ define HistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "HSIL, Unspecified"
+        aC ~ Dash."HSIL, Unspecified"
   )
 
 define HistologyInterpretedAsCin1:
@@ -1256,7 +1247,7 @@ define MostRecentHsilHistologyWithinLastTwoYears:
       AnyTrue(
         (B.allConclusions) aC
           return
-            aC ~ "HSIL, Unspecified" or
+            aC ~ Dash."HSIL, Unspecified" or
             aC ~ Dash."CIN2" or
             aC ~ Dash."CIN3"
       )
@@ -1296,7 +1287,7 @@ define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "HSIL, Unspecified"
+        aC ~ Dash."HSIL, Unspecified"
   )
 
 define TwoMostRecentBiopsyReportsWithin12monthsApart:
@@ -1874,7 +1865,7 @@ define CommonAbnormalityRecommendation:
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
 
-define ManagementRecommendation:
+define ManagementRecommendation: // NOTE: Should we call this RecommendationText for consistency with other logic paths?
   Coalesce(
     SpecialPopulationRecommendation,
     RareAbnormalityRecommendation,

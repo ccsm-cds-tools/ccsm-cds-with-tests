@@ -17,7 +17,7 @@ Usage: #definition
 * relatedArtifact[+].type = $RATYPE#citation "Citation" 
 * relatedArtifact[=].label = "ASCCP Recommendation"
 * relatedArtifact[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-* library = Canonical(ManagementLibrary|1.0)
+* library = Canonical(ManagementLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #1: Abnormal Results
 // -----------------------------------------------------------------------------

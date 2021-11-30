@@ -2,11 +2,9 @@
 // Criteria for Entering Cervical Cancer Screening and Management CDS
 // All Logic Paths require either:
   // Sex at birth = Female
-  // OR Gender identity = Transgender Make
+  // OR Gender identity = Transgender Male
 // Therefore, logic for this entry criteria is abstracted to this library
 library TopLevelScreeningLibrary version '1.0.0'
-
-// # Data model
 using FHIR version '4.0.1'
 
 // # Referenced libraries
@@ -34,8 +32,6 @@ parameter MinimumScreeningAge default 21 // Age in years
 
 // # CDS Logic
 context Patient
-
-// # Reusable functions
 
 // # Target population
 

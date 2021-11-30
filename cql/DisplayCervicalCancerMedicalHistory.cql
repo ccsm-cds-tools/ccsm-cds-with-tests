@@ -78,6 +78,8 @@ valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.4
 valueset "Pap Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017'
 valueset "Non NILM results of Cervical Cytology Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.235'
 valueset "HPV Immunization": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.191'
+valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
+valueset "Histologic cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.244'
 
 // Standard codes
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
@@ -87,7 +89,6 @@ code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History o
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
-code "Colposcopy": '176786003' from "SNOMED-CT" display 'Colposcopy of cervix (procedure)' // TODO: Revisit in progress clinical  concept
 code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy report' // A.K.A. "Histology tests"
 code "Positive": '10828004' from "SNOMED-CT" display 'Positive (qualifier value)'
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
@@ -96,6 +97,7 @@ code "Positive HPV Finding": '720005005' from "SNOMED-CT" display 'Human papillo
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
 code "CIN2": '285838002' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 2 (disorder)'
 code "CIN3": '20365006' from "SNOMED-CT" display 'Squamous intraepithelial neoplasia, grade III (morphologic abnormality)'
+code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -117,11 +119,10 @@ parameter AbnormalTestLookbackPeriod default 8 years
 
 context Patient
 
-// 1. Age (calculated from date of birth)
-
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
 //------------------------------------------------------------------------------
+// Age (calculated from date of birth)
 
 define PatientAge:
   AgeInYears()
@@ -129,7 +130,8 @@ define PatientAge:
 //------------------------------------------------------------------------------
 // PERTINENT CONDITIONS
 //------------------------------------------------------------------------------
-// Allow all clinical statues and no lookback restriction
+// Conditions relevant to cervical cancer
+//    Allow all clinical statues and no lookback restriction
 
 define CervicalCancerDiagnoses:
   [Condition: "Diagnosis of Cervical cancer"]
@@ -179,26 +181,40 @@ define RheumatoidArthritisDiagnoses:
   [Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"] union
   [Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"]
 
+define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses:
+  InflammatoryBowelDisease union
+  RheumatoidArthritisDiagnoses
+
+define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant:
+  if OnImmunosuppressant then
+    InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses
+  else
+    null
+
 define ChronicGraftVersusHostDiseaseDiagnoses:
   [Condition: "Chronic Graft versus Host Disease"] union
   [Condition: "Chronic GvHD ICD-9 Code"] union
   [Condition: "Chronic GvHD ICD-10 Code"]
 
-// TODO: Add "ChronicGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
+define ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell:
+  ChronicGraftVersusHostDiseaseDiagnoses C 
+  where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define GenitalGraftVersusHostDiseaseDiagnoses:
   [Condition: "Diagnosis of Genital GvHD"]
 
-// TODO: Add "GenitalGraftVersusHostDiseaseDiagnoses After Stem Cell" expression
+define GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell:
+  GenitalGraftVersusHostDiseaseDiagnoses C 
+  where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
-define ImmunocompromisedConditions: // TODO: Simplify Immunocompromised logic ("Immunocompromised" is also defined below on line 637).
+define ImmunocompromisedConditions:
   HivDiagnoses union
   SolidOrganTransplantDiagnoses union
   SystemicLupusErythematosusDiagnoses union
   HematopoieticStemCellTransplantDiagnoses union
   InflammatoryBowelDisease union
   RheumatoidArthritisDiagnoses union
-  ChronicGraftVersusHostDiseaseDiagnoses union // NOTE: Follow up about GVHD after review of Logic Path 3
+  ChronicGraftVersusHostDiseaseDiagnoses union
   GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
@@ -250,31 +266,30 @@ define PregnancyObservations:
       [Observation: "Pregnancy Status"] P
         where P.value ~ "Patient currently pregnant"
     ),
-    42 weeks // NOTE: Changing 12 months to 42 weeks
+    42 weeks
   )
 
 define DesExposureObservations:
-  // C3F.ObservationLookBack(
     C3F.Verified(
       [Observation: "In utero exposure to DES"]
-    )//,
-    // 12 months // NOTE: Removing lookback since it doesn't make sense here
-  // )
+    )
 
 define AbsenceOfCervixObservations:
-  // C3F.ObservationLookBack(
     C3F.Verified(
       [Observation: "Absence of cervix observation"]
-    )//,
-    // 12 months // NOTE: Removing lookback since it doesn't make sense here
-  // )
+    )
 
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
-  AbsenceOfCervixObservations
+  AbsenceOfCervixObservations union
+  // Clinician-provided Observations:
+  ResponsesToAbnormalBleedingQuestion union
+  ResponsesToVisibleLesionQuestion union
+  ResponsesToDesExposureQuestion
+
 
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
@@ -289,10 +304,11 @@ define PertinentObservationsSummary:
 //------------------------------------------------------------------------------
 // PERTINENT MEDICATIONS
 //------------------------------------------------------------------------------
-// Medication Request (completed) < 6 months ago
-// Medication Dispense (completed) < 6 months ago
-// Medication Administration (completed) < 6 months ago
-// Medication Statement (active) < 6 months ago
+// Medications relevant to cervical cancer (e.g., immunosuppressant treatment)
+//    Medication Request (completed) < 6 months ago
+//    Medication Dispense (completed) < 6 months ago
+//    Medication Administration (completed) < 6 months ago
+//    Medication Statement (active) < 6 months ago
 
 define ImmunosuppressantMedicationRequests:
   Common.CompletedMedicationRequest(
@@ -325,6 +341,12 @@ define ImmunosuppressantMedicationStatements:
       MedicationLookbackPeriod
     )
   )
+
+define OnImmunosuppressant:
+  Exists(ImmunosuppressantMedicationRequests) or
+  Exists(ImmunosuppressantMedicationDispenses) or
+  Exists(ImmunosuppressantMedicationAdministrations) or
+  Exists(ImmunosuppressantMedicationStatements)
 
 define PertinentMedicationRequests:
   ImmunosuppressantMedicationRequests
@@ -395,7 +417,8 @@ define PertinentMedicationsSummary:
 //------------------------------------------------------------------------------
 // PERTINENT PROCEDURES
 //------------------------------------------------------------------------------
-// With status of completed
+// Procedures relevant to cervical cancer (completed)
+//     With status of completed
 
 define HematopoieticStemCellTransplantProcedures:
   C3F.Completed(
@@ -403,11 +426,18 @@ define HematopoieticStemCellTransplantProcedures:
     [Procedure: "SNOMED Value Set for Hemopoietic Stem Cell Transplantation"]
   )
 
+define DateOfFirstHematopoieticStemCellTransplantProcedure:
+  Common.DateOfFirstProcedure(HematopoieticStemCellTransplantProcedures)
+ 
 define SolidOrganTransplantProcedures:
   C3F.Completed(
     [Procedure: "Solid Organ Transplant Procedure Codes"] union
     [Procedure: "Kidney Transplant"]
   )
+
+define ImmunocompromisedProcedures:
+  HematopoieticStemCellTransplantProcedures union
+  SolidOrganTransplantProcedures
 
 define ColposcopyProcedures:
   C3F.Completed(
@@ -433,8 +463,7 @@ define RemovalOfCervixProcedures:
 // NOTE: Follow up about cervical biopsy procedures
 
 define PertinentProcedures:
-  HematopoieticStemCellTransplantProcedures union
-  SolidOrganTransplantProcedures union
+  ImmunocompromisedProcedures
   ColposcopyProcedures union
   CervicalExcisionProcedures union
   CervicalAblationProcedures union
@@ -451,7 +480,8 @@ define PertinentProceduresSummary:
 //------------------------------------------------------------------------------
 // PERTINENT DIAGNOSTIC REPORTS
 //------------------------------------------------------------------------------
-// Status of (final, amended, corrected, appended).
+// Diagnostic reports relevant to cervical cancer
+//    Status of (final, amended, corrected, appended).
 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
@@ -461,9 +491,15 @@ define HpvDiagnosticReports:
     )
   )
 
-define NegativeHpvReports:
-  HpvDiagnosticReports R
-    where R.conclusionCode includes ToConcept("Negative HPV Finding") // TODO: Also look for "Negative" SNOMED code
+define MostRecentHpvReport:
+  Common.MostRecentDiagnosticReport(HpvDiagnosticReports)
+
+define MostRecentNegativeHpv:
+  MostRecentHpvReport R
+    where (
+      R.conclusionCode includes ToConcept("Negative HPV Finding") or
+      R.conclusionCode includes ToConcept("Negative")
+    )
 
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
@@ -473,14 +509,14 @@ define CervicalCytologyReports:
     )
   )
 
-define NilmCytologyReports:
-  CervicalCytologyReports R
+define MostRecentCytologyReport:
+  Common.MostRecentDiagnosticReport(CervicalCytologyReports)
+
+define MostRecentNilmCytology:
+  (MostRecentCytologyReport) R
     where AnyTrue(
       (R.conclusionCode) cC return cC ~ "NILM"
     )
-
-define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack(NilmCytologyReports, 12 months))
 
 define HistologyDiagnosticReports:
   Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])
@@ -516,10 +552,20 @@ define HistologyDiagnosticReportsSummary:
   }
 
 define DiagnosticReportsSummary:
-  (HpvDiagnosticReportsSummary
-  union CervicalCytologyReportsSummary
-  union HistologyDiagnosticReportsSummary) D
+  (
+    HpvDiagnosticReportsSummary union 
+    CervicalCytologyReportsSummary union
+    HistologyDiagnosticReportsSummary
+  ) D
   sort by Date desc
+
+define HighGradeOrCancerHistologyResults:
+  HistologyDiagnosticReports H
+    where H.conclusionCode includes ToConcept("CIN2") or
+      H.conclusionCode includes ToConcept("CIN3") or
+      H.conclusionCode includes ToConcept("HSIL, Unspecified") or
+      H.conclusionCode in "AIS" or
+      H.conclusionCode in "Histologic cancer"
 
 //------------------------------------------------------------------------------
 // PERTINENT ENCOUNTERS
@@ -535,9 +581,40 @@ define AbnormalUterineOrVaginalBleedingEncounters:
       )
   )
 
+define PertinentEncounters:
+  AbnormalUterineOrVaginalBleedingEncounters
+
+define PertinentEncountersSummary:
+  (PertinentEncounters) E
+  return {
+    Reason: Common.ConceptText(E.reasonCode[0]),
+    Status: E.status,
+    Start: Common.DateTimeText((E.period as FHIR.Period)."start"),
+    End: Common.DateTimeText((E.period as FHIR.Period)."end")
+  }
+
 //------------------------------------------------------------------------------
 // HPV IMMUNIZATIONS
 //------------------------------------------------------------------------------
+// hrHPV immunization
+
+define HrHPVImmunizations:
+  [Immunization: "HPV Immunization"]
+
+define PertinentImmunizations:
+  HrHPVImmunizations
+
+define PertinentImmunizationsSummary:
+  (PertinentImmunizations) I
+  return {
+    Name: Common.ConceptText(I.vaccineCode),
+    Status: I.status,
+    AdministrationDate: Coalesce(
+      I.occurrence,
+      Common.DateTimeText(I.occurrence)
+    ),
+    ExpirationDate: Common.DateText(I.expirationDate)
+  }
 
 // TODO: Add HPV Immunizations
 
@@ -548,12 +625,16 @@ define AbnormalUterineOrVaginalBleedingEncounters:
 // TODO: Add all 3 Questions to Dashboard (PertinentObservations)
 
 define ResponsesToAbnormalBleedingQuestion:
-  [Observation: "Abnormal Uterine or Vaginal Bleeding Question"]
-  // TODO: Add 12 month Lookback
+  C3F.ObservationLookBack(
+    [Observation: "Abnormal Uterine or Vaginal Bleeding Question"],
+    12 months
+  )
 
 define ResponsesToVisibleLesionQuestion:
-  [Observation: "Visible Uterine or Vaginal Lesion Question"]
-  // TODO: Add 12 month Lookback
+  C3F.ObservationLookBack(
+    [Observation: "Visible Uterine or Vaginal Lesion Question"],
+    12 months
+  )
 
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
@@ -596,54 +677,134 @@ define RecentAbnormalHistology:
 define HasRecentAbnormalHistology:
   Exists(RecentAbnormalHistology)
 
-define DiagnosisOfHiv:
-  Exists(HivDiagnoses)
+define Immunocompromised:
+  Exists(HivDiagnoses) or 
+  Exists(SolidOrganTransplantDiagnoses) or
+  Exists(SolidOrganTransplantProcedures) or
+  Exists(SystemicLupusErythematosusDiagnoses) or 
+  Exists(HematopoieticStemCellTransplantDiagnoses) or
+  Exists(HematopoieticStemCellTransplantProcedures) or
+  Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell) or
+  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell) or 
+  Exists(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
 
-define DiagnosisOfSolidOrganTransplant:
-  Exists(SolidOrganTransplantDiagnoses)
+// Logic to determine most recent distinct immunocompromised event:
 
-define ProcedureForSolidOrganTransplant:
-  Exists(SolidOrganTransplantProcedures)
+define FirstDiagnosisOfHiv:
+  {
+    type: 'Diagnosis Of HIV',
+    date: Common.DateOfFirstCondition(HivDiagnoses)
+  }
 
-define DiagnosisOfSystemicLupusErythematosus:
-  Exists(SystemicLupusErythematosusDiagnoses)
+define FirstDiagnosisOfSolidOrganTransplant:
+  {
+    type: 'Diagnosis Of Solid Organ Transplant',
+    date: Common.DateOfFirstCondition(SolidOrganTransplantDiagnoses)
+  }
 
-define DiagnosisOfHematopoieticStemCellTransplant:
-  Exists(HematopoieticStemCellTransplantDiagnoses)
+define FirstProcedureForSolidOrganTransplant:
+  {
+    type: 'Procedure For Solid Organ Transplant',
+    date: Common.DateOfFirstProcedure(SolidOrganTransplantProcedures)
+  }
 
-define ProcedureForHematopoieticStemCellTransplant:
-  Exists(HematopoieticStemCellTransplantProcedures)
+define FirstSolidOrganTransplant:
+  if FirstDiagnosisOfSolidOrganTransplant.date is not null then
+    if FirstProcedureForSolidOrganTransplant.date is not null then
+      First(
+        (
+          FirstDiagnosisOfSolidOrganTransplant union
+          FirstProcedureForSolidOrganTransplant
+        ) T 
+        return {
+          type: T.type,
+          date: T.date
+        }
+        sort by date
+      )
+    else 
+      FirstDiagnosisOfSolidOrganTransplant
+  else 
+    FirstProcedureForSolidOrganTransplant
 
-define DiagnosisOfChronicGraftVersusHostDisease:
-  Exists(ChronicGraftVersusHostDiseaseDiagnoses)
+define FirstDiagnosisOfSystemicLupusErythematosus:
+  {
+    type: 'Diagnosis Of Systemic Lupus Erythematosus',
+    date: Common.DateOfFirstCondition(SystemicLupusErythematosusDiagnoses)
+  }
 
-define DiagnosisOfGenitalGraftVersusHostDisease:
-  Exists(GenitalGraftVersusHostDiseaseDiagnoses)
+define FirstDiagnosisOfHematopoieticStemCellTransplant:
+  {
+    type: 'Diagnosis Of Hematopoietic Stem Cell Transplant',
+    date: Common.DateOfFirstCondition(HematopoieticStemCellTransplantDiagnoses)
+  }
 
-define DiagnosisOfIbsOrArthritisAndOnImmunosuppressant: // TODO: Arthritis -> Rheumatoid Arthritus or RA; IBD not IBS - Change after changing expression name.
-  (
-    Exists(InflammatoryBowelDisease) or
-    Exists(RheumatoidArthritisDiagnoses)
-  ) and
-  (
-    Exists(ImmunosuppressantMedicationRequests) or
-    Exists(ImmunosuppressantMedicationDispenses) or
-    Exists(ImmunosuppressantMedicationAdministrations) or
-    Exists(ImmunosuppressantMedicationStatements)
-  )
+define FirstProcedureForHematopoieticStemCellTransplant:
+  {
+    type: 'Procedure For Hematopoietic Stem Cell Transplant',
+    date: DateOfFirstHematopoieticStemCellTransplantProcedure
+  }
 
-// TODO: Add MostRecentDistinctImmunocompromisedCondition
+define FirstHematopoieticStemCellTransplant:
+  if FirstDiagnosisOfHematopoieticStemCellTransplant.date is not null then
+    if FirstProcedureForHematopoieticStemCellTransplant is not null then
+      First(
+        (
+          FirstDiagnosisOfHematopoieticStemCellTransplant union
+          FirstProcedureForHematopoieticStemCellTransplant
+        ) T 
+        return {
+          type: T.type,
+          date: T.date
+        }
+        sort by date
+      )
+    else
+      FirstDiagnosisOfHematopoieticStemCellTransplant
+  else FirstProcedureForHematopoieticStemCellTransplant
 
-define Immunocompromised:// TODO: Add logic to "reset clock" if a new immunocompromised condition is diagnosed.
-  DiagnosisOfHiv or
-  DiagnosisOfSolidOrganTransplant or
-  ProcedureForSolidOrganTransplant or
-  DiagnosisOfSystemicLupusErythematosus or
-  DiagnosisOfHematopoieticStemCellTransplant or
-  ProcedureForHematopoieticStemCellTransplant or
-  DiagnosisOfChronicGraftVersusHostDisease or
-  DiagnosisOfGenitalGraftVersusHostDisease or
-  DiagnosisOfIbsOrArthritisAndOnImmunosuppressant
+define FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell:
+  {
+    type: 'Diagnosis Of Chronic Graft Versus Host Disease After Stem Cell',
+    date: Common.DateOfFirstCondition(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell)
+  }
+
+define FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell:
+  {
+    type: 'Diagnosis Of Genital Graft Versus Host Disease After Stem Cell',
+    date: Common.DateOfFirstCondition(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell)
+  }
+
+define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
+  {
+    type: 'Diagnosis Of IBD Or Rheumatoid Arthritis And On Immunosuppressant',
+    date: Common.DateOfFirstCondition(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
+  }
+
+define DistinctImmunocompromisedEvents:
+  FirstDiagnosisOfHiv union
+  FirstSolidOrganTransplant union
+  FirstDiagnosisOfSystemicLupusErythematosus union
+  FirstHematopoieticStemCellTransplant union
+  FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell union
+  FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell union
+  FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
+
+define SortedDistinctImmunocompromisedEvents:
+  DistinctImmunocompromisedEvents E
+    where 
+      E.date is not null
+    return {
+      type: E.type,
+      date: E.date
+    }
+    sort by date
+
+define MostRecentDistinctImmunocompromisedEvent:
+  Last(SortedDistinctImmunocompromisedEvents)
+
+define MostRecentDistinctImmunocompromisedEventDate:
+  MostRecentDistinctImmunocompromisedEvent.date
 
 // TODO: There are 9 immunocompromised conditions.
 //      Can each condition have it’s own respective expression called OldestConditionX?
@@ -661,8 +822,47 @@ define Flags:
 // ERRORS
 //------------------------------------------------------------------------------
 
+define ErrorDiagnosticReportWithNoConclusonCodes:
+  if (
+      Exists(DiagnosticReportsSummary) and
+      DiagnosticReportsSummary.Value is null
+    ) then
+      'A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorHistologyWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then 
+    'A histology test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorCytologyyWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then
+    'A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
+define ErrorHpvWithUnexpectedCode:
+  if 
+    false // TODO: Determine criteria for an "unexpected code"
+    then
+    'An HPV test was found but with an enexpected result code. Please review patient record to resolve.'
+  else
+    null
+
 define Errors:
-  {} 
+  {
+    ErrorDiagnosticReportWithNoConclusonCodes
+  //   ErrorHistologyWithUnexpectedCode,
+  //   ErrorCytologyyWithUnexpectedCode,
+  //   ErrorHpvWithUnexpectedCode
+  } 
+  except {null}
   // TODO: DiagnosticReports without conclusionCodes
   // TODO: Histology with a code that isn't one we expect
   // TODO: Cervical Cytology with a code we don't expect
@@ -680,6 +880,7 @@ define CervicalCancerScreeningAndMedicalHistory:
   Observations: PertinentObservationsSummary,
   Medications: PertinentMedicationsSummary,
   Procedures: PertinentProceduresSummary,
-  DiagnosticReports: DiagnosticReportsSummary
-  // TODO: Add Immunizations
+  DiagnosticReports: DiagnosticReportsSummary,
+  Encounters: PertinentEncountersSummary,
+  Immunizations: PertinentImmunizationsSummary
 }

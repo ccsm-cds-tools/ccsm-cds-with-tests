@@ -275,11 +275,11 @@
                } ]
             }
          }, {
-            "name" : "NilmCytologyReports",
+            "name" : "MostRecentNilmCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "NilmCytologyReports",
+               "name" : "MostRecentNilmCytology",
                "libraryName" : "Dash",
                "type" : "ExpressionRef"
             }
@@ -288,21 +288,36 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "HasNilmCytologyWithinLast12Months",
-               "libraryName" : "Dash",
-               "type" : "ExpressionRef"
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "LookBack",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "MostRecentNilmCytology",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "value" : 12,
+                     "unit" : "months",
+                     "type" : "Quantity"
+                  } ]
+               }
             }
          }, {
-            "name" : "NegativeHpvReports",
+            "name" : "MostRecentNegativeHpv",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "NegativeHpvReports",
+               "name" : "MostRecentNegativeHpv",
                "libraryName" : "Dash",
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "CoincidentNilmCytologyAndNegativeHpvReports",
+            "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -310,13 +325,13 @@
                "source" : [ {
                   "alias" : "C",
                   "expression" : {
-                     "name" : "NilmCytologyReports",
+                     "name" : "MostRecentNilmCytology",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "alias" : "H",
                   "expression" : {
-                     "name" : "NegativeHpvReports",
+                     "name" : "MostRecentNegativeHpv",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -619,111 +634,15 @@
                         } ]
                      } ]
                   }, {
-                     "type" : "Or",
+                     "name" : "CoincidentDiagnosticReports",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
                      "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "AssociateDiagnosticReports",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "C",
-                              "type" : "AliasRef"
-                           }, {
-                              "name" : "H",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "path" : "encounter",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "path" : "encounter",
-                              "scope" : "H",
-                              "type" : "Property"
-                           } ]
-                        } ]
+                        "name" : "C",
+                        "type" : "AliasRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "R",
-                                 "expression" : {
-                                    "path" : "basedOn",
-                                    "scope" : "C",
-                                    "type" : "Property"
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "where" : {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "name" : "ToString",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "type",
-                                       "scope" : "R",
-                                       "type" : "Property"
-                                    } ]
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ServiceRequest",
-                                    "type" : "Literal"
-                                 } ]
-                              },
-                              "return" : {
-                                 "expression" : {
-                                    "path" : "reference",
-                                    "scope" : "R",
-                                    "type" : "Property"
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "R",
-                                 "expression" : {
-                                    "path" : "basedOn",
-                                    "scope" : "H",
-                                    "type" : "Property"
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "where" : {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "name" : "ToString",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "type",
-                                       "scope" : "R",
-                                       "type" : "Property"
-                                    } ]
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ServiceRequest",
-                                    "type" : "Literal"
-                                 } ]
-                              },
-                              "return" : {
-                                 "expression" : {
-                                    "path" : "reference",
-                                    "scope" : "R",
-                                    "type" : "Property"
-                                 }
-                              }
-                           } ]
-                        } ]
+                        "name" : "H",
+                        "type" : "AliasRef"
                      } ]
                   } ]
                },
@@ -754,8 +673,11 @@
             "expression" : {
                "type" : "Exists",
                "operand" : {
-                  "name" : "CoincidentNilmCytologyAndNegativeHpvReports",
-                  "type" : "ExpressionRef"
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
+                     "type" : "ExpressionRef"
+                  }
                }
             }
          }, {
@@ -915,7 +837,7 @@
                "type" : "Literal"
             }
          }, {
-            "name" : "Recommendation",
+            "name" : "RecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -994,7 +916,7 @@
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "Recommendation",
+                           "name" : "RecommendationText",
                            "type" : "ExpressionRef"
                         }
                      }
