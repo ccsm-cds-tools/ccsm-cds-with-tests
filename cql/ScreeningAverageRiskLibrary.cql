@@ -420,8 +420,6 @@ define NoErrorsHaveOccurred:
 //    OR Diagnosis of Cervical cancer
 //    OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic cancer”
 
-// TODO: Modify name above to AbsenceOrRemovalOfCervix without history of high grade cancer / precancer
-
 define HasRemovalOfCervixProcedures:
   Exists(Dash.RemovalOfCervixProcedures)
 

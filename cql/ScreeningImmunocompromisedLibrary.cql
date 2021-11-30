@@ -185,14 +185,14 @@ define DateOfThirdNilmCytologyAfterImmunosuppressionOnset:
 define CytologySequenceIntact:
   if DateOfFirstNilmCytologyAfterImmunosuppressionOnset is not null then
     if DateOfSecondNilmCytologyAfterImmunosuppressionOnset is not null then
-      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then // NOTE: Check to see if we need to lookback from Today()
+      if DateOfThirdNilmCytologyAfterImmunosuppressionOnset is not null then
         DateOfFirstNilmCytologyAfterImmunosuppressionOnset >  
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
         and
         DateOfSecondNilmCytologyAfterImmunosuppressionOnset >
           DateOfThirdNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
       else
-        DateOfFirstNilmCytologyAfterImmunosuppressionOnset > // TODO: Add Today() - CytologyWindow logic 
+        DateOfFirstNilmCytologyAfterImmunosuppressionOnset >
           DateOfSecondNilmCytologyAfterImmunosuppressionOnset - CytologyWindow
         and
         DateOfSecondNilmCytologyAfterImmunosuppressionOnset > (Today() - CytologyWindow)
@@ -324,7 +324,7 @@ define RecommendImmediateCervicalCytology:
   ProposeImmediateTesting and
   (Age21Through29 or Age30AndOlder)
 
-define RecommendImmediateCotesting: // NOTE: Check to see if this can be deleted.
+define RecommendImmediateCotesting:
   ProposeImmediateTesting and
   Age30AndOlder
 

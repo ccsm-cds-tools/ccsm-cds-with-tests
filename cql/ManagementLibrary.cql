@@ -1553,7 +1553,7 @@ define RecommendationForPregnantPatients:
         action: null,
         text: 'Surveillance colposcopy and testing is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.' // TODO: Update recommendation
       }
-    // Add Case for AIS result that happened during pregnancy (last case of K.2)
+    // TODO: Add Case for AIS result that happened during pregnancy (last case of K.2)
     else
       null
   end

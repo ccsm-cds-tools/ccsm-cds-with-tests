@@ -460,8 +460,6 @@ define RemovalOfCervixProcedures:
     [Procedure: "Removal of Cervix Procedures"]
   )
 
-// NOTE: Follow up about cervical biopsy procedures
-
 define PertinentProcedures:
   ImmunocompromisedProcedures
   ColposcopyProcedures union
@@ -571,7 +569,6 @@ define HighGradeOrCancerHistologyResults:
 // PERTINENT ENCOUNTERS
 //------------------------------------------------------------------------------
 
-// TODO: Add this expression to PertinentConditions
 define AbnormalUterineOrVaginalBleedingEncounters:
   Common.RelevantEncounterStatus(
     [Encounter] E
@@ -616,13 +613,9 @@ define PertinentImmunizationsSummary:
     ExpirationDate: Common.DateText(I.expirationDate)
   }
 
-// TODO: Add HPV Immunizations
-
 //------------------------------------------------------------------------------
 // CLINICIAN PROVIDED INFORMATION
 //------------------------------------------------------------------------------
-
-// TODO: Add all 3 Questions to Dashboard (PertinentObservations)
 
 define ResponsesToAbnormalBleedingQuestion:
   C3F.ObservationLookBack(
@@ -805,11 +798,6 @@ define MostRecentDistinctImmunocompromisedEvent:
 
 define MostRecentDistinctImmunocompromisedEventDate:
   MostRecentDistinctImmunocompromisedEvent.date
-
-// TODO: There are 9 immunocompromised conditions.
-//      Can each condition have it’s own respective expression called OldestConditionX?
-//      And then MostRecentDistinctImmunocompromisedCondition would coelesce all of the OldestConditionX expressions and just take the most recent.
-// Each of immuncompromised events could be an object with date and "type"
 
 define Flags:
   {
