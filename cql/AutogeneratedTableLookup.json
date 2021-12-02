@@ -2212,6 +2212,97 @@
                            }
                         }
                      } ]
+                  }, {
+                     "type" : "Coalesce",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "T",
+                           "expression" : {
+                              "name" : "PostColposcopyTable",
+                              "type" : "ExpressionRef"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "Equal",
+                                    "operand" : [ {
+                                       "path" : "preColposcopyResult",
+                                       "scope" : "T",
+                                       "type" : "Property"
+                                    }, {
+                                       "name" : "HighOrLowGradeResults",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "preBiopsyHpvVal",
+                                          "type" : "OperandRef"
+                                       }, {
+                                          "name" : "preBiopsyPapVal",
+                                          "type" : "OperandRef"
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "Equal",
+                                    "operand" : [ {
+                                       "path" : "postColposcopyPastHistory",
+                                       "scope" : "T",
+                                       "type" : "Property"
+                                    }, {
+                                       "name" : "PostColposcopyPastHistory",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "prev2HpvVal",
+                                          "type" : "OperandRef"
+                                       }, {
+                                          "name" : "prev2PapVal",
+                                          "type" : "OperandRef"
+                                       }, {
+                                          "name" : "prevHpvVal",
+                                          "type" : "OperandRef"
+                                       }, {
+                                          "name" : "prevPapVal",
+                                          "type" : "OperandRef"
+                                       } ]
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "path" : "hpv",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }, {
+                                    "name" : "currHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "path" : "pap",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "ALL",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        },
+                        "return" : {
+                           "expression" : {
+                              "path" : "management",
+                              "scope" : "T",
+                              "type" : "Property"
+                           }
+                        }
+                     } ]
                   } ]
                },
                "else" : {
