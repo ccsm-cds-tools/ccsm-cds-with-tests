@@ -632,6 +632,8 @@ define ResponsesToVisibleLesionQuestion:
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
 
+// TODO: Add "Future Pregnancy Concerns"
+
 //------------------------------------------------------------------------------
 // FLAGS
 //------------------------------------------------------------------------------

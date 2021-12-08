@@ -475,6 +475,7 @@ define CervicalCytologyTestsForGradeD:
     null
 
 // NOTE: Revisit after L3 logic is updated for those who have "aged out" of screening
+// TODO: Add test cases for Grade D
 define HasThreeNegativeCytologyTestsForGradeD:
   if Exists(CervicalCytologyTestsForGradeD) then
     Count(CervicalCytologyTestsForGradeD) >= 3 and
