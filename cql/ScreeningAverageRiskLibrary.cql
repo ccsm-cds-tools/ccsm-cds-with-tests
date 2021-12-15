@@ -22,7 +22,7 @@ include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
 include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
-include ScreeningDesExposureLibrary version '1.0.0' called DexExposure // TODO: Should this be DES?
+include ScreeningDesExposureLibrary version '1.0.0' called DesExposure
 include ScreeningImmunocompromisedLibrary version '1.0.0' called Immunocompromised
 
 //------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ define ExcludedBecauseSymptomatic:
   Symptomatic.IsIncludedAndNotExcluded
 
 define ExcludedBecauseDesExposure:
-  DexExposure.IsIncludedAndNotExcluded
+  DesExposure.IsIncludedAndNotExcluded
 
 define ExcludedBecauseImmunocompromised:
   Immunocompromised.IsIncludedAndNotExcluded
