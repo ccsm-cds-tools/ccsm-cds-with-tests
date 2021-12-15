@@ -175,10 +175,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 //   OR INCLUSION #2: Includes women who have been "diagnosed" with a high-grade precancerous lesion or cervical cancer
 //       Diagnosis of High grade pre-cancerous cervical lesion 
 //       OR Diagnosis of Cervical cancer 
-//       OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)" or "histologic AIS" or "histologic cancer"
-
-// TODO: Update comments above to reflect updated L2
-// TODO: Do this for other Logic Paths
+//       OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)" or “Histologic HSIL, unspecified” or "Histologic AIS" or "Histologic cancer"
 
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
