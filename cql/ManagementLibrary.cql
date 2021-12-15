@@ -1295,8 +1295,9 @@ define TwoMostRecentBiopsyReportsWithin12monthsApart:
 
 define RecommendationForPatientsYoungerThan25:
   case
+    // TODO: Update K.1 Recommendation text
     when (
-      AgeInYears() < 25 and // NOTE: Revisit whether this should state < 25 or 21 - 24
+      AgeInYears() < 25 and // NOTE: Revisit whether this should state < 25 or 21 - 24 - This seemslike we are sticking with <25
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsHsil or
@@ -1725,7 +1726,7 @@ define RecommendationForPatientsOlderThan65:
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: 'Follow recommendations for Common Abnormalities to determine management.'
+        text: 'Follow recommendations for Common Abnormalities to determine management.' // TODO: Update this text
       }
     else
       null
@@ -1865,7 +1866,9 @@ define CommonAbnormalityRecommendation:
   // TODO: Add detailed recommendation text based upon updates.
       // Add "Justification" field
 
-// TODO: Add Errata section
+// TODO: Add Errata section - once it is revisited by L2 team
+
+
 
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
