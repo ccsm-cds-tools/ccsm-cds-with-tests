@@ -237,7 +237,7 @@ define SortedHpvReports:
 
 define MostRecentHpvReport:
   if Count(SortedHpvReports) > 0 then
-    if SortedHpvReports[0].date within 5 years of Today() then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
+    if SortedHpvReports[0].date within 5 years of Today() then // TODO: Replace with (5 years + HpvTestingWiggleRoom) default to 6 months.
       SortedHpvReports[0]
     else
       null
