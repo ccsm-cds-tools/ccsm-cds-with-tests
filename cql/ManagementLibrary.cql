@@ -76,6 +76,7 @@ code "Histiocytes": 'HISTIOCYTES' from "LOCAL" display 'Histiocytes' // TODO: Up
 //------------------------------------------------------------------------------
 
 parameter BiopsyLookbackPeriod default 25 years
+parameter BiopsyReferralPeriod default 1 month
 // TODO: Add parameter to exclude people who are symptomatic
 
 /***** BEGIN CDS LOGIC ********************************************************/
@@ -398,14 +399,17 @@ define MostRecentBiopsyReport:
 define MostRecentBiopsyResult:
   MostRecentBiopsyReport.riskTableInput
 
-define ReferringHpvResult: // TODO: Convert 1 month to a parameter (for all tests)
-  if MostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
+define MostRecentBiopsyReferralPeriod:
+  Interval[MostRecentBiopsyReport.date - BiopsyReferralPeriod, MostRecentBiopsyReport.date)
+
+define ReferringHpvResult:
+  if MostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
     MostRecentHpvResult
-  else if SecondMostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if SecondMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
     SecondMostRecentHpvResult
-  else if ThirdMostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if ThirdMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
     ThirdMostRecentHpvResult
-  else if FourthMostRecentHpvReport.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if FourthMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
     FourthMostRecentHpvResult
   else
     'ALL'
@@ -413,20 +417,20 @@ define ReferringHpvResult: // TODO: Convert 1 month to a parameter (for all test
 define MostRecentCytologyBeforeBiopsy:
   Coalesce(
     (SortedCytologyReports) S
-      where S.date occurs 1 month or less before MostRecentBiopsyReport.date
+      where S.date included in MostRecentBiopsyReferralPeriod
   )
 
 define MostRecentCytologyResultBeforeBiopsy:
   MostRecentCytologyBeforeBiopsy.riskTableInput
 
 define ReferringCytologyResult:
-  if MostRecentCytologyCotest.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  if MostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
     MostRecentCytologyCotestResult
-  else if SecondMostRecentCytologyCotest.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if SecondMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
     SecondMostRecentCytologyCotestResult
-  else if ThirdMostRecentCytologyCotest.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if ThirdMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
     ThirdMostRecentCytologyCotestResult
-  else if FourthMostRecentCytologyCotest.date occurs 1 month or less before MostRecentBiopsyReport.date then
+  else if FourthMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
     FourthMostRecentCytologyCotestResult
   else if MostRecentCytologyBeforeBiopsy is not null then
     MostRecentCytologyResultBeforeBiopsy

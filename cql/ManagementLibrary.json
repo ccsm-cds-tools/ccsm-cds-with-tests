@@ -62,6 +62,14 @@
                "unit" : "years",
                "type" : "Quantity"
             }
+         }, {
+            "name" : "BiopsyReferralPeriod",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 1,
+               "unit" : "month",
+               "type" : "Quantity"
+            }
          } ]
       },
       "codeSystems" : {
@@ -2959,6 +2967,37 @@
                }
             }
          }, {
+            "name" : "MostRecentBiopsyReferralPeriod",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "lowClosed" : true,
+               "highClosed" : false,
+               "type" : "Interval",
+               "low" : {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "BiopsyReferralPeriod",
+                     "type" : "ParameterRef"
+                  } ]
+               },
+               "high" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentBiopsyReport",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
             "name" : "ReferringHpvResult",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2968,57 +3007,17 @@
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "And",
+                     "type" : "In",
                      "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : false,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "month",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentHpvReport",
+                           "type" : "ExpressionRef"
                         }
+                     }, {
+                        "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "ExpressionRef"
                      } ]
                   }
                },
@@ -3032,57 +3031,17 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondMostRecentHpvReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : false,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 1,
-                                    "unit" : "month",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "type" : "ExpressionRef"
                            }
+                        }, {
+                           "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "ExpressionRef"
                         } ]
                      }
                   },
@@ -3096,57 +3055,17 @@
                         "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                         "type" : "As",
                         "operand" : {
-                           "type" : "And",
+                           "type" : "In",
                            "operand" : [ {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "ThirdMostRecentHpvReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : true,
-                                 "highClosed" : false,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "type" : "Subtract",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 1,
-                                       "unit" : "month",
-                                       "type" : "Quantity"
-                                    } ]
-                                 },
-                                 "high" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "ThirdMostRecentHpvReport",
+                                 "type" : "ExpressionRef"
                               }
+                           }, {
+                              "name" : "MostRecentBiopsyReferralPeriod",
+                              "type" : "ExpressionRef"
                            } ]
                         }
                      },
@@ -3160,57 +3079,17 @@
                            "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                            "type" : "As",
                            "operand" : {
-                              "type" : "And",
+                              "type" : "In",
                               "operand" : [ {
-                                 "type" : "In",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "FourthMostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "lowClosed" : true,
-                                    "highClosed" : false,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 1,
-                                          "unit" : "month",
-                                          "type" : "Quantity"
-                                       } ]
-                                    },
-                                    "high" : {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 } ]
-                              }, {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "FourthMostRecentHpvReport",
+                                    "type" : "ExpressionRef"
                                  }
+                              }, {
+                                 "name" : "MostRecentBiopsyReferralPeriod",
+                                 "type" : "ExpressionRef"
                               } ]
                            }
                         },
@@ -3244,54 +3123,14 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "And",
+                     "type" : "In",
                      "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "scope" : "S",
-                           "type" : "Property"
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : false,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "month",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        } ]
+                        "path" : "date",
+                        "scope" : "S",
+                        "type" : "Property"
                      }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        }
+                        "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "ExpressionRef"
                      } ]
                   }
                } ]
@@ -3318,57 +3157,17 @@
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "And",
+                     "type" : "In",
                      "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyCotest",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : false,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "month",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "type" : "ExpressionRef"
                         }
+                     }, {
+                        "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "ExpressionRef"
                      } ]
                   }
                },
@@ -3382,57 +3181,17 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondMostRecentCytologyCotest",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : false,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 1,
-                                    "unit" : "month",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentCytologyCotest",
+                              "type" : "ExpressionRef"
                            }
+                        }, {
+                           "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "ExpressionRef"
                         } ]
                      }
                   },
@@ -3446,57 +3205,17 @@
                         "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                         "type" : "As",
                         "operand" : {
-                           "type" : "And",
+                           "type" : "In",
                            "operand" : [ {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "ThirdMostRecentCytologyCotest",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : true,
-                                 "highClosed" : false,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "type" : "Subtract",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 1,
-                                       "unit" : "month",
-                                       "type" : "Quantity"
-                                    } ]
-                                 },
-                                 "high" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "ThirdMostRecentCytologyCotest",
+                                 "type" : "ExpressionRef"
                               }
+                           }, {
+                              "name" : "MostRecentBiopsyReferralPeriod",
+                              "type" : "ExpressionRef"
                            } ]
                         }
                      },
@@ -3510,57 +3229,17 @@
                            "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                            "type" : "As",
                            "operand" : {
-                              "type" : "And",
+                              "type" : "In",
                               "operand" : [ {
-                                 "type" : "In",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "FourthMostRecentCytologyCotest",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "lowClosed" : true,
-                                    "highClosed" : false,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 1,
-                                          "unit" : "month",
-                                          "type" : "Quantity"
-                                       } ]
-                                    },
-                                    "high" : {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 } ]
-                              }, {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "FourthMostRecentCytologyCotest",
+                                    "type" : "ExpressionRef"
                                  }
+                              }, {
+                                 "name" : "MostRecentBiopsyReferralPeriod",
+                                 "type" : "ExpressionRef"
                               } ]
                            }
                         },
