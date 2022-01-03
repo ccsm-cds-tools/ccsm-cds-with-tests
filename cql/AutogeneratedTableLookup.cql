@@ -268,6 +268,14 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
             and T.hpv = currHpvVal
             and T.pap = AscusLsilPap(currPapVal)
             return T.management
+      ),
+      Coalesce( // Case 4: Current cytology might be specified as 'ALL'
+        PostColposcopyTable T
+          where T.preColposcopyResult = HighOrLowGradeResults(preBiopsyHpvVal, preBiopsyPapVal)
+            and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
+            and T.hpv = currHpvVal
+            and T.pap = 'ALL'
+            return T.management
       )
     )
   else

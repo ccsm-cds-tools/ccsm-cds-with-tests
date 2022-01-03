@@ -431,6 +431,18 @@ define ReferringCytologyResult:
   else
     'ALL'
 
+define MostRecentHpvResultPostBiopsy:
+  if MostRecentHpvReport.date occurs after MostRecentBiopsyReport.date then
+    MostRecentHpvResult
+  else
+    null
+
+define MostRecentCytologyResultPostBiopsy:
+  if MostRecentCytologyCotest.date occurs after MostRecentBiopsyReport.date then
+    MostRecentCytologyCotestResult
+  else
+    null
+
 define SecondMostRecentHpvResultPostBiopsy:
   if SecondMostRecentHpvReport.date occurs after MostRecentBiopsyReport.date then
     SecondMostRecentHpvResult
@@ -1794,8 +1806,8 @@ define LookUpTable4:
     ThirdMostRecentCytologyResultPostBiopsy,
     SecondMostRecentHpvResultPostBiopsy,
     SecondMostRecentCytologyResultPostBiopsy,
-    MostRecentHpvResult,
-    MostRecentCytologyCotestResult
+    MostRecentHpvResultPostBiopsy,
+    MostRecentCytologyResultPostBiopsy
   )
 
 define PostColposcopyManagementRecommendation:
