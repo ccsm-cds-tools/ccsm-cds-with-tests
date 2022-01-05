@@ -788,8 +788,11 @@ define RecommendationForRareCytology:
         text: 'For patients with atypical endometrial cells specified, initial evaluation limited to endometrial and endocervical sampling is preferred, with colposcopy acceptable at the time of initial evaluation. If colposcopy was deferred and no endometrial pathology is identified, additional evaluation with colposcopy is then recommended.'
       }
     when (
-      MostRecentCytologyReportWasWithinPastFiveYears and // TODO: This should be AGC or Atypical endometrial cells
-      CytologyInterpretedAsAgcOrAis and 
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      (
+        CytologyInterpretedAsAgc or
+        CytologyInterpretedAsAtypicalEndometrialCells
+      ) and
       not CytologyInterpretedAsAtypicalEndometrialCells and
       (
         MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1 year lookback

@@ -5402,8 +5402,14 @@
                                  "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "name" : "CytologyInterpretedAsAgcOrAis",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "CytologyInterpretedAsAgc",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
+                                    "type" : "ExpressionRef"
+                                 } ]
                               } ]
                            }, {
                               "type" : "Not",
