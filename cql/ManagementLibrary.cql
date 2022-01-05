@@ -716,6 +716,15 @@ define AnyHpvSinceMostRecentCytology:
       where B.date >= MostRecentCytologyReport.date - 1 day
   )
 
+define UnknownHpvCotest:
+  MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
+  AnyTrue(
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC ~ "Unknown" or
+        not (aC in "All Results of High Risk HPV Test")
+  )
+
 define NegativeOrUnknownHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
@@ -878,12 +887,12 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsNilm and
       (
         not AnyHpvSinceMostRecentCytology or
-        NegativeOrUnknownHpvCotest // TODO: Don't include Negative 
+        UnknownHpvCotest
       )
     ) then
       {
         action: null,
-        text: 'HPV testing is preferred (BIII). Repeat cytology in 3 years is acceptable if HPV testing is not performed (BIII).'
+        text: 'HPV testing is preferred (BIII). Repeat cytology in 3 years is acceptable if HPV testing is not performed (BIII). If HPV testing is performed, manage using Clinical Action Thresholds according to 2019 consensus guidelines.'
       }
     // G.4 Benign Endometrial Cells in Premenopausal Patients or Benign Glandular Cells in Posthysterectomy patients
     when (
