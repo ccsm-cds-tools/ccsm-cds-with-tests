@@ -6955,7 +6955,7 @@
                }
             }
          }, {
-            "name" : "MostRecentBiopsyReportWasWithinPast18months",
+            "name" : "MostRecentBiopsyReportWasWithinPast12months",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -6972,7 +6972,7 @@
                   "operand" : [ {
                      "type" : "Now"
                   }, {
-                     "value" : 18,
+                     "value" : 12,
                      "unit" : "months",
                      "type" : "Quantity"
                   } ]
@@ -7025,7 +7025,7 @@
                } ]
             }
          }, {
-            "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
+            "name" : "TwoMostRecentBiopsyReportsWithin12monthsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -7053,7 +7053,7 @@
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "value" : 18,
+                           "value" : 12,
                            "unit" : "months",
                            "type" : "Quantity"
                         } ]
@@ -7068,7 +7068,7 @@
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "value" : 18,
+                           "value" : 12,
                            "unit" : "months",
                            "type" : "Quantity"
                         } ]
@@ -7451,7 +7451,7 @@
                                     "type" : "Literal"
                                  } ]
                               }, {
-                                 "name" : "MostRecentBiopsyReportWasWithinPast18months",
+                                 "name" : "MostRecentBiopsyReportWasWithinPast12months",
                                  "type" : "ExpressionRef"
                               } ]
                            }, {
@@ -7463,7 +7463,7 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
+                        "name" : "TwoMostRecentBiopsyReportsWithin12monthsApart",
                         "type" : "ExpressionRef"
                      } ]
                   },
@@ -8751,71 +8751,6 @@
                      }
                   }
                }
-            }
-         }, {
-            "name" : "TwoMostRecentBiopsyReportsWithin12monthsApart",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "date",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "SecondMostRecentBiopsyReport",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "lowClosed" : true,
-                     "highClosed" : true,
-                     "type" : "Interval",
-                     "low" : {
-                        "type" : "Subtract",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 12,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
-                     },
-                     "high" : {
-                        "type" : "Add",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 12,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
-                     }
-                  } ]
-               }, {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               } ]
             }
          }, {
             "name" : "RecommendationForPatientsYoungerThan25",

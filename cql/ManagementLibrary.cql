@@ -1056,15 +1056,15 @@ define SecondMostRecentHistologyInterpretedAsNormal:
         aC ~ "Biopsy Normal"
   )
 
-define MostRecentBiopsyReportWasWithinPast18months:
-  MostRecentBiopsyReport.date >= Now() - 18 months // TODO: Change to 12 months to align with udpated L2.
+define MostRecentBiopsyReportWasWithinPast12months:
+  MostRecentBiopsyReport.date >= Now() - 12 months
 
 define MostRecentBiopsyReportWasBetween12and18monthsAgo:
   MostRecentBiopsyReport.date >= Now() - 18 months and
   MostRecentBiopsyReport.date < Now() - 12 months
 
-define TwoMostRecentBiopsyReportsWithin18monthsApart: // TODO: Change to 12 months to align with udpated L2.
-  SecondMostRecentBiopsyReport.date within 18 months of MostRecentBiopsyReport.date
+define TwoMostRecentBiopsyReportsWithin12monthsApart:
+  SecondMostRecentBiopsyReport.date within 12 months of MostRecentBiopsyReport.date
 
 define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
   SecondMostRecentBiopsyReport.date >= Now() - 36 months and
@@ -1139,10 +1139,10 @@ define RecommendationForHistologyResults:
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
     when (
       AgeInYears() >= 25 and
-      MostRecentBiopsyReportWasWithinPast18months and // TODO: Change to 12 month lookback to align with L2. Write a test case for somebody who had a colposcopy between 12 - 18 months ago - what recommendation is given?
+      MostRecentBiopsyReportWasWithinPast12months and
       HistologyInterpretedAsCin1 and
       SecondMostRecentHistologyInterpretedAsCin1 and
-      TwoMostRecentBiopsyReportsWithin18monthsApart // TODO: Change to 12 month lookback to align with L2.
+      TwoMostRecentBiopsyReportsWithin12monthsApart
     ) then
       {
         action: null,
@@ -1344,9 +1344,6 @@ define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
       return 
         aC ~ Dash."HSIL, Unspecified"
   )
-
-define TwoMostRecentBiopsyReportsWithin12monthsApart:
-  SecondMostRecentBiopsyReport.date within 12 months of MostRecentBiopsyReport.date
 
 define RecommendationForPatientsYoungerThan25:
   case
