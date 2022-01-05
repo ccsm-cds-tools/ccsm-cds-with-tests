@@ -495,7 +495,6 @@ define MostRecentCin2orCin3Biopsy:
   First(Cin2orCin3Biopsies)
 
 // Look for treatments after this CIN2/CIN3 biopsy
-// TODO: Add to dashboard
 define CervicalPrecancerTreatments:
   Dash.CervicalExcisionProcedures union 
     Dash.CervicalAblationProcedures
