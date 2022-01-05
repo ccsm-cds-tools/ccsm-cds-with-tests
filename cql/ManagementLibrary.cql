@@ -907,7 +907,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'No further evaluation is recommended (BII).' // TODO: Update recommendation text (G.4)
+        text: 'For asymptomatic premenopausal patients with benign endometrial cells, endometrial stromal cells, or histiocytes, no further evaluation is recommended (BII).'
       }
     when (
       HasPostmenopausalObservation and
@@ -916,7 +916,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'Endometrial assessment is recommended (BII).' // TODO: Update recommendation text (G.4)
+        text: 'For postmenopausal patient with benign endometrial cells found via cytology, endometrial assessment is recommended (BII).'
       }
     when (
       AbsenceOrRemovalOfCervix and
@@ -925,7 +925,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'No further evaluation is recommended (BII).' // TODO: Update recommendation text (G.4)
+        text: 'For patients “post-hysterectomy” with benign endometrial cells identified via cytology, no further evaluation is recommended (BII).'
       }
     else
       null
