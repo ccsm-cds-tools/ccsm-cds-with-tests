@@ -57,6 +57,7 @@ code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal me
 code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
 code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
 code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code
+code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
 code "HPV16+ Antigen": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)' // NOTE: check whether HPV16+ will become a value set
@@ -70,7 +71,6 @@ code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of 
 
 // Local codes
 code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
-code "Histiocytes": 'HISTIOCYTES' from "LOCAL" display 'Histiocytes' // TODO: Update code
 
 //------------------------------------------------------------------------------
 // PARAMETERS
