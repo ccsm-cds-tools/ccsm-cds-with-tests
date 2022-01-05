@@ -809,7 +809,6 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsAgcOrAis and
       (
         CytologyInterpretedAsEndocervicalAis or
-        // CytologyInterpretedAsAgc or // TODO: Delete this line
         CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
       )
       // TODO: Need to add logic for " AND cervical histology <> “invasive disease” "
