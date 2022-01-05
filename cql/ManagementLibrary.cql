@@ -705,7 +705,7 @@ define HistologyInterpretedAsCin2Cin3AisOrCancer:
 
 define AnyHpvSinceMostRecentCytology:
   Exists(
-    (SortedBiopsyReports) B // TODO: Change this to SortedHPVReports
+    (SortedHpvReports) B
       where B.date >= MostRecentCytologyReport.date - 1 day
   )
 
