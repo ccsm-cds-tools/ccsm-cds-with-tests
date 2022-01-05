@@ -6029,8 +6029,18 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "HasPremenopausalObservation",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "HasPremenopausalObservation",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "IsSymptomatic",
+                                 "libraryName" : "Symptomatic",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         }, {
                            "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
                            "type" : "ExpressionRef"
