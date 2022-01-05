@@ -79,6 +79,7 @@ code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stroma
 parameter BiopsyLookbackPeriod default 25 years
 parameter BiopsyReferralPeriod default 1 month
 parameter ExcludeSymptomatic default true
+parameter HpvTestingGracePeriod default 6 months
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -87,6 +88,9 @@ context Patient
 //------------------------------------------------------------------------------
 // FUNCTIONS
 //------------------------------------------------------------------------------
+
+define function HPVTestingIntervalLookBack(LookBackDate System.DateTime):
+  Interval[LookBackDate - HpvTestingInterval, LookBackDate)
 
 define function GetEarlierDate(d1 System.DateTime, d2 System.DateTime):
   if d1 is not null then
@@ -239,9 +243,12 @@ define SortedHpvReports:
   }
   sort by date desc
 
+define HpvTestingInterval:
+  5 years + HpvTestingGracePeriod
+
 define MostRecentHpvReport:
   if Count(SortedHpvReports) > 0 then
-    if SortedHpvReports[0].date within 5 years of Today() then // TODO: Replace with (5 years + HpvTestingWiggleRoom) default to 6 months.
+    if SortedHpvReports[0].date included in HPVTestingIntervalLookBack(Today()) then
       SortedHpvReports[0]
     else
       null
@@ -250,7 +257,7 @@ define MostRecentHpvReport:
 
 define SecondMostRecentHpvReport:
   if Count(SortedHpvReports) > 1 then
-    if SortedHpvReports[1].date within 5 years of MostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
+    if SortedHpvReports[1].date included in HPVTestingIntervalLookBack(MostRecentHpvReport.date) then
       SortedHpvReports[1]
     else
       null
@@ -259,7 +266,7 @@ define SecondMostRecentHpvReport:
 
 define ThirdMostRecentHpvReport:
   if Count(SortedHpvReports) > 2 then
-    if SortedHpvReports[2].date within 5 years of SecondMostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
+    if SortedHpvReports[2].date included in HPVTestingIntervalLookBack(SecondMostRecentHpvReport.date) then
       SortedHpvReports[2]
     else
       null
@@ -268,7 +275,7 @@ define ThirdMostRecentHpvReport:
 
 define FourthMostRecentHpvReport:
   if Count(SortedHpvReports) > 3 then
-    if SortedHpvReports[3].date within 5 years of ThirdMostRecentHpvReport.date then // TODO: Replace with (5 years + HpvTestingWiggleRoom)
+    if SortedHpvReports[3].date included in HPVTestingIntervalLookBack(ThirdMostRecentHpvReport.date) then
       SortedHpvReports[3]
     else
       null

@@ -82,6 +82,14 @@
                "value" : "true",
                "type" : "Literal"
             }
+         }, {
+            "name" : "HpvTestingGracePeriod",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 6,
+               "unit" : "months",
+               "type" : "Quantity"
+            }
          } ]
       },
       "codeSystems" : {
@@ -338,6 +346,52 @@
                   "type" : "Retrieve"
                }
             }
+         }, {
+            "name" : "HpvTestingInterval",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Add",
+               "operand" : [ {
+                  "value" : 5,
+                  "unit" : "years",
+                  "type" : "Quantity"
+               }, {
+                  "name" : "HpvTestingGracePeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
+            "name" : "HPVTestingIntervalLookBack",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "lowClosed" : true,
+               "highClosed" : false,
+               "type" : "Interval",
+               "low" : {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "name" : "LookBackDate",
+                     "type" : "OperandRef"
+                  }, {
+                     "name" : "HpvTestingInterval",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "high" : {
+                  "name" : "LookBackDate",
+                  "type" : "OperandRef"
+               }
+            },
+            "operand" : [ {
+               "name" : "LookBackDate",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
          }, {
             "name" : "GetEarlierDate",
             "context" : "Patient",
@@ -1470,156 +1524,30 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "SortedHpvReports",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "0",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "ToDateTime",
-                                 "operand" : {
-                                    "path" : "low",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "lowClosed" : true,
-                                       "highClosed" : true,
-                                       "type" : "Interval",
-                                       "low" : {
-                                          "type" : "Subtract",
-                                          "operand" : [ {
-                                             "type" : "Today"
-                                          }, {
-                                             "value" : 5,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
-                                          } ]
-                                       },
-                                       "high" : {
-                                          "type" : "Add",
-                                          "operand" : [ {
-                                             "type" : "Today"
-                                          }, {
-                                             "value" : 5,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
-                                          } ]
-                                       }
-                                    }
-                                 }
-                              },
-                              "lowClosedExpression" : {
-                                 "path" : "lowClosed",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "lowClosed" : true,
-                                    "highClosed" : true,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
-                                          "type" : "Today"
-                                       }, {
-                                          "value" : 5,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    },
-                                    "high" : {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "type" : "Today"
-                                       }, {
-                                          "value" : 5,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    }
-                                 }
-                              },
-                              "high" : {
-                                 "type" : "ToDateTime",
-                                 "operand" : {
-                                    "path" : "high",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "lowClosed" : true,
-                                       "highClosed" : true,
-                                       "type" : "Interval",
-                                       "low" : {
-                                          "type" : "Subtract",
-                                          "operand" : [ {
-                                             "type" : "Today"
-                                          }, {
-                                             "value" : 5,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
-                                          } ]
-                                       },
-                                       "high" : {
-                                          "type" : "Add",
-                                          "operand" : [ {
-                                             "type" : "Today"
-                                          }, {
-                                             "value" : 5,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
-                                          } ]
-                                       }
-                                    }
-                                 }
-                              },
-                              "highClosedExpression" : {
-                                 "path" : "highClosed",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "lowClosed" : true,
-                                    "highClosed" : true,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
-                                          "type" : "Today"
-                                       }, {
-                                          "value" : 5,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    },
-                                    "high" : {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "type" : "Today"
-                                       }, {
-                                          "value" : 5,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    }
-                                 }
-                              }
-                           } ]
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedHpvReports",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              } ]
+                           }
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
+                           "name" : "HPVTestingIntervalLookBack",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "type" : "ToDateTime",
                               "operand" : {
                                  "type" : "Today"
                               }
-                           }
+                           } ]
                         } ]
                      }
                   },
@@ -1728,71 +1656,32 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedHpvReports",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "1",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        }, {
+                           "name" : "HPVTestingIntervalLookBack",
+                           "type" : "FunctionRef",
                            "operand" : [ {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "SortedHpvReports",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "1",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : true,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "type" : "Add",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
+                                 "name" : "MostRecentHpvReport",
+                                 "type" : "ExpressionRef"
                               }
                            } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentHpvReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }
                         } ]
                      }
                   },
@@ -1901,71 +1790,32 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedHpvReports",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        }, {
+                           "name" : "HPVTestingIntervalLookBack",
+                           "type" : "FunctionRef",
                            "operand" : [ {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "SortedHpvReports",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "2",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : true,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "SecondMostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "type" : "Add",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "SecondMostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
+                                 "name" : "SecondMostRecentHpvReport",
+                                 "type" : "ExpressionRef"
                               }
                            } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "SecondMostRecentHpvReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }
                         } ]
                      }
                   },
@@ -2074,71 +1924,32 @@
                      "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                      "type" : "As",
                      "operand" : {
-                        "type" : "And",
+                        "type" : "In",
                         "operand" : [ {
-                           "type" : "In",
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedHpvReports",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "3",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        }, {
+                           "name" : "HPVTestingIntervalLookBack",
+                           "type" : "FunctionRef",
                            "operand" : [ {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "SortedHpvReports",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "3",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : true,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "ThirdMostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "type" : "Add",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "ThirdMostRecentHpvReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
+                                 "name" : "ThirdMostRecentHpvReport",
+                                 "type" : "ExpressionRef"
                               }
                            } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "ThirdMostRecentHpvReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }
                         } ]
                      }
                   },
