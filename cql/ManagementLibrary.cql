@@ -38,7 +38,7 @@ codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 // TODO: Cross-check value sets and codes with value set spreadsheet
 
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
-valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
+valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233' // NOTE: Should this value set be expanded to include DNA findings of HPV 16 and HPV 18?
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
 
 code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
@@ -58,10 +58,10 @@ code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state
 code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
-code "HPV16+": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)'
-code "HPV18+": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)'
-// TODO: Add SNOMED code for HPV16+ DNA
-// TODO: Add SNOMED code for HPV18+ DNA
+code "HPV16+ Antigen": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)' // NOTE: check whether HPV16+ will become a value set
+code "HPV16+ DNA": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
+code "HPV18+ Antigen": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)' // NOTE: check whether HPV18+ will become a value set
+code "HPV18+ DNA": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
@@ -129,8 +129,8 @@ define function HpvInterpretation(conclusions List<System.Concept>):
     case
       when c ~ Dash."Negative HPV Finding" then {text: 'HPV-negative', rank: 1}
       when c ~ Dash."Positive HPV Finding" then {text: 'HPV-positive', rank: 2}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
-      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
+      when c ~ "HPV18+ Antigen" or c ~ "HPV18+ DNA" then {text: 'HPV16-, HPV18+', rank: 3}
+      when c ~ "HPV16+ Antigen" or c ~ "HPV16+ DNA" then {text: 'HPV16+', rank: 4}
       else {text: 'ALL', rank: 0}
     end
 
@@ -711,8 +711,10 @@ define PositiveHpv16or18Cotest:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC ~ "HPV16+" or
-        aC ~ "HPV18+"
+        aC ~ "HPV16+ Antigen" or
+        aC ~ "HPV16+ DNA" or
+        aC ~ "HPV18+ Antigen" or
+        aC ~ "HPV18+ DNA"
   )
 
 define HasRemovalOfCervixProcedures:

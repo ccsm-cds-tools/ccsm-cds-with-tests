@@ -641,7 +641,7 @@ define ResponsesToDesExposureQuestion:
 define RecentPositiveHpv:
   Common.LookBack(
     (HpvDiagnosticReports) H
-      where H.conclusionCode includes ToConcept("Positive HPV Finding"),
+      where H.conclusionCode includes ToConcept("Positive HPV Finding"),  // NOTE: Should this be a value set, to include genotyped testing?
     AbnormalTestLookbackPeriod
   )
 
