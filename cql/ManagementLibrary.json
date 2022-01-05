@@ -4670,6 +4670,77 @@
                }
             }
          }, {
+            "name" : "AnyHistologyInterpretedAsCancer",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "type" : "Flatten",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "$this",
+                              "expression" : {
+                                 "name" : "SortedBiopsyReports",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "where" : {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "path" : "allConclusions",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "$this",
+                                       "type" : "AliasRef"
+                                    }
+                                 }
+                              }
+                           },
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "$this",
+                                    "type" : "AliasRef"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "Histologic cancer",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "HistologyInterpretedAsCin2Cin3AisOrCancer",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5495,21 +5566,36 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyInterpretedAsAgcOrAis",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "CytologyInterpretedAsAgcOrAis",
-                           "type" : "ExpressionRef"
+                           "type" : "Or",
+                           "operand" : [ {
+                              "name" : "CytologyInterpretedAsEndocervicalAis",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
+                              "type" : "ExpressionRef"
+                           } ]
                         } ]
                      }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "CytologyInterpretedAsEndocervicalAis",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
-                           "type" : "ExpressionRef"
-                        } ]
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "name" : "HasCervicalCancerDiagnoses",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "AnyHistologyInterpretedAsCancer",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
                      } ]
                   },
                   "then" : {

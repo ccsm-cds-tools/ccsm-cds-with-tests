@@ -697,6 +697,13 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
+define AnyHistologyInterpretedAsCancer:
+  AnyTrue(
+    (SortedBiopsyReports.allConclusions) aC
+      return 
+        aC in Dash."Histologic cancer"
+  )
+
 define HistologyInterpretedAsCin2Cin3AisOrCancer:
   HistologyInterpretedAsCin2 or
   HistologyInterpretedAsCin3 or
@@ -810,9 +817,11 @@ define RecommendationForRareCytology:
       (
         CytologyInterpretedAsEndocervicalAis or
         CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
+      ) and
+      not (
+        HasCervicalCancerDiagnoses or
+        AnyHistologyInterpretedAsCancer // NOTE: Review whether this should be referring to ANY Histology report or only the most recent
       )
-      // TODO: Need to add logic for " AND cervical histology <> “invasive disease” "
-      // NOTE: Discuss how "Invasive Disease" is defined
     ) then
       {
         action: null,
