@@ -3324,6 +3324,86 @@
                }
             }
          }, {
+            "name" : "MostRecentHpvResultPostBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentHpvReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               },
+               "then" : {
+                  "name" : "MostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "MostRecentCytologyResultPostBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               },
+               "then" : {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
             "name" : "SecondMostRecentHpvResultPostBiopsy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -10041,10 +10121,10 @@
                   "name" : "SecondMostRecentCytologyResultPostBiopsy",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "MostRecentHpvResult",
+                  "name" : "MostRecentHpvResultPostBiopsy",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "MostRecentCytologyCotestResult",
+                  "name" : "MostRecentCytologyResultPostBiopsy",
                   "type" : "ExpressionRef"
                } ]
             }

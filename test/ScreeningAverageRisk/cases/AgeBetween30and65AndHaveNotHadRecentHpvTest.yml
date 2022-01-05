@@ -1,0 +1,26 @@
+---
+name: Age between 30 and 65 and have NOT had recent HPV test
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1986-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *NegativeHpvReportsMoreThan5YearsAgo
+
+results:
+  IsIncludedAndNotExcluded: true
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediatePrimaryHpv: true
+  RecommendImmediateCotesting: false
+  LastScreeningType: 'hrHPV'
+  RecommendationText: 'Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
