@@ -858,8 +858,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        // TODO: Update this Recommendation text and remove "DISPLAY" from beginning of text
-        text: 'DISPLAY If a positive HPV test with partial genotyping is positive for HPV 16 or HPV 18, direct referral for colposcopy is recommended (BII).'
+        text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test with partial genotyping is positive for HPV 16 or HPV 18, direct referral for colposcopy is recommended (BII).'
       }
     // G.3 Absent Transformation Zone on Screening Cytology
     when (
