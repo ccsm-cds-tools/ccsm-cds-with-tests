@@ -104,6 +104,7 @@ code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis 
 code "Abnormal Uterine or Vaginal Bleeding Question": 'AUVBQ' from "LOCAL" display 'Is the patient experiencing abnormal uterine or vaginal bleeding today?'
 code "Visible Uterine or Vaginal Lesion Question": 'VUVLQ' from "LOCAL" display 'Does the patient have visible uterine or vaginal lesions?'
 code "DES Exposure Question": 'DESEQ' from "LOCAL" display 'Did the patient experience in utero exposure to diethylstilbesterol (DES)?'
+code "Future Pregnancy Concerns Question": 'FPCQ' from "LOCAL" display 'Does the patient have future pregnancy concerns related to treatment options?'
 
 //------------------------------------------------------------------------------
 // PARAMETERS
@@ -288,8 +289,8 @@ define PertinentObservations:
   // Clinician-provided Observations:
   ResponsesToAbnormalBleedingQuestion union
   ResponsesToVisibleLesionQuestion union
-  ResponsesToDesExposureQuestion
-
+  ResponsesToDesExposureQuestion union
+  ResponsesToFuturePregnancyConcernsQuestion
 
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
@@ -632,7 +633,11 @@ define ResponsesToVisibleLesionQuestion:
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
 
-// TODO: Add "Future Pregnancy Concerns"
+define ResponsesToFuturePregnancyConcernsQuestion: 
+  C3F.ObservationLookBack(
+    [Observation: "Future Pregnancy Concerns Question"],
+    3 months
+  )
 
 //------------------------------------------------------------------------------
 // FLAGS

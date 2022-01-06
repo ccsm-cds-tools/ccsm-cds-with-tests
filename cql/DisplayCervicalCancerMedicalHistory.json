@@ -423,6 +423,14 @@
             "codeSystem" : {
                "name" : "LOCAL"
             }
+         }, {
+            "name" : "Future Pregnancy Concerns Question",
+            "id" : "FPCQ",
+            "display" : "Does the patient have future pregnancy concerns related to treatment options?",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
          } ]
       },
       "contexts" : {
@@ -1550,6 +1558,33 @@
                }
             }
          }, {
+            "name" : "ResponsesToFuturePregnancyConcernsQuestion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ObservationLookBack",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Observation",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Future Pregnancy Concerns Question",
+                        "type" : "CodeRef"
+                     }
+                  }
+               }, {
+                  "value" : 3,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               } ]
+            }
+         }, {
             "name" : "PertinentObservations",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1562,41 +1597,47 @@
                      "operand" : [ {
                         "type" : "Union",
                         "operand" : [ {
-                           "name" : "AbnormalUterineOrVaginalBleedingObservations",
-                           "type" : "ExpressionRef"
+                           "type" : "Union",
+                           "operand" : [ {
+                              "name" : "AbnormalUterineOrVaginalBleedingObservations",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CervicalOrVaginalLesionObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "CervicalOrVaginalLesionObservations",
-                           "type" : "ExpressionRef"
+                           "type" : "Union",
+                           "operand" : [ {
+                              "name" : "PregnancyObservations",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DesExposureObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         } ]
                      }, {
                         "type" : "Union",
                         "operand" : [ {
-                           "name" : "PregnancyObservations",
+                           "name" : "AbsenceOfCervixObservations",
                            "type" : "ExpressionRef"
                         }, {
-                           "name" : "DesExposureObservations",
+                           "name" : "ResponsesToAbnormalBleedingQuestion",
                            "type" : "ExpressionRef"
                         } ]
                      } ]
                   }, {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "AbsenceOfCervixObservations",
+                        "name" : "ResponsesToVisibleLesionQuestion",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "ResponsesToAbnormalBleedingQuestion",
+                        "name" : "ResponsesToDesExposureQuestion",
                         "type" : "ExpressionRef"
                      } ]
                   } ]
                }, {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "name" : "ResponsesToVisibleLesionQuestion",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "ResponsesToDesExposureQuestion",
-                     "type" : "ExpressionRef"
-                  } ]
+                  "name" : "ResponsesToFuturePregnancyConcernsQuestion",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {

@@ -1070,6 +1070,14 @@ define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
   SecondMostRecentBiopsyReport.date >= Now() - 36 months and
   SecondMostRecentBiopsyReport.date < Now() - 18 months
 
+define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
+  Exists(
+    C3F.MostRecent(
+        Dash.ResponsesToFuturePregnancyConcernsQuestion R
+          where R.value ~ Dash."Yes"
+    )
+  )
+
 // TODO: ** Need to define logic for observation/surveillance of I.3 population **
 // TODO: ** Need to define logic for observation/surveillance of I.4 population **
 define RecommendationForHistologyResults:
@@ -1085,7 +1093,7 @@ define RecommendationForHistologyResults:
         text: 'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3]) (CIII).' // TODO: Update recommendation text
       }
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
-    when (
+    when ( // NOTE: Follow up about adding a "no" answer to the future pregnancy concerns question as a criterion for the I.2 Recommendations.
       AgeInYears() >= 25 and
       not Pregnant and
       MostRecentBiopsyReportWasWithinPastYear and
@@ -1107,6 +1115,16 @@ define RecommendationForHistologyResults:
       }
     // NOTE: Check back about adding I.3 Recommendations. We will need to answer question about how to represent "Future Pregnancy Concerns." This will likely be a question in the Dashboard.
     // I.3 Management of CIN2 in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsCin2 and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: null,
+        text: 'For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+      }
 // NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
     when (
