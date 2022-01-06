@@ -818,7 +818,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'Cotesting at 1 and 2 years is recommended.'
+        text: 'Cotesting at one and two years is recommended. If both cotests are negative, repeat cotesting at 3 years is recommended. If any test is abnormal, then colposcopy is recommended (BII).'
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
