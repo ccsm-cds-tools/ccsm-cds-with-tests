@@ -1125,6 +1125,16 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
       }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      MostRecentBiopsyReportWasWithinPastYear and 
+      HistologyInterpretedAsUnspecifiedHsil
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: null,
+        text: 'If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+      }
 // NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
     when (
