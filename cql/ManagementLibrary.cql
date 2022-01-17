@@ -623,6 +623,12 @@ define CytologyInterpretedAsNilm:
       return aC ~ Dash."NILM"
   )
 
+define SecondMostRecentCytologyInterpretedAsNilm:
+  AnyTrue(
+    (SecondMostRecentCytologyReport.allConclusions) aC
+      return aC ~ Dash."NILM"
+  )
+
 define CytologyInterpretedAsBenignEndometrialCells:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
@@ -1057,6 +1063,10 @@ define SecondMostRecentHistologyInterpretedAsNormal:
         aC ~ "Biopsy Normal"
   )
 
+define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
+  SecondMostRecentHistologyInterpretedAsCin1 or
+  SecondMostRecentHistologyInterpretedAsNormal
+
 define MostRecentBiopsyReportWasWithinPast12months:
   MostRecentBiopsyReport.date >= Now() - 12 months
 
@@ -1082,6 +1092,44 @@ define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
       )
     )
   )
+
+define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months:
+  First(
+    (SortedBiopsyReports) B
+      where B.date >= Now() - 18 months and
+      AnyTrue(
+        (B.allConclusions) aC
+          return
+            aC ~ Dash."HSIL, Unspecified" or
+            aC ~ Dash."CIN2"
+      )
+  )
+
+define MostRecentNegativeHsilSurveillanceResult:
+  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) then
+    MostRecentBiopsyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
+    HistologyInterpretedAsCin1OrNormal and
+    MostRecentCytologyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
+    (
+      CytologyInterpretedAsLsil or
+      CytologyInterpretedAsAscus or
+      CytologyInterpretedAsNilm
+    )
+  else
+    false
+
+define SecondMostRecentNegativeHsilSurveillanceResult:
+  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) then
+    SecondMostRecentBiopsyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
+    SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+    SecondMostRecentCytologyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
+    (
+      SecondMostRecentCytologyInterpretedAsLsil or
+      SecondMostRecentCytologyInterpretedAsAscus or
+      SecondMostRecentCytologyInterpretedAsNilm
+    )
+  else
+    false
 
 // TODO: ** Need to define logic for observation/surveillance of I.3 population **
 // TODO: ** Need to define logic for observation/surveillance of I.4 population **
@@ -1139,6 +1187,16 @@ define RecommendationForHistologyResults:
       {
         action: null,
         text: 'If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) and
+      MostRecentNegativeHsilSurveillanceResult
+      SecondMostRecentNegativeHsilSurveillanceResult
+    ) then
+      {
+        action: null,
+        text: 'Subsequent surveillance with colposcopy and HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
       }
 // NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
@@ -1509,10 +1567,7 @@ define RecommendationForPatientsYoungerThan25:
       MostRecentBiopsyReportWasBetween12and18monthsAgo and
       HistologyInterpretedAsCin1OrNormal and
       SecondMostRecentBiopsyReportWasBetween18and36monthsAgo and
-      (
-        SecondMostRecentHistologyInterpretedAsCin1 or
-        SecondMostRecentHistologyInterpretedAsNormal
-      ) and
+      SecondMostRecentHistologyInterpretedAsCin1OrNormal and
       MostRecentCytologyReportWasWithinPastYear and
       (
         CytologyInterpretedAsHsil or
