@@ -240,14 +240,6 @@
                "name" : "SNOMED-CT"
             }
          }, {
-            "name" : "Benign Glandular Cells",
-            "id" : "103639009",
-            "display" : "Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
             "name" : "Histiocytes",
             "id" : "14295007",
             "display" : "Resident tissue macrophage (cell)",
@@ -318,6 +310,14 @@
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Benign Glandular Cells",
+            "id" : "BGC",
+            "display" : "Benign Glandular Cells",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
             }
          }, {
             "name" : "Endometrial Stromal Cells",
@@ -7133,55 +7133,6 @@
                         "type" : "Quantity"
                      } ]
                   } ]
-               } ]
-            }
-         }, {
-            "name" : "RecentYesResponsesToVisibleLesionQuestion",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ObservationLookBack",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "R",
-                     "expression" : {
-                        "name" : "ResponsesToVisibleLesionQuestion",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "Equivalent",
-                     "operand" : [ {
-                        "name" : "ToConcept",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}CodeableConcept",
-                           "type" : "As",
-                           "operand" : {
-                              "path" : "value",
-                              "scope" : "R",
-                              "type" : "Property"
-                           }
-                        } ]
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Yes",
-                           "libraryName" : "Dash",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  }
-               }, {
-                  "value" : 12,
-                  "unit" : "months",
-                  "type" : "Quantity"
                } ]
             }
          }, {

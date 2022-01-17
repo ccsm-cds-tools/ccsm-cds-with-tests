@@ -56,7 +56,6 @@ code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometri
 code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
 code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
 code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
-code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code - Make this a local code for the time being; the current code is incorrect
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
@@ -70,6 +69,7 @@ code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intra
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
 
 // Local codes
+code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
 code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
 
 //------------------------------------------------------------------------------
