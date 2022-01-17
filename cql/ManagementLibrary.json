@@ -7136,6 +7136,55 @@
                } ]
             }
          }, {
+            "name" : "RecentYesResponsesToVisibleLesionQuestion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ObservationLookBack",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "name" : "ResponsesToVisibleLesionQuestion",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Equivalent",
+                     "operand" : [ {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                           "type" : "As",
+                           "operand" : {
+                              "path" : "value",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Yes",
+                           "libraryName" : "Dash",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  }
+               }, {
+                  "value" : 12,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               } ]
+            }
+         }, {
             "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7148,40 +7197,49 @@
                      "libraryName" : "C3F",
                      "type" : "FunctionRef",
                      "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "R",
-                           "expression" : {
-                              "name" : "ResponsesToFuturePregnancyConcernsQuestion",
-                              "libraryName" : "Dash",
-                              "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "where" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
+                        "name" : "ObservationLookBack",
+                        "libraryName" : "C3F",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "R",
+                              "expression" : {
+                                 "name" : "ResponsesToFuturePregnancyConcernsQuestion",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "where" : {
+                              "type" : "Equivalent",
                               "operand" : [ {
-                                 "asType" : "{http://hl7.org/fhir}CodeableConcept",
-                                 "type" : "As",
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                                    "type" : "As",
+                                    "operand" : {
+                                       "path" : "value",
+                                       "scope" : "R",
+                                       "type" : "Property"
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
                                  "operand" : {
-                                    "path" : "value",
-                                    "scope" : "R",
-                                    "type" : "Property"
+                                    "name" : "Yes",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
                                  }
                               } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "Yes",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        }
+                           }
+                        }, {
+                           "value" : 3,
+                           "unit" : "months",
+                           "type" : "Quantity"
+                        } ]
                      } ]
                   }
                }

@@ -1075,8 +1075,11 @@ define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
 define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
   Exists(
     C3F.MostRecent(
+      C3F.ObservationLookBack(
         Dash.ResponsesToFuturePregnancyConcernsQuestion R
-          where R.value ~ Dash."Yes"
+          where R.value ~ Dash."Yes",
+        3 months
+      )
     )
   )
 

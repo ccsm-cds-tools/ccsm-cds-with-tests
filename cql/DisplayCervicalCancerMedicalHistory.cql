@@ -637,7 +637,7 @@ define ResponsesToFuturePregnancyConcernsQuestion:
   C3F.ObservationLookBack(
     [Observation: "Future Pregnancy Concerns Question"],
     // TODO: This should be changed to a 12-month lookback here to be consistent within the dashboard questions. The 3 months will come into play in the actual LP5 recommendation.
-    3 months
+    12 months
   )
 
 //------------------------------------------------------------------------------
