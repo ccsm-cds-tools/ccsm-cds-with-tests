@@ -56,7 +56,7 @@ code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometri
 code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
 code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
 code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
-code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code
+code "Benign Glandular Cells": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)' // TODO: Update code - Make this a local code for the time being; the current code is incorrect
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
@@ -209,7 +209,7 @@ define IsIncluded:
 
 define Excluded:
   if ExcludeSymptomatic then
-    Symptomatic.IsSymptomatic
+    Symptomatic.IsSymptomatic // TODO: This may need a lookback of 3 months. 
   else
     false
 
@@ -809,12 +809,12 @@ define RecommendationForRareCytology:
         CytologyInterpretedAsAgc or
         CytologyInterpretedAsAtypicalEndometrialCells
       ) and
-      not CytologyInterpretedAsAtypicalEndometrialCells and
+      not CytologyInterpretedAsAtypicalEndometrialCells and // TODO: This logically doesn't make sense here. Re-adjust this according to L2 after discussing with Rose and Sharon. - This should probably just be removed - initial logic had a typo.
       (
         MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1 year lookback
         MostRecentBiopsyReport.date <= MostRecentCytologyReport.date + 1 year
       ) and
-      not HistologyInterpretedAsCin2Cin3AisOrCancer
+      not HistologyInterpretedAsCin2Cin3AisOrCancer // TODO: Update to look for CIN1 or normal
     ) then
       {
         action: null,
@@ -824,12 +824,13 @@ define RecommendationForRareCytology:
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsAgcOrAis and
       (
-        CytologyInterpretedAsEndocervicalAis or
+        CytologyInterpretedAsEndocervicalAis or // NOTE: This logic changed - review with Rose - This should be updated to reflect current L2 as-is. Also leave a note to revisit this before finalizing.
         CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
       ) and
       not (
         HasCervicalCancerDiagnoses or
         AnyHistologyInterpretedAsCancer // NOTE: Review whether this should be referring to ANY Histology report or only the most recent
+        // TODO: 12 month "look-forward" after cytology - for both forms of cancer evidence.
       )
     ) then
       {
@@ -1070,6 +1071,7 @@ define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
   SecondMostRecentBiopsyReport.date >= Now() - 36 months and
   SecondMostRecentBiopsyReport.date < Now() - 18 months
 
+// TODO: This should be updated to have a 3 month lookback here, since the lookback will be expanded to 12 months in the actual dashboard.
 define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
   Exists(
     C3F.MostRecent(
@@ -1949,7 +1951,7 @@ define CommonAbnormalityRecommendation:
 
 // TODO: Add Errata section - once it is revisited by L2 team
 
-
+// TODO: Go through and update all highlighted recommendations!
 
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
