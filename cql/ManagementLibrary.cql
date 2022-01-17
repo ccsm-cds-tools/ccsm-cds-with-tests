@@ -209,7 +209,7 @@ define IsIncluded:
 
 define Excluded:
   if ExcludeSymptomatic then
-    Symptomatic.IsSymptomatic // TODO: This may need a lookback of 3 months. 
+    Symptomatic.IsSymptomatic // NOTE: This may need a lookback of 3 months. Monitor relevant comment in L2 doc.
   else
     false
 
@@ -669,26 +669,23 @@ define Pregnant:
   Exists(Dash.PregnancyDiagnoses) or
   Exists(Dash.PregnancyObservations)
 
-define HistologyInterpretedAsCin2:
+define HistologyInterpretedAsCin1:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ Dash."CIN2"
+        aC ~ "CIN1"
   )
 
-define HistologyInterpretedAsCin3:
+define HistologyInterpretedAsNormal:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ Dash."CIN3"
+        aC ~ "Biopsy Normal"
   )
 
-define HistologyInterpretedAsAis:
-  AnyTrue(
-    (MostRecentBiopsyReport.allConclusions) aC
-      return 
-        aC in Dash."AIS"
-  )
+define HistologyInterpretedAsCin1OrNormal:
+  HistologyInterpretedAsCin1 or
+  HistologyInterpretedAsNormal
 
 define HistologyInterpretedAsCancer:
   AnyTrue(
@@ -697,18 +694,12 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
-define AnyHistologyInterpretedAsCancer:
+define AnyHistologyInterpretedAsCancer: // TODO: This might be able to use rec above now that it requires a lookback.
   AnyTrue(
     (SortedBiopsyReports.allConclusions) aC
       return 
         aC in Dash."Histologic cancer"
   )
-
-define HistologyInterpretedAsCin2Cin3AisOrCancer:
-  HistologyInterpretedAsCin2 or
-  HistologyInterpretedAsCin3 or
-  HistologyInterpretedAsAis or
-  HistologyInterpretedAsCancer
 
 define AnyHpvSinceMostRecentCytology:
   Exists(
@@ -809,12 +800,11 @@ define RecommendationForRareCytology:
         CytologyInterpretedAsAgc or
         CytologyInterpretedAsAtypicalEndometrialCells
       ) and
-      not CytologyInterpretedAsAtypicalEndometrialCells and // TODO: This logically doesn't make sense here. Re-adjust this according to L2 after discussing with Rose and Sharon. - This should probably just be removed - initial logic had a typo.
       (
-        MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1 year lookback
+        MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1-year lookback
         MostRecentBiopsyReport.date <= MostRecentCytologyReport.date + 1 year
       ) and
-      not HistologyInterpretedAsCin2Cin3AisOrCancer // TODO: Update to look for CIN1 or normal
+      HistologyInterpretedAsCin1OrNormal
     ) then
       {
         action: null,
@@ -995,25 +985,32 @@ define RecommendationForExceptionsToColposcopyThreshold:
 define MostRecentBiopsyReportWasWithinPastYear:
   MostRecentBiopsyReport.date >= Now() - 1 year
 
+define HistologyInterpretedAsCin2:
+  AnyTrue(
+    (MostRecentBiopsyReport.allConclusions) aC
+      return 
+        aC ~ Dash."CIN2"
+  )
+
+define HistologyInterpretedAsCin3:
+  AnyTrue(
+    (MostRecentBiopsyReport.allConclusions) aC
+      return 
+        aC ~ Dash."CIN3"
+  )
+
+define HistologyInterpretedAsAis:
+  AnyTrue(
+    (MostRecentBiopsyReport.allConclusions) aC
+      return 
+        aC in Dash."AIS"
+  )
+
 define HistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
         aC ~ Dash."HSIL, Unspecified"
-  )
-
-define HistologyInterpretedAsCin1:
-  AnyTrue(
-    (MostRecentBiopsyReport.allConclusions) aC
-      return 
-        aC ~ "CIN1"
-  )
-
-define HistologyInterpretedAsNormal:
-  AnyTrue(
-    (MostRecentBiopsyReport.allConclusions) aC
-      return 
-        aC ~ "Biopsy Normal"
   )
 
 define PrecedingCytologyResults:
@@ -1145,10 +1142,7 @@ define RecommendationForHistologyResults:
     when (
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
-      (
-        HistologyInterpretedAsCin1 or
-        HistologyInterpretedAsNormal
-      ) and
+      HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsHsil
     ) then
       {
@@ -1158,10 +1152,7 @@ define RecommendationForHistologyResults:
     when (
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
-      (
-        HistologyInterpretedAsCin1 or
-        HistologyInterpretedAsNormal
-      ) and
+      HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsAscH
     ) then
       {
@@ -1513,10 +1504,7 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() < 25 and
       not Pregnant and
       MostRecentBiopsyReportWasBetween12and18monthsAgo and
-      (
-        HistologyInterpretedAsCin1 or
-        HistologyInterpretedAsNormal
-      ) and
+      HistologyInterpretedAsCin1OrNormal and
       SecondMostRecentBiopsyReportWasBetween18and36monthsAgo and
       (
         SecondMostRecentHistologyInterpretedAsCin1 or

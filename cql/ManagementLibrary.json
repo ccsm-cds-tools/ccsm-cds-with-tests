@@ -4502,7 +4502,7 @@
                } ]
             }
          }, {
-            "name" : "HistologyInterpretedAsCin2",
+            "name" : "HistologyInterpretedAsCin1",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -4535,8 +4535,7 @@
                         }, {
                            "type" : "ToConcept",
                            "operand" : {
-                              "name" : "CIN2",
-                              "libraryName" : "Dash",
+                              "name" : "CIN1",
                               "type" : "CodeRef"
                            }
                         } ]
@@ -4545,7 +4544,7 @@
                }
             }
          }, {
-            "name" : "HistologyInterpretedAsCin3",
+            "name" : "HistologyInterpretedAsNormal",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -4578,8 +4577,7 @@
                         }, {
                            "type" : "ToConcept",
                            "operand" : {
-                              "name" : "CIN3",
-                              "libraryName" : "Dash",
+                              "name" : "Biopsy Normal",
                               "type" : "CodeRef"
                            }
                         } ]
@@ -4588,45 +4586,18 @@
                }
             }
          }, {
-            "name" : "HistologyInterpretedAsAis",
+            "name" : "HistologyInterpretedAsCin1OrNormal",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "InValueSet",
-                        "code" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        },
-                        "valueset" : {
-                           "name" : "AIS",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
-                        }
-                     }
-                  }
-               }
+               "type" : "Or",
+               "operand" : [ {
+                  "name" : "HistologyInterpretedAsCin1",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "HistologyInterpretedAsNormal",
+                  "type" : "ExpressionRef"
+               } ]
             }
          }, {
             "name" : "HistologyInterpretedAsCancer",
@@ -4739,32 +4710,6 @@
                      }
                   }
                }
-            }
-         }, {
-            "name" : "HistologyInterpretedAsCin2Cin3AisOrCancer",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Or",
-               "operand" : [ {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Or",
-                     "operand" : [ {
-                        "name" : "HistologyInterpretedAsCin2",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "HistologyInterpretedAsCin3",
-                        "type" : "ExpressionRef"
-                     } ]
-                  }, {
-                     "name" : "HistologyInterpretedAsAis",
-                     "type" : "ExpressionRef"
-                  } ]
-               }, {
-                  "name" : "HistologyInterpretedAsCancer",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "AnyHpvSinceMostRecentCytology",
@@ -5594,26 +5539,17 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "And",
+                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Or",
                               "operand" : [ {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                                 "name" : "CytologyInterpretedAsAgc",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "CytologyInterpretedAsAgc",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
                                  "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
                                  "type" : "ExpressionRef"
-                              }
+                              } ]
                            } ]
                         }, {
                            "type" : "And",
@@ -5663,11 +5599,8 @@
                            } ]
                         } ]
                      }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "name" : "HistologyInterpretedAsCin2Cin3AisOrCancer",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "HistologyInterpretedAsCin1OrNormal",
+                        "type" : "ExpressionRef"
                      } ]
                   },
                   "then" : {
@@ -6538,6 +6471,133 @@
                } ]
             }
          }, {
+            "name" : "HistologyInterpretedAsCin2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "CIN2",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "HistologyInterpretedAsCin3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "CIN3",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "HistologyInterpretedAsAis",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "AIS",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "HistologyInterpretedAsUnspecifiedHsil",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -6573,90 +6633,6 @@
                            "operand" : {
                               "name" : "HSIL, Unspecified",
                               "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "HistologyInterpretedAsCin1",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "CIN1",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "HistologyInterpretedAsNormal",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Biopsy Normal",
                               "type" : "CodeRef"
                            }
                         } ]
@@ -7544,14 +7520,8 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "HistologyInterpretedAsCin1",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "HistologyInterpretedAsNormal",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "HistologyInterpretedAsCin1OrNormal",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
                         "name" : "PrecedingCytologyIsHsil",
@@ -7604,14 +7574,8 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "HistologyInterpretedAsCin1",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "HistologyInterpretedAsNormal",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "HistologyInterpretedAsCin1OrNormal",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
                         "name" : "PrecedingCytologyIsAscH",
@@ -9770,14 +9734,8 @@
                                        "type" : "ExpressionRef"
                                     } ]
                                  }, {
-                                    "type" : "Or",
-                                    "operand" : [ {
-                                       "name" : "HistologyInterpretedAsCin1",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "name" : "HistologyInterpretedAsNormal",
-                                       "type" : "ExpressionRef"
-                                    } ]
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
                                  } ]
                               }, {
                                  "name" : "SecondMostRecentBiopsyReportWasBetween18and36monthsAgo",
