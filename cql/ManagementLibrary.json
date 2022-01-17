@@ -5625,21 +5625,21 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "CytologyInterpretedAsAgcOrAis",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                           "type" : "ExpressionRef"
                         }, {
                            "type" : "Or",
                            "operand" : [ {
-                              "name" : "CytologyInterpretedAsEndocervicalAis",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "CytologyInterpretedAsAgcOrAis",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
-                              "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
+                              "name" : "CytologyInterpretedAsEndocervicalAis",
                               "type" : "ExpressionRef"
                            } ]
                         } ]

@@ -812,10 +812,12 @@ define RecommendationForRareCytology:
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
       (
-        CytologyInterpretedAsEndocervicalAis or // NOTE: This logic changed - review with Rose - This should be updated to reflect current L2 as-is. Also leave a note to revisit this before finalizing.
-        CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
+        (
+          CytologyInterpretedAsAgcOrAis and
+          CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
+        ) or
+        CytologyInterpretedAsEndocervicalAis // NOTE: Revisit this cytology test results logic after L2 team discusses.
       ) and
       not (
         HasCervicalCancerDiagnoses or
