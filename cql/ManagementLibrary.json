@@ -4641,73 +4641,47 @@
                }
             }
          }, {
-            "name" : "AnyHistologyInterpretedAsCancer",
+            "name" : "CancerDiagnosisWithin12MonthsOfMostRecentCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
+               "type" : "Exists",
+               "operand" : {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "aC",
+                     "alias" : "C",
                      "expression" : {
-                        "type" : "Flatten",
-                        "operand" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "$this",
-                              "expression" : {
-                                 "name" : "SortedBiopsyReports",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ],
-                           "where" : {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "allConclusions",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           },
-                           "return" : {
-                              "distinct" : false,
-                              "expression" : {
-                                 "path" : "allConclusions",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "$this",
-                                    "type" : "AliasRef"
-                                 }
-                              }
-                           }
-                        }
+                        "name" : "CervicalCancerDiagnoses",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
                      }
                   } ],
                   "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "InValueSet",
-                        "code" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        },
-                        "valueset" : {
-                           "name" : "Histologic cancer",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
-                        }
-                     }
+                  "where" : {
+                     "type" : "Less",
+                     "operand" : [ {
+                        "name" : "ConditionDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "C",
+                           "type" : "AliasRef"
+                        } ]
+                     }, {
+                        "type" : "Add",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "value" : 12,
+                           "unit" : "months",
+                           "type" : "Quantity"
+                        } ]
+                     } ]
                   }
                }
             }
@@ -5648,11 +5622,38 @@
                         "operand" : {
                            "type" : "Or",
                            "operand" : [ {
-                              "name" : "HasCervicalCancerDiagnoses",
+                              "name" : "CancerDiagnosisWithin12MonthsOfMostRecentCytology",
                               "type" : "ExpressionRef"
                            }, {
-                              "name" : "AnyHistologyInterpretedAsCancer",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HistologyInterpretedAsCancer",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "Less",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentCytologyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 12,
+                                       "unit" : "months",
+                                       "type" : "Quantity"
+                                    } ]
+                                 } ]
+                              } ]
                            } ]
                         }
                      } ]

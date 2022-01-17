@@ -694,11 +694,10 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
-define AnyHistologyInterpretedAsCancer: // TODO: This might be able to use rec above now that it requires a lookback.
-  AnyTrue(
-    (SortedBiopsyReports.allConclusions) aC
-      return 
-        aC in Dash."Histologic cancer"
+define CancerDiagnosisWithin12MonthsOfMostRecentCytology:
+  Exists(
+    Dash.CervicalCancerDiagnoses C
+      where Common.ConditionDate(C) < MostRecentCytologyReport.date + 12 months
   )
 
 define AnyHpvSinceMostRecentCytology:
@@ -820,9 +819,11 @@ define RecommendationForRareCytology:
         CytologyInterpretedAsEndocervicalAis // NOTE: Revisit this cytology test results logic after L2 team discusses.
       ) and
       not (
-        HasCervicalCancerDiagnoses or
-        AnyHistologyInterpretedAsCancer // NOTE: Review whether this should be referring to ANY Histology report or only the most recent
-        // TODO: 12 month "look-forward" after cytology - for both forms of cancer evidence.
+        CancerDiagnosisWithin12MonthsOfMostRecentCytology or
+        (
+          HistologyInterpretedAsCancer and
+          MostRecentBiopsyReport.date < MostRecentCytologyReport.date + 12 months
+        )
       )
     ) then
       {
