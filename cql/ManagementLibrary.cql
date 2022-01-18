@@ -1026,7 +1026,7 @@ define PrecedingCytologyResults:
   Coalesce(
     (SortedCytologyReports) S
       where S.date <= MostRecentBiopsyReport.date and
-        S.date >= MostRecentBiopsyReport.date - 1 year
+        S.date >= MostRecentBiopsyReport.date - 6 months
   )
 
 define PrecedingCytologyIsHsil:
@@ -1258,7 +1258,7 @@ define RecommendationForHistologyResults:
     ) then
       {
         action: null,
-        text: 'For cytology showing HSIL, but biopsy showing histologic LSIL (CIN 1) or less, either an immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year is acceptable, provided in the latter case that the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2 (BII).'
+        text: 'When CIN 2+ is not identified, HSIL cytology is managed more aggressively than ASC-H cytology. For cytology showing HSIL, but biopsy showing histologic LSIL (CIN 1) or less, either an immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year is acceptable, provided in the latter case that the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2 (BII). When CIN2+ is not identified histologically after an ASC-H or HSIL cytology result, it is acceptable to review the cytologic, histologic, and colposcopic findings. If the review yields a revised interpretation, management should follow guidelines for the revised diagnosis (CIII).'
       }
     when (
       AgeInYears() >= 25 and
@@ -1268,7 +1268,7 @@ define RecommendationForHistologyResults:
     ) then
       {
         action: null,
-        text: 'If the colposcopic examination can fully visualize the squamocolumnar junction and the upper limit of any lesion and that the endocervical sampling, if collected, is negative, observation at 1 year with HPV-based testing is recommended; a diagnostic excisional procedure is not recommended (BII).'
+        text: 'For ASC-H, if the colposcopic examination can fully visualize the squamocolumnar junction and the upper limit of any lesion and that the endocervical sampling, if collected, is negative, observation at 1 year with HPV-based testing with cotesting or primary hrHPV testing is recommended; a diagnostic excisional procedure is not recommended (BII).'
       }
 // NOTE: Review above I.4 logic once I.4 L2 is done being built out--------------------------------------------
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
