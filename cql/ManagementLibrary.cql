@@ -132,7 +132,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
   (conclusions) c
   return
     case
-      when c ~ Dash."Negative HPV Finding" then {text: 'HPV-negative', rank: 1}
+      when c ~ Dash."Negative HPV Finding" or c ~ Dash."Negative" then {text: 'HPV-negative', rank: 1}
       when c ~ Dash."Positive HPV Finding" then {text: 'HPV-positive', rank: 2}
       when c ~ "HPV18+ Antigen" or c ~ "HPV18+ DNA" then {text: 'HPV16-, HPV18+', rank: 3}
       when c ~ "HPV16+ Antigen" or c ~ "HPV16+ DNA" then {text: 'HPV16+', rank: 4}
@@ -726,7 +726,7 @@ define NegativeOrUnknownHpvCotest:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC ~ Dash."Negative HPV Finding" or
+        aC ~ Dash."Negative HPV Finding" or aC ~ Dash."Negative" or
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
@@ -1304,58 +1304,248 @@ define RecommendationForHistologyResults:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #4: Surveillance After Abnormalities
 
-define CervicalExcisionOrAblativeProceduresInLast25years:
-  (
+define MostRecentTreatment:
+  C3F.MostRecentProcedure(
     Dash.CervicalExcisionProcedures union
     Dash.CervicalAblationProcedures
-  ) P
-  where Common.ProcedureDate(P) >= Now() - 25 years
+  )
+
+define MostRecentTreatmentDate:
+  Common.ProcedureDate(MostRecentTreatment)
+
+define TreatmentInLastYear:
+  MostRecentTreatment P
+  where Common.ProcedureDate(P) >= Now() - 12 months
   
-define HasCervicalExcisionOrAblativeProceduresInLast25years:
-  Exists(CervicalExcisionOrAblativeProceduresInLast25years)
+define HasTreatmentInLastYear:
+  Exists(TreatmentInLastYear)
 
-define MostRecentExicisionOrAblativeProcedure:
-  C3F.MostRecentProcedure(CervicalExcisionOrAblativeProceduresInLast25years)
-
-define DateOfMostRecentExicisionOrAblativeProcedure:
-  Common.ProcedureDate(MostRecentExicisionOrAblativeProcedure)
-
-define PrecedingHistologyResults:
+define AnyHistologicHsil:
   (SortedBiopsyReports) B
-    where B.date <= DateOfMostRecentExicisionOrAblativeProcedure
+    where AnyTrue(
+      (B.allConclusions) aC
+        return
+          aC ~ Dash."CIN2" or
+          aC ~ Dash."CIN3" or
+          aC ~ Dash."HSIL, Unspecified"
+    )
 
-define HasPrecedingHistologyResults:
-  Exists(PrecedingHistologyResults)
+define HistologyInterpretedAsHistologicHsil:
+  HistologyInterpretedAsCin2 or
+  HistologyInterpretedAsCin3 or
+  HistologyInterpretedAsUnspecifiedHsil
 
-define MostRecentPrecedingHistologyResult:
-  First(PrecedingHistologyResults)
-
-define MostRecentPrecedingHistologyIntepretedAsHsil:
+define SecondMostRecentHistologyInterpretedAsCin2:
   AnyTrue(
-    (PrecedingHistologyResults.allConclusions) aC
+    (SecondMostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ Dash."CIN2" or
+        aC ~ Dash."CIN2"
+  )
+
+define SecondMostRecentHistologyInterpretedAsCin3:
+  AnyTrue(
+    (SecondMostRecentBiopsyReport.allConclusions) aC
+      return 
         aC ~ Dash."CIN3"
   )
+
+define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
+  AnyTrue(
+    (SecondMostRecentBiopsyReport.allConclusions) aC
+      return 
+        aC ~ Dash."HSIL, Unspecified"
+  )
+
+define SecondMostRecentHistologyInterpretedAsHistologicHsil:
+  SecondMostRecentHistologyInterpretedAsCin2 or
+  SecondMostRecentHistologyInterpretedAsCin3 or
+  SecondMostRecentHistologyInterpretedAsUnspecifiedHsil
+
+define HistologicHsilWithin12MonthsBeforeTreatment:
+  AnyHistologicHsil B
+  where
+    B.date 12 months or less before MostRecentTreatmentDate
+
+define HasHistologicHsilWithin12MonthsBeforeTreatment:
+  Exists(HistologicHsilWithin12MonthsBeforeTreatment)
+
+define PositiveHrHpvTestAfterTreatment:
+  MostRecentHpvReport.date >= Now() - 12 months and
+  MostRecentHpvReport.date 12 months or less after MostRecentTreatmentDate and
+  AnyTrue(
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC ~ Dash."Positive HPV Finding"
+  )
+
+define RareAbnormalityHighGradeHistology:
+  (SortedBiopsyReports) B
+    where AnyTrue(
+      (B.allConclusions) aC
+        return
+          aC ~ Dash."CIN2" or
+          aC ~ Dash."CIN3" or
+          aC ~ Dash."HSIL, Unspecified" or
+          aC in Dash."AIS"
+    )
+
+define RareAbnormalityHighGradeHistologyBeforeTreatment:
+  if Exists(MostRecentTreatment) then
+    RareAbnormalityHighGradeHistology C 
+    where
+      C.date 12 months or less before MostRecentTreatmentDate
+  else
+    null
+
+define CytologicHsilOrAgcOrPersistentAscH:
+  (SortedCytologyReports) C
+    where AnyTrue(
+      (C.allConclusions) aC
+        return
+          aC in "HSIL" or
+          aC ~ "AGC"
+          // TODO: Add ASC-H after we review how "persistent ASC-H" is defined here (see comment in L2 doc).
+    )
+
+define CytologicHsilOrAgcOrPersistentAscHBeforeTreatment:
+  if Exists(MostRecentTreatment) then
+    CytologicHsilOrAgcOrPersistentAscH C 
+    where
+      C.date 12 months or less before MostRecentTreatmentDate
+  else
+    null
+
+define TreatmentForHighGradeHistologyOrCytology:
+  if Exists(MostRecentTreatment) and
+    (
+      Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
+      Exists(CytologicHsilOrAgcOrPersistentAscHBeforeTreatment)
+    ) then
+    MostRecentTreatment
+  else
+    null
+
+define HasTreatmentForHighGradeHistologyOrCytology:
+  Exists(TreatmentForHighGradeHistologyOrCytology)
+
+define TreatmentForHighGradeHistologyOrCytologyDate:
+  Common.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
+
+define NegativeHrHpvTests:
+  SortedHpvReports R
+    where AnyTrue(
+      (R.allConclusions) aC
+        return
+          aC ~ Dash."Negative HPV Finding" or
+          aC ~ Dash."Negative"
+    )
+
+define NegativeHrHpvTestsAsPartOfCotest:
+  from NegativeHrHpvTests H, SortedCytologyReports C 
+    where H.date within 1 day of C.date
+    return H
+
+define NegativePrimaryHrHpvTests:
+  NegativeHrHpvTests except NegativeHrHpvTestsAsPartOfCotest
+
+define NegativeCytologyTests:
+  SortedCytologyReports R
+    where AnyTrue(
+      (R.allConclusions) aC
+        return
+          aC ~ Dash."NILM"
+    )
+
+define NegativeCotests:
+  from NegativeHrHpvTests H, NegativeCytologyTests C 
+    where H.date within 1 day of C.date
+    return H
+
+define NegativeSurveillanceTests:
+  (
+    NegativePrimaryHrHpvTests union
+    NegativeCotests
+  )
+
+define SortedNegativeSurveillanceTests:
+  NegativeSurveillanceTests H
+    where H.date is not null
+    return {
+      date: H.date
+    }
+    sort by date asc
+
+define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
+  if HasTreatmentForHighGradeHistologyOrCytology then
+    SortedNegativeSurveillanceTests T 
+    where T.date > TreatmentForHighGradeHistologyOrCytologyDate
+  else
+    null
+
+define InitialIntensiveSurveillancePeriod:
+  if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 4 then
+    (
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
+    ) or
+    (
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
+    )
+  else 
+    false
 
 define RecommendationForSurveillanceAfterAbnormalities:
   // TODO: Add J.1 Language to Common Abnormality "Follow-up" recommendations
   case
     // J.2 Short-Term Follow-up After Treatment for Histologic HSIL
     when (
-      HasCervicalExcisionOrAblativeProceduresInLast25years and
-      HasPrecedingHistologyResults and
-      MostRecentPrecedingHistologyIntepretedAsHsil
+      HasTreatmentInLastYear and
+      HasHistologicHsilWithin12MonthsBeforeTreatment
     ) then
       {
         action: null,
-        text: 'After treatment, hrHPV-based testing at 6 months is referred regardless of the margin status of the excisional specimen (BII).' // TODO: Update recommendation text
+        text: 'After treatment, hrHPV-based testing is preferred at 6 months regardless of the margin status of the excisional specimen (BII). hrHPV-based testing includes cotesting and primary hrHPV testing. Follow-up at 6 months with colposcopy and ECC is acceptable (BIII). When margins are positive for CIN 2+ or ECC performed at the time of the excisional procedure shows CIN 2+ in patients 25 years or older who are not concerned about the potential effect of treatment on future pregnancy outcomes, repeat excision or observation is acceptable. For observation, HPV-based testing in 6 months is preferred; it is also acceptable to perform a colposcopy and ECC at 6 months.'
+      }
+    when (
+      PositiveHrHpvTestAfterTreatment and
+      HasHistologicHsilWithin12MonthsBeforeTreatment
+    ) then
+      {
+        action: null,
+        text: 'Colposcopy and appropriate biopsies should be performed if an hrHPV “positive” result after treatment for histologic HSIL (AIII).'
+      }
+    when (
+      HistologyInterpretedAsHistologicHsil and
+      MostRecentBiopsyReport.date 5 years or less after MostRecentTreatmentDate and
+      SecondMostRecentHistologyInterpretedAsHistologicHsil and
+      SecondMostRecentBiopsyReport.date 5 years or less before MostRecentTreatmentDate
+    ) then
+      {
+        action: null,
+        text: 'If recurrent histologic HSIL (CIN 2+) develops after excisional treatment, and repeat excision is not feasible or not desired, hysterectomy is recommended.'
       }
     // J.3 Guidance for Long-Term Follow-up After Treatment for High-Grade Histology or Cytology
-    // J.4 Guidance for Long-Term Follow-up After Low-Grade Cytology or Histologic LSIL Abnormalities Without Evidence of Histology or Cytologic High-Grade Abnormalities
+    when (
+      HasTreatmentForHighGradeHistologyOrCytology and
+      TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
+      not InitialIntensiveSurveillancePeriod
+    ) then
+      {
+        action: null,
+        text: 'In patients treated for histologic or cytologic HSIL, after the initial HPV-based test at 6 months, annual HPV or cotesting is preferred until 3 consecutive negative tests have been obtained (AII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
+      }
+    when (
+      HasTreatmentForHighGradeHistologyOrCytology and
+      TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
+      InitialIntensiveSurveillancePeriod
+    ) then
+      {
+        action: null,
+        text: 'In patients treated for histologic or cytologic HSIL, after the initial intensive surveillance period, continued surveillance at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology (histologic HSIL, CIN 2, CIN 3, or AIS) or high-grade cytology (HSIL, AGC, or persistent ASC-H) even if this is beyond the age of 65 years (BII). When patients with a history of treated high-grade histology or cytology reach the age of 65 years, if they have completed the initial 25-year surveillance period, continued surveillance at 3-year intervals is acceptable and may continue as long as the patient is in reasonably good health (BIII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
+      }
     else
       null
-  // TODO: Add new logic from Rare Abnormality #4 L2 once L2 is updated
   end
 
 define RareAbnormalityRecommendation:
@@ -1469,20 +1659,6 @@ define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
             aC ~ "LSIL" or
             aC ~ "ASC-US"
       )
-
-define SecondMostRecentHistologyInterpretedAsCin2:
-  AnyTrue(
-    (SecondMostRecentBiopsyReport.allConclusions) aC
-      return 
-        aC ~ Dash."CIN2"
-  )
-
-define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
-  AnyTrue(
-    (SecondMostRecentBiopsyReport.allConclusions) aC
-      return 
-        aC ~ Dash."HSIL, Unspecified"
-  )
 
 define RecommendationForPatientsYoungerThan25:
   case
