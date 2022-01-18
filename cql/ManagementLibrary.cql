@@ -1070,7 +1070,7 @@ define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
 define MostRecentBiopsyReportWasWithinPast12months:
   MostRecentBiopsyReport.date >= Now() - 12 months
 
-define MostRecentBiopsyReportWasBetween12and18monthsAgo:
+define MostRecentBiopsyReportWasBetween12and18monthsAgo: // TODO: Some of these expressions may be able to be deleted later - check after completion of Rare Abnormality #3
   MostRecentBiopsyReport.date >= Now() - 18 months and
   MostRecentBiopsyReport.date < Now() - 12 months
 
@@ -1241,8 +1241,8 @@ define RecommendationForHistologyResults:
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) and
-      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and // NOTE: Check if count of tests can be greater than or equal to 5. If so, modify here and in the line below
-      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and
+      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and // NOTE: Check if count of tests can be greater than or equal to 5. If so, modify here and in the line below.
+      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then  
       {
@@ -1572,7 +1572,7 @@ define WhichRarityMadeTheRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
-define MostRecentCytologyReportWasBetween12and18monthsAgo:
+define MostRecentCytologyReportWasBetween12and18monthsAgo: // TODO: Delete old/unused expressions
   MostRecentCytologyReport.date >= Now() - 18 months and
   MostRecentCytologyReport.date < Now() - 12 months
 
@@ -1624,23 +1624,21 @@ define ColposcopySinceMostRecentCytology:
       where Common.ProcedureDate(P) >= MostRecentCytologyReport.date
   )
 
-define MostRecentHsilHistologyWithinLastTwoYears:
+define HistologicHsilCin2OrUnspecified:
   First(
     (SortedBiopsyReports) B
-      where B.date >= Now() - 2 years and
-      AnyTrue(
-        (B.allConclusions) aC
-          return
-            aC ~ Dash."HSIL, Unspecified" or
-            aC ~ Dash."CIN2" or
-            aC ~ Dash."CIN3"
-      )
+    where AnyTrue(
+      (B.allConclusions) aC
+        return
+          aC ~ Dash."CIN2" or
+          aC ~ Dash."HSIL, Unspecified"
+    )
   )
 
 define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
   (SortedBiopsyReports) B
     where 
-      B.date > MostRecentHsilHistologyWithinLastTwoYears.date and
+      B.date less than 2 years after HistologicHsilCin2OrUnspecified.date and
       AnyTrue(
         (B.allConclusions) aC
           return
@@ -1651,7 +1649,7 @@ define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
 define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
   (SortedCytologyReports) C
     where 
-      C.date > MostRecentHsilHistologyWithinLastTwoYears.date and
+      C.date less than 2 years after HistologicHsilCin2OrUnspecified.date and
       AnyTrue(
         (C.allConclusions) aC
           return
@@ -1660,12 +1658,68 @@ define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
             aC ~ "ASC-US"
       )
 
+define Under25AndLowGradeCytologyResults:
+  AgeInYears() < 25 and
+  (
+    CytologyInterpretedAsLsil or
+    (
+      MostRecentCytologyCotestResult = 'ASC-US' and
+      MostRecentHpvResult = 'HPV-positive'
+    ) or
+    (
+      CytologyInterpretedAsAscus and
+      MostRecentCytologyCotestResult is null
+    )
+  )
+
+define TwoMostRecentCytologyReports2To3YearsApart:
+  SecondMostRecentCytologyReport.date 2 years or more before MostRecentCytologyReport.date and
+  SecondMostRecentCytologyReport.date 3 years or less before MostRecentCytologyReport.date
+
+define Under25AndSecondMostRecentLowGradeCytologyResults:
+  AgeInYears() < 25 and
+  (
+    SecondMostRecentCytologyInterpretedAsLsil or
+    (
+      SecondMostRecentCytologyInterpretedAsAscus and
+      AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+    ) or
+    (
+      SecondMostRecentCytologyInterpretedAsAscus and
+      AssociatedHpvCotest is null
+    )
+  )
+
+define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
+  HistologyInterpretedAsCin1OrNormal and
+  Under25AndLowGradeCytologyResults and 
+  Under25AndSecondMostRecentLowGradeCytologyResults and 
+  MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
+
+define CytologyInterpretedAsNotNilm:
+  Exists(MostRecentCytologyReport) and
+  not CytologyInterpretedAsNilm
+
+define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
+  AnyTrue(
+    (SecondMostRecentCytologyReport.allConclusions) aC
+      return
+        aC ~ "ASC-H" or
+        aC in "HSIL"
+  )
+
 define RecommendationForPatientsYoungerThan25:
   case
-    // TODO: Update K.1 Recommendation text
     // Heading 1 & Heading 2: Initial Management After an Abnormal Screening Test Result; Management of Cytology ASC-H and HSIL in Patients Younger than 25 Years
-    when (
-      AgeInYears() < 25 and // NOTE: Revisit whether this should state < 25 or 21 - 24 - This seemslike we are sticking with <25
+    when ( // #1
+      Under25AndLowGradeCytologyResults
+    ) then
+      {
+        action: 'Cytology',
+        text: 'Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+      }    
+    when ( // #2
+      AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsHsil or
@@ -1676,177 +1730,131 @@ define RecommendationForPatientsYoungerThan25:
     ) then
       {
         action: 'Colposcopy',
-        text: 'Colposcopy is recommended.' // TODO: Add updated text for this recommendation
+        text: 'Colposcopy is recommended for individuals under 25 years old with cytologic HSIL, ASC-H, AGC or AIS (BII). Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
-    when ( // TODO: Rephrase how this is written to match updated L2. Add test cases for 21 - 25 population.
-      AgeInYears() < 25 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      (
-        CytologyInterpretedAsLsil or
-        (
-          CytologyInterpretedAsAscus and
-          MostRecentCytologyCotestResult is null
-        ) or
-        (
-          MostRecentCytologyCotestResult = 'ASC-US' and
-          MostRecentHpvResult = 'HPV-positive'
-        )
-      ) and
-      (
-        TwoMostRecentCytologyReportsWithin5yearsApart and
-        (
-          SecondMostRecentCytologyInterpretedAsLsil or
-          (
-            SecondMostRecentCytologyInterpretedAsAscus and
-            AssociatedHpvCotest.riskTableInput = 'HPV-positive'
-          ) or
-          (
-            SecondMostRecentCytologyInterpretedAsAscus and
-            AssociatedHpvCotest is null
-          )
-        )
-      ) and
-      not ColposcopySinceMostRecentCytology
+    when ( // #3
+      Under25AndLowGradeCytologyResults and
+      Under25AndSecondMostRecentLowGradeCytologyResults
+      and TwoMostRecentCytologyReports2To3YearsApart
     ) then
       {
-        action: 'Colposcopy',
-        text: 'Colposcopy is recommended.'
+        action: 'Colposcopy', // NOTE: Do we want to continue adding 'actions' to the Rare Abnormality recommendations?
+        text: 'Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
-    when ( // TODO: This should also be rephrased to match how it is written in the updated L2
-      AgeInYears() < 25 and
-      MostRecentCytologyReportWasBetween12and18monthsAgo and
-      (
-        CytologyInterpretedAsLsil or
-        (
-          CytologyInterpretedAsAscus and
-          MostRecentCytologyCotestResult is null
-        ) or
-        (
-          MostRecentCytologyCotestResult = 'ASC-US' and
-          MostRecentHpvResult = 'HPV-positive'
-        )
-      )
-    ) then
-      {
-        action: 'Cytology',
-        text: 'Repeat Cervical Cytology testing alone.'
-      }
-    when (
-      AgeInYears() < 25 and
-      MostRecentCytologyReportWasWithinPastYear and
-      (
-        CytologyInterpretedAsLsil or
-        (
-          CytologyInterpretedAsAscus and
-          MostRecentCytologyCotestResult is null
-        ) or
-        (
-          MostRecentCytologyCotestResult = 'ASC-US' and
-          MostRecentHpvResult = 'HPV-positive'
-        )
-      )
-    ) then
-      {
-        action: null,
-        text: 'Repeat Cervical Cytology is next due on ' + ToString(ToDate(MostRecentCytologyReport.date + 12 months)) + '.'
-      }
-    when ( // TODO: We can combine the two expressions below
+    when ( // #4
       AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       MostRecentCytologyCotestResult = 'ASC-US' and
-      MostRecentHpvResult = 'HPV-negative' and
-      MostRecentCytologyReportWasWithinPastThreeYears
-    ) then
-      {
-        action: null,
-        text: 'Repeat Cervical Cytology is next due on ' + ToString(ToDate(MostRecentCytologyReport.date + 3 years)) + '.'
-      }
-    when (
-      AgeInYears() < 25 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      MostRecentCytologyCotestResult = 'ASC-US' and
-      MostRecentHpvResult = 'HPV-negative' and
-      not MostRecentCytologyReportWasWithinPastThreeYears
+      MostRecentHpvResult = 'HPV-negative'
     ) then
       {
         action: 'Cytology',
-        text: 'Repeat Cervical Cytology testing alone.' // TODO: Update text to match L2
+        text: 'Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
-    when (
-      AgeInYears() < 25 and
-      MostRecentBiopsyResult in {'<CIN1','CIN1'} and
-      ReferringCytologyResult in {'LSIL','ASC-US'}
+    when ( // #5a
+      HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening and
+      MostRecentBiopsyReport.date > Now() - 12 months
     ) then
       {
         action: null,
-        text: 'Repeat Cervical Cytology in 1 year.'
+        text: 'For patients under 25 years old perform cervical cytology one year following cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
-    when (
-      AgeInYears() < 25 and
-      MostRecentBiopsyResult in {'<CIN1','CIN1'} and
-      ReferringCytologyResult = 'ASC-H'
+    when ( // #5b
+      HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening and
+      MostRecentBiopsyReport.date <= Now() - 12 months and
+      not (MostRecentCytologyReport.date > MostRecentBiopsyReport.date)
     ) then
       {
         action: null,
-        text: 'Observation cytology in 1 and 2 years is recommended.'
+        text: 'This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
     // Management of Histology of Less than CIN2 Preceded by Cytology ASC-H and HSIL in Patients Younger than 25 Year
-    when (
+    when ( // 1b
+      AgeInYears() < 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      CytologyInterpretedAsHsil and
+      MostRecentCytologyReport.date less than 12 months before MostRecentBiopsyReport.date
+    ) then
+      {
+        action: null,
+        text: 'Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+      }
+    when ( // 1c
+      AgeInYears() < 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      CytologyInterpretedAsAscH and
+      MostRecentCytologyReport.date less than 12 months before MostRecentBiopsyReport.date
+    ) then
+      {
+        action: null,
+        text: 'Observation is recommended with cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a ASC-H, AGC or AIS cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+      }
+    when ( // 2
+      AgeInYears() >= 21 and AgeInYears() < 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      CytologyInterpretedAsNotNilm and
+      MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date and
+      SecondMostRecentCytologyInterpretedAsAscHOrHsil and
+      SecondMostRecentCytologyReport.date less than 6 months before MostRecentBiopsyReport.date
+    ) then
+      {
+        action: null,
+        text: 'Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+      }
+    when ( // 3
       AgeInYears() < 25 and
       not Pregnant and
-      MostRecentBiopsyReportWasBetween12and18monthsAgo and
       HistologyInterpretedAsCin1OrNormal and
-      SecondMostRecentBiopsyReportWasBetween18and36monthsAgo and
-      SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-      MostRecentCytologyReportWasWithinPastYear and
       (
         CytologyInterpretedAsHsil or
         CytologyInterpretedAsAscH
-      )
+      ) and
+      MostRecentCytologyReport.date more than 18 months after MostRecentBiopsyReport.date and
+      MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
     ) then
       {
         action: null,
-        text: 'A diagnostic excisional procedure is recommended.'
+        text: 'If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
       }
     // Management of Histologic HSIL (CIN2 or CIN3) for Patients Younger Than 25 Years
-    when (
-      AgeInYears() < 25 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsCin2
-    ) then
-      {
-        action: null,
-        text: 'Observation is preferred, and treatment is acceptable. Observation includes colposcopy and cytology at 6-month intervals.'
-      }
-    when (
+    when ( // 1
       AgeInYears() < 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin3
     ) then
       {
         action: 'Treatment',
-        text: 'Treatment is recommended, and observation is unacceptable.'
+        text: 'Treatment is recommended, and observation is unacceptable (EII)'
       }
-    when (
+    when ( // 2
+      AgeInYears() < 25 and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsCin2
+    ) then
+      {
+        action: null,
+        text: 'Observation is preferred, and treatment is acceptable (BII). Observation includes colposcopy and cytology at 6-month intervals.'
+      }
+    when ( // 3
       AgeInYears() < 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsUnspecifiedHsil
     ) then
       {
         action: null,
-        text: 'Observation or treatment is acceptable. Observation includes colposcopy and cytology at 6-month intervals.'
+        text: 'Observation or treatment is acceptable after an unspecified histologic HSIL result. Observation includes colposcopy and cytology at 6-month intervals'
       }
-    when (
+    when ( // 4
       AgeInYears() < 25 and
-      MostRecentHsilHistologyWithinLastTwoYears is not null and
+      HistologicHsilCin2OrUnspecified is not null and
       Count(SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology) = 2 and
       Count(SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology) = 2
     ) then
       {
         action: null,
-        text: 'Repeat Cervical Cytology is next due on ' + ToString(ToDate(MostRecentCytologyReport.date + 1 year)) + '.'
+        text: 'Surveillance with colposcopy and cervical cytology should be performed at 1 year after the most recent cervical histology and cytology tests following an earlier histology HSIL (CIN2) or histologic HSIL, unspecified result.'
       }
-    when (
+    when ( // 5
       AgeInYears() < 25 and
       (
         HistologyInterpretedAsCin2 or
@@ -1856,11 +1864,11 @@ define RecommendationForPatientsYoungerThan25:
         SecondMostRecentHistologyInterpretedAsCin2 or
         SecondMostRecentHistologyInterpretedAsUnspecifiedHsil
       ) and
-      TwoMostRecentBiopsyReportsWithin12monthsApart
+      SecondMostRecentBiopsyReport.date within 2 years of MostRecentBiopsyReport.date
     ) then
       {
         action: 'Treatment',
-        text: 'Treatment is recommended.'
+        text: 'Treatment is recommended. Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.'
       }
     else
       null

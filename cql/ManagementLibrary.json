@@ -8770,7 +8770,7 @@
                                  }
                               } ]
                            }, {
-                              "type" : "Equal",
+                              "type" : "GreaterOrEqual",
                               "operand" : [ {
                                  "type" : "Count",
                                  "source" : {
@@ -8784,7 +8784,7 @@
                               } ]
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "type" : "Count",
                               "source" : {
@@ -11368,7 +11368,7 @@
                }
             }
          }, {
-            "name" : "MostRecentHsilHistologyWithinLastTwoYears",
+            "name" : "HistologicHsilCin2OrUnspecified",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -11384,101 +11384,61 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "GreaterOrEqual",
-                        "operand" : [ {
-                           "path" : "date",
-                           "scope" : "B",
-                           "type" : "Property"
-                        }, {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "type" : "Now"
-                           }, {
-                              "value" : 2,
-                              "unit" : "years",
-                              "type" : "Quantity"
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "AnyTrue",
-                        "source" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "aC",
-                              "expression" : {
-                                 "path" : "allConclusions",
-                                 "scope" : "B",
-                                 "type" : "Property"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
-                                 "type" : "Or",
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "aC",
+                           "expression" : {
+                              "path" : "allConclusions",
+                              "scope" : "B",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Equivalent",
                                  "operand" : [ {
-                                    "type" : "Or",
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
                                     "operand" : [ {
-                                       "type" : "Equivalent",
-                                       "operand" : [ {
-                                          "name" : "ToConcept",
-                                          "libraryName" : "FHIRHelpers",
-                                          "type" : "FunctionRef",
-                                          "operand" : [ {
-                                             "name" : "aC",
-                                             "type" : "AliasRef"
-                                          } ]
-                                       }, {
-                                          "type" : "ToConcept",
-                                          "operand" : {
-                                             "name" : "HSIL, Unspecified",
-                                             "libraryName" : "Dash",
-                                             "type" : "CodeRef"
-                                          }
-                                       } ]
-                                    }, {
-                                       "type" : "Equivalent",
-                                       "operand" : [ {
-                                          "name" : "ToConcept",
-                                          "libraryName" : "FHIRHelpers",
-                                          "type" : "FunctionRef",
-                                          "operand" : [ {
-                                             "name" : "aC",
-                                             "type" : "AliasRef"
-                                          } ]
-                                       }, {
-                                          "type" : "ToConcept",
-                                          "operand" : {
-                                             "name" : "CIN2",
-                                             "libraryName" : "Dash",
-                                             "type" : "CodeRef"
-                                          }
-                                       } ]
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
                                     } ]
                                  }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "CIN3",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "CIN2",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
                                  } ]
-                              }
+                              }, {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "HSIL, Unspecified",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              } ]
                            }
                         }
-                     } ]
+                     }
                   }
                }
             }
@@ -11499,17 +11459,37 @@
                "where" : {
                   "type" : "And",
                   "operand" : [ {
-                     "type" : "Greater",
+                     "type" : "In",
                      "operand" : [ {
                         "path" : "date",
                         "scope" : "B",
                         "type" : "Property"
                      }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHsilHistologyWithinLastTwoYears",
-                           "type" : "ExpressionRef"
+                        "lowClosed" : false,
+                        "highClosed" : false,
+                        "type" : "Interval",
+                        "low" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HistologicHsilCin2OrUnspecified",
+                              "type" : "ExpressionRef"
+                           }
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "HistologicHsilCin2OrUnspecified",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "value" : 2,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
                         }
                      } ]
                   }, {
@@ -11586,17 +11566,37 @@
                "where" : {
                   "type" : "And",
                   "operand" : [ {
-                     "type" : "Greater",
+                     "type" : "In",
                      "operand" : [ {
                         "path" : "date",
                         "scope" : "C",
                         "type" : "Property"
                      }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHsilHistologyWithinLastTwoYears",
-                           "type" : "ExpressionRef"
+                        "lowClosed" : false,
+                        "highClosed" : false,
+                        "type" : "Interval",
+                        "low" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HistologicHsilCin2OrUnspecified",
+                              "type" : "ExpressionRef"
+                           }
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "HistologicHsilCin2OrUnspecified",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "value" : 2,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
                         }
                      } ]
                   }, {
@@ -11678,12 +11678,416 @@
                }
             }
          }, {
+            "name" : "Under25AndLowGradeCytologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Less",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "25",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "CytologyInterpretedAsLsil",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentCytologyCotestResult",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ASC-US",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentHpvResult",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-positive",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "CytologyInterpretedAsAscus",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyCotestResult",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "TwoMostRecentCytologyReports2To3YearsApart",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "SameOrBefore",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentCytologyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "value" : 2,
+                        "unit" : "years",
+                        "type" : "Quantity"
+                     } ]
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : false,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "Under25AndSecondMostRecentLowGradeCytologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Less",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "25",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "SecondMostRecentCytologyInterpretedAsLsil",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "SecondMostRecentCytologyInterpretedAsAscus",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "path" : "riskTableInput",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "AssociatedHpvCotest",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-positive",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "SecondMostRecentCytologyInterpretedAsAscus",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "AssociatedHpvCotest",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "HistologyInterpretedAsCin1OrNormal",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "Under25AndLowGradeCytologyResults",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "name" : "Under25AndSecondMostRecentLowGradeCytologyResults",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "lowClosed" : false,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "CytologyInterpretedAsNotNilm",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Exists",
+                  "operand" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "MostRecentCytologyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "CytologyInterpretedAsNilm",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "ASC-H",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "HSIL",
+                              "type" : "ValueSetRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "RecommendationForPatientsYoungerThan25",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Case",
                "caseItem" : [ {
+                  "when" : {
+                     "name" : "Under25AndLowGradeCytologyResults",
+                     "type" : "ExpressionRef"
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cytology",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
@@ -11746,7 +12150,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended.",
+                           "value" : "Colposcopy is recommended for individuals under 25 years old with cytologic HSIL, ASC-H, AGC or AIS (BII). Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
                            "type" : "Literal"
                         }
                      } ]
@@ -11757,130 +12161,15 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Less",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "CytologyInterpretedAsLsil",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "name" : "CytologyInterpretedAsAscus",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "name" : "MostRecentCytologyCotestResult",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "type" : "Equal",
-                                    "operand" : [ {
-                                       "name" : "MostRecentCytologyCotestResult",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "ASC-US",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "type" : "Equal",
-                                    "operand" : [ {
-                                       "name" : "MostRecentHpvResult",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "HPV-positive",
-                                       "type" : "Literal"
-                                    } ]
-                                 } ]
-                              } ]
-                           } ]
+                           "name" : "Under25AndLowGradeCytologyResults",
+                           "type" : "ExpressionRef"
                         }, {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "TwoMostRecentCytologyReportsWithin5yearsApart",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "SecondMostRecentCytologyInterpretedAsLsil",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "name" : "SecondMostRecentCytologyInterpretedAsAscus",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "type" : "Equal",
-                                       "operand" : [ {
-                                          "path" : "riskTableInput",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "AssociatedHpvCotest",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "HPV-positive",
-                                          "type" : "Literal"
-                                       } ]
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "name" : "SecondMostRecentCytologyInterpretedAsAscus",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "AssociatedHpvCotest",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ]
-                              } ]
-                           } ]
+                           "name" : "Under25AndSecondMostRecentLowGradeCytologyResults",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "name" : "ColposcopySinceMostRecentCytology",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "TwoMostRecentCytologyReports2To3YearsApart",
+                        "type" : "ExpressionRef"
                      } ]
                   },
                   "then" : {
@@ -11896,7 +12185,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended.",
+                           "value" : " Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
                            "type" : "Literal"
                         }
                      } ]
@@ -11907,70 +12196,49 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "Less",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "MostRecentCytologyReportWasBetween12and18monthsAgo",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "CytologyInterpretedAsLsil",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "name" : "CytologyInterpretedAsAscus",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "name" : "MostRecentCytologyCotestResult",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ]
-                           } ]
-                        }, {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "Equal",
+                              "type" : "Less",
                               "operand" : [ {
-                                 "name" : "MostRecentCytologyCotestResult",
-                                 "type" : "ExpressionRef"
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ASC-US",
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
                                  "type" : "Literal"
                               } ]
                            }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "MostRecentHpvResult",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                              "type" : "ExpressionRef"
                            } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentCytologyCotestResult",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ASC-US",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "MostRecentHpvResult",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-negative",
+                           "type" : "Literal"
                         } ]
                      } ]
                   },
@@ -11987,7 +12255,50 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat Cervical Cytology testing alone.",
+                           "value" : "Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 12,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "For patients under 25 years old perform cervical cytology one year following cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
                            "type" : "Literal"
                         }
                      } ]
@@ -11998,281 +12309,47 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "Less",
+                           "name" : "HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "LessOrEqual",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
                               }
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "MostRecentCytologyReportWasWithinPastYear",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "CytologyInterpretedAsLsil",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "And",
+                              "type" : "Subtract",
                               "operand" : [ {
-                                 "name" : "CytologyInterpretedAsAscus",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Now"
                               }, {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "name" : "MostRecentCytologyCotestResult",
-                                    "type" : "ExpressionRef"
-                                 }
+                                 "value" : 12,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
                               } ]
-                           } ]
-                        }, {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "MostRecentCytologyCotestResult",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ASC-US",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "MostRecentHpvResult",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
-                                 "type" : "Literal"
-                              } ]
-                           } ]
-                        } ]
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Repeat Cervical Cytology is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
-                                    "operand" : {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 12,
-                                          "unit" : "months",
-                                          "type" : "Quantity"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
-                              "type" : "Literal"
-                           } ]
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Less",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "MostRecentCytologyCotestResult",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ASC-US",
-                                 "type" : "Literal"
-                              } ]
-                           } ]
-                        }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "MostRecentHpvResult",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "HPV-negative",
-                              "type" : "Literal"
-                           } ]
-                        } ]
-                     }, {
-                        "name" : "MostRecentCytologyReportWasWithinPastThreeYears",
-                        "type" : "ExpressionRef"
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Repeat Cervical Cytology is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
-                                    "operand" : {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 3,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
-                              "type" : "Literal"
-                           } ]
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Less",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "MostRecentCytologyCotestResult",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ASC-US",
-                                 "type" : "Literal"
-                              } ]
-                           } ]
-                        }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "MostRecentHpvResult",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "HPV-negative",
-                              "type" : "Literal"
                            } ]
                         } ]
                      }, {
                         "type" : "Not",
                         "operand" : {
-                           "name" : "MostRecentCytologyReportWasWithinPastThreeYears",
-                           "type" : "ExpressionRef"
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         }
                      } ]
                   },
@@ -12281,15 +12358,13 @@
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cytology",
-                           "type" : "Literal"
+                           "type" : "Null"
                         }
                      }, {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat Cervical Cytology testing alone.",
+                           "value" : "This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
                            "type" : "Literal"
                         }
                      } ]
@@ -12447,6 +12522,467 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
+                              "type" : "Less",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "HistologyInterpretedAsCin1OrNormal",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "CytologyInterpretedAsHsil",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "lowClosed" : false,
+                           "highClosed" : false,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 12,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Less",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "HistologyInterpretedAsCin1OrNormal",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "CytologyInterpretedAsAscH",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "lowClosed" : false,
+                           "highClosed" : false,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 12,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Observation is recommended with cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a ASC-H, AGC or AIS cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "GreaterOrEqual",
+                                       "operand" : [ {
+                                          "precision" : "Year",
+                                          "type" : "CalculateAge",
+                                          "operand" : {
+                                             "path" : "birthDate.value",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "Patient",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                          "value" : "21",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "type" : "Less",
+                                       "operand" : [ {
+                                          "precision" : "Year",
+                                          "type" : "CalculateAge",
+                                          "operand" : {
+                                             "path" : "birthDate.value",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "Patient",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                          "value" : "25",
+                                          "type" : "Literal"
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "name" : "CytologyInterpretedAsNotNilm",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : false,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "lowClosed" : false,
+                           "highClosed" : false,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 6,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "Less",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "name" : "Pregnant",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "CytologyInterpretedAsHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyInterpretedAsAscH",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 18,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "lowClosed" : false,
+                           "highClosed" : false,
+                           "type" : "Interval",
+                           "low" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           },
+                           "high" : {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 3,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
                                  "type" : "And",
@@ -12554,7 +13090,7 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin2",
+                        "name" : "HistologyInterpretedAsCin3",
                         "type" : "ExpressionRef"
                      } ]
                   },
@@ -12563,13 +13099,15 @@
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Treatment",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation is preferred, and treatment is acceptable. Observation includes colposcopy and cytology at 6-month intervals.",
+                           "value" : "Treatment is recommended, and observation is unacceptable (EII)",
                            "type" : "Literal"
                         }
                      } ]
@@ -12602,7 +13140,7 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin3",
+                        "name" : "HistologyInterpretedAsCin2",
                         "type" : "ExpressionRef"
                      } ]
                   },
@@ -12611,15 +13149,13 @@
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment",
-                           "type" : "Literal"
+                           "type" : "Null"
                         }
                      }, {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment is recommended, and observation is unacceptable.",
+                           "value" : "Observation is preferred, and treatment is acceptable (BII). Observation includes colposcopy and cytology at 6-month intervals.",
                            "type" : "Literal"
                         }
                      } ]
@@ -12667,7 +13203,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation or treatment is acceptable. Observation includes colposcopy and cytology at 6-month intervals.",
+                           "value" : "Observation or treatment is acceptable after an unspecified histologic HSIL result. Observation includes colposcopy and cytology at 6-month intervals",
                            "type" : "Literal"
                         }
                      } ]
@@ -12702,7 +13238,7 @@
                               "operand" : {
                                  "type" : "IsNull",
                                  "operand" : {
-                                    "name" : "MostRecentHsilHistologyWithinLastTwoYears",
+                                    "name" : "HistologicHsilCin2OrUnspecified",
                                     "type" : "ExpressionRef"
                                  }
                               }
@@ -12746,39 +13282,9 @@
                      }, {
                         "name" : "text",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Repeat Cervical Cytology is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
-                                    "operand" : {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 1,
-                                          "unit" : "year",
-                                          "type" : "Quantity"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
-                              "type" : "Literal"
-                           } ]
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance with colposcopy and cervical cytology should be performed at 1 year after the most recent cervical histology and cytology tests following an earlier histology HSIL (CIN2) or histologic HSIL, unspecified result.",
+                           "type" : "Literal"
                         }
                      } ]
                   }
@@ -12828,8 +13334,65 @@
                            } ]
                         } ]
                      }, {
-                        "name" : "TwoMostRecentBiopsyReportsWithin12monthsApart",
-                        "type" : "ExpressionRef"
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "lowClosed" : true,
+                              "highClosed" : true,
+                              "type" : "Interval",
+                              "low" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 2,
+                                    "unit" : "years",
+                                    "type" : "Quantity"
+                                 } ]
+                              },
+                              "high" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 2,
+                                    "unit" : "years",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -12845,7 +13408,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment is recommended.",
+                           "value" : "Treatment is recommended. Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.",
                            "type" : "Literal"
                         }
                      } ]
