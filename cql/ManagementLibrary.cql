@@ -1081,7 +1081,6 @@ define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
   SecondMostRecentBiopsyReport.date >= Now() - 36 months and
   SecondMostRecentBiopsyReport.date < Now() - 18 months
 
-// TODO: This should be updated to have a 3 month lookback here, since the lookback will be expanded to 12 months in the actual dashboard.
 define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
   Exists(
     C3F.MostRecent(
@@ -1097,6 +1096,18 @@ define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months:
   First(
     (SortedBiopsyReports) B
       where B.date >= Now() - 18 months and
+      AnyTrue(
+        (B.allConclusions) aC
+          return
+            aC ~ Dash."HSIL, Unspecified" or
+            aC ~ Dash."CIN2"
+      )
+  )
+
+define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years:
+  First(
+    (SortedBiopsyReports) B
+      where B.date >= Now() - 6 years and
       AnyTrue(
         (B.allConclusions) aC
           return
@@ -1130,6 +1141,35 @@ define SecondMostRecentNegativeHsilSurveillanceResult:
     )
   else
     false
+
+define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years:
+  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) then
+    SortedBiopsyReports R
+      where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
+      AnyTrue(
+        (R.allConclusions) aC
+          return
+            aC ~ "CIN1" or
+            aC ~ "Biopsy Normal"
+      )
+  else
+    null
+
+define SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years:
+  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) then
+    SortedCytologyReports R
+      where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
+      AnyTrue(
+        (R.allConclusions) aC
+          return
+            aC ~ Dash."NILM" or
+            aC ~ "LSIL" or
+            aC ~ "ASC-US"
+      )
+  else
+    null
+
+// TODO: Check if count of tests can be greater than or equal to 5
 
 // TODO: ** Need to define logic for observation/surveillance of I.3 population **
 // TODO: ** Need to define logic for observation/surveillance of I.4 population **
@@ -1192,11 +1232,23 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) and
       MostRecentNegativeHsilSurveillanceResult
-      SecondMostRecentNegativeHsilSurveillanceResult
+      SecondMostRecentNegativeHsilSurveillanceResult and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
         action: null,
         text: 'Subsequent surveillance with colposcopy and HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) and
+      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and
+      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then  
+      {
+        action: null,
+        text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
       }
 // NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
@@ -1393,7 +1445,7 @@ define MostRecentHsilHistologyWithinLastTwoYears:
       )
   )
 
-define SubsequentLowGradeHistologyReports:
+define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
   (SortedBiopsyReports) B
     where 
       B.date > MostRecentHsilHistologyWithinLastTwoYears.date and
@@ -1404,7 +1456,7 @@ define SubsequentLowGradeHistologyReports:
             aC ~ "Biopsy Normal"
       )
 
-define SubsequentLowGradeCytologyReports:
+define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
   (SortedCytologyReports) C
     where 
       C.date > MostRecentHsilHistologyWithinLastTwoYears.date and
@@ -1609,8 +1661,8 @@ define RecommendationForPatientsYoungerThan25:
     when (
       AgeInYears() < 25 and
       MostRecentHsilHistologyWithinLastTwoYears is not null and
-      Count(SubsequentLowGradeHistologyReports) = 2 and
-      Count(SubsequentLowGradeCytologyReports) = 2
+      Count(SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology) = 2 and
+      Count(SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology) = 2
     ) then
       {
         action: null,
