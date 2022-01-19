@@ -207,7 +207,7 @@ define IsIncluded:
 
 define Excluded:
   if ExcludeSymptomatic then
-    Symptomatic.IsSymptomatic // NOTE: This may need a lookback of 3 months. Monitor relevant comment in L2 doc.
+    Symptomatic.IsSymptomatic
   else
     false
 
@@ -698,10 +698,10 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
-define CancerDiagnosisWithin12MonthsOfMostRecentCytology:
+define CancerDiagnosisAfterMostRecentCytology:
   Exists(
     Dash.CervicalCancerDiagnoses C
-      where Common.ConditionDate(C) < MostRecentCytologyReport.date + 12 months
+      where Common.ConditionDate(C) > MostRecentCytologyReport.date
   )
 
 define AnyHpvSinceMostRecentCytology:
@@ -802,12 +802,9 @@ define RecommendationForRareCytology:
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsAgc or
-        CytologyInterpretedAsAtypicalEndometrialCells
+        CytologyInterpretedAsAtypicalEndocervicalCells
       ) and
-      (
-        MostRecentBiopsyReport.date >= Now() - 1 year and // NOTE: Determine whether we want to include this 1-year lookback
-        MostRecentBiopsyReport.date <= MostRecentCytologyReport.date + 1 year
-      ) and
+      MostRecentBiopsyReport.date 12 months or less after MostRecentCytologyReport.date and
       HistologyInterpretedAsCin1OrNormal
     ) then
       {
@@ -824,10 +821,10 @@ define RecommendationForRareCytology:
         CytologyInterpretedAsEndocervicalAis // NOTE: Revisit this cytology test results logic after L2 team discusses.
       ) and
       not (
-        CancerDiagnosisWithin12MonthsOfMostRecentCytology or
+        CancerDiagnosisAfterMostRecentCytology or
         (
           HistologyInterpretedAsCancer and
-          MostRecentBiopsyReport.date < MostRecentCytologyReport.date + 12 months
+          MostRecentBiopsyReport.date > MostRecentCytologyReport.date
         )
       )
     ) then
@@ -1266,7 +1263,7 @@ define RecommendationForHistologyResults:
     when ( // 4
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) and
-      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and // NOTE: Check if count of tests can be greater than or equal to 5. If so, modify here and in the line below.
+      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then  
@@ -2528,8 +2525,6 @@ define CommonAbnormalityRecommendation:
   // TODO: Add text at the end of Treatment Recommendations after confirming with L2 Team
 
 // TODO: Add Errata section
-
-// TODO: Go through and update all highlighted recommendations!
 
 //------------------------------------------------------------------------------
 // CDS OUTPUTS

@@ -4767,7 +4767,7 @@
                }
             }
          }, {
-            "name" : "CancerDiagnosisWithin12MonthsOfMostRecentCytology",
+            "name" : "CancerDiagnosisAfterMostRecentCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -4784,7 +4784,7 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "Less",
+                     "type" : "Greater",
                      "operand" : [ {
                         "name" : "ConditionDate",
                         "libraryName" : "Common",
@@ -4794,19 +4794,12 @@
                            "type" : "AliasRef"
                         } ]
                      }, {
-                        "type" : "Add",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 12,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
                      } ]
                   }
                }
@@ -5668,14 +5661,14 @@
                                  "name" : "CytologyInterpretedAsAgc",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
+                                 "name" : "CytologyInterpretedAsAtypicalEndocervicalCells",
                                  "type" : "ExpressionRef"
                               } ]
                            } ]
                         }, {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "GreaterOrEqual",
+                              "type" : "In",
                               "operand" : [ {
                                  "path" : "date",
                                  "type" : "Property",
@@ -5684,39 +5677,46 @@
                                     "type" : "ExpressionRef"
                                  }
                               }, {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "type" : "Now"
-                                 }, {
-                                    "value" : 1,
-                                    "unit" : "year",
-                                    "type" : "Quantity"
-                                 } ]
-                              } ]
-                           }, {
-                              "type" : "LessOrEqual",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "type" : "Add",
-                                 "operand" : [ {
+                                 "lowClosed" : false,
+                                 "highClosed" : true,
+                                 "type" : "Interval",
+                                 "low" : {
                                     "path" : "date",
                                     "type" : "Property",
                                     "source" : {
                                        "name" : "MostRecentCytologyReport",
                                        "type" : "ExpressionRef"
                                     }
-                                 }, {
-                                    "value" : 1,
-                                    "unit" : "year",
-                                    "type" : "Quantity"
-                                 } ]
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentCytologyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 12,
+                                       "unit" : "months",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
                               } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }
                            } ]
                         } ]
                      }, {
@@ -5769,7 +5769,7 @@
                         "operand" : {
                            "type" : "Or",
                            "operand" : [ {
-                              "name" : "CancerDiagnosisWithin12MonthsOfMostRecentCytology",
+                              "name" : "CancerDiagnosisAfterMostRecentCytology",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "And",
@@ -5777,7 +5777,7 @@
                                  "name" : "HistologyInterpretedAsCancer",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "type" : "Less",
+                                 "type" : "Greater",
                                  "operand" : [ {
                                     "path" : "date",
                                     "type" : "Property",
@@ -5786,19 +5786,12 @@
                                        "type" : "ExpressionRef"
                                     }
                                  }, {
-                                    "type" : "Add",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentCytologyReport",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 12,
-                                       "unit" : "months",
-                                       "type" : "Quantity"
-                                    } ]
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
                                  } ]
                               } ]
                            } ]
