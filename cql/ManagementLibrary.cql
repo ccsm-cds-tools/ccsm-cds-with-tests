@@ -1093,22 +1093,11 @@ define MostRecentBiopsyReportWasWithinPast12months:
 define MostRecentBiopsyReportWasWithinPast18months:
   MostRecentBiopsyReport.date >= Now() - 18 months
 
-define MostRecentBiopsyReportWasBetween12and18monthsAgo: // TODO: Some of these expressions may be able to be deleted later - check after completion of Rare Abnormality #3
-  MostRecentBiopsyReport.date >= Now() - 18 months and
-  MostRecentBiopsyReport.date < Now() - 12 months
-
-define TwoMostRecentBiopsyReportsWithin12monthsApart:
-  SecondMostRecentBiopsyReport.date within 12 months of MostRecentBiopsyReport.date
-
 define TwoMostRecentBiopsyReportsWithin18monthsApart:
   SecondMostRecentBiopsyReport.date within 18 months of MostRecentBiopsyReport.date
 
 define TwoMostRecentBiopsyReportsWithin15monthsApart:
   SecondMostRecentBiopsyReport.date within 15 months of MostRecentBiopsyReport.date
-
-define SecondMostRecentBiopsyReportWasBetween18and36monthsAgo:
-  SecondMostRecentBiopsyReport.date >= Now() - 36 months and
-  SecondMostRecentBiopsyReport.date < Now() - 18 months
 
 define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
   Exists(
@@ -1797,16 +1786,6 @@ define WhichRarityMadeTheRecommendation:
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
-
-define MostRecentCytologyReportWasBetween12and18monthsAgo: // TODO: Delete old/unused expressions
-  MostRecentCytologyReport.date >= Now() - 18 months and
-  MostRecentCytologyReport.date < Now() - 12 months
-
-define MostRecentCytologyReportWasWithinPastYear:
-  MostRecentCytologyReport.date >= Now() - 1 year
-
-define MostRecentCytologyReportWasWithinPastThreeYears:
-  MostRecentCytologyReport.date >= Now() - 3 years
 
 define CytologyInterpretedAsLsil:
   AnyTrue(
