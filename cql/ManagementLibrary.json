@@ -12185,7 +12185,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : " Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
                            "type" : "Literal"
                         }
                      } ]
@@ -12365,151 +12365,6 @@
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
-                           "type" : "Literal"
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Less",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "type" : "In",
-                           "operand" : [ {
-                              "name" : "MostRecentBiopsyResult",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "<CIN1",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "CIN1",
-                                 "type" : "Literal"
-                              } ]
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "In",
-                        "operand" : [ {
-                           "name" : "ReferringCytologyResult",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "type" : "List",
-                           "element" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "LSIL",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ASC-US",
-                              "type" : "Literal"
-                           } ]
-                        } ]
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat Cervical Cytology in 1 year.",
-                           "type" : "Literal"
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Less",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "type" : "In",
-                           "operand" : [ {
-                              "name" : "MostRecentBiopsyResult",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "<CIN1",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "CIN1",
-                                 "type" : "Literal"
-                              } ]
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "ReferringCytologyResult",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ASC-H",
-                           "type" : "Literal"
-                        } ]
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation cytology in 1 and 2 years is recommended.",
                            "type" : "Literal"
                         }
                      } ]
@@ -12981,93 +12836,6 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "type" : "And",
-                                       "operand" : [ {
-                                          "type" : "Less",
-                                          "operand" : [ {
-                                             "precision" : "Year",
-                                             "type" : "CalculateAge",
-                                             "operand" : {
-                                                "path" : "birthDate.value",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "Patient",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          }, {
-                                             "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                             "value" : "25",
-                                             "type" : "Literal"
-                                          } ]
-                                       }, {
-                                          "type" : "Not",
-                                          "operand" : {
-                                             "name" : "Pregnant",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       } ]
-                                    }, {
-                                       "name" : "MostRecentBiopsyReportWasBetween12and18monthsAgo",
-                                       "type" : "ExpressionRef"
-                                    } ]
-                                 }, {
-                                    "name" : "HistologyInterpretedAsCin1OrNormal",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "name" : "SecondMostRecentBiopsyReportWasBetween18and36monthsAgo",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }, {
-                           "name" : "MostRecentCytologyReportWasWithinPastYear",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "CytologyInterpretedAsHsil",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "CytologyInterpretedAsAscH",
-                           "type" : "ExpressionRef"
-                        } ]
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "type" : "Null"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "A diagnostic excisional procedure is recommended.",
-                           "type" : "Literal"
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
                            "type" : "Less",
                            "operand" : [ {
                               "precision" : "Year",
@@ -13442,43 +13210,51 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "name" : "Onset",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
+               "strict" : false,
+               "type" : "As",
+               "operand" : {
+                  "type" : "Coalesce",
                   "operand" : [ {
-                     "name" : "MostRecentCondition",
-                     "libraryName" : "C3F",
+                     "name" : "Onset",
+                     "libraryName" : "Common",
                      "type" : "FunctionRef",
                      "operand" : [ {
-                        "name" : "PregnancyDiagnoses",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
+                        "name" : "MostRecentCondition",
+                        "libraryName" : "C3F",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "PregnancyDiagnoses",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        } ]
                      } ]
-                  } ]
-               }, {
-                  "name" : "ObservationDate",
-                  "libraryName" : "Common",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "MostRecent",
-                     "libraryName" : "C3F",
+                  }, {
+                     "name" : "ObservationDate",
+                     "libraryName" : "Common",
                      "type" : "FunctionRef",
                      "operand" : [ {
-                        "name" : "PregnancyObservations",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
+                        "name" : "MostRecent",
+                        "libraryName" : "C3F",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "PregnancyObservations",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        } ]
                      } ]
                   } ]
-               } ]
+               },
+               "asTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Date",
+                  "type" : "NamedTypeSpecifier"
+               }
             }
          }, {
             "name" : "FirstHistologyAfterPregnancyOnset",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "First",
+               "type" : "Last",
                "source" : {
                   "type" : "Query",
                   "source" : [ {
@@ -13496,11 +13272,101 @@
                         "scope" : "B",
                         "type" : "Property"
                      }, {
-                        "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
-                        "type" : "As",
+                        "type" : "ToDateTime",
                         "operand" : {
                            "name" : "PregnancyOnset",
                            "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HistologicAisDuringPregnancy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "B",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "B",
+                              "type" : "Property"
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "name" : "PregnancyOnset",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "B",
+                              "type" : "Property"
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "name" : "PregnancyOnset",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "value" : 42,
+                                    "unit" : "weeks",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "B",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "AIS",
+                                    "libraryName" : "Dash",
+                                    "type" : "ValueSetRef"
+                                 }
+                              }
+                           }
                         }
                      } ]
                   }
@@ -13882,7 +13748,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Refer to ASCCP management guidelines for considerations during patient pregnancy.",
+                           "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -13940,9 +13806,15 @@
                      }, {
                         "name" : "text",
                         "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Follow recommendations for Common Abnormalities to determine management.",
-                           "type" : "Literal"
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "name" : "CommonAbnormalityRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : " is recommended.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -13952,26 +13824,48 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "GreaterOrEqual",
+                           "type" : "And",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
+                              "name" : "Pregnant",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "Pregnant",
-                           "type" : "ExpressionRef"
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "FirstHistologyAfterPregnancyOnset",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "year",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
                         } ]
                      }, {
                         "type" : "In",
@@ -14007,7 +13901,55 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Surveillance colposcopy and testing is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.",
+                           "value" : "Surveillance colposcopy and testing (with diagnostic cytology or HPV depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable (BII). In postpartum period, colposcopy is recommended no earlier than 4 weeks after delivery (BII). In patients diagnosed with histologic HSIL (CIN2 or CIN3) during pregnancy, if a lesion is detected at postpartum colposcopy, an excisional treatment procedure or full diagnostic evaluation (cervical cytology, HPV, and biopsy) is acceptable (BII). In the absence of a lesion on colposcopy, a full diagnostic evaluation is recommended/ expedited treatment is not recommended (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "name" : "Pregnant",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HistologicAisDuringPregnancy",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).",
                            "type" : "Literal"
                         }
                      } ]

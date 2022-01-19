@@ -1889,24 +1889,37 @@ define PregnancyOnset:
         Dash.PregnancyObservations
       )
     )
-  )
+  ) as System.Date
 
 define FirstHistologyAfterPregnancyOnset:
-  First(
+  Last(
     (SortedBiopsyReports) B
       where B.date >= PregnancyOnset
   )
 
+define HistologicAisDuringPregnancy:
+  Exists(
+    (SortedBiopsyReports) B
+      where 
+        B.date >= PregnancyOnset and
+        B.date <= PregnancyOnset + 42 weeks and
+        AnyTrue(
+          (B.allConclusions) aC
+            return
+              aC in Dash."AIS"
+        )
+  )
+
 define RecommendationForPregnantPatients:
   case
-    when (
+    when ( // 1
       AgeInYears() >= 25 and
       Pregnant and 
       CommonAbnormalityRecommendationText = 'Treatment'
     ) then
       {
         action: null,
-        text: 'Refer to ASCCP management guidelines for considerations during patient pregnancy.' // TODO: Update text to add highlighted text in L2
+        text: 'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
       }
     when (
       AgeInYears() >= 25 and
@@ -1915,18 +1928,27 @@ define RecommendationForPregnantPatients:
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: 'Follow recommendations for Common Abnormalities to determine management.' // TODO: Update text to add highlighted text in L2
+        text: CommonAbnormalityRecommendationText + ' is recommended.' // TODO: Make any necessary updates to this as Common Abnormality recommendations are updated.
       }
-    when (
+    when ( // 2
       AgeInYears() >= 25 and
       Pregnant and 
+      FirstHistologyAfterPregnancyOnset.date > Now() - 1 year and
       FirstHistologyAfterPregnancyOnset.riskTableInput in {'CIN2','CIN3'}
     ) then
       {
         action: null,
-        text: 'Surveillance colposcopy and testing is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.' // TODO: Update recommendation
+        text: 'Surveillance colposcopy and testing (with diagnostic cytology or HPV depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable (BII). In postpartum period, colposcopy is recommended no earlier than 4 weeks after delivery (BII). In patients diagnosed with histologic HSIL (CIN2 or CIN3) during pregnancy, if a lesion is detected at postpartum colposcopy, an excisional treatment procedure or full diagnostic evaluation (cervical cytology, HPV, and biopsy) is acceptable (BII). In the absence of a lesion on colposcopy, a full diagnostic evaluation is recommended/ expedited treatment is not recommended (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
       }
-    // TODO: Add Case for AIS result that happened during pregnancy (last case of K.2)
+    when (
+      AgeInYears() >= 25 and
+      Pregnant and 
+      HistologicAisDuringPregnancy
+    ) then
+      {
+        action: null,
+        text: 'Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).'
+      }
     else
       null
   end
