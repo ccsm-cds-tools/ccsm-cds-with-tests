@@ -2138,15 +2138,31 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.5 Managing Patients Older Than 65 Years With a History of Prior Abnormalities
 
+define ManagementRecommendationIsSurveillance:
+  CommonAbnormalityRecommendationText in {'5-year follow-up','3-year follow-up','1-year follow-up'}
+
+define ManagementRecommendationIsColposcopyOrTreatment:
+  CommonAbnormalityRecommendationText in {'Colposcopy','Colposcopy/Treatment','Treatment'}
+
 define RecommendationForPatientsOlderThan65:
   case
     when (
       AgeInYears() > 65 and
-      IsIncludedAndNotExcluded
+      IsIncludedAndNotExcluded and
+      ManagementRecommendationIsSurveillance
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: 'Follow recommendations for Common Abnormalities to determine management.' // TODO: Update this text
+        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + 'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).\n\nIf patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
+      }
+    when (
+      AgeInYears() > 65 and
+      IsIncludedAndNotExcluded and
+      ManagementRecommendationIsColposcopyOrTreatment
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + 'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
       }
     else
       null
