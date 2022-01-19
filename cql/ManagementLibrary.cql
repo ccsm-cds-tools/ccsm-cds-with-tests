@@ -57,9 +57,9 @@ code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
-code "HPV16+ Antigen": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)' // NOTE: check whether HPV16+ will become a value set
+code "HPV16+ Antigen": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)' // NOTE: We still need to determine whether HPV16+ will become a value set
 code "HPV16+ DNA": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
-code "HPV18+ Antigen": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)' // NOTE: check whether HPV18+ will become a value set
+code "HPV18+ Antigen": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)' // NOTE: We still need to determine whether HPV18+ will become a value set
 code "HPV18+ DNA": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
@@ -1898,7 +1898,7 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndSecondMostRecentLowGradeCytologyResults and 
   MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
 
-define CytologyInterpretedAsNotNilm: // NOTE: Review how we want to model "Not Nilm" - inclusive or exclusive? - This should probably change to reflect how it is modeled in K.3.
+define CytologyInterpretedAsNotNilm: // NOTE: Review how we want to model "Not Nilm" - Inclusive or Exclusive? - This could change to reflect how it is modeled in K.3. Make this consistent throughout the Management Logic after review with L2 team.
   Exists(MostRecentCytologyReport) and
   not CytologyInterpretedAsNilm
 
@@ -2417,7 +2417,7 @@ define GeneralScreeningManagementRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
-define LookUpTable2: // NOTE: What about the multiple negative cotests referenced in Table 2b and 2c?
+define LookUpTable2: // NOTE: Review whether we are correctly handling the multiple negative cotests referenced in Table 2b and 2c
   RiskTableLookup.GetSurveillanceManagement(
     ThirdMostRecentHpvResult,
     ThirdMostRecentCytologyCotestResult,
@@ -2434,7 +2434,7 @@ define SurveillanceManagementRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
 // Table 3
-define LookUpTable3: // NOTE: What about history going further back?
+define LookUpTable3: // NOTE: Review whether we need to look at history going further back
   RiskTableLookup.GetColposcopyResultsManagement(
     ReferringHpvResult,
     ReferringCytologyResult,
