@@ -14444,67 +14444,254 @@
                } ]
             }
          }, {
-            "name" : "NegativeHpvReportsSinceHysterectomy",
+            "name" : "HighGradePreCancerCervicalLesionDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "CervicalPrecancerDisorders",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "date",
+                     "value" : {
+                        "name" : "ConditionDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentCondition",
+                           "libraryName" : "C3F",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "CervicalPrecancerDisorders",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "CervicalCancerDiagnosisDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "CervicalCancerDiagnoses",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "date",
+                     "value" : {
+                        "name" : "ConditionDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentCondition",
+                           "libraryName" : "C3F",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "CervicalCancerDiagnoses",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HighGradeOrCancerHistologyResultsDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "HighGradeOrCancerHistologyResults",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "date",
+                     "value" : {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentDiagnosticReport",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "HighGradeOrCancerHistologyResults",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "CauseForHysterectomyDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Except",
+               "operand" : [ {
+                  "type" : "List",
+                  "element" : [ {
+                     "name" : "HighGradePreCancerCervicalLesionDate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "CervicalCancerDiagnosisDate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "HighGradeOrCancerHistologyResultsDate",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "X",
+                     "expression" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "type" : "Null"
+                        } ]
+                     }
+                  } ],
+                  "return" : {
+                     "distinct" : false,
+                     "expression" : {
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "X",
+                           "type" : "AliasRef"
+                        },
+                        "asTypeSpecifier" : {
+                           "type" : "TupleTypeSpecifier",
+                           "element" : [ {
+                              "name" : "date",
+                              "type" : {
+                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               } ]
+            }
+         }, {
+            "name" : "SortedCauseForHysterectomyDates",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Query",
                "source" : [ {
-                  "alias" : "H",
+                  "alias" : "D",
                   "expression" : {
-                     "name" : "SortedHpvReports",
+                     "name" : "CauseForHysterectomyDates",
                      "type" : "ExpressionRef"
                   }
                } ],
                "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "name" : "CervixRemovalDate",
-                        "type" : "ExpressionRef"
-                     } ]
-                  }, {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "path" : "riskTableInput",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV-negative",
-                        "type" : "Literal"
-                     } ]
-                  } ]
-               },
                "return" : {
                   "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "date",
-                        "value" : {
-                           "path" : "date",
-                           "scope" : "H",
-                           "type" : "Property"
-                        }
-                     } ]
+                     "name" : "D",
+                     "type" : "AliasRef"
                   }
                },
                "sort" : {
                   "by" : [ {
-                     "direction" : "asc",
+                     "direction" : "desc",
                      "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
             }
          }, {
-            "name" : "FirstNegativeHpvReportSinceHysterectomy",
+            "name" : "MostRecentCauseForHysterectomyDate",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -14517,7 +14704,7 @@
                      "operand" : [ {
                         "type" : "Count",
                         "source" : {
-                           "name" : "NegativeHpvReportsSinceHysterectomy",
+                           "name" : "SortedCauseForHysterectomyDates",
                            "type" : "ExpressionRef"
                         }
                      }, {
@@ -14528,35 +14715,30 @@
                   }
                },
                "then" : {
-                  "type" : "Indexer",
-                  "operand" : [ {
-                     "name" : "NegativeHpvReportsSinceHysterectomy",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
-                  } ]
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Indexer",
+                     "operand" : [ {
+                        "name" : "SortedCauseForHysterectomyDates",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
                },
                "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
                   "type" : "As",
                   "operand" : {
                      "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "date",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
                   }
                }
             }
          }, {
-            "name" : "SecondNegativeHpvReportSinceHysterectomy",
+            "name" : "HysterectomyPerformedForTreatment",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -14565,266 +14747,110 @@
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeHpvReportsSinceHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "1",
-                        "type" : "Literal"
-                     } ]
-                  }
-               },
-               "then" : {
-                  "type" : "Indexer",
-                  "operand" : [ {
-                     "name" : "NegativeHpvReportsSinceHysterectomy",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "1",
-                     "type" : "Literal"
-                  } ]
-               },
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "date",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
-            "name" : "ThirdNegativeHpvReportSinceHysterectomy",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeHpvReportsSinceHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "2",
-                        "type" : "Literal"
-                     } ]
-                  }
-               },
-               "then" : {
-                  "type" : "Indexer",
-                  "operand" : [ {
-                     "name" : "NegativeHpvReportsSinceHysterectomy",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "2",
-                     "type" : "Literal"
-                  } ]
-               },
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "date",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
-            "name" : "UndergoingLongTermSurveillance",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "FirstNegativeHpvReportSinceHysterectomy",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "SecondNegativeHpvReportSinceHysterectomy",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "ThirdNegativeHpvReportSinceHysterectomy",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ]
-                  }, {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "SecondNegativeHpvReportSinceHysterectomy",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : true,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "FirstNegativeHpvReportSinceHysterectomy",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "year",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "FirstNegativeHpvReportSinceHysterectomy",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "year",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "FirstNegativeHpvReportSinceHysterectomy",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        }
-                     } ]
-                  } ]
-               }, {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "ThirdNegativeHpvReportSinceHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondNegativeHpvReportSinceHysterectomy",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "year",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondNegativeHpvReportSinceHysterectomy",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "year",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
                      "type" : "Not",
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "SecondNegativeHpvReportSinceHysterectomy",
+                           "name" : "MostRecentCauseForHysterectomyDate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "CervixRemovalDate",
                               "type" : "ExpressionRef"
                            }
                         }
                      }
-                  } ]
-               } ]
+                  },
+                  "then" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "name" : "CervixRemovalDate",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "lowClosed" : false,
+                           "highClosed" : true,
+                           "type" : "Interval",
+                           "low" : {
+                              "name" : "MostRecentCauseForHysterectomyDate",
+                              "type" : "ExpressionRef"
+                           },
+                           "high" : {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "name" : "MostRecentCauseForHysterectomyDate",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "year",
+                                 "type" : "Quantity"
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "MostRecentCauseForHysterectomyDate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  },
+                  "else" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "value" : "false",
+                     "type" : "Literal"
+                  }
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
             }
          }, {
-            "name" : "HpvTestingCadence",
+            "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "T",
+                  "expression" : {
+                     "name" : "SortedNegativeSurveillanceTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "T",
+                     "type" : "Property"
+                  }, {
+                     "name" : "CervixRemovalDate",
+                     "type" : "ExpressionRef"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "InitialIntensiveSurveillancePeriodPostHysterectomy",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -14833,103 +14859,147 @@
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "name" : "UndergoingLongTermSurveillance",
-                     "type" : "ExpressionRef"
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "3",
+                        "type" : "Literal"
+                     } ]
                   }
                },
                "then" : {
-                  "value" : 3,
-                  "unit" : "years",
-                  "type" : "Quantity"
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "2",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  }, {
+                     "lowClosed" : false,
+                     "highClosed" : false,
+                     "type" : "Interval",
+                     "low" : {
+                        "name" : "CervixRemovalDate",
+                        "type" : "ExpressionRef"
+                     },
+                     "high" : {
+                        "type" : "Add",
+                        "operand" : [ {
+                           "name" : "CervixRemovalDate",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "value" : 5,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     }
+                  } ]
                },
                "else" : {
-                  "value" : 1,
-                  "unit" : "year",
-                  "type" : "Quantity"
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
                }
-            }
-         }, {
-            "name" : "NextHpvTestingDueDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Add",
-               "operand" : [ {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentHpvReport",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "HpvTestingCadence",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "RecommendationForManagingPatientsAfterHysterectomy",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "name" : "CervixRemovalDate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 25,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        }, {
+                           "name" : "HysterectomyPerformedForTreatment",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "Not",
                         "operand" : {
-                           "name" : "CervixRemovalDate",
+                           "name" : "InitialIntensiveSurveillancePeriodPostHysterectomy",
                            "type" : "ExpressionRef"
                         }
-                     }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.",
+                           "type" : "Literal"
+                        }
+                     } ]
                   }
-               },
-               "then" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Less",
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
                         "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "type" : "Subtract",
+                           "type" : "GreaterOrEqual",
                            "operand" : [ {
-                              "type" : "Now"
-                           }, {
-                              "name" : "HpvTestingCadence",
+                              "name" : "CervixRemovalDate",
                               "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 25,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
                            } ]
+                        }, {
+                           "name" : "HysterectomyPerformedForTreatment",
+                           "type" : "ExpressionRef"
                         } ]
-                     }
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "hrHPV",
-                           "type" : "Literal"
-                        }
                      }, {
-                        "name" : "text",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "hrHPV-based testing is recommended.",
-                           "type" : "Literal"
-                        }
+                        "name" : "InitialIntensiveSurveillancePeriodPostHysterectomy",
+                        "type" : "ExpressionRef"
                      } ]
                   },
-                  "else" : {
+                  "then" : {
                      "type" : "Tuple",
                      "element" : [ {
                         "name" : "action",
@@ -14939,79 +15009,33 @@
                      }, {
                         "name" : "text",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "hrHPV-based testing is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
-                                    "operand" : {
-                                       "name" : "NextHpvTestingDueDate",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
-                              "type" : "Literal"
-                           } ]
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).",
+                           "type" : "Literal"
                         }
                      } ]
                   }
-               },
+               } ],
                "else" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "name" : "AbsenceOrRemovalOfCervix",
-                        "type" : "ExpressionRef"
-                     }
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
                   },
-                  "then" : {
-                     "type" : "Tuple",
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "action",
-                        "value" : {
-                           "type" : "Null"
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "text",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "If hysterectomy is performed for treatment, patients should have 3 consecutive annual hrHPV-based tests before entering long-term surveillance. Long-term surveillance after treatment for histologic HSIL (CIN 2 or CIN 3) or AIS involves hrHPV-based testing at 3-year intervals for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).",
-                           "type" : "Literal"
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
                         }
                      } ]
-                  },
-                  "else" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Null"
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "TupleTypeSpecifier",
-                        "element" : [ {
-                           "name" : "action",
-                           "type" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}Any",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "text",
-                           "type" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        } ]
-                     }
                   }
                }
             }

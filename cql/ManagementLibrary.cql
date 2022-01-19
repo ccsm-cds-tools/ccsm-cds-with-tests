@@ -2050,67 +2050,90 @@ define CervixRemovalDate:
     MostRecentCervixRemovalDiagnosisDate
   )
 
-define NegativeHpvReportsSinceHysterectomy:
-  (SortedHpvReports) H
-    where H.date >= CervixRemovalDate and
-      H.riskTableInput = 'HPV-negative'
-    return {
-      date: H.date
-    } sort by date asc
-
-define FirstNegativeHpvReportSinceHysterectomy:
-  if Count(NegativeHpvReportsSinceHysterectomy) > 0 then
-    NegativeHpvReportsSinceHysterectomy[0]
+define HighGradePreCancerCervicalLesionDate:
+  if Exists(Dash.CervicalPrecancerDisorders) then
+    {
+      date: Common.ConditionDate(C3F.MostRecentCondition(Dash.CervicalPrecancerDisorders))
+    }
   else
     null
 
-define SecondNegativeHpvReportSinceHysterectomy:
-  if Count(NegativeHpvReportsSinceHysterectomy) > 1 then
-    NegativeHpvReportsSinceHysterectomy[1]
+define CervicalCancerDiagnosisDate:
+  if Exists(Dash.CervicalCancerDiagnoses) then
+    {
+      date: Common.ConditionDate(C3F.MostRecentCondition(Dash.CervicalCancerDiagnoses))
+    }
+  else
+    null
+  
+define HighGradeOrCancerHistologyResultsDate:
+  if Exists(Dash.HighGradeOrCancerHistologyResults) then
+    {
+      date: Common.DiagnosticReportDate(Common.MostRecentDiagnosticReport(Dash.HighGradeOrCancerHistologyResults))
+    }
   else
     null
 
-define ThirdNegativeHpvReportSinceHysterectomy:
-  if Count(NegativeHpvReportsSinceHysterectomy) > 2 then
-    NegativeHpvReportsSinceHysterectomy[2]
+define CauseForHysterectomyDates:
+  {
+    HighGradePreCancerCervicalLesionDate,
+    CervicalCancerDiagnosisDate,
+    HighGradeOrCancerHistologyResultsDate
+  } except { null }
+
+define SortedCauseForHysterectomyDates:
+  CauseForHysterectomyDates D
+  return D
+  sort by date desc
+
+define MostRecentCauseForHysterectomyDate:
+  if Count(SortedCauseForHysterectomyDates) > 0 then
+    SortedCauseForHysterectomyDates[0].date
   else
     null
 
-define UndergoingLongTermSurveillance:
-  FirstNegativeHpvReportSinceHysterectomy is not null and
-  SecondNegativeHpvReportSinceHysterectomy is not null and
-  ThirdNegativeHpvReportSinceHysterectomy is not null and
-  SecondNegativeHpvReportSinceHysterectomy.date within 1 year of FirstNegativeHpvReportSinceHysterectomy.date and
-  ThirdNegativeHpvReportSinceHysterectomy.date within 1 year of SecondNegativeHpvReportSinceHysterectomy.date
-
-define HpvTestingCadence:
-  if UndergoingLongTermSurveillance then
-    3 years
+define HysterectomyPerformedForTreatment:
+  if MostRecentCauseForHysterectomyDate is not null then
+    if CervixRemovalDate is not null then
+      CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate
+    else 
+      false
   else
-    1 year
+    false
 
-define NextHpvTestingDueDate:
-  MostRecentHpvReport.date + HpvTestingCadence
+define NegativeSurveillanceTestsAfterHysterectomy: // NOTE: We should be able to refactor the LP4 Grade D Exclusions in a similar way
+  SortedNegativeSurveillanceTests T 
+  where T.date >= CervixRemovalDate
 
-define RecommendationForManagingPatientsAfterHysterectomy: // TODO: Align with L2 definition of hysterectomy for treatment.
-  if CervixRemovalDate is not null then
-    if MostRecentHpvReport.date < Now() - HpvTestingCadence then
+define InitialIntensiveSurveillancePeriodPostHysterectomy:
+  if Count(NegativeSurveillanceTestsAfterHysterectomy) >= 3 then
+    NegativeSurveillanceTestsAfterHysterectomy[2].date less than 5 years after CervixRemovalDate
+  else
+    false
+
+define RecommendationForManagingPatientsAfterHysterectomy:
+  case
+    when ( // 1
+      CervixRemovalDate >= Now() - 25 years and
+      HysterectomyPerformedForTreatment and
+      not InitialIntensiveSurveillancePeriodPostHysterectomy
+    ) then
       {
-        action: 'hrHPV',
-        text: 'hrHPV-based testing is recommended.'
+        action: null,
+        text: 'Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.'
+      }
+    when ( // 2
+      CervixRemovalDate >= Now() - 25 years and
+      HysterectomyPerformedForTreatment and
+      InitialIntensiveSurveillancePeriodPostHysterectomy
+    ) then
+      {
+        action: null,
+        text: 'HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).'
       }
     else
-      {
-        action: null,
-        text: 'hrHPV-based testing is next due on ' + ToString(ToDate(NextHpvTestingDueDate)) + '.'
-      }
-  else if AbsenceOrRemovalOfCervix then // TODO: Throw error if date of AbsenceOrRemovalOfCervix is not found, instead of having this "catch-all" case here.
-      {
-        action: null,
-        text: 'If hysterectomy is performed for treatment, patients should have 3 consecutive annual hrHPV-based tests before entering long-term surveillance. Long-term surveillance after treatment for histologic HSIL (CIN 2 or CIN 3) or AIS involves hrHPV-based testing at 3-year intervals for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).'
-      }
-  else
-    null
+      null
+  end
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.5 Managing Patients Older Than 65 Years With a History of Prior Abnormalities
