@@ -14012,7 +14012,7 @@
                } ]
             }
          }, {
-            "name" : "TwoMostRecentCytologyReportsWithin2yearsApart",
+            "name" : "TwoMostRecentCytologyReportsWithin18MonthsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -14040,8 +14040,8 @@
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "value" : 2,
-                           "unit" : "years",
+                           "value" : 18,
+                           "unit" : "months",
                            "type" : "Quantity"
                         } ]
                      },
@@ -14055,8 +14055,8 @@
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "value" : 2,
-                           "unit" : "years",
+                           "value" : 18,
+                           "unit" : "months",
                            "type" : "Quantity"
                         } ]
                      }
@@ -14113,7 +14113,7 @@
                                        "type" : "ExpressionRef"
                                     }, {
                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "ACS-US",
+                                       "value" : "ASC-US",
                                        "type" : "Literal"
                                     } ]
                                  } ]
@@ -14127,33 +14127,39 @@
                                  "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "type" : "In",
+                                 "type" : "Or",
                                  "operand" : [ {
-                                    "path" : "riskTableInput",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentCytologyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "type" : "List",
-                                    "element" : [ {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "LSIL",
-                                       "type" : "Literal"
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "path" : "riskTableInput",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentCytologyReport",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "HSIL",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "ASC-H",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "AGC",
-                                       "type" : "Literal"
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "LSIL",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "ASC-H",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "AGC",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "HSIL+",
+                                          "type" : "Literal"
+                                       } ]
                                     } ]
+                                 }, {
+                                    "name" : "CytologyInterpretedAsAis",
+                                    "type" : "ExpressionRef"
                                  } ]
                               } ]
                            } ]
@@ -14194,7 +14200,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended.",
+                           "value" : "Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.",
                            "type" : "Literal"
                         }
                      } ]
@@ -14222,7 +14228,7 @@
                            }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ACS-US",
+                           "value" : "ASC-US",
                            "type" : "Literal"
                         } ]
                      } ]
@@ -14238,7 +14244,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat cytology in 6 to 12 months.",
+                           "value" : "Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.",
                            "type" : "Literal"
                         }
                      } ]
@@ -14260,37 +14266,43 @@
                                  "type" : "ExpressionRef"
                               } ]
                            }, {
-                              "type" : "In",
+                              "type" : "Or",
                               "operand" : [ {
-                                 "path" : "riskTableInput",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "type" : "List",
-                                 "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ASC-US",
-                                    "type" : "Literal"
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "path" : "riskTableInput",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "LSIL",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "HSIL",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "ASC-H",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "AGC",
-                                    "type" : "Literal"
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "ASC-US",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "LSIL",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "ASC-H",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "AGC",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "HSIL+",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
+                              }, {
+                                 "name" : "CytologyInterpretedAsAis",
+                                 "type" : "ExpressionRef"
                               } ]
                            } ]
                         }, {
@@ -14304,12 +14316,12 @@
                               }
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ACS-US",
+                              "value" : "ASC-US",
                               "type" : "Literal"
                            } ]
                         } ]
                      }, {
-                        "name" : "TwoMostRecentCytologyReportsWithin2yearsApart",
+                        "name" : "TwoMostRecentCytologyReportsWithin18MonthsApart",
                         "type" : "ExpressionRef"
                      } ]
                   },
@@ -14324,7 +14336,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended",
+                           "value" : "Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.",
                            "type" : "Literal"
                         }
                      } ]

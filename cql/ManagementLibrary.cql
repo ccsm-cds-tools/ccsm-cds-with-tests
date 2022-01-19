@@ -1696,7 +1696,7 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndSecondMostRecentLowGradeCytologyResults and 
   MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
 
-define CytologyInterpretedAsNotNilm:
+define CytologyInterpretedAsNotNilm: // NOTE: Review how we want to model "Not Nilm" - inclusive or exclusive? - This should probably change to reflect how it is modeled in K.3.
   Exists(MostRecentCytologyReport) and
   not CytologyInterpretedAsNilm
 
@@ -1962,22 +1962,25 @@ define Immunocompromised:
 define MostRecentHpvReportWasWithinPastFiveYears:
   MostRecentHpvReport.date > Now() - 5 years
 
-define TwoMostRecentCytologyReportsWithin2yearsApart:
-  SecondMostRecentCytologyReport.date within 2 years of MostRecentCytologyReport.date
+define TwoMostRecentCytologyReportsWithin18MonthsApart:
+  SecondMostRecentCytologyReport.date within 18 months of MostRecentCytologyReport.date
 
 define RecommendationForImmunosuppressedPatients:
   case
-    when (
+    when ( // 1
       Immunocompromised and
       (
         (
           MostRecentHpvResult = 'HPV-positive' and
-          MostRecentCytologyCotestResult = 'ACS-US' and // TODO: Should this be ASC-US? Make sure this is consistent and aligns with what is in the risk tables.
+          MostRecentCytologyCotestResult = 'ASC-US' and
           MostRecentCytologyReportWasWithinPastFiveYears
         ) or
         (
           MostRecentCytologyReportWasWithinPastFiveYears and
-          MostRecentCytologyReport.riskTableInput in {'LSIL','HSIL','ASC-H','AGC'} // TODO: Add AIS
+          (
+            MostRecentCytologyReport.riskTableInput in {'LSIL','ASC-H','AGC','HSIL+'} or // NOTE: Clarify what is meant by "Not NILM". It appears in 3 places in the logic.
+            CytologyInterpretedAsAis
+          )
         ) or
         (
           MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+'} and
@@ -1987,28 +1990,30 @@ define RecommendationForImmunosuppressedPatients:
     ) then
       {
         action: null,
-        text: 'Colposcopy is recommended.' // TODO: Update recommendation text
+        text: 'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
       }
-    when (
+    when ( // 2
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
-      // MostRecentHpvResult is null and // TODO: Remove this line.
-      MostRecentCytologyReport.riskTableInput = 'ACS-US'
+      MostRecentCytologyReport.riskTableInput = 'ASC-US'
     ) then
       {
         action: null,
-        text: 'Repeat cytology in 6 to 12 months.' // TODO: Update recommendation text
+        text: 'Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.'
       }
-    when (
+    when ( // 3
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
-      MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','HSIL','ASC-H','AGC'} and
-      SecondMostRecentCytologyReport.riskTableInput = 'ACS-US' and
-      TwoMostRecentCytologyReportsWithin2yearsApart // TODO: Make this 18 months
+      (
+        MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'} or
+        CytologyInterpretedAsAis
+      ) and
+      SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
+      TwoMostRecentCytologyReportsWithin18MonthsApart
     ) then
       {
         action: null,
-        text: 'Colposcopy is recommended' // TODO: Update recommendation text
+        text: 'Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.'
       }
     else
       null
