@@ -1043,6 +1043,27 @@ define PrecedingCytologyIsAscH:
         aC ~ "ASC-H"
   )
 
+define PrecedingCytologyResultsBeforeSecondMostRecentBiopsy:
+  Coalesce(
+    (SortedCytologyReports) S
+      where S.date <= SecondMostRecentBiopsyReport.date and
+        S.date >= SecondMostRecentBiopsyReport.date - 6 months
+  )
+
+define PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil:
+  AnyTrue(
+    (PrecedingCytologyResultsBeforeSecondMostRecentBiopsy.allConclusions) aC
+      return 
+        aC in "HSIL"
+  )
+
+define PrecedingCytologyBeforeSecondMostRecentBiopsyIsAscH:
+  AnyTrue(
+    (PrecedingCytologyResultsBeforeSecondMostRecentBiopsy.allConclusions) aC
+      return
+        aC ~ "ASC-H"
+  )
+
 define SecondMostRecentBiopsyReport:
   if Count(SortedBiopsyReports) > 1 then
       SortedBiopsyReports[1]
@@ -1070,12 +1091,18 @@ define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
 define MostRecentBiopsyReportWasWithinPast12months:
   MostRecentBiopsyReport.date >= Now() - 12 months
 
+define MostRecentBiopsyReportWasWithinPast18months:
+  MostRecentBiopsyReport.date >= Now() - 18 months
+
 define MostRecentBiopsyReportWasBetween12and18monthsAgo: // TODO: Some of these expressions may be able to be deleted later - check after completion of Rare Abnormality #3
   MostRecentBiopsyReport.date >= Now() - 18 months and
   MostRecentBiopsyReport.date < Now() - 12 months
 
 define TwoMostRecentBiopsyReportsWithin12monthsApart:
   SecondMostRecentBiopsyReport.date within 12 months of MostRecentBiopsyReport.date
+
+define TwoMostRecentBiopsyReportsWithin18monthsApart:
+  SecondMostRecentBiopsyReport.date within 18 months of MostRecentBiopsyReport.date
 
 define TwoMostRecentBiopsyReportsWithin15monthsApart:
   SecondMostRecentBiopsyReport.date within 15 months of MostRecentBiopsyReport.date
@@ -1171,6 +1198,16 @@ define SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6
       )
   else
     null
+
+define MostRecentSurveillanceTestNegative:
+  (
+    MostRecentHpvResult = 'HPV-negative' and
+    MostRecentCytologyCotestResult = 'NILM'
+  ) or
+  (
+    MostRecentHpvResult = 'HPV-negative' and
+    MostRecentCytologyCotest is null
+  )
 
 // TODO: ** Need to define logic for observation/surveillance of I.4 population **
 define RecommendationForHistologyResults:
@@ -1270,9 +1307,8 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'If CIN 2 remains present for a 2-year period, treatment is recommended (CII).'
       }
-// NOTE: I.4 is a work in progress. Revisit this section--------------------------------------------
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
-    when (
+    when ( // 1
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin1OrNormal and
@@ -1282,7 +1318,7 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'When CIN 2+ is not identified, HSIL cytology is managed more aggressively than ASC-H cytology. For cytology showing HSIL, but biopsy showing histologic LSIL (CIN 1) or less, either an immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year is acceptable, provided in the latter case that the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2 (BII). When CIN2+ is not identified histologically after an ASC-H or HSIL cytology result, it is acceptable to review the cytologic, histologic, and colposcopic findings. If the review yields a revised interpretation, management should follow guidelines for the revised diagnosis (CIII).'
       }
-    when (
+    when ( // 2
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin1OrNormal and
@@ -1292,8 +1328,156 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'For ASC-H, if the colposcopic examination can fully visualize the squamocolumnar junction and the upper limit of any lesion and that the endocervical sampling, if collected, is negative, observation at 1 year with HPV-based testing with cotesting or primary hrHPV testing is recommended; a diagnostic excisional procedure is not recommended (BII).'
       }
-    // TODO: Add I.4 Recommendation #3, #4, and #5
-// NOTE: Review above I.4 logic once I.4 L2 is done being built out--------------------------------------------
+    when ( // 3 - Recommendation #1
+      AgeInYears() >= 25 and
+      ( 
+        (
+          (
+            MostRecentBiopsyReportWasWithinPast18months and
+            HistologyInterpretedAsNormal and
+            TwoMostRecentBiopsyReportsWithin18monthsApart
+          ) and
+          (
+            HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date > Now() - 18 months and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
+          ) and
+          (
+            SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil
+          ) and
+          not (
+          MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
+          )
+        ) or
+        (
+          (
+            HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date > Now() - 18 months and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after MostRecentBiopsyReport.date
+          ) and
+          (
+            HistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyIsAscH
+          ) and
+          not (
+            MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
+          )
+        )  
+      )
+    ) then
+      {
+        action: null,
+        text: 'HPV-based testing (i.e., cotesting or primary hrHPV testing) is recommended 1 year after the initial negative follow up result(s) when observation is elected after a histologic LSIL (CIN1) preceded by ASC-H or HSIL cytology.'
+      }
+    when ( // 3 - Recommendation #2
+      AgeInYears() >= 25 and
+      MostRecentSurveillanceTestNegative and
+      MostRecentHpvReport.date >= Now() - 3.5 years and
+      ( 
+        (
+          (
+            MostRecentBiopsyReport.date 18 months or less before MostRecentHpvReport.date and
+            HistologyInterpretedAsNormal and
+            TwoMostRecentBiopsyReportsWithin18monthsApart
+          ) and
+          (
+            HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less before MostRecentHpvReport.date and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
+          ) and
+          (
+            SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil
+          ) and
+          not (
+          MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
+          )
+        ) or
+        (
+          (
+            HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less before MostRecentHpvReport.date and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after MostRecentBiopsyReport.date
+          ) and
+          (
+            HistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyIsAscH
+          ) and
+          not (
+            MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
+          )
+        )  
+      )
+    ) then
+      {
+        action: null,
+        text: 'Retest with HPV-based testing (i.e., cotesting or primary hrHPV testing) every 3 years after surveillance tests are negative during the 2-year observation period following histologic LSIL (CIN1) or less preceded by ASC-H or HSIL cytology. Proceed with long-term surveillance (i.e., HPV-based testing every 3 years for at least 25 years, even if this is beyond the age of 65 years (BII)'
+      }
+    when ( // 4
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      (
+        PrecedingCytologyIsHsil or
+        PrecedingCytologyIsAscH
+      ) and
+      not (
+        MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
+      ) and
+      (
+        (
+          Exists(MostRecentCytologyReport) and
+          not CytologyInterpretedAsNilm and
+          not CytologyInterpretedAsHsil and
+          MostRecentCytologyReport.date 1 year or more after MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
+        ) or
+        (
+          Exists(MostRecentHpvReport) and
+          MostRecentHpvResult != 'HPV-negative' and
+          MostRecentHpvReport.date 1 year or more after MostRecentBiopsyReport.date and
+          MostRecentHpvReport.date less than 3 years after MostRecentBiopsyReport.date
+        ) or
+        (
+          // TODO: As written, this part of the path will not trigger. Going forward, we should look into a way to clarify the lookback for 'LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology' so that it is not reliant on the MostRecentBiopsyReport
+          Exists(MostRecentBiopsyReport) and
+          not HistologyInterpretedAsNormal and
+          MostRecentBiopsyReport.date 1 year or more after MostRecentBiopsyReport.date and
+          MostRecentBiopsyReport.date less than 3 years after MostRecentBiopsyReport.date
+        )
+      )
+    ) then
+      {
+        action: null,
+        text: 'If any test is abnormal during the observation period after a HSIL and ASC-H cytology, a repeat colposcopy is recommended, and management based on resulting biopsies is recommended.'
+      }
+    when ( // 5
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      (
+        PrecedingCytologyIsHsil or
+        PrecedingCytologyIsAscH
+      ) and
+      not (
+        MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
+      ) and
+      (
+        (
+          CytologyInterpretedAsHsil and
+          MostRecentCytologyReport.date 1 year or more after MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
+        ) or
+        (
+          CytologyInterpretedAsAscH and
+          MostRecentCytologyReport.date 2 years or more after MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
+        )
+      )
+    ) then
+      {
+        action: null,
+        text: 'A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).'
+      }
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
     when (
       AgeInYears() >= 25 and
@@ -1493,6 +1677,32 @@ define SortedNegativeSurveillanceTests:
       date: H.date
     }
     sort by date asc
+
+define NegativeSurveillanceTestsAfterMostRecentBiopsy:
+  SortedNegativeSurveillanceTests H
+    where H.date > MostRecentBiopsyReport.date
+
+define FirstNegativeSurveillanceTestAfterMostRecentBiopsy:
+  if Count(NegativeSurveillanceTestsAfterMostRecentBiopsy) > 0 then
+    NegativeSurveillanceTestsAfterMostRecentBiopsy[0]
+  else
+    null
+
+define HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy:
+  Exists(FirstNegativeSurveillanceTestAfterMostRecentBiopsy)
+
+define NegativeSurveillanceTestsAfterSecondMostRecentBiopsy:
+  SortedNegativeSurveillanceTests H
+    where H.date > SecondMostRecentBiopsyReport.date
+
+define FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy:
+  if Count(NegativeSurveillanceTestsAfterSecondMostRecentBiopsy) > 0 then
+    NegativeSurveillanceTestsAfterSecondMostRecentBiopsy[0]
+  else
+    null
+
+define HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy:
+  Exists(FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy)
 
 define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
   if HasTreatmentForHighGradeHistologyOrCytology then

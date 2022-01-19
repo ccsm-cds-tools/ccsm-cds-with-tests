@@ -6928,6 +6928,145 @@
                }
             }
          }, {
+            "name" : "PrecedingCytologyResultsBeforeSecondMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "LessOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentBiopsyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "value" : 6,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "PrecedingCytologyResultsBeforeSecondMostRecentBiopsy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "HSIL",
+                           "type" : "ValueSetRef"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsAscH",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "PrecedingCytologyResultsBeforeSecondMostRecentBiopsy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "ASC-H",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "SecondMostRecentHistologyInterpretedAsCin1",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7050,6 +7189,30 @@
                } ]
             }
          }, {
+            "name" : "MostRecentBiopsyReportWasWithinPast18months",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentBiopsyReport",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "type" : "Now"
+                  }, {
+                     "value" : 18,
+                     "unit" : "months",
+                     "type" : "Quantity"
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "MostRecentBiopsyReportWasBetween12and18monthsAgo",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7140,6 +7303,71 @@
                            }
                         }, {
                            "value" : 12,
+                           "unit" : "months",
+                           "type" : "Quantity"
+                        } ]
+                     }
+                  } ]
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               } ]
+            }
+         }, {
+            "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "lowClosed" : true,
+                     "highClosed" : true,
+                     "type" : "Interval",
+                     "low" : {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "value" : 18,
+                           "unit" : "months",
+                           "type" : "Quantity"
+                        } ]
+                     },
+                     "high" : {
+                        "type" : "Add",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "value" : 18,
                            "unit" : "months",
                            "type" : "Quantity"
                         } ]
@@ -8305,6 +8533,56 @@
                }
             }
          }, {
+            "name" : "MostRecentSurveillanceTestNegative",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "MostRecentHpvResult",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV-negative",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "MostRecentCytologyCotestResult",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "NILM",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "MostRecentHpvResult",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV-negative",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "SecondMostRecentHistologyInterpretedAsUnspecifiedHsil",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8386,6 +8664,621 @@
                               "type" : "CodeRef"
                            }
                         } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeHrHpvTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "SortedHpvReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Negative HPV Finding",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Negative",
+                                    "libraryName" : "Dash",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeHrHpvTestsAsPartOfCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeHrHpvTests",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "H",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativePrimaryHrHpvTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Except",
+               "operand" : [ {
+                  "name" : "NegativeHrHpvTests",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "NegativeHrHpvTestsAsPartOfCotest",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "NegativeCytologyTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "NILM",
+                                 "libraryName" : "Dash",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeCotests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeHrHpvTests",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "NegativeCytologyTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "H",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "NegativePrimaryHrHpvTests",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "NegativeCotests",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "SortedNegativeSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeSurveillanceTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }
+                  }
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "path" : "date",
+                           "scope" : "H",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedNegativeSurveillanceTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "H",
+                     "type" : "Property"
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "type" : "Indexer",
+                  "operand" : [ {
+                     "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "MostRecentTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "MostRecentProcedure",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "CervicalExcisionProcedures",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "CervicalAblationProcedures",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "MostRecentTreatmentDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ProcedureDate",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "MostRecentTreatment",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "NegativeSurveillanceTestsAfterMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedNegativeSurveillanceTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "H",
+                     "type" : "Property"
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               }
+            }
+         }, {
+            "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterMostRecentBiopsy",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "type" : "Indexer",
+                  "operand" : [ {
+                     "name" : "NegativeSurveillanceTestsAfterMostRecentBiopsy",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "CytologyInterpretedAsHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "HSIL",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -9164,6 +10057,1508 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "name" : "MostRecentBiopsyReportWasWithinPast18months",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "HistologyInterpretedAsNormal",
+                                          "type" : "ExpressionRef"
+                                       } ]
+                                    }, {
+                                       "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "name" : "HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "type" : "Greater",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "type" : "Subtract",
+                                             "operand" : [ {
+                                                "type" : "Now"
+                                             }, {
+                                                "value" : 18,
+                                                "unit" : "months",
+                                                "type" : "Quantity"
+                                             } ]
+                                          } ]
+                                       } ]
+                                    }, {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "type" : "In",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "lowClosed" : false,
+                                             "highClosed" : true,
+                                             "type" : "Interval",
+                                             "low" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "SecondMostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             },
+                                             "high" : {
+                                                "type" : "Add",
+                                                "operand" : [ {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "SecondMostRecentBiopsyReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }, {
+                                                   "value" : 18,
+                                                   "unit" : "months",
+                                                   "type" : "Quantity"
+                                                } ]
+                                             }
+                                          } ]
+                                       }, {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "SecondMostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          }
+                                       } ]
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "SecondMostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 1,
+                                             "unit" : "year",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "type" : "Greater",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "type" : "Subtract",
+                                          "operand" : [ {
+                                             "type" : "Now"
+                                          }, {
+                                             "value" : 18,
+                                             "unit" : "months",
+                                             "type" : "Quantity"
+                                          } ]
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "In",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "lowClosed" : false,
+                                          "highClosed" : true,
+                                          "type" : "Interval",
+                                          "low" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          },
+                                          "high" : {
+                                             "type" : "Add",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "MostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "value" : 18,
+                                                "unit" : "months",
+                                                "type" : "Quantity"
+                                             } ]
+                                          }
+                                       } ]
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "PrecedingCytologyIsAscH",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 1,
+                                             "unit" : "year",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-based testing (i.e., cotesting or primary hrHPV testing) is recommended 1 year after the initial negative follow up result(s) when observation is elected after a histologic LSIL (CIN1) preceded by ASC-H or HSIL cytology.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "MostRecentSurveillanceTestNegative",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 3.5,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "type" : "And",
+                                          "operand" : [ {
+                                             "type" : "In",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "MostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "lowClosed" : true,
+                                                "highClosed" : false,
+                                                "type" : "Interval",
+                                                "low" : {
+                                                   "type" : "Subtract",
+                                                   "operand" : [ {
+                                                      "path" : "date",
+                                                      "type" : "Property",
+                                                      "source" : {
+                                                         "name" : "MostRecentHpvReport",
+                                                         "type" : "ExpressionRef"
+                                                      }
+                                                   }, {
+                                                      "value" : 18,
+                                                      "unit" : "months",
+                                                      "type" : "Quantity"
+                                                   } ]
+                                                },
+                                                "high" : {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "MostRecentHpvReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }
+                                             } ]
+                                          }, {
+                                             "type" : "Not",
+                                             "operand" : {
+                                                "type" : "IsNull",
+                                                "operand" : {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "MostRecentHpvReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "name" : "HistologyInterpretedAsNormal",
+                                          "type" : "ExpressionRef"
+                                       } ]
+                                    }, {
+                                       "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "name" : "HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "type" : "And",
+                                          "operand" : [ {
+                                             "type" : "In",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "lowClosed" : true,
+                                                "highClosed" : false,
+                                                "type" : "Interval",
+                                                "low" : {
+                                                   "type" : "Subtract",
+                                                   "operand" : [ {
+                                                      "path" : "date",
+                                                      "type" : "Property",
+                                                      "source" : {
+                                                         "name" : "MostRecentHpvReport",
+                                                         "type" : "ExpressionRef"
+                                                      }
+                                                   }, {
+                                                      "value" : 18,
+                                                      "unit" : "months",
+                                                      "type" : "Quantity"
+                                                   } ]
+                                                },
+                                                "high" : {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "MostRecentHpvReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }
+                                             } ]
+                                          }, {
+                                             "type" : "Not",
+                                             "operand" : {
+                                                "type" : "IsNull",
+                                                "operand" : {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "MostRecentHpvReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }
+                                             }
+                                          } ]
+                                       } ]
+                                    }, {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "type" : "In",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "lowClosed" : false,
+                                             "highClosed" : true,
+                                             "type" : "Interval",
+                                             "low" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "SecondMostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             },
+                                             "high" : {
+                                                "type" : "Add",
+                                                "operand" : [ {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "SecondMostRecentBiopsyReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }, {
+                                                   "value" : 18,
+                                                   "unit" : "months",
+                                                   "type" : "Quantity"
+                                                } ]
+                                             }
+                                          } ]
+                                       }, {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "SecondMostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          }
+                                       } ]
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "SecondMostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 1,
+                                             "unit" : "year",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "type" : "In",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "lowClosed" : true,
+                                             "highClosed" : false,
+                                             "type" : "Interval",
+                                             "low" : {
+                                                "type" : "Subtract",
+                                                "operand" : [ {
+                                                   "path" : "date",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "MostRecentHpvReport",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }, {
+                                                   "value" : 18,
+                                                   "unit" : "months",
+                                                   "type" : "Quantity"
+                                                } ]
+                                             },
+                                             "high" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "MostRecentHpvReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "MostRecentHpvReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          }
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "In",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "FirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "lowClosed" : false,
+                                          "highClosed" : true,
+                                          "type" : "Interval",
+                                          "low" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          },
+                                          "high" : {
+                                             "type" : "Add",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "MostRecentBiopsyReport",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "value" : 18,
+                                                "unit" : "months",
+                                                "type" : "Quantity"
+                                             } ]
+                                          }
+                                       } ]
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "PrecedingCytologyIsAscH",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "MostRecentBiopsyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 1,
+                                             "unit" : "year",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Retest with HPV-based testing (i.e., cotesting or primary hrHPV testing) every 3 years after surveillance tests are negative during the 2-year observation period following histologic LSIL (CIN1) or less preceded by ASC-H or HSIL cytology. Proceed with long-term surveillance (i.e., HPV-based testing every 3 years for at least 25 years, even if this is beyond the age of 65 years (BII)",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "PrecedingCytologyIsHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "PrecedingCytologyIsAscH",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "name" : "MostRecentTreatmentDate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "lowClosed" : false,
+                                    "highClosed" : true,
+                                    "type" : "Interval",
+                                    "low" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    },
+                                    "high" : {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 1,
+                                          "unit" : "year",
+                                          "type" : "Quantity"
+                                       } ]
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "type" : "Exists",
+                                          "operand" : {
+                                             "type" : "ToList",
+                                             "operand" : {
+                                                "name" : "MostRecentCytologyReport",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }, {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "name" : "CytologyInterpretedAsNilm",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ]
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "name" : "CytologyInterpretedAsHsil",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "SameOrAfter",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentCytologyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 1,
+                                          "unit" : "year",
+                                          "type" : "Quantity"
+                                       } ]
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "lowClosed" : false,
+                                    "highClosed" : false,
+                                    "type" : "Interval",
+                                    "low" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    },
+                                    "high" : {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 3,
+                                          "unit" : "years",
+                                          "type" : "Quantity"
+                                       } ]
+                                    }
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "Exists",
+                                       "operand" : {
+                                          "type" : "ToList",
+                                          "operand" : {
+                                             "name" : "MostRecentHpvReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "name" : "MostRecentHpvResult",
+                                             "type" : "ExpressionRef"
+                                          }, {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "HPV-negative",
+                                             "type" : "Literal"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "SameOrAfter",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentHpvReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 1,
+                                          "unit" : "year",
+                                          "type" : "Quantity"
+                                       } ]
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentHpvReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "lowClosed" : false,
+                                    "highClosed" : false,
+                                    "type" : "Interval",
+                                    "low" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    },
+                                    "high" : {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 3,
+                                          "unit" : "years",
+                                          "type" : "Quantity"
+                                       } ]
+                                    }
+                                 } ]
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "Exists",
+                                    "operand" : {
+                                       "type" : "ToList",
+                                       "operand" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "name" : "HistologyInterpretedAsNormal",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "SameOrAfter",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 1,
+                                       "unit" : "year",
+                                       "type" : "Quantity"
+                                    } ]
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : false,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
+                              } ]
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "If any test is abnormal during the observation period after a HSIL and ASC-H cytology, a repeat colposcopy is recommended, and management based on resulting biopsies is recommended.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "PrecedingCytologyIsHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "PrecedingCytologyIsAscH",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "name" : "MostRecentTreatmentDate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "lowClosed" : false,
+                                    "highClosed" : true,
+                                    "type" : "Interval",
+                                    "low" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    },
+                                    "high" : {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentBiopsyReport",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 1,
+                                          "unit" : "year",
+                                          "type" : "Quantity"
+                                       } ]
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "CytologyInterpretedAsHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "SameOrAfter",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 1,
+                                       "unit" : "year",
+                                       "type" : "Quantity"
+                                    } ]
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : false,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "CytologyInterpretedAsAscH",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "SameOrAfter",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 2,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : false,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
+                              } ]
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
                            "type" : "And",
@@ -9291,40 +11686,6 @@
                      } ]
                   }
                }
-            }
-         }, {
-            "name" : "MostRecentTreatment",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "MostRecentProcedure",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "name" : "CervicalExcisionProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "CervicalAblationProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "MostRecentTreatmentDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ProcedureDate",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentTreatment",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "TreatmentInLastYear",
@@ -10194,355 +12555,6 @@
                } ]
             }
          }, {
-            "name" : "NegativeHrHpvTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "SortedHpvReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative HPV Finding",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           } ]
-                        }
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeHrHpvTestsAsPartOfCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeHrHpvTests",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "alias" : "C",
-                  "expression" : {
-                     "name" : "SortedCytologyReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "scope" : "C",
-                           "type" : "Property"
-                        }
-                     }
-                  } ]
-               },
-               "return" : {
-                  "expression" : {
-                     "name" : "H",
-                     "type" : "AliasRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativePrimaryHrHpvTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Except",
-               "operand" : [ {
-                  "name" : "NegativeHrHpvTests",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "NegativeHrHpvTestsAsPartOfCotest",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "NegativeCytologyTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "SortedCytologyReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "aC",
-                                 "type" : "AliasRef"
-                              } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "NILM",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeCotests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeHrHpvTests",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "alias" : "C",
-                  "expression" : {
-                     "name" : "NegativeCytologyTests",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "scope" : "C",
-                           "type" : "Property"
-                        }
-                     }
-                  } ]
-               },
-               "return" : {
-                  "expression" : {
-                     "name" : "H",
-                     "type" : "AliasRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeSurveillanceTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "name" : "NegativePrimaryHrHpvTests",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "NegativeCotests",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "SortedNegativeSurveillanceTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeSurveillanceTests",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }
-                  }
-               },
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "date",
-                        "value" : {
-                           "path" : "date",
-                           "scope" : "H",
-                           "type" : "Property"
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
             "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -11360,46 +13372,6 @@
                      "type" : "Quantity"
                   } ]
                } ]
-            }
-         }, {
-            "name" : "CytologyInterpretedAsHsil",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "InValueSet",
-                        "code" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        },
-                        "valueset" : {
-                           "name" : "HSIL",
-                           "type" : "ValueSetRef"
-                        }
-                     }
-                  }
-               }
             }
          }, {
             "name" : "AssociatedHpvCotest",
