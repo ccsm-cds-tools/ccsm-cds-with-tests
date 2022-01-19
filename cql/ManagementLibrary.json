@@ -8305,6 +8305,92 @@
                }
             }
          }, {
+            "name" : "SecondMostRecentHistologyInterpretedAsUnspecifiedHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "HSIL, Unspecified",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "SecondMostRecentHistologyInterpretedAsCin2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "CIN2",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "RecommendationForHistologyResults",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8826,6 +8912,154 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "type" : "LessOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "HistologyInterpretedAsCin2",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "name" : "SecondMostRecentHistologyInterpretedAsUnspecifiedHsil",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "SecondMostRecentHistologyInterpretedAsCin2",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 2,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "lowClosed" : false,
+                              "highClosed" : false,
+                              "type" : "Interval",
+                              "low" : {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              },
+                              "high" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "SecondMostRecentBiopsyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 2.5,
+                                    "unit" : "years",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "If CIN 2 remains present for a 2-year period, treatment is recommended (CII).",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
                               "type" : "GreaterOrEqual",
                               "operand" : [ {
                                  "precision" : "Year",
@@ -9256,49 +9490,6 @@
                } ]
             }
          }, {
-            "name" : "SecondMostRecentHistologyInterpretedAsCin2",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "SecondMostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "CIN2",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }
-               }
-            }
-         }, {
             "name" : "SecondMostRecentHistologyInterpretedAsCin3",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -9333,49 +9524,6 @@
                            "type" : "ToConcept",
                            "operand" : {
                               "name" : "CIN3",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "SecondMostRecentHistologyInterpretedAsUnspecifiedHsil",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "SecondMostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "HSIL, Unspecified",
                               "libraryName" : "Dash",
                               "type" : "CodeRef"
                            }
