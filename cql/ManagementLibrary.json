@@ -5735,7 +5735,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cotesting at one and two years is recommended. If both cotests are negative, repeat cotesting at 3 years is recommended. If any test is abnormal, then colposcopy is recommended (BII).",
+                           "value" : "For patients with cytology showing AGC not otherwise specified or atypical endocervical cells not otherwise specified in whom histologic HSIL (CIN 2+) or AIS/cancer is not identified, cotesting at one and two years is recommended. If both cotests are negative, repeat cotesting at 3 years is recommended. If any test is abnormal, then colposcopy is recommended (BII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -15813,6 +15813,41 @@
                } ]
             }
          }, {
+            "name" : "ManagementRecommendationIsSurveillance",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "In",
+               "operand" : [ {
+                  "name" : "CommonAbnormalityRecommendationText",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "List",
+                  "element" : [ {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "5-year follow-up",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "3-year follow-up",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "1-year follow-up",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "J1RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "RecommendationForPregnantPatients",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -15846,14 +15881,21 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Equal",
+                        "type" : "In",
                         "operand" : [ {
                            "name" : "CommonAbnormalityRecommendationText",
                            "type" : "ExpressionRef"
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment",
-                           "type" : "Literal"
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy/Treatment",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Treatment",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      } ]
                   },
@@ -15901,17 +15943,101 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
+                        "name" : "ManagementRecommendationIsSurveillance",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "name" : "CommonAbnormalityRecommendationText",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : " is recommended.",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Pregnant",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "name" : "CommonAbnormalityRecommendationText",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Colposcopy/Treatment",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Treatment",
+                                    "type" : "Literal"
+                                 } ]
+                              } ]
+                           }
+                        } ]
+                     }, {
                         "type" : "Not",
                         "operand" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "CommonAbnormalityRecommendationText",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Treatment",
-                              "type" : "Literal"
-                           } ]
+                           "name" : "ManagementRecommendationIsSurveillance",
+                           "type" : "ExpressionRef"
                         }
                      } ]
                   },
@@ -17160,32 +17286,6 @@
                }
             }
          }, {
-            "name" : "ManagementRecommendationIsSurveillance",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "name" : "CommonAbnormalityRecommendationText",
-                  "type" : "ExpressionRef"
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "5-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "3-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "1-year follow-up",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "ManagementRecommendationIsColposcopyOrTreatment",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -17597,27 +17697,74 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Tuple",
-               "element" : [ {
-                  "name" : "action",
-                  "value" : {
-                     "name" : "CommonAbnormalityRecommendationText",
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "ManagementRecommendationIsSurveillance",
                      "type" : "ExpressionRef"
                   }
-               }, {
-                  "name" : "text",
-                  "value" : {
-                     "type" : "Concatenate",
-                     "operand" : [ {
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "action",
+                     "value" : {
                         "name" : "CommonAbnormalityRecommendationText",
                         "type" : "ExpressionRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : " is recommended.",
-                        "type" : "Literal"
-                     } ]
-                  }
-               } ]
+                     }
+                  }, {
+                     "name" : "text",
+                     "value" : {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "name" : "CommonAbnormalityRecommendationText",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " is recommended.",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "\n\n",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "name" : "J1RecommendationText",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "action",
+                     "value" : {
+                        "name" : "CommonAbnormalityRecommendationText",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "text",
+                     "value" : {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : " is recommended.",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  } ]
+               }
             }
          }, {
             "name" : "ManagementRecommendation",
