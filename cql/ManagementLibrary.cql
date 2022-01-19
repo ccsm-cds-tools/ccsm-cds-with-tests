@@ -37,7 +37,7 @@ codesystem "NULL FLAVOR": 'http://terminology.hl7.org/CodeSystem/v3-NullFlavor'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
-valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233' // NOTE: Should this value set be expanded to include DNA findings of HPV 16 and HPV 18?
+valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233' // NOTE: This value set should be expanded to include DNA findings of HPV 16 and HPV 18 (and potentially RNA findings).
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
 
 code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
@@ -47,6 +47,7 @@ code "Atypical Endometrial Cells": '103646000' from "SNOMED-CT" display 'Atypica
 code "Atypical Endocervical Cells":	'441094005' from "SNOMED-CT" display 'Atypical endocervical cells on cervical Papanicolaou smear (finding)'
 code "Endocervical AIS": '447760009' from "SNOMED-CT" display 'Endocervical adenocarcinoma in situ (disorder)'
 code "AGC": '441219009' from "SNOMED-CT" display 'Atypical glandular cells on cervical Papanicolaou smear (finding)'
+code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
 code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)'
 code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
@@ -569,6 +570,12 @@ define CytologyInterpretedAsAgc:
       return aC ~ "AGC"
   )
 
+define CytologyInterpretedAsAgcFavorNeoplasia:
+  AnyTrue(
+    (MostRecentCytologyReport.allConclusions) aC
+      return aC ~ "AGC Favor Neoplasia"
+  )
+
 define CytologyInterpretedAsAis:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
@@ -814,11 +821,9 @@ define RecommendationForRareCytology:
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        (
-          CytologyInterpretedAsAgcOrAis and
-          CytologyInterpretedAsEndocervicalCellsFavorNeoplasia
-        ) or
-        CytologyInterpretedAsEndocervicalAis // NOTE: Revisit this cytology test results logic after L2 team discusses.
+        CytologyInterpretedAsAgcFavorNeoplasia or
+        CytologyInterpretedAsEndocervicalCellsFavorNeoplasia or
+        CytologyInterpretedAsEndocervicalAis
       ) and
       not (
         CancerDiagnosisAfterMostRecentCytology or
@@ -1131,6 +1136,21 @@ define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years:
       )
   )
 
+define HistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy:
+  (SortedBiopsyReports) B
+    where
+      B.date 2 years or more before MostRecentBiopsyReport.date and
+      B.date 2.5 years or less before MostRecentBiopsyReport.date and
+      AnyTrue(
+        (B.allConclusions) aC
+          return
+            aC ~ Dash."HSIL, Unspecified" or
+            aC ~ Dash."CIN2"
+      )
+
+define HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy:
+  Exists(HistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy)
+
 define MostRecentNegativeHsilSurveillanceResult:
   if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) then
     MostRecentBiopsyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
@@ -1207,7 +1227,6 @@ define RecommendationForHistologyResults:
         text: 'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3]) (CIII), but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
       }
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
-    // NOTE: Follow up about adding a "no" answer to the future pregnancy concerns question as a criterion for the I.2 Recommendations.
     when ( // 1
       AgeInYears() >= 25 and
       not Pregnant and
@@ -1271,21 +1290,13 @@ define RecommendationForHistologyResults:
         action: null,
         text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
       }
-    // NOTE: Should there be a limit on what Cervical Histology Results we are looking for in the I.3 #5? Right now, the L2 reads as "ANY 2 Cervical Histology Results within 2 - 2.5 years of each other." I chose to just look for the most recent 2 cervical histology results, since I can't think of a great way to iteratively check for all combinations of histology results within 2 - 2.5 years of each other. Open to discussion about alternative ways to model this logic.
     when ( // 5
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       (
         HistologyInterpretedAsUnspecifiedHsil or
         HistologyInterpretedAsCin2
       ) and
-      (
-        SecondMostRecentHistologyInterpretedAsUnspecifiedHsil or
-        SecondMostRecentHistologyInterpretedAsCin2
-      ) and
-      (
-        MostRecentBiopsyReport.date more than 2 years after SecondMostRecentBiopsyReport.date and
-        MostRecentBiopsyReport.date less than 2.5 years after SecondMostRecentBiopsyReport.date
-      )
+      HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy
     ) then
       {
         action: null,
@@ -1584,29 +1595,50 @@ define RareAbnormalityHighGradeHistologyBeforeTreatment:
   else
     null
 
-define CytologicHsilOrAgcOrPersistentAscH:
+define CytologicHsilOrAgc:
   (SortedCytologyReports) C
     where AnyTrue(
       (C.allConclusions) aC
         return
           aC in "HSIL" or
           aC ~ "AGC"
-          // TODO: Add ASC-H after we review how "persistent ASC-H" is defined here (see comment in L2 doc).
     )
 
-define CytologicHsilOrAgcOrPersistentAscHBeforeTreatment:
+define CytologicHsilOrAgcBeforeTreatment:
   if Exists(MostRecentTreatment) then
-    CytologicHsilOrAgcOrPersistentAscH C 
+    CytologicHsilOrAgc C 
     where
       C.date 12 months or less before MostRecentTreatmentDate
   else
     null
 
+define CytologyResultsBeforeTreatment:
+  if Exists(MostRecentTreatment) then
+    (SortedCytologyReports) C
+    where
+      C.date 12 months or less before MostRecentTreatmentDate
+  else
+    null
+
+define HasPersistentAscHBeforeTreatment:
+  if Count(CytologyResultsBeforeTreatment) >= 2 then
+    AnyTrue(
+      (CytologyResultsBeforeTreatment[0].allConclusions) aC
+        return aC ~ "ASC-H"
+    ) and
+    AnyTrue(
+      (CytologyResultsBeforeTreatment[1].allConclusions) aC
+        return aC ~ "ASC-H"
+    )
+  else
+    false
+
 define TreatmentForHighGradeHistologyOrCytology:
   if Exists(MostRecentTreatment) and
     (
       Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
-      Exists(CytologicHsilOrAgcOrPersistentAscHBeforeTreatment)
+      Exists(CytologicHsilOrAgcBeforeTreatment) or
+      HasPersistentAscHBeforeTreatment
     ) then
     MostRecentTreatment
   else
