@@ -9920,15 +9920,8 @@
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "AnyCin",
-                           "expression" : {
-                              "name" : "PrecedingCytologyIsAscH",
-                              "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "relationship" : [ ]
+                        "name" : "PrecedingCytologyIsAscH",
+                        "type" : "ExpressionRef"
                      } ]
                   },
                   "then" : {
@@ -14298,6 +14291,39 @@
                }
             }
          }, {
+            "name" : "BiopsySinceMostRecentCytology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "B",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "B",
+                        "type" : "Property"
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "RecommendationForPatientsYoungerThan25",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -14332,48 +14358,57 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "Less",
+                           "type" : "And",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
+                              "type" : "Less",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
+                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
                            "type" : "Or",
                            "operand" : [ {
                               "type" : "Or",
                               "operand" : [ {
-                                 "name" : "CytologyInterpretedAsHsil",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "CytologyInterpretedAsHsil",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "CytologyInterpretedAsAscH",
+                                    "type" : "ExpressionRef"
+                                 } ]
                               }, {
-                                 "name" : "CytologyInterpretedAsAscH",
+                                 "name" : "CytologyInterpretedAsAgc",
                                  "type" : "ExpressionRef"
                               } ]
                            }, {
-                              "name" : "CytologyInterpretedAsAgc",
+                              "name" : "CytologyInterpretedAsAis",
                               "type" : "ExpressionRef"
                            } ]
-                        }, {
-                           "name" : "CytologyInterpretedAsAis",
-                           "type" : "ExpressionRef"
                         } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "name" : "BiopsySinceMostRecentCytology",
+                           "type" : "ExpressionRef"
+                        }
                      } ]
                   },
                   "then" : {

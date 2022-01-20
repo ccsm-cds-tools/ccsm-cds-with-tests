@@ -1942,6 +1942,12 @@ define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
         aC in "HSIL"
   )
 
+define BiopsySinceMostRecentCytology:
+  Exists(
+    SortedBiopsyReports B 
+    where B.date > MostRecentCytologyReport.date
+  )
+
 define RecommendationForPatientsYoungerThan25:
   case
     // Heading 1 & Heading 2: Initial Management After an Abnormal Screening Test Result; Management of Cytology ASC-H and HSIL in Patients Younger than 25 Years
@@ -1960,7 +1966,9 @@ define RecommendationForPatientsYoungerThan25:
         CytologyInterpretedAsAscH or
         CytologyInterpretedAsAgc or
         CytologyInterpretedAsAis
-      )
+      ) and
+      not BiopsySinceMostRecentCytology
+
     ) then
       {
         action: 'Colposcopy',
