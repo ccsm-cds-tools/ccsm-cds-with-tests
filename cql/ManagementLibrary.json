@@ -16785,6 +16785,176 @@
                } ]
             }
          }, {
+            "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "P",
+                  "expression" : {
+                     "name" : "RemovalOfCervixProcedures",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "rC",
+                        "expression" : {
+                           "path" : "reasonCode",
+                           "scope" : "P",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Or",
+                                    "operand" : [ {
+                                       "type" : "Or",
+                                       "operand" : [ {
+                                          "type" : "Or",
+                                          "operand" : [ {
+                                             "type" : "InValueSet",
+                                             "code" : {
+                                                "name" : "ToConcept",
+                                                "libraryName" : "FHIRHelpers",
+                                                "type" : "FunctionRef",
+                                                "operand" : [ {
+                                                   "name" : "rC",
+                                                   "type" : "AliasRef"
+                                                } ]
+                                             },
+                                             "valueset" : {
+                                                "name" : "Cervical Precancer Disorders",
+                                                "libraryName" : "Dash",
+                                                "type" : "ValueSetRef"
+                                             }
+                                          }, {
+                                             "type" : "InValueSet",
+                                             "code" : {
+                                                "name" : "ToConcept",
+                                                "libraryName" : "FHIRHelpers",
+                                                "type" : "FunctionRef",
+                                                "operand" : [ {
+                                                   "name" : "rC",
+                                                   "type" : "AliasRef"
+                                                } ]
+                                             },
+                                             "valueset" : {
+                                                "name" : "Diagnosis of Cervical cancer",
+                                                "libraryName" : "Dash",
+                                                "type" : "ValueSetRef"
+                                             }
+                                          } ]
+                                       }, {
+                                          "type" : "Equivalent",
+                                          "operand" : [ {
+                                             "name" : "ToConcept",
+                                             "libraryName" : "FHIRHelpers",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "rC",
+                                                "type" : "AliasRef"
+                                             } ]
+                                          }, {
+                                             "type" : "ToConcept",
+                                             "operand" : {
+                                                "name" : "CIN2",
+                                                "libraryName" : "Dash",
+                                                "type" : "CodeRef"
+                                             }
+                                          } ]
+                                       } ]
+                                    }, {
+                                       "type" : "Equivalent",
+                                       "operand" : [ {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "rC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }, {
+                                          "type" : "ToConcept",
+                                          "operand" : {
+                                             "name" : "CIN3",
+                                             "libraryName" : "Dash",
+                                             "type" : "CodeRef"
+                                          }
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "rC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "HSIL, Unspecified",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "rC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "AIS",
+                                    "libraryName" : "Dash",
+                                    "type" : "ValueSetRef"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "rC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              },
+                              "valueset" : {
+                                 "name" : "Histologic cancer",
+                                 "libraryName" : "Dash",
+                                 "type" : "ValueSetRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentCervixRemovalObservationDate",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -17142,11 +17312,35 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "name" : "CervixRemovalDate",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "lowClosed" : false,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "name" : "MostRecentCauseForHysterectomyDate",
+                           "type" : "ExpressionRef"
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "MostRecentCauseForHysterectomyDate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
                      "type" : "Not",
                      "operand" : {
                         "type" : "IsNull",
@@ -17155,73 +17349,14 @@
                            "type" : "ExpressionRef"
                         }
                      }
+                  } ]
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
+                     "type" : "ExpressionRef"
                   }
-               },
-               "then" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "CervixRemovalDate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     }
-                  },
-                  "then" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "name" : "CervixRemovalDate",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "lowClosed" : false,
-                           "highClosed" : true,
-                           "type" : "Interval",
-                           "low" : {
-                              "name" : "MostRecentCauseForHysterectomyDate",
-                              "type" : "ExpressionRef"
-                           },
-                           "high" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "name" : "MostRecentCauseForHysterectomyDate",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "year",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "MostRecentCauseForHysterectomyDate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ]
-                  },
-                  "else" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "value" : "false",
-                     "type" : "Literal"
-                  }
-               },
-               "else" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "value" : "false",
-                  "type" : "Literal"
-               }
+               } ]
             }
          }, {
             "name" : "NegativeSurveillanceTestsAfterHysterectomy",

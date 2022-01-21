@@ -2283,6 +2283,20 @@ define MostRecentCervixRemovalProcedureDate:
     )
   )
 
+define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
+  Dash.RemovalOfCervixProcedures P
+    where AnyTrue(
+      (P.reasonCode) rC
+        return
+          rC in Dash."Cervical Precancer Disorders" or 
+          rC in Dash."Diagnosis of Cervical cancer" or
+          rC ~ Dash."CIN2" or
+          rC ~ Dash."CIN3" or
+          rC ~ Dash."HSIL, Unspecified" or
+          rC in Dash."AIS" or
+          rC in Dash."Histologic cancer"
+    )
+
 define MostRecentCervixRemovalObservationDate:
   Common.ObservationDate(
     C3F.MostRecent(
@@ -2347,13 +2361,8 @@ define MostRecentCauseForHysterectomyDate:
     null
 
 define HysterectomyPerformedForTreatment:
-  if MostRecentCauseForHysterectomyDate is not null then
-    if CervixRemovalDate is not null then
-      CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate
-    else 
-      false
-  else
-    false
+    CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate or
+    Exists(CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
 
 define NegativeSurveillanceTestsAfterHysterectomy: // NOTE: We should be able to refactor the LP4 Grade D Exclusions in a similar way
   SortedNegativeSurveillanceTests T 
