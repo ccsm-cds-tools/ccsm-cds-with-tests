@@ -11,19 +11,19 @@ include "FHIRHelpers" version '4.0.1' called FHIRHelpers
 
 // METADATA
 	// Downloaded from: https://cervixca.nlm.nih.gov/RiskTables/
-	// Date Generated: 10/07/2021 12:35:08
+	// Date Generated: 20/01/2022 21:45:31
 	// Number of Risk Tables: 5
 	// Risk Tables:
 		// 1 - Screening
-				// (last downloaded: Tue May 11 06:13:16 2021)
+				// (last downloaded: Thu Jan 20 15:53:44 2022)
 		// 2 - Surveillance
-				// (last downloaded: Tue May 11 06:13:16 2021)
+				// (last downloaded: Thu Jan 20 15:42:01 2022)
 		// 3 - Colposcopy Results
-				// (last downloaded: Tue May 11 06:13:16 2021)
+				// (last downloaded: Thu Jan 20 15:42:01 2022)
 		// 4 - Post Colpo Surveillance
-				// (last downloaded: Tue May 11 06:13:16 2021)
+				// (last downloaded: Thu Jan 20 15:42:01 2022)
 		// 5 - Post Treatment Surveillance
-				// (last downloaded: Tue May 11 06:13:16 2021)
+				// (last downloaded: Thu Jan 20 15:42:01 2022)
 
 // Export Risk Tables
 define ClinicalSituations:
@@ -128,6 +128,13 @@ define GeneralScreening:
 		pap: 'HSIL+',
 		value: { immediate: 48.86, five_year: 53.16 },
 		management: 'Colposcopy/Treatment'
+	},
+	{
+		history: 'NO HISTORY',
+		hpv: 'HPV-positive',
+		pap: 'ALL',
+		value: { immediate: -1, five_year: -1 },
+		management: ''
 	},
 	{
 		history: 'NO HISTORY',
@@ -667,6 +674,22 @@ define Surveillance:
 	{
 		history_prev_2: 'none',
 		history: 'HPV-negative/LSIL',
+		hpv: 'HPV-negative',
+		pap: 'ALL',
+		value: { immediate: 0.0, five_year: 0.99 },
+		management: ''
+	},
+	{
+		history_prev_2: 'HPV-negative/LSIL',
+		history: 'Cotest-negative',
+		hpv: 'HPV-negative',
+		pap: 'NILM',
+		value: { immediate: 0.0, five_year: 0.27 },
+		management: '3-year follow-up'
+	},
+	{
+		history_prev_2: 'none',
+		history: 'HPV-negative/LSIL',
 		hpv: 'HPV-positive',
 		pap: 'NILM',
 		value: { immediate: 0.0, five_year: 8.62 },
@@ -763,6 +786,14 @@ define Surveillance:
 	{
 		history_prev_2: 'none',
 		history: 'HPV-negative/ASC-US',
+		hpv: 'HPV-negative',
+		pap: 'ALL',
+		value: { immediate: 0.06, five_year: 0.28 },
+		management: ''
+	},
+	{
+		history_prev_2: 'none',
+		history: 'HPV-negative/ASC-US',
 		hpv: 'HPV-positive',
 		pap: 'NILM',
 		value: { immediate: 0.96, five_year: 2.36 },
@@ -818,6 +849,14 @@ define Surveillance:
 	},
 	{
 		history_prev_2: 'HPV-positive/NILM',
+		history: ' Cotest-negative x2',
+		hpv: 'HPV-negative',
+		pap: 'NILM',
+		value: { immediate: 0.0, five_year: 0.17 },
+		management: '3-year follow-up'
+	},
+	{
+		history_prev_2: 'HPV-positive/NILM',
 		history: ' Cotest-negative',
 		hpv: 'HPV-positive',
 		pap: 'NILM',
@@ -828,7 +867,7 @@ define Surveillance:
 		history_prev_2: 'HPV-positive/NILM',
 		history: ' Cotest-negative',
 		hpv: 'HPV-positive',
-		pap: 'ASC-US, LSIL',
+		pap: 'ASC-US/LSIL',
 		value: { immediate: 2.6, five_year: 7.46 },
 		management: '1-year follow-up'
 	},
@@ -860,7 +899,7 @@ define Surveillance:
 		history_prev_2: 'HPV-positive/NILM',
 		history: 'HPV-negative',
 		hpv: 'HPV-positive',
-		pap: 'ASC-US, LSIL',
+		pap: 'ASC-US/LSIL',
 		value: { immediate: 2.56, five_year: 6.94 },
 		management: '1-year follow-up'
 	},
@@ -884,7 +923,7 @@ define Surveillance:
 		history_prev_2: 'none',
 		history: 'HPV-positive/NILM',
 		hpv: 'HPV16+',
-		pap: 'ASC_US',
+		pap: 'ASC-US',
 		value: { immediate: 14.3, five_year: 27.1 },
 		management: 'Colposcopy'
 	},
@@ -916,7 +955,7 @@ define Surveillance:
 		history_prev_2: 'none',
 		history: 'HPV-positive/NILM',
 		hpv: 'HPV16-,18+',
-		pap: 'ASC_US',
+		pap: 'ASC-US',
 		value: { immediate: 8.77, five_year: 11.88 },
 		management: 'Colposcopy'
 	},
@@ -1096,7 +1135,7 @@ define PostColposcopy:
 		hpv: 'HPV-negative',
 		pap: 'NILM',
 		value: { immediate: 0.02, five_year: 0.48 },
-		management: '3-year follow-up'
+		management: '1-year follow-up'
 	},
 	{
 		preColposcopyResult: 'High Grade',
