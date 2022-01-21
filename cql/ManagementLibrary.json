@@ -14208,26 +14208,41 @@
                } ]
             }
          }, {
-            "name" : "CytologyInterpretedAsNotNilm",
+            "name" : "CytologyInterpretedAsAscusOrAbove",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "And",
+               "type" : "In",
                "operand" : [ {
-                  "type" : "Exists",
-                  "operand" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "MostRecentCytologyReport",
-                        "type" : "ExpressionRef"
-                     }
-                  }
-               }, {
-                  "type" : "Not",
-                  "operand" : {
-                     "name" : "CytologyInterpretedAsNilm",
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyReport",
                      "type" : "ExpressionRef"
                   }
+               }, {
+                  "type" : "List",
+                  "element" : [ {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "ASC-US",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "LSIL",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "ASC-H",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "AGC",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HSIL+",
+                     "type" : "Literal"
+                  } ]
                } ]
             }
          }, {
@@ -14874,7 +14889,7 @@
                                     "type" : "ExpressionRef"
                                  } ]
                               }, {
-                                 "name" : "CytologyInterpretedAsNotNilm",
+                                 "name" : "CytologyInterpretedAsAscusOrAbove",
                                  "type" : "ExpressionRef"
                               } ]
                            }, {
@@ -16668,38 +16683,8 @@
                            }, {
                               "type" : "Or",
                               "operand" : [ {
-                                 "type" : "In",
-                                 "operand" : [ {
-                                    "path" : "riskTableInput",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentCytologyReport",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "type" : "List",
-                                    "element" : [ {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "ASC-US",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "LSIL",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "ASC-H",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "AGC",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "HSIL+",
-                                       "type" : "Literal"
-                                    } ]
-                                 } ]
+                                 "name" : "CytologyInterpretedAsAscusOrAbove",
+                                 "type" : "ExpressionRef"
                               }, {
                                  "name" : "CytologyInterpretedAsAis",
                                  "type" : "ExpressionRef"

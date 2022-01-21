@@ -1930,9 +1930,8 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndSecondMostRecentLowGradeCytologyResults and 
   MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
 
-define CytologyInterpretedAsNotNilm: // NOTE: Review how we want to model "Not Nilm" - Inclusive or Exclusive? - This could change to reflect how it is modeled in K.3. Make this consistent throughout the Management Logic after review with L2 team.
-  Exists(MostRecentCytologyReport) and
-  not CytologyInterpretedAsNilm
+define CytologyInterpretedAsAscusOrAbove:
+  MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'} // NOTE: Review whether "ASC-US or Above" (referred to as "<> NILM" in some parts of the L2) should include AIS
 
 define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
   AnyTrue(
@@ -2034,7 +2033,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // 2
       AgeInYears() >= 21 and AgeInYears() < 25 and
       HistologyInterpretedAsCin1OrNormal and
-      CytologyInterpretedAsNotNilm and
+      CytologyInterpretedAsAscusOrAbove and
       MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date and
       SecondMostRecentCytologyInterpretedAsAscHOrHsil and
       SecondMostRecentCytologyReport.date less than 6 months before MostRecentBiopsyReport.date
@@ -2232,7 +2231,7 @@ define RecommendationForImmunosuppressedPatients:
         (
           MostRecentCytologyReportWasWithinPastFiveYears and
           (
-            MostRecentCytologyReport.riskTableInput in {'LSIL','ASC-H','AGC','HSIL+'} or // NOTE: Clarify what is meant by "Not NILM". It appears in 3 places in the logic.
+            MostRecentCytologyReport.riskTableInput in {'LSIL','ASC-H','AGC','HSIL+'} or 
             CytologyInterpretedAsAis
           )
         ) or
@@ -2259,7 +2258,7 @@ define RecommendationForImmunosuppressedPatients:
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'} or
+        CytologyInterpretedAsAscusOrAbove or
         CytologyInterpretedAsAis
       ) and
       SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
