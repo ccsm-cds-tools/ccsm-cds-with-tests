@@ -87,19 +87,13 @@ define function GetGeneralScreeningManagement(prevHpvVal String, prevPapVal Stri
     )
   )
 
-// Some of the entries in the risk tables refer to 'ASC_US' instead of 'ASC-US'.
-// This function converts from the latter to former.
-define function AscusAlternativeSpelling(ascus String):
-  if ascus = 'ASC-US' then 'ASC_US'
-  else 'NULL'
-
 // Some of the entries in the risk tables group different cytology results together.
 // This function takes a fully specified cytology result and returns the grouped 
 // string.
 define function HighGradeOrAscusLsilPap(currPapVal String):
   if currPapVal = 'ASC-US' or
     currPapVal = 'LSIL' then
-      'ASC-US, LSIL'
+      'ASC-US/LSIL'
   else if currPapVal = 'ASC-H' or
     currPapVal = 'AGC' or
     currPapVal = 'HSIL+' then
@@ -128,14 +122,6 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = currPapVal
-        return T.management
-    ),
-    Coalesce( // Case 2: 'ASC_US' instead of 'ASC-US'
-      SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
-        and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
-        and T.pap = AscusAlternativeSpelling(currPapVal)
         return T.management
     ),
     Coalesce( // Case 3: 'ASC-US, LSIL' or 'High Grade'
