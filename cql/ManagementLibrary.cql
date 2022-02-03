@@ -2009,7 +2009,7 @@ define RecommendationForPatientsYoungerThan25:
         action: null,
         text: 'This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
       }
-    // Management of Histology of Less than CIN2 Preceded by Cytology ASC-H and HSIL in Patients Younger than 25 Year
+    // Heading 3: Management of Histology of Less than CIN2 Preceded by Cytology ASC-H and HSIL in Patients Younger than 25 Year
     when ( // 1b
       AgeInYears() < 25 and
       HistologyInterpretedAsCin1OrNormal and
@@ -2033,7 +2033,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // 2
       AgeInYears() >= 21 and AgeInYears() < 25 and
       HistologyInterpretedAsCin1OrNormal and
-      CytologyInterpretedAsAscusOrAbove and
+      CytologyInterpretedAsAscusOrAbove and // NOTE: We may have to add "Or AIS" here. L2 team is currently discussing.
       MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date and
       SecondMostRecentCytologyInterpretedAsAscHOrHsil and
       SecondMostRecentCytologyReport.date less than 6 months before MostRecentBiopsyReport.date
@@ -2057,7 +2057,7 @@ define RecommendationForPatientsYoungerThan25:
         action: null,
         text: 'If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
       }
-    // Management of Histologic HSIL (CIN2 or CIN3) for Patients Younger Than 25 Years
+    // Heading 4: Management of Histologic HSIL (CIN2 or CIN3) for Patients Younger Than 25 Years
     when ( // 1
       AgeInYears() < 25 and
       MostRecentBiopsyReportWasWithinPastYear and
@@ -2088,8 +2088,8 @@ define RecommendationForPatientsYoungerThan25:
     when ( // 4
       AgeInYears() < 25 and
       HistologicHsilCin2OrUnspecified is not null and
-      Count(SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology) = 2 and
-      Count(SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology) = 2
+      Count(SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology) >= 2 and
+      Count(SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology) >= 2
     ) then
       {
         action: null,
@@ -2153,7 +2153,7 @@ define HistologicAisDuringPregnancy:
 
 define RecommendationForPregnantPatients:
   case
-    // NOTE: These recommendations are in a different order than in the L2 Document since criteria for the first two cases are subsets of criteria for later recommendations and should supersede their supersets if applicable.
+    // #1 is covered by the Common Abnormality Recommendation section.
     when ( // 2 - Recommendation #1
       AgeInYears() >= 25 and
       Pregnant and 
@@ -2172,36 +2172,6 @@ define RecommendationForPregnantPatients:
       {
         action: null,
         text: 'Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).'
-      }
-    when ( // 1a
-      AgeInYears() >= 25 and
-      Pregnant and 
-      CommonAbnormalityRecommendationText in {'Colposcopy/Treatment','Treatment'}
-    ) then
-      {
-        action: null,
-        text: 'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
-      }
-    when ( // 1b
-      AgeInYears() >= 25 and
-      Pregnant and 
-      ManagementRecommendationIsSurveillance
-    ) then
-      {
-        action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + J1RecommendationText
-      }
-    when ( // 1c
-      AgeInYears() >= 25 and
-      Pregnant and 
-      not (
-        CommonAbnormalityRecommendationText in {'Colposcopy/Treatment','Treatment'}
-      ) and
-      not ManagementRecommendationIsSurveillance
-    ) then
-      {
-        action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.'
       }
     else
       null
@@ -2401,7 +2371,11 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.5 Managing Patients Older Than 65 Years With a History of Prior Abnormalities
 
+define Over65RecommendationText:
+  'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
+
 define RecommendationForPatientsOlderThan65:
+  // TODO: Re-word text here once edits are made to the Common Abnormalities section by the L2 team.
   case
     when (
       AgeInYears() > 65 and
@@ -2410,7 +2384,7 @@ define RecommendationForPatientsOlderThan65:
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + 'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).\n\nIf patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
+        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + J1RecommendationText + '\n\n' + Over65RecommendationText
       }
     when (
       AgeInYears() > 65 and
@@ -2419,7 +2393,7 @@ define RecommendationForPatientsOlderThan65:
     ) then
       {
         action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + 'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
+        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + Over65RecommendationText
       }
     else
       null
@@ -2560,18 +2534,98 @@ define ManagementRecommendationIsColposcopyOrTreatment:
 define J1RecommendationText:
   'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
 
+define TreatmentWithPregnancyConcernsRecommendationText:
+  'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+
+define OneYearSurveillanceRecommendationText:
+  'When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).'
+
+define ThreeYearSurveillanceRecommendationText:
+  'When patients have an estimated 5-year CIN 3+ risk of 0.15% or greater but less than 0.55% based on history and current test results, repeat testing in 3 years with HPV-based testing is recommended (AII).'
+
+define FiveYearSurveillanceRecommendationText:
+  'When patients have an estimated 5-year CIN 3+ risk of less than 0.15% based on past history and current test results, return to routine screening at 5-year intervals using HPV-based testing is recommended (AII).'
+
+define ColposcopyRecommendationText:
+  'When patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).'
+
+define ColposcopyOrTreatmentRecommendationText:
+  'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ 25% or greater and less than 60% based on history and current results, treatment using an excisional procedure without previous biopsy confirmation or histologic evaluation with colposcopy and biopsy are both acceptable (AII).'
+
+define TreatmentRecommendationText:
+  'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ of 60% or greater based on history and current results, treatment using an excisional procedure without previous biopsy confirmation is preferred but colposcopy with biopsy is acceptable (BII).'
+
 define CommonAbnormalityRecommendation:
-  if ManagementRecommendationIsSurveillance then
-    {
-      action: CommonAbnormalityRecommendationText,
-      text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + J1RecommendationText
-    }
-  else
-    {
-      action: CommonAbnormalityRecommendationText,
-      text: CommonAbnormalityRecommendationText + ' is recommended.'
-    }
-  // TODO: Add text at the end of Treatment Recommendations after confirming with L2 Team
+  // TODO: Add J.1 Recommndation text to K.5 above as well.
+  case
+    when (
+      // TODO: Check that >= 25 applies to all 5 Common Abnormality Recommendations
+      AgeInYears() >= 25 and
+      CommonAbnormalityRecommendationText = '1-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: OneYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and
+      CommonAbnormalityRecommendationText = '3-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: ThreeYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and
+      CommonAbnormalityRecommendationText = '5-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: FiveYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and
+      CommonAbnormalityRecommendationText = 'Colposcopy'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: ColposcopyRecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      CommonAbnormalityRecommendationText = 'Colposcopy/Treatment'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: ColposcopyOrTreatmentRecommendationText + '\n\n' + TreatmentWithPregnancyConcernsRecommendationText
+      }
+    when (
+      AgeInYears() > 50 and
+      CommonAbnormalityRecommendationText = 'Colposcopy/Treatment'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: ColposcopyOrTreatmentRecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      CommonAbnormalityRecommendationText = 'Treatment'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: TreatmentRecommendationText + '\n\n' + TreatmentWithPregnancyConcernsRecommendationText
+      }
+    when (
+      AgeInYears() > 50 and
+      CommonAbnormalityRecommendationText = 'Treatment'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: TreatmentRecommendationText
+      }
+    else
+      null
+  end
 
 // TODO: Add Errata section
 
