@@ -1931,7 +1931,7 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
 
 define CytologyInterpretedAsAscusOrAbove:
-  MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'} // NOTE: Review whether "ASC-US or Above" (referred to as "<> NILM" in some parts of the L2) should include AIS
+  MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
 
 define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
   AnyTrue(
@@ -2033,7 +2033,10 @@ define RecommendationForPatientsYoungerThan25:
     when ( // 2
       AgeInYears() >= 21 and AgeInYears() < 25 and
       HistologyInterpretedAsCin1OrNormal and
-      CytologyInterpretedAsAscusOrAbove and // NOTE: We may have to add "Or AIS" here. L2 team is currently discussing.
+      (
+        CytologyInterpretedAsAscusOrAbove or
+        CytologyInterpretedAsAis
+      ) and
       MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date and
       SecondMostRecentCytologyInterpretedAsAscHOrHsil and
       SecondMostRecentCytologyReport.date less than 6 months before MostRecentBiopsyReport.date
