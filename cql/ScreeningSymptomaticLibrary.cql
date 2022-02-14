@@ -91,14 +91,15 @@ define RecentlyRespondedYesToAbnormalBleedingQuestion:
     )
   )
 
+define IsSymptomatic:
+  HasRecentAbnormalBleedingCondition or
+  HasRecentAbnormalBleedingEncounter or
+  HasRecentAbnormalBleedingObservation or
+  RecentlyRespondedYesToAbnormalBleedingQuestion
+
 define IsIncluded:
   Entry.FemaleorTransgenderMale and
-  (
-    HasRecentAbnormalBleedingCondition or
-    HasRecentAbnormalBleedingEncounter or
-    HasRecentAbnormalBleedingObservation or
-    RecentlyRespondedYesToAbnormalBleedingQuestion
-  )
+  IsSymptomatic
 
 //------------------------------------------------------------------------------
 // EXCLUSIONS

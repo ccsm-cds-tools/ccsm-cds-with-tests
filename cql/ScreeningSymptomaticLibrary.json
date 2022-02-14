@@ -216,6 +216,32 @@
                }
             }
          }, {
+            "name" : "IsSymptomatic",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "HasRecentAbnormalBleedingCondition",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "HasRecentAbnormalBleedingEncounter",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "name" : "HasRecentAbnormalBleedingObservation",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "RecentlyRespondedYesToAbnormalBleedingQuestion",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "IsIncluded",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -226,26 +252,8 @@
                   "libraryName" : "Entry",
                   "type" : "ExpressionRef"
                }, {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Or",
-                     "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "HasRecentAbnormalBleedingCondition",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "HasRecentAbnormalBleedingEncounter",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "HasRecentAbnormalBleedingObservation",
-                        "type" : "ExpressionRef"
-                     } ]
-                  }, {
-                     "name" : "RecentlyRespondedYesToAbnormalBleedingQuestion",
-                     "type" : "ExpressionRef"
-                  } ]
+                  "name" : "IsSymptomatic",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {

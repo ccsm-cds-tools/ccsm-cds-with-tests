@@ -22,7 +22,7 @@ include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
 include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
-include ScreeningDesExposureLibrary version '1.0.0' called DexExposure
+include ScreeningDesExposureLibrary version '1.0.0' called DesExposure
 include ScreeningImmunocompromisedLibrary version '1.0.0' called Immunocompromised
 
 //------------------------------------------------------------------------------
@@ -39,6 +39,7 @@ parameter PrimaryHpvTestingCadence default 5 years
 parameter CotestingCadence default 5 years
 parameter AllowGradeDExclusion default true
 parameter AllowGradeDRecommendation default true
+// TODO: Add parameter for Grade D recommendation for patients < 21
 parameter GradeDAdequatePriorScreeningLookback default 10 years // TODO: We may want to change to 11 years to allow for wiggle room - Pending discussion with L2
 
 /***** BEGIN CDS LOGIC ********************************************************/
@@ -66,6 +67,8 @@ define IsIncluded:
   ) and 
   Entry.FemaleorTransgenderMale
 
+// TODO: Add Grade D Inclusions (negative recommendations) for patients < 21
+
 //------------------------------------------------------------------------------
 // EXCLUSIONS
 //------------------------------------------------------------------------------
@@ -82,7 +85,7 @@ define ExcludedBecauseSymptomatic:
   Symptomatic.IsIncludedAndNotExcluded
 
 define ExcludedBecauseDesExposure:
-  DexExposure.IsIncludedAndNotExcluded
+  DesExposure.IsIncludedAndNotExcluded
 
 define ExcludedBecauseImmunocompromised:
   Immunocompromised.IsIncludedAndNotExcluded
@@ -429,7 +432,7 @@ define HasAbsenceOfCervixDiagnoses:
 define HasAbsenceOfCervixObservations:
   Exists(Dash.AbsenceOfCervixObservations)
 
-define AbsenceOrRemovalOfCervix:
+define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be able to consolidate.
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or 
   HasAbsenceOfCervixObservations
@@ -475,6 +478,7 @@ define CervicalCytologyTestsForGradeD:
     null
 
 // NOTE: Revisit after L3 logic is updated for those who have "aged out" of screening
+// TODO: Add test cases for Grade D
 define HasThreeNegativeCytologyTestsForGradeD:
   if Exists(CervicalCytologyTestsForGradeD) then
     Count(CervicalCytologyTestsForGradeD) >= 3 and
