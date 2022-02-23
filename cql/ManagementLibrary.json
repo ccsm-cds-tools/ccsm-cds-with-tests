@@ -17009,38 +17009,128 @@
                "type" : "Literal"
             }
          }, {
-            "name" : "LookUpTable5",
+            "name" : "SpecialPopulationRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetPostTreatmentManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
+               "type" : "Coalesce",
                "operand" : [ {
-                  "name" : "MostRecentBiopsyResult",
+                  "name" : "RecommendationForPatientsYoungerThan25",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                  "name" : "RecommendationForPregnantPatients",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                  "name" : "RecommendationForImmunosuppressedPatients",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "SecondMostRecentHpvResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultAfterTreatment",
+                  "name" : "RecommendationForManagingPatientsAfterHysterectomy",
                   "type" : "ExpressionRef"
                } ]
             }
          }, {
-            "name" : "PostTreatmentManagementRecommendation",
+            "name" : "WhichPopulationMadeTheRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPatientsYoungerThan25",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "5",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPregnantPatients",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "4",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForImmunosuppressedPatients",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForManagingPatientsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  }
+               } ],
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable1",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetGeneralScreeningManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "SecondMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "GeneralScreeningManagementRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -17053,14 +17143,125 @@
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "LookUpTable5",
+                           "name" : "LookUpTable1",
                            "type" : "ExpressionRef"
                         }
                      }
                   }
                },
                "then" : {
-                  "name" : "LookUpTable5",
+                  "name" : "LookUpTable1",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetSurveillanceManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ThirdMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "SurveillanceManagementRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "LookUpTable2",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetColposcopyResultsManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ReferringHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ReferringCytologyResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentBiopsyResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ColposcopyResultsManagementRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable3",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "LookUpTable3",
                   "type" : "ExpressionRef"
                },
                "else" : {
@@ -17141,26 +17342,38 @@
                }
             }
          }, {
-            "name" : "LookUpTable3",
+            "name" : "LookUpTable5",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetColposcopyResultsManagement",
+               "name" : "GetPostTreatmentManagement",
                "libraryName" : "RiskTableLookup",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "type" : "ExpressionRef"
-               }, {
                   "name" : "MostRecentBiopsyResult",
                   "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
-            "name" : "ColposcopyResultsManagementRecommendation",
+            "name" : "PostTreatmentManagementRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -17173,128 +17386,14 @@
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "LookUpTable3",
+                           "name" : "LookUpTable5",
                            "type" : "ExpressionRef"
                         }
                      }
                   }
                },
                "then" : {
-                  "name" : "LookUpTable3",
-                  "type" : "ExpressionRef"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "LookUpTable2",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetSurveillanceManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ThirdMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "SurveillanceManagementRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "LookUpTable2",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               },
-               "then" : {
-                  "name" : "LookUpTable2",
-                  "type" : "ExpressionRef"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "LookUpTable1",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetGeneralScreeningManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "SecondMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "GeneralScreeningManagementRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "LookUpTable1",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               },
-               "then" : {
-                  "name" : "LookUpTable1",
+                  "name" : "LookUpTable5",
                   "type" : "ExpressionRef"
                },
                "else" : {
@@ -17327,364 +17426,6 @@
                   "name" : "GeneralScreeningManagementRecommendation",
                   "type" : "ExpressionRef"
                } ]
-            }
-         }, {
-            "name" : "ManagementRecommendationIsSurveillance",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "name" : "CommonAbnormalityRecommendationText",
-                  "type" : "ExpressionRef"
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "5-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "3-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "1-year follow-up",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "J1RecommendationText",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "ManagementRecommendationIsColposcopyOrTreatment",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "name" : "CommonAbnormalityRecommendationText",
-                  "type" : "ExpressionRef"
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy/Treatment",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Treatment",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "RecommendationForPatientsOlderThan65",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Case",
-               "caseItem" : [ {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Greater",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "65",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "IsIncludedAndNotExcluded",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "ManagementRecommendationIsSurveillance",
-                        "type" : "ExpressionRef"
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "name" : "CommonAbnormalityRecommendationText",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : " is recommended.",
-                                          "type" : "Literal"
-                                       } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "\n\n",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "name" : "J1RecommendationText",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "Over65RecommendationText",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Greater",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "65",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "IsIncludedAndNotExcluded",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "ManagementRecommendationIsColposcopyOrTreatment",
-                        "type" : "ExpressionRef"
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "name" : "CommonAbnormalityRecommendationText",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : " is recommended.",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "Over65RecommendationText",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               } ],
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "action",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     }, {
-                        "name" : "text",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
-            "name" : "SpecialPopulationRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "name" : "RecommendationForPatientsYoungerThan25",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForPregnantPatients",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForImmunosuppressedPatients",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForManagingPatientsAfterHysterectomy",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForPatientsOlderThan65",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "WhichPopulationMadeTheRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Case",
-               "caseItem" : [ {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPatientsYoungerThan25",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "5",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPregnantPatients",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "4",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForImmunosuppressedPatients",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "3",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForManagingPatientsAfterHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "2",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPatientsOlderThan65",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "1",
-                     "type" : "Literal"
-                  }
-               } ],
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
             }
          }, {
             "name" : "WhichTableMadeTheRecommendation",
@@ -17782,6 +17523,15 @@
                }
             }
          }, {
+            "name" : "J1RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "TreatmentWithPregnancyConcernsRecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -17823,7 +17573,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "When patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).",
+               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
                "type" : "Literal"
             }
          }, {
@@ -17854,22 +17604,43 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "And",
                         "operand" : [ {
-                           "precision" : "Year",
-                           "type" : "CalculateAge",
-                           "operand" : {
-                              "path" : "birthDate.value",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "Patient",
-                                 "type" : "ExpressionRef"
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
-                           }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
-                           "type" : "Literal"
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -17916,7 +17687,7 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "Greater",
                         "operand" : [ {
                            "precision" : "Year",
                            "type" : "CalculateAge",
@@ -17930,8 +17701,104 @@
                            }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
+                           "value" : "65",
                            "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "1-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "OneYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -17978,7 +17845,7 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "Greater",
                         "operand" : [ {
                            "precision" : "Year",
                            "type" : "CalculateAge",
@@ -17992,8 +17859,104 @@
                            }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
+                           "value" : "65",
                            "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "3-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "ThreeYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -18031,6 +17994,81 @@
                               } ]
                            }, {
                               "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "65",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "5-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "FiveYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
                               "type" : "ExpressionRef"
                            } ]
                         }
