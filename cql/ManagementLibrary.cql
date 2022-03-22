@@ -926,7 +926,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'For patients “post-hysterectomy” with benign endometrial cells identified via cytology, no further evaluation is recommended (BII).'
+        text: 'For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
       }
     else
       null
