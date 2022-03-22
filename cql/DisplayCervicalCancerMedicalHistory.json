@@ -260,6 +260,10 @@
             "name" : "Histologic cancer",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.244",
             "accessLevel" : "Public"
+         }, {
+            "name" : "High Risk HPV Positive Results",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.234",
+            "accessLevel" : "Public"
          } ]
       },
       "codes" : {
@@ -347,14 +351,6 @@
             "name" : "Negative HPV Finding",
             "id" : "787724008",
             "display" : "Human papillomavirus deoxyribonucleic acid test negative (finding)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Positive HPV Finding",
-            "id" : "720005005",
-            "display" : "Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -3481,8 +3477,8 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "Contains",
-                     "operand" : [ {
+                     "type" : "AnyInValueSet",
+                     "codes" : {
                         "type" : "Query",
                         "source" : [ {
                            "alias" : "X",
@@ -3504,13 +3500,11 @@
                               } ]
                            }
                         }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Positive HPV Finding",
-                           "type" : "CodeRef"
-                        }
-                     } ]
+                     },
+                     "valueset" : {
+                        "name" : "High Risk HPV Positive Results",
+                        "type" : "ValueSetRef"
+                     }
                   }
                }, {
                   "name" : "AbnormalTestLookbackPeriod",

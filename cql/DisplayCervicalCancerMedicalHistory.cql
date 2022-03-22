@@ -24,8 +24,6 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 // CODE SYSTEMS, VALUE SETS, AND CODES
 //------------------------------------------------------------------------------
 
-// TODO: Crosscheck valuesets with value set spreadsheet
-
 codesystem "LOINC": 'http://loinc.org'
 codesystem "SNOMED-CT": 'http://snomed.info/sct'
 codesystem "RXNORM": 'http://www.nlm.nih.gov/research/umls/rxnorm'
@@ -80,6 +78,7 @@ valueset "Non NILM results of Cervical Cytology Test": 'http://cts.nlm.nih.gov/f
 valueset "HPV Immunization": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.191'
 valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
 valueset "Histologic cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.244'
+valueset "High Risk HPV Positive Results": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.234'
 
 // Standard codes
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
@@ -93,7 +92,6 @@ code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy re
 code "Positive": '10828004' from "SNOMED-CT" display 'Positive (qualifier value)'
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
 code "Negative HPV Finding": '787724008' from "SNOMED-CT" display 'Human papillomavirus deoxyribonucleic acid test negative (finding)'
-code "Positive HPV Finding": '720005005' from "SNOMED-CT" display 'Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)'
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
 code "CIN2": '285838002' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 2 (disorder)'
 code "CIN3": '20365006' from "SNOMED-CT" display 'Squamous intraepithelial neoplasia, grade III (morphologic abnormality)'
@@ -646,7 +644,7 @@ define ResponsesToFuturePregnancyConcernsQuestion:
 define RecentPositiveHpv:
   Common.LookBack(
     (HpvDiagnosticReports) H
-      where H.conclusionCode includes ToConcept("Positive HPV Finding"),  // NOTE: Should this be a value set, to include genotyped testing?
+      where H.conclusionCode in "High Risk HPV Positive Results",
     AbnormalTestLookbackPeriod
   )
 

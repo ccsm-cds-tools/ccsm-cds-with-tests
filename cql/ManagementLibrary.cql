@@ -132,7 +132,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
   return
     case
       when c ~ Dash."Negative HPV Finding" or c ~ Dash."Negative" then {text: 'HPV-negative', rank: 1}
-      when c ~ Dash."Positive HPV Finding" then {text: 'HPV-positive', rank: 2}
+      when c in Dash."High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
       when c ~ "HPV18+ Antigen" or c ~ "HPV18+ DNA" then {text: 'HPV16-, HPV18+', rank: 3}
       when c ~ "HPV16+ Antigen" or c ~ "HPV16+ DNA" then {text: 'HPV16+', rank: 4}
       else {text: 'ALL', rank: 0}
@@ -741,7 +741,7 @@ define PositiveHpvCotest:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC ~ Dash."Positive HPV Finding"
+        aC in Dash."High Risk HPV Positive Results"
   )
 
 define PositiveHpv16or18Cotest:
@@ -1573,7 +1573,7 @@ define PositiveHrHpvTestAfterTreatment:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC ~ Dash."Positive HPV Finding"
+        aC in Dash."High Risk HPV Positive Results"
   )
 
 define RareAbnormalityHighGradeHistology:
@@ -2530,7 +2530,7 @@ define TreatmentRecommendationText:
 define PositivePrimaryHpv:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
-      return aC ~ Dash."Positive HPV Finding"
+      return aC in Dash."High Risk HPV Positive Results"
   ) and 
   MostRecentCytologyCotest is null
 
