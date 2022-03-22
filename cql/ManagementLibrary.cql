@@ -2527,8 +2527,24 @@ define ColposcopyOrTreatmentRecommendationText:
 define TreatmentRecommendationText:
   'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ of 60% or greater based on history and current results, treatment using an excisional procedure without previous biopsy confirmation is preferred but colposcopy with biopsy is acceptable (BII).'
 
+define PositivePrimaryHpv:
+  AnyTrue(
+    (MostRecentHpvReport.allConclusions) aC 
+      return aC ~ Dash."Positive HPV Finding"
+  ) and 
+  MostRecentCytologyCotest is null
+
 define CommonAbnormalityRecommendation:
   case
+    when (
+      PositivePrimaryHpv is not null and
+      not (MostRecentCytologyReport.date after MostRecentHpvReport.date) and
+      not (MostRecentBiopsyReport.date after MostRecentHpvReport.date)
+    ) then
+      {
+        action: null,
+        text: 'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal histology results in order to provide an evidence-based care recommendation.'
+      }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       CommonAbnormalityRecommendationText = '1-year follow-up'

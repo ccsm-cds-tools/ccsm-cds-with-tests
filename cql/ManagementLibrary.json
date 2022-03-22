@@ -17595,12 +17595,137 @@
                "type" : "Literal"
             }
          }, {
+            "name" : "PositivePrimaryHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentHpvReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "Positive HPV Finding",
+                                 "libraryName" : "Dash",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }, {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "MostRecentCytologyCotest",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
             "name" : "CommonAbnormalityRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Case",
                "caseItem" : [ {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "PositivePrimaryHpv",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal histology results in order to provide an evidence-based care recommendation.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
@@ -18398,7 +18523,7 @@
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "name" : "{urn:hl7-org:elm-types:r1}Any",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
