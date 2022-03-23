@@ -2539,7 +2539,7 @@ define CommonAbnormalityRecommendation:
     ) then
       {
         action: null,
-        text: 'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal histology results in order to provide an evidence-based care recommendation.'
+        text: 'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
