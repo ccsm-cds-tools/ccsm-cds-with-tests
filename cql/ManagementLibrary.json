@@ -264,15 +264,7 @@
                "name" : "NULL FLAVOR"
             }
          }, {
-            "name" : "HPV16+ Antigen",
-            "id" : "766842008",
-            "display" : "Antigen of Human papillomavirus type 16 L1 capsid protein (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "HPV16+ DNA",
+            "name" : "HPV16+",
             "id" : "708298003",
             "display" : "Deoxyribonucleic acid of Human papillomavirus 16 (substance)",
             "accessLevel" : "Public",
@@ -280,15 +272,7 @@
                "name" : "SNOMED-CT"
             }
          }, {
-            "name" : "HPV18+ Antigen",
-            "id" : "766848007",
-            "display" : "Antigen of Human papillomavirus type 18 L1 capsid protein (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "HPV18+ DNA",
+            "name" : "HPV18+",
             "id" : "708299006",
             "display" : "Deoxyribonucleic acid of Human papillomavirus 18 (substance)",
             "accessLevel" : "Public",
@@ -888,31 +872,16 @@
                         }
                      }, {
                         "when" : {
-                           "type" : "Or",
+                           "type" : "Equivalent",
                            "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV18+ Antigen",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "name" : "c",
+                              "type" : "AliasRef"
                            }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV18+ DNA",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV18+",
+                                 "type" : "CodeRef"
+                              }
                            } ]
                         },
                         "then" : {
@@ -935,31 +904,16 @@
                         }
                      }, {
                         "when" : {
-                           "type" : "Or",
+                           "type" : "Equivalent",
                            "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV16+ Antigen",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "name" : "c",
+                              "type" : "AliasRef"
                            }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV16+ DNA",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV16+",
+                                 "type" : "CodeRef"
+                              }
                            } ]
                         },
                         "then" : {
@@ -5376,61 +5330,21 @@
                         "expression" : {
                            "type" : "Or",
                            "operand" : [ {
-                              "type" : "Or",
+                              "type" : "Equivalent",
                               "operand" : [ {
-                                 "type" : "Or",
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "HPV16+ Antigen",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "HPV16+ DNA",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
                                  } ]
                               }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "HPV18+ Antigen",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "HPV16+",
+                                    "type" : "CodeRef"
+                                 }
                               } ]
                            }, {
                               "type" : "Equivalent",
@@ -5445,7 +5359,7 @@
                               }, {
                                  "type" : "ToConcept",
                                  "operand" : {
-                                    "name" : "HPV18+ DNA",
+                                    "name" : "HPV18+",
                                     "type" : "CodeRef"
                                  }
                               } ]
