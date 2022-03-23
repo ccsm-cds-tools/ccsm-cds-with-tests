@@ -854,7 +854,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
+        text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
