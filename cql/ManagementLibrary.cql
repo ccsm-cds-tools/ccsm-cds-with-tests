@@ -158,7 +158,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       when c ~ "Biopsy Normal" then {text: '<CIN1', rank: 1}
       when c ~ "CIN1" then {text: 'CIN1', rank: 2}
       when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
-      when c ~ Dash."CIN3" then {text: 'CIN3', rank: 4}
+      when c in Dash."Histologic CIN3" then {text: 'CIN3', rank: 4}
       when c in Dash."AIS" then {text: 'AIS', rank: 5}
       when c in Dash."Histologic cancer" then {text: 'Cancer', rank: 6}
       else {text: 'ALL', rank: 0}
@@ -1002,7 +1002,7 @@ define HistologyInterpretedAsCin3:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ Dash."CIN3"
+        aC in Dash."Histologic CIN3"
   )
 
 define HistologyInterpretedAsAis:
@@ -1520,7 +1520,7 @@ define AnyHistologicHsil:
       (B.allConclusions) aC
         return
           aC ~ Dash."CIN2" or
-          aC ~ Dash."CIN3" or
+          aC in Dash."Histologic CIN3" or
           aC ~ Dash."HSIL, Unspecified"
     )
 
@@ -1540,7 +1540,7 @@ define SecondMostRecentHistologyInterpretedAsCin3:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ Dash."CIN3"
+        aC in Dash."Histologic CIN3"
   )
 
 define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
@@ -1578,7 +1578,7 @@ define RareAbnormalityHighGradeHistology:
       (B.allConclusions) aC
         return
           aC ~ Dash."CIN2" or
-          aC ~ Dash."CIN3" or
+          aC in Dash."Histologic CIN3" or
           aC ~ Dash."HSIL, Unspecified" or
           aC in Dash."AIS"
     )
@@ -2260,7 +2260,7 @@ define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
           rC in Dash."Cervical Precancer Disorders" or 
           rC in Dash."Diagnosis of Cervical cancer" or
           rC ~ Dash."CIN2" or
-          rC ~ Dash."CIN3" or
+          rC in Dash."Histologic CIN3" or
           rC ~ Dash."HSIL, Unspecified" or
           rC in Dash."AIS" or
           rC in Dash."Histologic cancer"

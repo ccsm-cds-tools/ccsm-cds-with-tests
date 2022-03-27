@@ -268,6 +268,10 @@
             "name" : "High Risk HPV Results Without HPV16 or HPV18",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.263",
             "accessLevel" : "Public"
+         }, {
+            "name" : "Histologic CIN3",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.269",
+            "accessLevel" : "Public"
          } ]
       },
       "codes" : {
@@ -371,14 +375,6 @@
             "name" : "CIN2",
             "id" : "285838002",
             "display" : "Cervical intraepithelial neoplasia grade 2 (disorder)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "CIN3",
-            "id" : "20365006",
-            "display" : "Squamous intraepithelial neoplasia, grade III (morphologic abnormality)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -3044,8 +3040,8 @@
                                  }
                               } ]
                            }, {
-                              "type" : "Contains",
-                              "operand" : [ {
+                              "type" : "AnyInValueSet",
+                              "codes" : {
                                  "type" : "Query",
                                  "source" : [ {
                                     "alias" : "X",
@@ -3067,13 +3063,11 @@
                                        } ]
                                     }
                                  }
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "CIN3",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              },
+                              "valueset" : {
+                                 "name" : "Histologic CIN3",
+                                 "type" : "ValueSetRef"
+                              }
                            } ]
                         }, {
                            "type" : "Contains",

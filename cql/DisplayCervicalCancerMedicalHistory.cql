@@ -80,6 +80,7 @@ valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032
 valueset "Histologic cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.244'
 valueset "High Risk HPV Positive Results": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.234'
 valueset "High Risk HPV Results Without HPV16 or HPV18": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.263'
+valueset "Histologic CIN3": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.269'
 
 // Standard codes
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
@@ -95,7 +96,6 @@ code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value
 code "Negative HPV Finding": '787724008' from "SNOMED-CT" display 'Human papillomavirus deoxyribonucleic acid test negative (finding)'
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
 code "CIN2": '285838002' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 2 (disorder)'
-code "CIN3": '20365006' from "SNOMED-CT" display 'Squamous intraepithelial neoplasia, grade III (morphologic abnormality)'
 code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
 
 // Non-standard or "local" codes
@@ -560,7 +560,7 @@ define DiagnosticReportsSummary:
 define HighGradeOrCancerHistologyResults:
   HistologyDiagnosticReports H
     where H.conclusionCode includes ToConcept("CIN2") or
-      H.conclusionCode includes ToConcept("CIN3") or
+      H.conclusionCode in "Histologic CIN3" or
       H.conclusionCode includes ToConcept("HSIL, Unspecified") or
       H.conclusionCode in "AIS" or
       H.conclusionCode in "Histologic cancer"
