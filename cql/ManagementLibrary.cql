@@ -734,12 +734,12 @@ define NegativeOrUnknownHpvCotest:
         not (aC in "All Results of High Risk HPV Test")
   )
 
-define PositiveHpvCotest:
+define PositiveUntypedHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC in Dash."High Risk HPV Positive Results"
+        aC in Dash."High Risk HPV Results Without HPV16 or HPV18"
   )
 
 define PositiveHpv16or18Cotest:
@@ -849,7 +849,7 @@ define RecommendationForRareCytology:
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
-      PositiveHpvCotest and
+      PositiveUntypedHpvCotest and
       AgeInYears() >= 25
     ) then
       {
