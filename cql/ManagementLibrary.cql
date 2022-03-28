@@ -739,7 +739,7 @@ define PositiveUntypedHpvCotest:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC in Dash."High Risk HPV Results Without HPV16 or HPV18"
+        aC in Dash."High Risk Positive HPV Results Without HPV16 or HPV18"
   )
 
 define PositiveHpv16or18Cotest:
