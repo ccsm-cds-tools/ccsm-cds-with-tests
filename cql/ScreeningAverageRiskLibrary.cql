@@ -386,7 +386,7 @@ define ErrorUnexpectedHpvResult:
       ErrorMissingHpvResult is null and
       AnyTrue(
         (HpvTestsForGradeDUnfiltered.conclusionCode) aC
-          return aC !~ Dash."Negative HPV Finding"
+          return not (aC in Dash."HPV Negative Results")
       )
     ) then
       'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
@@ -497,7 +497,7 @@ define HpvTestsForGradeDUnfiltered:
 define HpvTestsForGradeD:
   if AllowGradeDRecommendation then
     HpvTestsForGradeDUnfiltered H
-      where AnyTrue((H.conclusionCode) cC return cC ~ Dash."Negative HPV Finding")
+      where AnyTrue((H.conclusionCode) cC return cC in Dash."HPV Negative Results")
       return {
         type: 'hrHPV',
         date: Common.DiagnosticReportDate(H)

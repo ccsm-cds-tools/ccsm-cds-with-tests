@@ -792,65 +792,17 @@
                      "type" : "Case",
                      "caseItem" : [ {
                         "when" : {
-                           "type" : "Or",
+                           "type" : "Equivalent",
                            "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative HPV Finding",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-negative",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "1",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
                               "name" : "c",
                               "type" : "AliasRef"
-                           },
-                           "valueset" : {
-                              "name" : "High Risk HPV Positive Results",
-                              "libraryName" : "Dash",
-                              "type" : "ValueSetRef"
-                           }
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV16+",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -858,14 +810,14 @@
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
+                                 "value" : "HPV16+",
                                  "type" : "Literal"
                               }
                            }, {
                               "name" : "rank",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "2",
+                                 "value" : "4",
                                  "type" : "Literal"
                               }
                            } ]
@@ -904,17 +856,16 @@
                         }
                      }, {
                         "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "c",
                               "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "HPV16+",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -922,14 +873,45 @@
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV16+",
+                                 "value" : "HPV-positive",
                                  "type" : "Literal"
                               }
                            }, {
                               "name" : "rank",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "4",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-negative",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "1",
                                  "type" : "Literal"
                               }
                            } ]
@@ -5058,44 +5040,21 @@
                            "operand" : [ {
                               "type" : "Or",
                               "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "type" : "Equivalent",
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
                                     "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Negative HPV Finding",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
                                     } ]
-                                 }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Negative",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "HPV Negative Results",
+                                    "libraryName" : "Dash",
+                                    "type" : "ValueSetRef"
+                                 }
                               }, {
                                  "type" : "Equivalent",
                                  "operand" : [ {
@@ -8563,44 +8522,21 @@
                      "relationship" : [ ],
                      "return" : {
                         "expression" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative HPV Finding",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
                               } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         }
                      }
                   }

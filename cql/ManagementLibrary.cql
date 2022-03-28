@@ -129,10 +129,10 @@ define function HpvInterpretation(conclusions List<System.Concept>):
   (conclusions) c
   return
     case
-      when c ~ Dash."Negative HPV Finding" or c ~ Dash."Negative" then {text: 'HPV-negative', rank: 1}
-      when c in Dash."High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
       when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
+      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
+      when c in Dash."High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
+      when c in Dash."HPV Negative Results" then {text: 'HPV-negative', rank: 1}
       else {text: 'ALL', rank: 0}
     end
 
@@ -729,7 +729,7 @@ define NegativeOrUnknownHpvCotest:
   AnyTrue(
     (MostRecentHpvReport.allConclusions) aC 
       return 
-        aC ~ Dash."Negative HPV Finding" or aC ~ Dash."Negative" or
+        aC in Dash."HPV Negative Results" or
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
@@ -1651,8 +1651,7 @@ define NegativeHrHpvTests:
     where AnyTrue(
       (R.allConclusions) aC
         return
-          aC ~ Dash."Negative HPV Finding" or
-          aC ~ Dash."Negative"
+          aC in Dash."HPV Negative Results"
     )
 
 define NegativeHrHpvTestsAsPartOfCotest:

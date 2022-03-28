@@ -81,6 +81,7 @@ valueset "Histologic cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.1
 valueset "High Risk HPV Positive Results": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.234'
 valueset "High Risk HPV Results Without HPV16 or HPV18": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.263'
 valueset "Histologic CIN3": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.269'
+valueset "HPV Negative Results": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.268'
 
 // Standard codes
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
@@ -91,9 +92,7 @@ code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy report' // A.K.A. "Histology tests"
-code "Positive": '10828004' from "SNOMED-CT" display 'Positive (qualifier value)'
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
-code "Negative HPV Finding": '787724008' from "SNOMED-CT" display 'Human papillomavirus deoxyribonucleic acid test negative (finding)'
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
 code "CIN2": '285838002' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 2 (disorder)'
 code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
@@ -495,8 +494,7 @@ define MostRecentHpvReport:
 define MostRecentNegativeHpv:
   MostRecentHpvReport R
     where (
-      R.conclusionCode includes ToConcept("Negative HPV Finding") or
-      R.conclusionCode includes ToConcept("Negative")
+      R.conclusionCode in "HPV Negative Results"
     )
 
 define CervicalCytologyReports:

@@ -1295,8 +1295,8 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "Contains",
-                  "operand" : [ {
+                  "type" : "AnyInValueSet",
+                  "codes" : {
                      "type" : "Query",
                      "source" : [ {
                         "alias" : "X",
@@ -1318,14 +1318,12 @@
                            } ]
                         }
                      }
-                  }, {
-                     "type" : "ToConcept",
-                     "operand" : {
-                        "name" : "Negative HPV Finding",
-                        "libraryName" : "Dash",
-                        "type" : "CodeRef"
-                     }
-                  } ]
+                  },
+                  "valueset" : {
+                     "name" : "HPV Negative Results",
+                     "libraryName" : "Dash",
+                     "type" : "ValueSetRef"
+                  }
                },
                "return" : {
                   "expression" : {
@@ -1884,8 +1882,8 @@
                               "expression" : {
                                  "type" : "Not",
                                  "operand" : {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
+                                    "type" : "InValueSet",
+                                    "code" : {
                                        "name" : "ToConcept",
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
@@ -1893,14 +1891,12 @@
                                           "name" : "aC",
                                           "type" : "AliasRef"
                                        } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Negative HPV Finding",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "HPV Negative Results",
+                                       "libraryName" : "Dash",
+                                       "type" : "ValueSetRef"
+                                    }
                                  }
                               }
                            }
