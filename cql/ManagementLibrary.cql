@@ -39,6 +39,7 @@ codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
+valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
 code "CIN1": '285836003' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 1 (disorder)'
@@ -60,7 +61,6 @@ code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
 code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
 code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
-code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
@@ -155,7 +155,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
   (conclusions) c
   return
     case
-      when c ~ "Biopsy Normal" then {text: '<CIN1', rank: 1}
+      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
       when c ~ "CIN1" then {text: 'CIN1', rank: 2}
       when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
       when c in Dash."Histologic CIN3" then {text: 'CIN3', rank: 4}
@@ -689,7 +689,7 @@ define HistologyInterpretedAsNormal:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "Biopsy Normal"
+        aC in "Normal Histology Finding"
   )
 
 define HistologyInterpretedAsCin1OrNormal:
@@ -1078,7 +1078,7 @@ define SecondMostRecentHistologyInterpretedAsNormal:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
       return 
-        aC ~ "Biopsy Normal"
+        aC in "Normal Histology Finding"
   )
 
 define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
@@ -1181,7 +1181,7 @@ define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast
         (R.allConclusions) aC
           return
             aC ~ "CIN1" or
-            aC ~ "Biopsy Normal"
+            aC in "Normal Histology Finding"
       )
   else
     null
@@ -1872,7 +1872,7 @@ define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
         (B.allConclusions) aC
           return
             aC ~ "CIN1" or
-            aC ~ "Biopsy Normal"
+            aC in "Normal Histology Finding"
       )
 
 define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:

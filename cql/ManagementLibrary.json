@@ -132,6 +132,10 @@
             "name" : "HSIL",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256",
             "accessLevel" : "Public"
+         }, {
+            "name" : "Normal Histology Finding",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262",
+            "accessLevel" : "Public"
          } ]
       },
       "codes" : {
@@ -275,14 +279,6 @@
             "name" : "HPV18+",
             "id" : "708299006",
             "display" : "Deoxyribonucleic acid of Human papillomavirus 18 (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Biopsy Normal",
-            "id" : "165324008",
-            "display" : "Biopsy result normal (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -1030,17 +1026,15 @@
                      "type" : "Case",
                      "caseItem" : [ {
                         "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "c",
                               "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "Biopsy Normal",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "Normal Histology Finding",
+                              "type" : "ValueSetRef"
+                           }
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -4673,8 +4667,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -4682,13 +4676,11 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Biopsy Normal",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Normal Histology Finding",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -7038,8 +7030,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -7047,13 +7039,11 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Biopsy Normal",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Normal Histology Finding",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -8226,8 +8216,8 @@
                                        }
                                     } ]
                                  }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
+                                    "type" : "InValueSet",
+                                    "code" : {
                                        "name" : "ToConcept",
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
@@ -8235,13 +8225,11 @@
                                           "name" : "aC",
                                           "type" : "AliasRef"
                                        } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Biopsy Normal",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "Normal Histology Finding",
+                                       "type" : "ValueSetRef"
+                                    }
                                  } ]
                               }
                            }
@@ -13592,8 +13580,8 @@
                                     }
                                  } ]
                               }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
+                                 "type" : "InValueSet",
+                                 "code" : {
                                     "name" : "ToConcept",
                                     "libraryName" : "FHIRHelpers",
                                     "type" : "FunctionRef",
@@ -13601,13 +13589,11 @@
                                        "name" : "aC",
                                        "type" : "AliasRef"
                                     } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "Biopsy Normal",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "Normal Histology Finding",
+                                    "type" : "ValueSetRef"
+                                 }
                               } ]
                            }
                         }
