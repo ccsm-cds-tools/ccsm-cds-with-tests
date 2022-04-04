@@ -28,7 +28,7 @@ GENERATECQLFILE = True
 # Output CQL file contents to the console for debugging
 DEBUG = False
 
-INPUT_DIRECTORY = '/risk-tables/risk-tables-excel-new/'
+INPUT_DIRECTORY = '/risk-tables/risk-tables-current/risk-tables-excel-2-22/'
 OUTPUT_DIRECTORY_CQL_TABLES = '/cql/'
 OUTPUT_DIRECTORY_MASTER_TABLES = '/risk-tables/output/'
 
