@@ -197,7 +197,7 @@ define function PostColposcopyPastHistory(prev2HpvVal String, prev2PapVal String
         prevPapVal = 'ASC-US' or
         prevPapVal = 'LSIL'
       )
-    ) then ' HPV-negative/ASCUS/LSIL'
+    ) then ' HPV-negative/ASC-US/LSIL'
     when (
       prev2HpvVal is null and
       prev2PapVal is null and
