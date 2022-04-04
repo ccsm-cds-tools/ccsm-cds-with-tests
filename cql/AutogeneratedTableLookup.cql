@@ -269,7 +269,7 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
 
 define function TreatCin2AndCin3TheSame(biopsyVal String):
   if biopsyVal = 'CIN2' or biopsyVal = 'CIN3' then
-    'CIN3'
+    'CIN 2 or 3'
   else
     null
 
