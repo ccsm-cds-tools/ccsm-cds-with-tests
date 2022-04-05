@@ -1,14 +1,14 @@
-/*  
+/*
   Library: Cervical Cancer Screening for Symptomatic Individuals
   Author: CMS Alliance to Modernize Healthcare, operated by THE MITRE Corporation.
 
-  (C) 2021 The MITRE Corporation. All Rights Reserved. 
-  Approved for Public Release: 21-1556. 
+  (C) 2021 The MITRE Corporation. All Rights Reserved.
+  Approved for Public Release: 21-1556.
   Distribution Unlimited.
 
-  Unless otherwise noted, this work is available under an Apache 2.0 license. 
-  It was produced by the MITRE Corporation for the Division of Cancer Prevention 
-  and Control, Centers for Disease Control and Prevention in accordance with the 
+  Unless otherwise noted, this work is available under an Apache 2.0 license.
+  It was produced by the MITRE Corporation for the Division of Cancer Prevention
+  and Control, Centers for Disease Control and Prevention in accordance with the
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
@@ -48,12 +48,12 @@ define IsAge21YearsOrYounger:
 //------------------------------------------------------------------------------
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
-// AND     
-// Diagnosis of Abnormal uterine/vaginal bleeding (active, recurrence, relapse) 
-//   OR Abnormal uterine/vaginal bleeding listed as the reason for an encounter (triaged, in-progress, completed) 
-//   OR Abnormal uterine/vaginal bleeding observation (final, amended, corrected) 
-//   OR response to "Is the patient experiencing abnormal uterine or vaginal bleeding today?" = "Yes" 
-// AND 
+// AND
+// Diagnosis of Abnormal uterine/vaginal bleeding (active, recurrence, relapse)
+//   OR Abnormal uterine/vaginal bleeding listed as the reason for an encounter (triaged, in-progress, completed)
+//   OR Abnormal uterine/vaginal bleeding observation (final, amended, corrected)
+//   OR response to "Is the patient experiencing abnormal uterine or vaginal bleeding today?" = "Yes"
+// AND
 // Date recorded is <= 24 hours ago
 
 define HasRecentAbnormalBleedingCondition:
@@ -81,15 +81,13 @@ define HasRecentAbnormalBleedingObservation:
   )
 
 define RecentlyRespondedYesToAbnormalBleedingQuestion:
-  Exists(
     C3F.MostRecent(
       C3F.ObservationLookBack(
         Dash.ResponsesToAbnormalBleedingQuestion R
           where R.value ~ Dash."Yes",
         SymptomaticLookBack
       )
-    )
-  )
+    ) is not null
 
 define IsSymptomatic:
   HasRecentAbnormalBleedingCondition or
@@ -119,12 +117,12 @@ define MostRecentNilmCytology:
   Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack(Dash.MostRecentNilmCytology, 12 months))
+  Exists(Common.LookBack({Dash.MostRecentNilmCytology}, 12 months))
 
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
 
-define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: 
+define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
   from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
@@ -132,7 +130,14 @@ define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
     Common.CoincidentDiagnosticReports(C, H)
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
-  Exists(MostRecentCoincidentNilmCytologyAndNegativeHpvReport)
+  MostRecentCoincidentNilmCytologyAndNegativeHpvReport M
+  return
+    if
+      M.C is not null and M.H is not null
+    then
+      true
+    else
+      false
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(
