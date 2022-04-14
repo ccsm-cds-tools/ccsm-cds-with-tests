@@ -265,7 +265,7 @@ define CoincidentHpvTests:
 define NegativeCotests:
   CoincidentHpvTests R
     where
-      R.conclusionCode includes ToConcept(Dash."Negative HPV Finding")
+      R.conclusionCode in Dash."HPV Negative Results"
     return {
       type: 'DiagnosticReport',
       date: Common.DiagnosticReportDate(R)
@@ -353,7 +353,7 @@ define ErrorCotestWithNonNegativeHpvResult:
     ErrorCotestWithMissingHpvResult is null and
     AnyTrue(
       (CoincidentHpvTests.conclusionCode) aC
-        return aC !~ Dash."Negative HPV Finding"
+        return not (aC in Dash."HPV Negative Results")
     )
   ) then
     'An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.'
