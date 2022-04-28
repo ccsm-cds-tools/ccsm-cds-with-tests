@@ -64,6 +64,7 @@ code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Hu
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
+code "SCC": '1162767002' from "SNOMED-CT" display 'Squamous cell carcinoma (morphologic abnormality)'
 
 // Local codes
 code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
@@ -109,7 +110,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "LSIL" then {text: 'LSIL', rank: 3}
         when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
         when c ~ "AGC" then {text: 'AGC', rank: 5}
-        when c in "HSIL" then {text: 'HSIL+', rank: 6}
+        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 6}
         else {text: 'ALL', rank: 0}
       end
   else

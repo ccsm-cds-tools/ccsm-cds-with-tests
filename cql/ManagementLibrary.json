@@ -300,6 +300,14 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "SCC",
+            "id" : "1162767002",
+            "display" : "Squamous cell carcinoma (morphologic abnormality)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Benign Glandular Cells",
             "id" : "BGC",
             "display" : "Benign Glandular Cells",
@@ -686,15 +694,30 @@
                            }
                         }, {
                            "when" : {
-                              "type" : "InValueSet",
-                              "code" : {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              },
-                              "valueset" : {
-                                 "name" : "HSIL",
-                                 "type" : "ValueSetRef"
-                              }
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "c",
+                                    "type" : "AliasRef"
+                                 },
+                                 "valueset" : {
+                                    "name" : "HSIL",
+                                    "type" : "ValueSetRef"
+                                 }
+                              }, {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "c",
+                                    "type" : "AliasRef"
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "SCC",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              } ]
                            },
                            "then" : {
                               "type" : "Tuple",
