@@ -81,13 +81,13 @@ define HasRecentAbnormalBleedingObservation:
   )
 
 define RecentlyRespondedYesToAbnormalBleedingQuestion:
-    C3F.MostRecent(
-      C3F.ObservationLookBack(
-        Dash.ResponsesToAbnormalBleedingQuestion R
-          where R.value ~ Dash."Yes",
-        SymptomaticLookBack
-      )
-    ) is not null
+  C3F.MostRecent(
+    C3F.ObservationLookBack(
+      Dash.ResponsesToAbnormalBleedingQuestion R
+        where R.value ~ Dash."Yes",
+      SymptomaticLookBack
+    )
+  ) is not null
 
 define IsSymptomatic:
   HasRecentAbnormalBleedingCondition or
@@ -117,7 +117,7 @@ define MostRecentNilmCytology:
   Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack({Dash.MostRecentNilmCytology}, 12 months))
+  Common.DiagnosticReportDate(Dash.MostRecentNilmCytology) >= Today() - 12 months
 
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
@@ -132,12 +132,8 @@ define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
   MostRecentCoincidentNilmCytologyAndNegativeHpvReport M
   return
-    if
       M.C is not null and M.H is not null
-    then
-      true
-    else
-      false
+
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(
