@@ -161,9 +161,9 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
+               "type" : "Not",
                "operand" : {
-                  "type" : "ToList",
+                  "type" : "IsNull",
                   "operand" : {
                      "name" : "MostRecent",
                      "libraryName" : "C3F",
@@ -296,24 +296,28 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "LookBack",
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "name" : "DiagnosticReportDate",
                   "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "MostRecentNilmCytology",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "value" : 12,
-                     "unit" : "months",
-                     "type" : "Quantity"
+                     "name" : "MostRecentNilmCytology",
+                     "type" : "ExpressionRef"
                   } ]
-               }
+               }, {
+                  "type" : "ToDateTime",
+                  "operand" : {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "type" : "Today"
+                     }, {
+                        "value" : 12,
+                        "unit" : "months",
+                        "type" : "Quantity"
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "MostRecentNegativeHpv",
@@ -679,12 +683,39 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "type" : "ToList",
-                  "operand" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "M",
+                  "expression" : {
                      "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
                      "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "C",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "H",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     } ]
                   }
                }
             }
