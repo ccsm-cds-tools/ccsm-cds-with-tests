@@ -1,14 +1,14 @@
-/*  
+/*
   Library: Management of Abnormal Cervical Cancer Screening Results
   Author: CMS Alliance to Modernize Healthcare, operated by THE MITRE Corporation.
 
-  (C) 2021 The MITRE Corporation. All Rights Reserved. 
-  Approved for Public Release: 21-1556. 
+  (C) 2021 The MITRE Corporation. All Rights Reserved.
+  Approved for Public Release: 21-1556.
   Distribution Unlimited.
 
-  Unless otherwise noted, this work is available under an Apache 2.0 license. 
-  It was produced by the MITRE Corporation for the Division of Cancer Prevention 
-  and Control, Centers for Disease Control and Prevention in accordance with the 
+  Unless otherwise noted, this work is available under an Apache 2.0 license.
+  It was produced by the MITRE Corporation for the Division of Cancer Prevention
+  and Control, Centers for Disease Control and Prevention in accordance with the
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
@@ -113,7 +113,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         else {text: 'ALL', rank: 0}
       end
   else
-    {text: 'ALL', rank: 0}
+    {{text: 'ALL', rank: 0}}
 
 /**
  * Takes a list of HPV conclusion codes and maps each to a text value and a numerical 
@@ -137,8 +137,8 @@ define function HpvInterpretation(conclusions List<System.Concept>):
     end
 
 /**
- * Takes the output from HpvInterpretation() and returns the text of the 
- * interpretation with the highest rank. This allows more specific conclusions to 
+ * Takes the output from HpvInterpretation() and returns the text of the
+ * interpretation with the highest rank. This allows more specific conclusions to
  * take precedence over more general ones.
  * @param interpretations - a list of tuples
  * @returns System.String the text to be used as input to the risk tables
@@ -176,8 +176,8 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 //       OR Cervical Histology result not equal to "Negative"
 //       <= 7 years ago
 //   OR INCLUSION #2: Includes women who have been "diagnosed" with a high-grade precancerous lesion or cervical cancer
-//       Diagnosis of High grade pre-cancerous cervical lesion 
-//       OR Diagnosis of Cervical cancer 
+//       Diagnosis of High grade pre-cancerous cervical lesion
+//       OR Diagnosis of Cervical cancer
 //       OR Cervical histology result = "Histologic HSIL (CIN2)" or "Histologic HSIL (CIN3)" or “Histologic HSIL, unspecified” or "Histologic AIS" or "Histologic cancer"
 
 define HasRecentAbnormalScreening:
@@ -192,7 +192,7 @@ define HasCervicalCancerDiagnoses:
 define IsIncluded:
   Entry.FemaleorTransgenderMale and
   (
-    HasRecentAbnormalScreening or 
+    HasRecentAbnormalScreening or
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
     Exists(Dash.HighGradeOrCancerHistologyResults)
@@ -295,7 +295,7 @@ define FourthMostRecentHpvResult:
 // CERVICAL CYTOLOGY
 
 define CervicalCytologyReports:
-  Dash.CervicalCytologyReports    
+  Dash.CervicalCytologyReports
 
 define SortedCytologyReports:
   (CervicalCytologyReports) C
@@ -493,7 +493,7 @@ define MostRecentCin2orCin3Biopsy:
 
 // Look for treatments after this CIN2/CIN3 biopsy
 define CervicalPrecancerTreatments:
-  Dash.CervicalExcisionProcedures union 
+  Dash.CervicalExcisionProcedures union
     Dash.CervicalAblationProcedures
 
 define CervicalPrecancerTreatmentsAfterBiopsy:
@@ -681,7 +681,7 @@ define Pregnant:
 define HistologyInterpretedAsCin1:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ "CIN1"
   )
 
@@ -699,7 +699,7 @@ define HistologyInterpretedAsCin1OrNormal:
 define HistologyInterpretedAsCancer:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC in Dash."Histologic cancer"
   )
 
@@ -718,8 +718,8 @@ define AnyHpvSinceMostRecentCytology:
 define UnknownHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
-    (MostRecentHpvReport.allConclusions) aC 
-      return 
+    (MostRecentHpvReport.allConclusions) aC
+      return
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
@@ -762,7 +762,7 @@ define HasAbsenceOfCervixObservations:
 
 define AbsenceOrRemovalOfCervix:
   HasRemovalOfCervixProcedures or
-  HasAbsenceOfCervixDiagnoses or 
+  HasAbsenceOfCervixDiagnoses or
   HasAbsenceOfCervixObservations
 
 define RecommendationForRareCytology:
@@ -994,7 +994,7 @@ define MostRecentBiopsyReportWasWithinPastYear:
 define HistologyInterpretedAsCin2:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ Dash."CIN2"
   )
 
@@ -1008,14 +1008,14 @@ define HistologyInterpretedAsCin3:
 define HistologyInterpretedAsAis:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC in Dash."AIS"
   )
 
 define HistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ Dash."HSIL, Unspecified"
   )
 
@@ -1029,7 +1029,7 @@ define PrecedingCytologyResults:
 define PrecedingCytologyIsHsil:
   AnyTrue(
     (PrecedingCytologyResults.allConclusions) aC
-      return 
+      return
         aC in "HSIL"
   )
 
@@ -1050,7 +1050,7 @@ define PrecedingCytologyResultsBeforeSecondMostRecentBiopsy:
 define PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil:
   AnyTrue(
     (PrecedingCytologyResultsBeforeSecondMostRecentBiopsy.allConclusions) aC
-      return 
+      return
         aC in "HSIL"
   )
 
@@ -1070,7 +1070,7 @@ define SecondMostRecentBiopsyReport:
 define SecondMostRecentHistologyInterpretedAsCin1:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ "CIN1"
   )
 
@@ -1098,15 +1098,13 @@ define TwoMostRecentBiopsyReportsWithin15monthsApart:
   SecondMostRecentBiopsyReport.date within 15 months of MostRecentBiopsyReport.date
 
 define RecentlyRespondedYesToFuturePregnancyConcernsQuestion:
-  Exists(
-    C3F.MostRecent(
-      C3F.ObservationLookBack(
-        Dash.ResponsesToFuturePregnancyConcernsQuestion R
-          where R.value ~ Dash."Yes",
-        3 months
-      )
+  C3F.MostRecent(
+    C3F.ObservationLookBack(
+      Dash.ResponsesToFuturePregnancyConcernsQuestion R
+        where R.value ~ Dash."Yes",
+      3 months
     )
-  )
+  ) is not null
 
 define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months:
   First(
@@ -1148,7 +1146,7 @@ define HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy:
   Exists(HistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy)
 
 define MostRecentNegativeHsilSurveillanceResult:
-  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) then
+  if (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) then
     MostRecentBiopsyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
     HistologyInterpretedAsCin1OrNormal and
     MostRecentCytologyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
@@ -1161,7 +1159,7 @@ define MostRecentNegativeHsilSurveillanceResult:
     false
 
 define SecondMostRecentNegativeHsilSurveillanceResult:
-  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) then
+  if (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) then
     SecondMostRecentBiopsyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
     SecondMostRecentHistologyInterpretedAsCin1OrNormal and
     SecondMostRecentCytologyReport.date 18 months or less after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months.date and
@@ -1174,7 +1172,7 @@ define SecondMostRecentNegativeHsilSurveillanceResult:
     false
 
 define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years:
-  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) then
+  if (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) then
     SortedBiopsyReports R
       where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
       AnyTrue(
@@ -1187,7 +1185,7 @@ define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast
     null
 
 define SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years:
-  if Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) then
+  if (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) then
     SortedCytologyReports R
       where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
       AnyTrue(
@@ -1256,7 +1254,7 @@ define RecommendationForHistologyResults:
       }
     when ( // 2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentBiopsyReportWasWithinPastYear and 
+      MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsUnspecifiedHsil
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
@@ -1266,7 +1264,7 @@ define RecommendationForHistologyResults:
       }
     when ( // 3
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months) and
+      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) and
       MostRecentNegativeHsilSurveillanceResult
       SecondMostRecentNegativeHsilSurveillanceResult and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
@@ -1277,11 +1275,11 @@ define RecommendationForHistologyResults:
       }
     when ( // 4
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Exists(InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years) and
+      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) and
       Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
-    ) then  
+    ) then
       {
         action: null,
         text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
@@ -1321,7 +1319,7 @@ define RecommendationForHistologyResults:
       }
     when ( // 3 - Recommendation #1
       AgeInYears() >= 25 and
-      ( 
+      (
         (
           (
             MostRecentBiopsyReportWasWithinPast18months and
@@ -1354,7 +1352,7 @@ define RecommendationForHistologyResults:
           not (
             MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
           )
-        )  
+        )
       )
     ) then
       {
@@ -1365,7 +1363,7 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and
       MostRecentSurveillanceTestNegative and
       MostRecentHpvReport.date >= Now() - 3.5 years and
-      ( 
+      (
         (
           (
             MostRecentBiopsyReport.date 18 months or less before MostRecentHpvReport.date and
@@ -1398,7 +1396,7 @@ define RecommendationForHistologyResults:
           not (
             MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
           )
-        )  
+        )
       )
     ) then
       {
@@ -1417,21 +1415,21 @@ define RecommendationForHistologyResults:
       ) and
       (
         (
-          Exists(MostRecentCytologyReport) and
+          (MostRecentCytologyReport is not null) and
           not CytologyInterpretedAsNilm and
           not CytologyInterpretedAsHsil and
           MostRecentCytologyReport.date 1 year or more after MostRecentBiopsyReport.date and
           MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
         ) or
         (
-          Exists(MostRecentHpvReport) and
+          (MostRecentHpvReport is not null) and
           MostRecentHpvResult != 'HPV-negative' and
           MostRecentHpvReport.date 1 year or more after MostRecentBiopsyReport.date and
           MostRecentHpvReport.date less than 3 years after MostRecentBiopsyReport.date
         ) or
         (
           // TODO: As written, this part of the path will not trigger. Going forward, we should look into a way to clarify the lookback for 'LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology' so that it is not reliant on the MostRecentBiopsyReport
-          Exists(MostRecentBiopsyReport) and
+          (MostRecentBiopsyReport is not null) and
           not HistologyInterpretedAsNormal and
           MostRecentBiopsyReport.date 1 year or more after MostRecentBiopsyReport.date and
           MostRecentBiopsyReport.date less than 3 years after MostRecentBiopsyReport.date
@@ -1510,9 +1508,9 @@ define MostRecentTreatmentDate:
 define TreatmentInLastYear:
   MostRecentTreatment P
   where Common.ProcedureDate(P) >= Now() - 12 months
-  
+
 define HasTreatmentInLastYear:
-  Exists(TreatmentInLastYear)
+  TreatmentInLastYear is not null
 
 define AnyHistologicHsil:
   (SortedBiopsyReports) B
@@ -1532,7 +1530,7 @@ define HistologyInterpretedAsHistologicHsil:
 define SecondMostRecentHistologyInterpretedAsCin2:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ Dash."CIN2"
   )
 
@@ -1546,7 +1544,7 @@ define SecondMostRecentHistologyInterpretedAsCin3:
 define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
-      return 
+      return
         aC ~ Dash."HSIL, Unspecified"
   )
 
@@ -1584,8 +1582,8 @@ define RareAbnormalityHighGradeHistology:
     )
 
 define RareAbnormalityHighGradeHistologyBeforeTreatment:
-  if Exists(MostRecentTreatment) then
-    RareAbnormalityHighGradeHistology C 
+  if (MostRecentTreatment is not null) then
+    RareAbnormalityHighGradeHistology C
     where
       C.date 12 months or less before MostRecentTreatmentDate
   else
@@ -1601,15 +1599,15 @@ define CytologicHsilOrAgc:
     )
 
 define CytologicHsilOrAgcBeforeTreatment:
-  if Exists(MostRecentTreatment) then
-    CytologicHsilOrAgc C 
+  if (MostRecentTreatment is not null) then
+    CytologicHsilOrAgc C
     where
       C.date 12 months or less before MostRecentTreatmentDate
   else
     null
 
 define CytologyResultsBeforeTreatment:
-  if Exists(MostRecentTreatment) then
+  if (MostRecentTreatment is not null) then
     (SortedCytologyReports) C
     where
       C.date 12 months or less before MostRecentTreatmentDate
@@ -1630,7 +1628,7 @@ define HasPersistentAscHBeforeTreatment:
     false
 
 define TreatmentForHighGradeHistologyOrCytology:
-  if Exists(MostRecentTreatment) and
+  if (MostRecentTreatment is not null) and
     (
       Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
       Exists(CytologicHsilOrAgcBeforeTreatment) or
@@ -1641,7 +1639,7 @@ define TreatmentForHighGradeHistologyOrCytology:
     null
 
 define HasTreatmentForHighGradeHistologyOrCytology:
-  Exists(TreatmentForHighGradeHistologyOrCytology)
+  TreatmentForHighGradeHistologyOrCytology is not null
 
 define TreatmentForHighGradeHistologyOrCytologyDate:
   Common.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
@@ -1655,7 +1653,7 @@ define NegativeHrHpvTests:
     )
 
 define NegativeHrHpvTestsAsPartOfCotest:
-  from NegativeHrHpvTests H, SortedCytologyReports C 
+  from NegativeHrHpvTests H, SortedCytologyReports C
     where H.date within 1 day of C.date
     return H
 
@@ -1671,7 +1669,7 @@ define NegativeCytologyTests:
     )
 
 define NegativeCotests:
-  from NegativeHrHpvTests H, NegativeCytologyTests C 
+  from NegativeHrHpvTests H, NegativeCytologyTests C
     where H.date within 1 day of C.date
     return H
 
@@ -1700,7 +1698,7 @@ define FirstNegativeSurveillanceTestAfterMostRecentBiopsy:
     null
 
 define HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy:
-  Exists(FirstNegativeSurveillanceTestAfterMostRecentBiopsy)
+  FirstNegativeSurveillanceTestAfterMostRecentBiopsy is not null
 
 define NegativeSurveillanceTestsAfterSecondMostRecentBiopsy:
   SortedNegativeSurveillanceTests H
@@ -1713,11 +1711,11 @@ define FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy:
     null
 
 define HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy:
-  Exists(FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy)
+  FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy is not null
 
 define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
   if HasTreatmentForHighGradeHistologyOrCytology then
-    SortedNegativeSurveillanceTests T 
+    SortedNegativeSurveillanceTests T
     where T.date > TreatmentForHighGradeHistologyOrCytologyDate
   else
     null
@@ -1732,7 +1730,7 @@ define InitialIntensiveSurveillancePeriod:
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
     )
-  else 
+  else
     false
 
 define RecommendationForSurveillanceAfterAbnormalities:
@@ -1866,7 +1864,7 @@ define HistologicHsilCin2OrUnspecified:
 
 define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
   (SortedBiopsyReports) B
-    where 
+    where
       B.date less than 2 years after HistologicHsilCin2OrUnspecified.date and
       AnyTrue(
         (B.allConclusions) aC
@@ -1877,7 +1875,7 @@ define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
 
 define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
   (SortedCytologyReports) C
-    where 
+    where
       C.date less than 2 years after HistologicHsilCin2OrUnspecified.date and
       AnyTrue(
         (C.allConclusions) aC
@@ -1921,8 +1919,8 @@ define Under25AndSecondMostRecentLowGradeCytologyResults:
 
 define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   HistologyInterpretedAsCin1OrNormal and
-  Under25AndLowGradeCytologyResults and 
-  Under25AndSecondMostRecentLowGradeCytologyResults and 
+  Under25AndLowGradeCytologyResults and
+  Under25AndSecondMostRecentLowGradeCytologyResults and
   MostRecentBiopsyReport.date 3 years or less after MostRecentCytologyReport.date
 
 define CytologyInterpretedAsAscusOrAbove:
@@ -1938,7 +1936,7 @@ define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
 
 define BiopsySinceMostRecentCytology:
   Exists(
-    SortedBiopsyReports B 
+    SortedBiopsyReports B
     where B.date > MostRecentCytologyReport.date
   )
 
@@ -1951,7 +1949,7 @@ define RecommendationForPatientsYoungerThan25:
       {
         action: 'Cytology',
         text: 'Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
-      }    
+      }
     when ( // 2
       AgeInYears() < 25 and
       MostRecentCytologyReportWasWithinPastFiveYears and
@@ -2139,7 +2137,7 @@ define FirstHistologyAfterPregnancyOnset:
 define HistologicAisDuringPregnancy:
   Exists(
     (SortedBiopsyReports) B
-      where 
+      where
         B.date >= PregnancyOnset and
         B.date <= PregnancyOnset + 42 weeks and
         AnyTrue(
@@ -2154,7 +2152,7 @@ define RecommendationForPregnantPatients:
     // #1 is covered by the Common Abnormality Recommendation section.
     when ( // 2 - Recommendation #1
       AgeInYears() >= 25 and
-      Pregnant and 
+      Pregnant and
       FirstHistologyAfterPregnancyOnset.date > Now() - 1 year and
       FirstHistologyAfterPregnancyOnset.riskTableInput in {'CIN2','CIN3'}
     ) then
@@ -2164,7 +2162,7 @@ define RecommendationForPregnantPatients:
       }
     when ( // 2 - Recommendation #2
       AgeInYears() >= 25 and
-      Pregnant and 
+      Pregnant and
       HistologicAisDuringPregnancy
     ) then
       {
@@ -2200,7 +2198,7 @@ define RecommendationForImmunosuppressedPatients:
         (
           MostRecentCytologyReportWasWithinPastFiveYears and
           (
-            MostRecentCytologyReport.riskTableInput in {'LSIL','ASC-H','AGC','HSIL+'} or 
+            MostRecentCytologyReport.riskTableInput in {'LSIL','ASC-H','AGC','HSIL+'} or
             CytologyInterpretedAsAis
           )
         ) or
@@ -2256,7 +2254,7 @@ define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
     where AnyTrue(
       (P.reasonCode) rC
         return
-          rC in Dash."Cervical Precancer Disorders" or 
+          rC in Dash."Cervical Precancer Disorders" or
           rC in Dash."Diagnosis of Cervical cancer" or
           rC ~ Dash."CIN2" or
           rC in Dash."Histologic CIN3" or
@@ -2301,7 +2299,7 @@ define CervicalCancerDiagnosisDate:
     }
   else
     null
-  
+
 define HighGradeOrCancerHistologyResultsDate:
   if Exists(Dash.HighGradeOrCancerHistologyResults) then
     {
@@ -2333,7 +2331,7 @@ define HysterectomyPerformedForTreatment:
     Exists(CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
 
 define NegativeSurveillanceTestsAfterHysterectomy: // NOTE: We should be able to refactor the LP4 Grade D Exclusions in a similar way
-  SortedNegativeSurveillanceTests T 
+  SortedNegativeSurveillanceTests T
   where T.date >= CervixRemovalDate
 
 define InitialIntensiveSurveillancePeriodPostHysterectomy:

@@ -1,14 +1,14 @@
-/*  
+/*
   Library: Cervical Cancer Screening and Management Dashboard
   Author: CMS Alliance to Modernize Healthcare, operated by THE MITRE Corporation.
 
-  (C) 2021 The MITRE Corporation. All Rights Reserved. 
-  Approved for Public Release: 21-1556. 
+  (C) 2021 The MITRE Corporation. All Rights Reserved.
+  Approved for Public Release: 21-1556.
   Distribution Unlimited.
 
-  Unless otherwise noted, this work is available under an Apache 2.0 license. 
-  It was produced by the MITRE Corporation for the Division of Cancer Prevention 
-  and Control, Centers for Disease Control and Prevention in accordance with the 
+  Unless otherwise noted, this work is available under an Apache 2.0 license.
+  It was produced by the MITRE Corporation for the Division of Cancer Prevention
+  and Control, Centers for Disease Control and Prevention in accordance with the
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
@@ -63,8 +63,8 @@ valueset "Kidney Transplant": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.1
 valueset "Diagnosis of Cervical cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.246'
 valueset "Cervical Precancer Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.228'
 valueset "Diethylstilbestrol (DES) exposure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.198'
-valueset "Diagnosis of Absence of cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201' 
-valueset "Absence of cervix observation": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.202' 
+valueset "Diagnosis of Absence of cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201'
+valueset "Absence of cervix observation": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.202'
 valueset "Colposcopy procedure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.252'
 valueset "Surgery Female Genital System Cervix Uteri": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.3157.1315'
 valueset "Cervical Excision Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.182'
@@ -196,14 +196,14 @@ define ChronicGraftVersusHostDiseaseDiagnoses:
   [Condition: "Chronic GvHD ICD-10 Code"]
 
 define ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell:
-  ChronicGraftVersusHostDiseaseDiagnoses C 
+  ChronicGraftVersusHostDiseaseDiagnoses C
   where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define GenitalGraftVersusHostDiseaseDiagnoses:
   [Condition: "Diagnosis of Genital GvHD"]
 
 define GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell:
-  GenitalGraftVersusHostDiseaseDiagnoses C 
+  GenitalGraftVersusHostDiseaseDiagnoses C
   where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define ImmunocompromisedConditions:
@@ -427,7 +427,7 @@ define HematopoieticStemCellTransplantProcedures:
 
 define DateOfFirstHematopoieticStemCellTransplantProcedure:
   Common.DateOfFirstProcedure(HematopoieticStemCellTransplantProcedures)
- 
+
 define SolidOrganTransplantProcedures:
   C3F.Completed(
     [Procedure: "Solid Organ Transplant Procedure Codes"] union
@@ -549,7 +549,7 @@ define HistologyDiagnosticReportsSummary:
 
 define DiagnosticReportsSummary:
   (
-    HpvDiagnosticReportsSummary union 
+    HpvDiagnosticReportsSummary union
     CervicalCytologyReportsSummary union
     HistologyDiagnosticReportsSummary
   ) D
@@ -630,7 +630,7 @@ define ResponsesToVisibleLesionQuestion:
 define ResponsesToDesExposureQuestion:
   [Observation: "DES Exposure Question"]
 
-define ResponsesToFuturePregnancyConcernsQuestion: 
+define ResponsesToFuturePregnancyConcernsQuestion:
   C3F.ObservationLookBack(
     [Observation: "Future Pregnancy Concerns Question"],
     12 months
@@ -661,7 +661,7 @@ define HasRecentAbnormalCytologyResults:
   Exists(RecentAbnormalCytologyResults)
 
 define HasRecentAbnormalScreening:
-  HasRecentPositiveHpv or 
+  HasRecentPositiveHpv or
   HasRecentAbnormalCytologyResults
 
 define RecentAbnormalHistology:
@@ -675,14 +675,14 @@ define HasRecentAbnormalHistology:
   Exists(RecentAbnormalHistology)
 
 define Immunocompromised:
-  Exists(HivDiagnoses) or 
+  Exists(HivDiagnoses) or
   Exists(SolidOrganTransplantDiagnoses) or
   Exists(SolidOrganTransplantProcedures) or
-  Exists(SystemicLupusErythematosusDiagnoses) or 
+  Exists(SystemicLupusErythematosusDiagnoses) or
   Exists(HematopoieticStemCellTransplantDiagnoses) or
   Exists(HematopoieticStemCellTransplantProcedures) or
   Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell) or
-  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell) or 
+  Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell) or
   Exists(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
 
 // Logic to determine most recent distinct immunocompromised event:
@@ -710,18 +710,13 @@ define FirstSolidOrganTransplant:
     if FirstProcedureForSolidOrganTransplant.date is not null then
       First(
         (
-          FirstDiagnosisOfSolidOrganTransplant union
-          FirstProcedureForSolidOrganTransplant
-        ) T 
-        return {
-          type: T.type,
-          date: T.date
-        }
+          {FirstDiagnosisOfSolidOrganTransplant, FirstProcedureForSolidOrganTransplant}
+        ) T
         sort by date
       )
-    else 
+    else
       FirstDiagnosisOfSolidOrganTransplant
-  else 
+  else
     FirstProcedureForSolidOrganTransplant
 
 define FirstDiagnosisOfSystemicLupusErythematosus:
@@ -747,13 +742,8 @@ define FirstHematopoieticStemCellTransplant:
     if FirstProcedureForHematopoieticStemCellTransplant is not null then
       First(
         (
-          FirstDiagnosisOfHematopoieticStemCellTransplant union
-          FirstProcedureForHematopoieticStemCellTransplant
-        ) T 
-        return {
-          type: T.type,
-          date: T.date
-        }
+          {FirstDiagnosisOfHematopoieticStemCellTransplant, FirstProcedureForHematopoieticStemCellTransplant}
+        ) T
         sort by date
       )
     else
@@ -779,17 +769,17 @@ define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
   }
 
 define DistinctImmunocompromisedEvents:
-  FirstDiagnosisOfHiv union
-  FirstSolidOrganTransplant union
-  FirstDiagnosisOfSystemicLupusErythematosus union
-  FirstHematopoieticStemCellTransplant union
-  FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell union
-  FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell union
-  FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant
+  {FirstDiagnosisOfHiv,
+  FirstSolidOrganTransplant,
+  FirstDiagnosisOfSystemicLupusErythematosus,
+  FirstHematopoieticStemCellTransplant,
+  FirstDiagnosisOfChronicGraftVersusHostDiseaseAfterStemCell,
+  FirstDiagnosisOfGenitalGraftVersusHostDiseaseAfterStemCell,
+  FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant}
 
 define SortedDistinctImmunocompromisedEvents:
   DistinctImmunocompromisedEvents E
-    where 
+    where
       E.date is not null
     return {
       type: E.type,
@@ -824,15 +814,15 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
     null
 
 define ErrorHistologyWithUnexpectedCode:
-  if 
+  if
     false // TODO: Determine criteria for an "unexpected code"
-    then 
+    then
     'A histology test was found but with an enexpected result code. Please review patient record to resolve.'
   else
     null
 
 define ErrorCytologyyWithUnexpectedCode:
-  if 
+  if
     false // TODO: Determine criteria for an "unexpected code"
     then
     'A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.'
@@ -840,7 +830,7 @@ define ErrorCytologyyWithUnexpectedCode:
     null
 
 define ErrorHpvWithUnexpectedCode:
-  if 
+  if
     false // TODO: Determine criteria for an "unexpected code"
     then
     'An HPV test was found but with an enexpected result code. Please review patient record to resolve.'
@@ -853,7 +843,7 @@ define Errors:
   //   ErrorHistologyWithUnexpectedCode,
   //   ErrorCytologyyWithUnexpectedCode,
   //   ErrorHpvWithUnexpectedCode
-  } 
+  }
   except {null}
   // TODO: DiagnosticReports without conclusionCodes
   // TODO: Histology with a code that isn't one we expect
@@ -865,7 +855,7 @@ define Errors:
 // The Summary object represents the full Cervical Cancer Screening and Management Medical History to be displayed to the clinician. A robust UI
 // should be created in order to display this information in a Cervical Cancer Screening and Management Dashboard
 
-define CervicalCancerScreeningAndMedicalHistory: 
+define CervicalCancerScreeningAndMedicalHistory:
 {
   Age: PatientAge,
   Conditions: PertinentConditionsSummary,
