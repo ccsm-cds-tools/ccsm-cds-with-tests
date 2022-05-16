@@ -37,8 +37,9 @@ codesystem "NULL FLAVOR": 'http://terminology.hl7.org/CodeSystem/v3-NullFlavor'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
-valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233' // NOTE: This value set should be expanded to include DNA findings of HPV 16 and HPV 18 (and potentially RNA findings).
+valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
+valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
 code "CIN1": '285836003' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 1 (disorder)'
@@ -58,11 +59,8 @@ code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
-code "HPV16+ Antigen": '766842008' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 16 L1 capsid protein (substance)' // NOTE: We still need to determine whether HPV16+ will become a value set
-code "HPV16+ DNA": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
-code "HPV18+ Antigen": '766848007' from "SNOMED-CT" display 'Antigen of Human papillomavirus type 18 L1 capsid protein (substance)' // NOTE: We still need to determine whether HPV18+ will become a value set
-code "HPV18+ DNA": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
-code "Biopsy Normal": '165324008' from "SNOMED-CT" display 'Biopsy result normal (finding)'
+code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
+code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
@@ -118,11 +116,11 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     {{text: 'ALL', rank: 0}}
 
 /**
- * Takes a list of HPV conclusion codes and maps each to a text value and a numerical
- * ranking. The text value can be used as input to the risk tables and the numerical
- * ranking is meant to convey precendence so that the most specific conclusion can
- * be selected from amongst a group of codes. For instance, an HPV test may come back
- * both as postive and postive for HPV16. We want to be able to select the latter
+ * Takes a list of HPV conclusion codes and maps each to a text value and a numerical 
+ * ranking. The text value can be used as input to the risk tables and the numerical 
+ * ranking is meant to convey precendence so that the most specific conclusion can 
+ * be selected from amongst a group of codes. For instance, an HPV test may come back 
+ * both as positive and positive for HPV16. We want to be able to select the latter 
  * in this case as input to the risk tables.
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { text System.String, rank System.Integer }>
@@ -131,10 +129,10 @@ define function HpvInterpretation(conclusions List<System.Concept>):
   (conclusions) c
   return
     case
-      when c ~ Dash."Negative HPV Finding" or c ~ Dash."Negative" then {text: 'HPV-negative', rank: 1}
-      when c ~ Dash."Positive HPV Finding" then {text: 'HPV-positive', rank: 2}
-      when c ~ "HPV18+ Antigen" or c ~ "HPV18+ DNA" then {text: 'HPV16-, HPV18+', rank: 3}
-      when c ~ "HPV16+ Antigen" or c ~ "HPV16+ DNA" then {text: 'HPV16+', rank: 4}
+      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
+      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
+      when c in Dash."High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
+      when c in Dash."HPV Negative Results" then {text: 'HPV-negative', rank: 1}
       else {text: 'ALL', rank: 0}
     end
 
@@ -157,10 +155,10 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
   (conclusions) c
   return
     case
-      when c ~ "Biopsy Normal" then {text: '<CIN1', rank: 1}
+      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
       when c ~ "CIN1" then {text: 'CIN1', rank: 2}
       when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
-      when c ~ Dash."CIN3" then {text: 'CIN3', rank: 4}
+      when c in Dash."Histologic CIN3" then {text: 'CIN3', rank: 4}
       when c in Dash."AIS" then {text: 'AIS', rank: 5}
       when c in Dash."Histologic cancer" then {text: 'Cancer', rank: 6}
       else {text: 'ALL', rank: 0}
@@ -690,8 +688,8 @@ define HistologyInterpretedAsCin1:
 define HistologyInterpretedAsNormal:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return
-        aC ~ "Biopsy Normal"
+      return 
+        aC in "Normal Histology Finding"
   )
 
 define HistologyInterpretedAsCin1OrNormal:
@@ -729,30 +727,28 @@ define UnknownHpvCotest:
 define NegativeOrUnknownHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
-    (MostRecentHpvReport.allConclusions) aC
-      return
-        aC ~ Dash."Negative HPV Finding" or aC ~ Dash."Negative" or
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC in Dash."HPV Negative Results" or
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
   )
 
-define PositiveHpvCotest:
+define PositiveUntypedHpvCotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
-    (MostRecentHpvReport.allConclusions) aC
-      return
-        aC ~ Dash."Positive HPV Finding"
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC in Dash."High Risk Positive HPV Results Without HPV16 or HPV18"
   )
 
 define PositiveHpv16or18Cotest:
   MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
   AnyTrue(
-    (MostRecentHpvReport.allConclusions) aC
-      return
-        aC ~ "HPV16+ Antigen" or
-        aC ~ "HPV16+ DNA" or
-        aC ~ "HPV18+ Antigen" or
-        aC ~ "HPV18+ DNA"
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC ~ "HPV16+" or
+        aC ~ "HPV18+"
   )
 
 define HasRemovalOfCervixProcedures:
@@ -853,12 +849,12 @@ define RecommendationForRareCytology:
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
-      PositiveHpvCotest and
+      PositiveUntypedHpvCotest and
       AgeInYears() >= 25
     ) then
       {
         action: null,
-        text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
+        text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
@@ -926,7 +922,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: null,
-        text: 'For patients “post-hysterectomy” with benign endometrial cells identified via cytology, no further evaluation is recommended (BII).'
+        text: 'For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
       }
     else
       null
@@ -1005,8 +1001,8 @@ define HistologyInterpretedAsCin2:
 define HistologyInterpretedAsCin3:
   AnyTrue(
     (MostRecentBiopsyReport.allConclusions) aC
-      return
-        aC ~ Dash."CIN3"
+      return 
+        aC in Dash."Histologic CIN3"
   )
 
 define HistologyInterpretedAsAis:
@@ -1081,8 +1077,8 @@ define SecondMostRecentHistologyInterpretedAsCin1:
 define SecondMostRecentHistologyInterpretedAsNormal:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
-      return
-        aC ~ "Biopsy Normal"
+      return 
+        aC in "Normal Histology Finding"
   )
 
 define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
@@ -1183,7 +1179,7 @@ define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast
         (R.allConclusions) aC
           return
             aC ~ "CIN1" or
-            aC ~ "Biopsy Normal"
+            aC in "Normal Histology Finding"
       )
   else
     null
@@ -1522,7 +1518,7 @@ define AnyHistologicHsil:
       (B.allConclusions) aC
         return
           aC ~ Dash."CIN2" or
-          aC ~ Dash."CIN3" or
+          aC in Dash."Histologic CIN3" or
           aC ~ Dash."HSIL, Unspecified"
     )
 
@@ -1541,8 +1537,8 @@ define SecondMostRecentHistologyInterpretedAsCin2:
 define SecondMostRecentHistologyInterpretedAsCin3:
   AnyTrue(
     (SecondMostRecentBiopsyReport.allConclusions) aC
-      return
-        aC ~ Dash."CIN3"
+      return 
+        aC in Dash."Histologic CIN3"
   )
 
 define SecondMostRecentHistologyInterpretedAsUnspecifiedHsil:
@@ -1569,9 +1565,9 @@ define PositiveHrHpvTestAfterTreatment:
   MostRecentHpvReport.date >= Now() - 12 months and
   MostRecentHpvReport.date 12 months or less after MostRecentTreatmentDate and
   AnyTrue(
-    (MostRecentHpvReport.allConclusions) aC
-      return
-        aC ~ Dash."Positive HPV Finding"
+    (MostRecentHpvReport.allConclusions) aC 
+      return 
+        aC in Dash."High Risk HPV Positive Results"
   )
 
 define RareAbnormalityHighGradeHistology:
@@ -1580,7 +1576,7 @@ define RareAbnormalityHighGradeHistology:
       (B.allConclusions) aC
         return
           aC ~ Dash."CIN2" or
-          aC ~ Dash."CIN3" or
+          aC in Dash."Histologic CIN3" or
           aC ~ Dash."HSIL, Unspecified" or
           aC in Dash."AIS"
     )
@@ -1653,8 +1649,7 @@ define NegativeHrHpvTests:
     where AnyTrue(
       (R.allConclusions) aC
         return
-          aC ~ Dash."Negative HPV Finding" or
-          aC ~ Dash."Negative"
+          aC in Dash."HPV Negative Results"
     )
 
 define NegativeHrHpvTestsAsPartOfCotest:
@@ -1875,7 +1870,7 @@ define SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology:
         (B.allConclusions) aC
           return
             aC ~ "CIN1" or
-            aC ~ "Biopsy Normal"
+            aC in "Normal Histology Finding"
       )
 
 define SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology:
@@ -2262,7 +2257,7 @@ define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
           rC in Dash."Cervical Precancer Disorders" or
           rC in Dash."Diagnosis of Cervical cancer" or
           rC ~ Dash."CIN2" or
-          rC ~ Dash."CIN3" or
+          rC in Dash."Histologic CIN3" or
           rC ~ Dash."HSIL, Unspecified" or
           rC in Dash."AIS" or
           rC in Dash."Histologic cancer"
@@ -2375,38 +2370,14 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 define Over65RecommendationText:
   'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
 
-define RecommendationForPatientsOlderThan65:
-  // TODO: Re-word text here once edits are made to the Common Abnormalities section by the L2 team.
-  case
-    when (
-      AgeInYears() > 65 and
-      IsIncludedAndNotExcluded and
-      ManagementRecommendationIsSurveillance
-    ) then
-      {
-        action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + J1RecommendationText + '\n\n' + Over65RecommendationText
-      }
-    when (
-      AgeInYears() > 65 and
-      IsIncludedAndNotExcluded and
-      ManagementRecommendationIsColposcopyOrTreatment
-    ) then
-      {
-        action: CommonAbnormalityRecommendationText,
-        text: CommonAbnormalityRecommendationText + ' is recommended.' + '\n\n' + Over65RecommendationText
-      }
-    else
-      null
-  end
+// If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). Care recommendations for these individuals are covered within the Common Abnormality logic paths.
 
 define SpecialPopulationRecommendation:
   Coalesce(
     RecommendationForPatientsYoungerThan25,
     RecommendationForPregnantPatients,
     RecommendationForImmunosuppressedPatients,
-    RecommendationForManagingPatientsAfterHysterectomy,
-    RecommendationForPatientsOlderThan65
+    RecommendationForManagingPatientsAfterHysterectomy
   )
 
 define WhichPopulationMadeTheRecommendation:
@@ -2415,7 +2386,6 @@ define WhichPopulationMadeTheRecommendation:
     when RecommendationForPregnantPatients is not null then 4
     when RecommendationForImmunosuppressedPatients is not null then 3
     when RecommendationForManagingPatientsAfterHysterectomy is not null then 2
-    when RecommendationForPatientsOlderThan65 is not null then 1
     else null
   end
 
@@ -2526,12 +2496,6 @@ define WhichTableMadeTheRecommendation:
     else null
   end
 
-define ManagementRecommendationIsSurveillance:
-  CommonAbnormalityRecommendationText in {'5-year follow-up','3-year follow-up','1-year follow-up'}
-
-define ManagementRecommendationIsColposcopyOrTreatment:
-  CommonAbnormalityRecommendationText in {'Colposcopy','Colposcopy/Treatment','Treatment'}
-
 define J1RecommendationText:
   'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
 
@@ -2548,7 +2512,7 @@ define FiveYearSurveillanceRecommendationText:
   'When patients have an estimated 5-year CIN 3+ risk of less than 0.15% based on past history and current test results, return to routine screening at 5-year intervals using HPV-based testing is recommended (AII).'
 
 define ColposcopyRecommendationText:
-  'When patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).'
+  'For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
 
 define ColposcopyOrTreatmentRecommendationText:
   'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ 25% or greater and less than 60% based on history and current results, treatment using an excisional procedure without previous biopsy confirmation or histologic evaluation with colposcopy and biopsy are both acceptable (AII).'
@@ -2556,12 +2520,26 @@ define ColposcopyOrTreatmentRecommendationText:
 define TreatmentRecommendationText:
   'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ of 60% or greater based on history and current results, treatment using an excisional procedure without previous biopsy confirmation is preferred but colposcopy with biopsy is acceptable (BII).'
 
+define PositivePrimaryHpv:
+  AnyTrue(
+    (MostRecentHpvReport.allConclusions) aC 
+      return aC in Dash."High Risk HPV Positive Results"
+  ) and 
+  MostRecentCytologyCotest is null
+
 define CommonAbnormalityRecommendation:
-  // TODO: Add J.1 Recommndation text to K.5 above as well.
   case
     when (
-      // TODO: Check that >= 25 applies to all 5 Common Abnormality Recommendations
-      AgeInYears() >= 25 and
+      PositivePrimaryHpv is not null and
+      not (MostRecentCytologyReport.date after MostRecentHpvReport.date) and
+      not (MostRecentBiopsyReport.date after MostRecentHpvReport.date)
+    ) then
+      {
+        action: null,
+        text: 'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.'
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 65 and
       CommonAbnormalityRecommendationText = '1-year follow-up'
     ) then
       {
@@ -2569,7 +2547,15 @@ define CommonAbnormalityRecommendation:
         text: OneYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
       }
     when (
-      AgeInYears() >= 25 and
+      AgeInYears() > 65 and
+      CommonAbnormalityRecommendationText = '1-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: OneYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 65 and
       CommonAbnormalityRecommendationText = '3-year follow-up'
     ) then
       {
@@ -2577,12 +2563,28 @@ define CommonAbnormalityRecommendation:
         text: ThreeYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
       }
     when (
-      AgeInYears() >= 25 and
+      AgeInYears() > 65 and
+      CommonAbnormalityRecommendationText = '3-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: ThreeYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 65 and
       CommonAbnormalityRecommendationText = '5-year follow-up'
     ) then
       {
         action: CommonAbnormalityRecommendationText,
         text: FiveYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+      }
+    when (
+      AgeInYears() > 65 and
+      CommonAbnormalityRecommendationText = '5-year follow-up'
+    ) then
+      {
+        action: CommonAbnormalityRecommendationText,
+        text: FiveYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
       }
     when (
       AgeInYears() >= 25 and

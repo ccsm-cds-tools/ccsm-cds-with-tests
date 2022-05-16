@@ -245,7 +245,7 @@
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017",
             "accessLevel" : "Public"
          }, {
-            "name" : "Non NILM results of Cervical Cytology Test",
+            "name" : "Abnormal results of Cervical Cytology Test",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.235",
             "accessLevel" : "Public"
          }, {
@@ -259,6 +259,22 @@
          }, {
             "name" : "Histologic cancer",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.244",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "High Risk HPV Positive Results",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.234",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "High Risk Positive HPV Results Without HPV16 or HPV18",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.263",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "Histologic CIN3",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.269",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "HPV Negative Results",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.268",
             "accessLevel" : "Public"
          } ]
       },
@@ -328,33 +344,9 @@
                "name" : "LOINC"
             }
          }, {
-            "name" : "Positive",
-            "id" : "10828004",
-            "display" : "Positive (qualifier value)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
             "name" : "Negative",
             "id" : "260385009",
             "display" : "Negative (qualifier value)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Negative HPV Finding",
-            "id" : "787724008",
-            "display" : "Human papillomavirus deoxyribonucleic acid test negative (finding)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Positive HPV Finding",
-            "id" : "720005005",
-            "display" : "Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -371,14 +363,6 @@
             "name" : "CIN2",
             "id" : "285838002",
             "display" : "Cervical intraepithelial neoplasia grade 2 (disorder)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "CIN3",
-            "id" : "20365006",
-            "display" : "Squamous intraepithelial neoplasia, grade III (morphologic abnormality)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -2515,70 +2499,34 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "R",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
+                  "type" : "AnyInValueSet",
+                  "codes" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "X",
+                        "expression" : {
+                           "path" : "conclusionCode",
+                           "scope" : "R",
+                           "type" : "Property"
                         }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Negative HPV Finding",
-                           "type" : "CodeRef"
+                     } ],
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "X",
+                              "type" : "AliasRef"
+                           } ]
                         }
-                     } ]
-                  }, {
-                     "type" : "Contains",
-                     "operand" : [ {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "X",
-                           "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "R",
-                              "type" : "Property"
-                           }
-                        } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "X",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Negative",
-                           "type" : "CodeRef"
-                        }
-                     } ]
-                  } ]
+                     }
+                  },
+                  "valueset" : {
+                     "name" : "HPV Negative Results",
+                     "type" : "ValueSetRef"
+                  }
                }
             }
          }, {
@@ -3044,8 +2992,8 @@
                                  }
                               } ]
                            }, {
-                              "type" : "Contains",
-                              "operand" : [ {
+                              "type" : "AnyInValueSet",
+                              "codes" : {
                                  "type" : "Query",
                                  "source" : [ {
                                     "alias" : "X",
@@ -3067,13 +3015,11 @@
                                        } ]
                                     }
                                  }
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "CIN3",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              },
+                              "valueset" : {
+                                 "name" : "Histologic CIN3",
+                                 "type" : "ValueSetRef"
+                              }
                            } ]
                         }, {
                            "type" : "Contains",
@@ -3481,8 +3427,8 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "Contains",
-                     "operand" : [ {
+                     "type" : "AnyInValueSet",
+                     "codes" : {
                         "type" : "Query",
                         "source" : [ {
                            "alias" : "X",
@@ -3504,13 +3450,11 @@
                               } ]
                            }
                         }
-                     }, {
-                        "type" : "ToConcept",
-                        "operand" : {
-                           "name" : "Positive HPV Finding",
-                           "type" : "CodeRef"
-                        }
-                     } ]
+                     },
+                     "valueset" : {
+                        "name" : "High Risk HPV Positive Results",
+                        "type" : "ValueSetRef"
+                     }
                   }
                }, {
                   "name" : "AbnormalTestLookbackPeriod",
@@ -3572,7 +3516,7 @@
                         }
                      },
                      "valueset" : {
-                        "name" : "Non NILM results of Cervical Cytology Test",
+                        "name" : "Abnormal results of Cervical Cytology Test",
                         "type" : "ValueSetRef"
                      }
                   }

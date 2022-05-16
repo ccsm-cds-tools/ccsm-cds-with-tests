@@ -132,6 +132,10 @@
             "name" : "HSIL",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256",
             "accessLevel" : "Public"
+         }, {
+            "name" : "Normal Histology Finding",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262",
+            "accessLevel" : "Public"
          } ]
       },
       "codes" : {
@@ -264,15 +268,7 @@
                "name" : "NULL FLAVOR"
             }
          }, {
-            "name" : "HPV16+ Antigen",
-            "id" : "766842008",
-            "display" : "Antigen of Human papillomavirus type 16 L1 capsid protein (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "HPV16+ DNA",
+            "name" : "HPV16+",
             "id" : "708298003",
             "display" : "Deoxyribonucleic acid of Human papillomavirus 16 (substance)",
             "accessLevel" : "Public",
@@ -280,25 +276,9 @@
                "name" : "SNOMED-CT"
             }
          }, {
-            "name" : "HPV18+ Antigen",
-            "id" : "766848007",
-            "display" : "Antigen of Human papillomavirus type 18 L1 capsid protein (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "HPV18+ DNA",
+            "name" : "HPV18+",
             "id" : "708299006",
             "display" : "Deoxyribonucleic acid of Human papillomavirus 18 (substance)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Biopsy Normal",
-            "id" : "165324008",
-            "display" : "Biopsy result normal (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -808,33 +788,16 @@
                      "type" : "Case",
                      "caseItem" : [ {
                         "when" : {
-                           "type" : "Or",
+                           "type" : "Equivalent",
                            "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative HPV Finding",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "name" : "c",
+                              "type" : "AliasRef"
                            }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV16+",
+                                 "type" : "CodeRef"
+                              }
                            } ]
                         },
                         "then" : {
@@ -843,14 +806,14 @@
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-negative",
+                                 "value" : "HPV16+",
                                  "type" : "Literal"
                               }
                            }, {
                               "name" : "rank",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "1",
+                                 "value" : "4",
                                  "type" : "Literal"
                               }
                            } ]
@@ -864,57 +827,9 @@
                            }, {
                               "type" : "ToConcept",
                               "operand" : {
-                                 "name" : "Positive HPV Finding",
-                                 "libraryName" : "Dash",
+                                 "name" : "HPV18+",
                                  "type" : "CodeRef"
                               }
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "2",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV18+ Antigen",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV18+ DNA",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
                            } ]
                         },
                         "then" : {
@@ -937,32 +852,16 @@
                         }
                      }, {
                         "when" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV16+ Antigen",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "c",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "HPV16+ DNA",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           } ]
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -970,14 +869,45 @@
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV16+",
+                                 "value" : "HPV-positive",
                                  "type" : "Literal"
                               }
                            }, {
                               "name" : "rank",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "4",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-negative",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "1",
                                  "type" : "Literal"
                               }
                            } ]
@@ -1096,17 +1026,15 @@
                      "type" : "Case",
                      "caseItem" : [ {
                         "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "c",
                               "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "Biopsy Normal",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "Normal Histology Finding",
+                              "type" : "ValueSetRef"
+                           }
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -1193,18 +1121,16 @@
                         }
                      }, {
                         "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "c",
                               "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "CIN3",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "Histologic CIN3",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         },
                         "then" : {
                            "type" : "Tuple",
@@ -4741,8 +4667,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -4750,13 +4676,11 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Biopsy Normal",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Normal Histology Finding",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -5108,44 +5032,21 @@
                            "operand" : [ {
                               "type" : "Or",
                               "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "type" : "Equivalent",
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
                                     "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Negative HPV Finding",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
                                     } ]
-                                 }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Negative",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "HPV Negative Results",
+                                    "libraryName" : "Dash",
+                                    "type" : "ValueSetRef"
+                                 }
                               }, {
                                  "type" : "Equivalent",
                                  "operand" : [ {
@@ -5189,7 +5090,7 @@
                } ]
             }
          }, {
-            "name" : "PositiveHpvCotest",
+            "name" : "PositiveUntypedHpvCotest",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -5272,8 +5173,8 @@
                      "relationship" : [ ],
                      "return" : {
                         "expression" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
@@ -5281,14 +5182,12 @@
                                  "name" : "aC",
                                  "type" : "AliasRef"
                               } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "Positive HPV Finding",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk Positive HPV Results Without HPV16 or HPV18",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         }
                      }
                   }
@@ -5380,61 +5279,21 @@
                         "expression" : {
                            "type" : "Or",
                            "operand" : [ {
-                              "type" : "Or",
+                              "type" : "Equivalent",
                               "operand" : [ {
-                                 "type" : "Or",
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "HPV16+ Antigen",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "aC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "HPV16+ DNA",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
                                  } ]
                               }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "HPV18+ Antigen",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "HPV16+",
+                                    "type" : "CodeRef"
+                                 }
                               } ]
                            }, {
                               "type" : "Equivalent",
@@ -5449,7 +5308,7 @@
                               }, {
                                  "type" : "ToConcept",
                                  "operand" : {
-                                    "name" : "HPV18+ DNA",
+                                    "name" : "HPV18+",
                                     "type" : "CodeRef"
                                  }
                               } ]
@@ -5921,7 +5780,7 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "PositiveHpvCotest",
+                           "name" : "PositiveUntypedHpvCotest",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
@@ -5955,7 +5814,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).",
+                           "value" : "For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -6263,7 +6122,7 @@
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For patients “post-hysterectomy” with benign endometrial cells identified via cytology, no further evaluation is recommended (BII).",
+                           "value" : "For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -6659,8 +6518,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -6668,14 +6527,12 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "CIN3",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Histologic CIN3",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -7173,8 +7030,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -7182,13 +7039,11 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Biopsy Normal",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Normal Histology Finding",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -8361,8 +8216,8 @@
                                        }
                                     } ]
                                  }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
+                                    "type" : "InValueSet",
+                                    "code" : {
                                        "name" : "ToConcept",
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
@@ -8370,13 +8225,11 @@
                                           "name" : "aC",
                                           "type" : "AliasRef"
                                        } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "Biopsy Normal",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "Normal Histology Finding",
+                                       "type" : "ValueSetRef"
+                                    }
                                  } ]
                               }
                            }
@@ -8657,44 +8510,21 @@
                      "relationship" : [ ],
                      "return" : {
                         "expression" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative HPV Finding",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
                               } ]
-                           }, {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Negative",
-                                    "libraryName" : "Dash",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         }
                      }
                   }
@@ -11675,8 +11505,8 @@
                                     }
                                  } ]
                               }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
+                                 "type" : "InValueSet",
+                                 "code" : {
                                     "name" : "ToConcept",
                                     "libraryName" : "FHIRHelpers",
                                     "type" : "FunctionRef",
@@ -11684,14 +11514,12 @@
                                        "name" : "aC",
                                        "type" : "AliasRef"
                                     } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "CIN3",
-                                       "libraryName" : "Dash",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "Histologic CIN3",
+                                    "libraryName" : "Dash",
+                                    "type" : "ValueSetRef"
+                                 }
                               } ]
                            }, {
                               "type" : "Equivalent",
@@ -11802,8 +11630,8 @@
                   "relationship" : [ ],
                   "return" : {
                      "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
+                        "type" : "InValueSet",
+                        "code" : {
                            "name" : "ToConcept",
                            "libraryName" : "FHIRHelpers",
                            "type" : "FunctionRef",
@@ -11811,14 +11639,12 @@
                               "name" : "aC",
                               "type" : "AliasRef"
                            } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "CIN3",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Histologic CIN3",
+                           "libraryName" : "Dash",
+                           "type" : "ValueSetRef"
+                        }
                      }
                   }
                }
@@ -12038,8 +11864,8 @@
                      "relationship" : [ ],
                      "return" : {
                         "expression" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
@@ -12047,14 +11873,12 @@
                                  "name" : "aC",
                                  "type" : "AliasRef"
                               } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "Positive HPV Finding",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
                         }
                      }
                   }
@@ -12113,8 +11937,8 @@
                                        }
                                     } ]
                                  }, {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
+                                    "type" : "InValueSet",
+                                    "code" : {
                                        "name" : "ToConcept",
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
@@ -12122,14 +11946,12 @@
                                           "name" : "aC",
                                           "type" : "AliasRef"
                                        } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "CIN3",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "Histologic CIN3",
+                                       "libraryName" : "Dash",
+                                       "type" : "ValueSetRef"
+                                    }
                                  } ]
                               }, {
                                  "type" : "Equivalent",
@@ -13758,8 +13580,8 @@
                                     }
                                  } ]
                               }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
+                                 "type" : "InValueSet",
+                                 "code" : {
                                     "name" : "ToConcept",
                                     "libraryName" : "FHIRHelpers",
                                     "type" : "FunctionRef",
@@ -13767,13 +13589,11 @@
                                        "name" : "aC",
                                        "type" : "AliasRef"
                                     } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "Biopsy Normal",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "Normal Histology Finding",
+                                    "type" : "ValueSetRef"
+                                 }
                               } ]
                            }
                         }
@@ -16303,8 +16123,8 @@
                                           } ]
                                        } ]
                                     }, {
-                                       "type" : "Equivalent",
-                                       "operand" : [ {
+                                       "type" : "InValueSet",
+                                       "code" : {
                                           "name" : "ToConcept",
                                           "libraryName" : "FHIRHelpers",
                                           "type" : "FunctionRef",
@@ -16312,14 +16132,12 @@
                                              "name" : "rC",
                                              "type" : "AliasRef"
                                           } ]
-                                       }, {
-                                          "type" : "ToConcept",
-                                          "operand" : {
-                                             "name" : "CIN3",
-                                             "libraryName" : "Dash",
-                                             "type" : "CodeRef"
-                                          }
-                                       } ]
+                                       },
+                                       "valueset" : {
+                                          "name" : "Histologic CIN3",
+                                          "libraryName" : "Dash",
+                                          "type" : "ValueSetRef"
+                                       }
                                     } ]
                                  }, {
                                     "type" : "Equivalent",
@@ -17009,38 +16827,128 @@
                "type" : "Literal"
             }
          }, {
-            "name" : "LookUpTable5",
+            "name" : "SpecialPopulationRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetPostTreatmentManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
+               "type" : "Coalesce",
                "operand" : [ {
-                  "name" : "MostRecentBiopsyResult",
+                  "name" : "RecommendationForPatientsYoungerThan25",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                  "name" : "RecommendationForPregnantPatients",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                  "name" : "RecommendationForImmunosuppressedPatients",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "SecondMostRecentHpvResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultAfterTreatment",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultAfterTreatment",
+                  "name" : "RecommendationForManagingPatientsAfterHysterectomy",
                   "type" : "ExpressionRef"
                } ]
             }
          }, {
-            "name" : "PostTreatmentManagementRecommendation",
+            "name" : "WhichPopulationMadeTheRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPatientsYoungerThan25",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "5",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPregnantPatients",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "4",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForImmunosuppressedPatients",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForManagingPatientsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  }
+               } ],
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable1",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetGeneralScreeningManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "SecondMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "GeneralScreeningManagementRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -17053,14 +16961,125 @@
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "LookUpTable5",
+                           "name" : "LookUpTable1",
                            "type" : "ExpressionRef"
                         }
                      }
                   }
                },
                "then" : {
-                  "name" : "LookUpTable5",
+                  "name" : "LookUpTable1",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetSurveillanceManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ThirdMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "SurveillanceManagementRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "LookUpTable2",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "LookUpTable3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetColposcopyResultsManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ReferringHpvResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ReferringCytologyResult",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentBiopsyResult",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "ColposcopyResultsManagementRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable3",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "LookUpTable3",
                   "type" : "ExpressionRef"
                },
                "else" : {
@@ -17141,26 +17160,38 @@
                }
             }
          }, {
-            "name" : "LookUpTable3",
+            "name" : "LookUpTable5",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetColposcopyResultsManagement",
+               "name" : "GetPostTreatmentManagement",
                "libraryName" : "RiskTableLookup",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "type" : "ExpressionRef"
-               }, {
                   "name" : "MostRecentBiopsyResult",
                   "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResultAfterTreatment",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyResultAfterTreatment",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
-            "name" : "ColposcopyResultsManagementRecommendation",
+            "name" : "PostTreatmentManagementRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -17173,128 +17204,14 @@
                      "operand" : {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "LookUpTable3",
+                           "name" : "LookUpTable5",
                            "type" : "ExpressionRef"
                         }
                      }
                   }
                },
                "then" : {
-                  "name" : "LookUpTable3",
-                  "type" : "ExpressionRef"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "LookUpTable2",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetSurveillanceManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ThirdMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "SurveillanceManagementRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "LookUpTable2",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               },
-               "then" : {
-                  "name" : "LookUpTable2",
-                  "type" : "ExpressionRef"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "LookUpTable1",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetGeneralScreeningManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "SecondMostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "GeneralScreeningManagementRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "LookUpTable1",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               },
-               "then" : {
-                  "name" : "LookUpTable1",
+                  "name" : "LookUpTable5",
                   "type" : "ExpressionRef"
                },
                "else" : {
@@ -17327,364 +17244,6 @@
                   "name" : "GeneralScreeningManagementRecommendation",
                   "type" : "ExpressionRef"
                } ]
-            }
-         }, {
-            "name" : "ManagementRecommendationIsSurveillance",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "name" : "CommonAbnormalityRecommendationText",
-                  "type" : "ExpressionRef"
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "5-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "3-year follow-up",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "1-year follow-up",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "J1RecommendationText",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "ManagementRecommendationIsColposcopyOrTreatment",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "name" : "CommonAbnormalityRecommendationText",
-                  "type" : "ExpressionRef"
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy/Treatment",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Treatment",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "RecommendationForPatientsOlderThan65",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Case",
-               "caseItem" : [ {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Greater",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "65",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "IsIncludedAndNotExcluded",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "ManagementRecommendationIsSurveillance",
-                        "type" : "ExpressionRef"
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "name" : "CommonAbnormalityRecommendationText",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : " is recommended.",
-                                          "type" : "Literal"
-                                       } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "\n\n",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "name" : "J1RecommendationText",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "Over65RecommendationText",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               }, {
-                  "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Greater",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "65",
-                              "type" : "Literal"
-                           } ]
-                        }, {
-                           "name" : "IsIncludedAndNotExcluded",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "ManagementRecommendationIsColposcopyOrTreatment",
-                        "type" : "ExpressionRef"
-                     } ]
-                  },
-                  "then" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "text",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "name" : "CommonAbnormalityRecommendationText",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : " is recommended.",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "Over65RecommendationText",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               } ],
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "action",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     }, {
-                        "name" : "text",
-                        "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
-            "name" : "SpecialPopulationRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "name" : "RecommendationForPatientsYoungerThan25",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForPregnantPatients",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForImmunosuppressedPatients",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForManagingPatientsAfterHysterectomy",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "RecommendationForPatientsOlderThan65",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "WhichPopulationMadeTheRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Case",
-               "caseItem" : [ {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPatientsYoungerThan25",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "5",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPregnantPatients",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "4",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForImmunosuppressedPatients",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "3",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForManagingPatientsAfterHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "2",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForPatientsOlderThan65",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "1",
-                     "type" : "Literal"
-                  }
-               } ],
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
             }
          }, {
             "name" : "WhichTableMadeTheRecommendation",
@@ -17782,6 +17341,15 @@
                }
             }
          }, {
+            "name" : "J1RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "TreatmentWithPregnancyConcernsRecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -17823,7 +17391,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "When patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).",
+               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
                "type" : "Literal"
             }
          }, {
@@ -17845,6 +17413,56 @@
                "type" : "Literal"
             }
          }, {
+            "name" : "PositivePrimaryHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentHpvReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "libraryName" : "Dash",
+                              "type" : "ValueSetRef"
+                           }
+                        }
+                     }
+                  }
+               }, {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "MostRecentCytologyCotest",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
             "name" : "CommonAbnormalityRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -17854,22 +17472,116 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "And",
                         "operand" : [ {
-                           "precision" : "Year",
-                           "type" : "CalculateAge",
+                           "type" : "Not",
                            "operand" : {
-                              "path" : "birthDate.value",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "Patient",
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "PositivePrimaryHpv",
                                  "type" : "ExpressionRef"
                               }
                            }
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.",
                            "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -17916,7 +17628,7 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "Greater",
                         "operand" : [ {
                            "precision" : "Year",
                            "type" : "CalculateAge",
@@ -17930,8 +17642,104 @@
                            }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
+                           "value" : "65",
                            "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "1-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "OneYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -17978,7 +17786,7 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "GreaterOrEqual",
+                        "type" : "Greater",
                         "operand" : [ {
                            "precision" : "Year",
                            "type" : "CalculateAge",
@@ -17992,8 +17800,104 @@
                            }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "25",
+                           "value" : "65",
                            "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "3-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "ThreeYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Equal",
@@ -18031,6 +17935,81 @@
                               } ]
                            }, {
                               "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "65",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "5-year follow-up",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "name" : "CommonAbnormalityRecommendationText",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "name" : "FiveYearSurveillanceRecommendationText",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\n\n",
+                                       "type" : "Literal"
+                                    } ]
+                                 }, {
+                                    "name" : "J1RecommendationText",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "\n\n",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "Over65RecommendationText",
                               "type" : "ExpressionRef"
                            } ]
                         }
@@ -18360,7 +18339,7 @@
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "name" : "{urn:hl7-org:elm-types:r1}Any",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
