@@ -6037,8 +6037,17 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "HasPremenopausalObservation",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasPremenopausalObservation",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "name" : "HasPostmenopausalObservation",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
                            }, {
                               "type" : "Not",
                               "operand" : {

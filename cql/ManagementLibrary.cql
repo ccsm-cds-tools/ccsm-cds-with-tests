@@ -895,6 +895,7 @@ define RecommendationForRareCytology:
     // G.4 Benign Endometrial Cells in Premenopausal Patients or Benign Glandular Cells in Posthysterectomy patients
     when (
       HasPremenopausalObservation and
+      not HasPostmenopausalObservation and
       not Symptomatic.IsSymptomatic and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
