@@ -1784,6 +1784,15 @@ define RecommendationForSurveillanceAfterAbnormalities:
         action: null,
         text: 'In patients treated for histologic or cytologic HSIL, after the initial intensive surveillance period, continued surveillance at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology (histologic HSIL, CIN 2, CIN 3, or AIS) or high-grade cytology (HSIL, AGC, or persistent ASC-H) even if this is beyond the age of 65 years (BII). When patients with a history of treated high-grade histology or cytology reach the age of 65 years, if they have completed the initial 25-year surveillance period, continued surveillance at 3-year intervals is acceptable and may continue as long as the patient is in reasonably good health (BIII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
       }
+    when (
+      HasTreatmentForHighGradeHistologyOrCytology and
+      TreatmentForHighGradeHistologyOrCytologyDate < Now() - 25 years and
+      InitialIntensiveSurveillancePeriod
+    ) then
+      {
+        action: null,
+        text: 'Continued surveillance with HPV testing or cotesting at 3-year intervals for at least 25 years is recommended after treatment and initial post-treatment management of histologic HSIL, CIN 2, CIN 3, or AIS.'
+      }
     else
       null
   end

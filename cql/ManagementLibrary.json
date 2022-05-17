@@ -13207,6 +13207,51 @@
                         }
                      } ]
                   }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "HasTreatmentForHighGradeHistologyOrCytology",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Less",
+                           "operand" : [ {
+                              "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 25,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "InitialIntensiveSurveillancePeriod",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "action",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Continued surveillance with HPV testing or cotesting at 3-year intervals for at least 25 years is recommended after treatment and initial post-treatment management of histologic HSIL, CIN 2, CIN 3, or AIS.",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
                } ],
                "else" : {
                   "type" : "As",
