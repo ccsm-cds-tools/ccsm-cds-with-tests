@@ -1,4 +1,4 @@
-{
+export const ScreeningSymptomaticLibrary = {
   "resourceType": "Library",
   "id": "ScreeningSymptomaticLibrary",
   "meta": {

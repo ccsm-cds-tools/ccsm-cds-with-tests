@@ -1,4 +1,4 @@
-{
+export const ScreeningAverageRiskLibrary = {
   "resourceType": "Library",
   "id": "ScreeningAverageRiskLibrary",
   "meta": {

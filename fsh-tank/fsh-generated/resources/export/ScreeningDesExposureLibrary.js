@@ -1,4 +1,4 @@
-{
+export const ScreeningDesExposureLibrary = {
   "resourceType": "Library",
   "id": "ScreeningDesExposureLibrary",
   "meta": {

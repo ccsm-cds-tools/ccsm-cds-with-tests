@@ -1,4 +1,4 @@
-{
+export const ManagementLibrary = {
   "resourceType": "Library",
   "id": "ManagementLibrary",
   "meta": {

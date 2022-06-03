@@ -1,4 +1,4 @@
-{
+export const TopLevelScreeningLibrary = {
   "resourceType": "Library",
   "id": "TopLevelScreeningLibrary",
   "meta": {

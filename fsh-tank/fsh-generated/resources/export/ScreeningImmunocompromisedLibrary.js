@@ -1,4 +1,4 @@
-{
+export const ScreeningImmunocompromisedLibrary = {
   "resourceType": "Library",
   "id": "ScreeningImmunocompromisedLibrary",
   "meta": {
