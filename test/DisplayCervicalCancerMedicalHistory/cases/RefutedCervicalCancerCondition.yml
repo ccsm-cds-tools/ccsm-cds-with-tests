@@ -1,0 +1,23 @@
+---
+name: Refuted Cervical Cancer Condition
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: Condition
+  clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+  verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#refuted Refuted
+  code: SNOMEDCT#363354003 Malignant tumor of cervix (disorder)
+  onsetDateTime: 2017-05-01
+
+results:
+  CervicalCancerDiagnoses: $should have length 0
+  PertinentConditions: $should have length 0

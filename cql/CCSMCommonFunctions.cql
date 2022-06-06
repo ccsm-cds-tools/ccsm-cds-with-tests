@@ -19,6 +19,14 @@ using FHIR version '4.0.1'
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 
+codesystem "CONDVERSTATUS": 'http://terminology.hl7.org/CodeSystem/condition-ver-status'
+
+code "Condition Refuted code": 'refuted' from "CONDVERSTATUS" display 'Refuted'
+code "Condition Entered in Error code": 'entered-in-error' from "CONDVERSTATUS" display 'Entered in Error'
+
+concept "Condition Refuted": { "Condition Refuted code" } display 'Refuted'
+concept "Condition Entered in Error": { "Condition Entered in Error code" } display 'Entered in Error'
+
 /*******************************************************************************
  * NOTICE: This following code has been adapted from "Factors to Consider in 
  * Managing Chronic Pain: A Pain Management Summary," available at:
@@ -148,7 +156,7 @@ define function Abatement(c FHIR.Condition):
 *******************************************************************************/
 
 /*******************************************************************************
-* DiagnosticReport Functions
+* Condition Functions
 *******************************************************************************/
 
 define function ConditionDate(C Condition):
@@ -188,6 +196,16 @@ define function DateOfFirstCondition(CondList List<Condition>):
       CondList
     )
   )
+
+/**
+ * Conditions that are valid. This is reflected by a Condition that does not have a verificationStatus of 'refuted' or `entered-in-error`.
+ * @see http://hl7.org/fhir/R4/valueset-condition-ver-status.html
+ * @param CondList - a list of Conditions
+ * @returns {List<Condition>} a list of valid Conditions, or null if null was passed in
+ */
+define function ValidCondition(CondList List<Condition>):
+  CondList C where C.verificationStatus !~ "Condition Refuted"
+    and C.verificationStatus !~ "Condition Entered in Error"
 
 /*******************************************************************************
 * DiagnosticReport Functions
@@ -351,8 +369,6 @@ define function CompletedMedicationRequest(MedList List<MedicationRequest>):
 /*******************************************************************************
 * Observation Functions
 *******************************************************************************/
-
-
 
 
 /*******************************************************************************
