@@ -219,19 +219,19 @@ define PatientAge:
 //    Allow all clinical statues and no lookback restriction
 
 define CervicalCancerDiagnoses:
-  [Condition: "Diagnosis of Cervical cancer"]
+  Common.ValidCondition([Condition: "Diagnosis of Cervical cancer"])
 
 define CervicalPrecancerDisorders:
-  [Condition: "Cervical Precancer Disorders"]
+  Common.ValidCondition([Condition: "Cervical Precancer Disorders"])
 
 define CervicalOrVaginalLesionDiagnoses:
-  [Condition: "Observed Cervical and/or Vaginal Lesions"]
+  Common.ValidCondition([Condition: "Observed Cervical and/or Vaginal Lesions"])
 
 define DesExposureDiagnoses:
-  [Condition: "Diethylstilbestrol (DES) exposure"]
+  Common.ValidCondition([Condition: "Diethylstilbestrol (DES) exposure"])
 
 define AbsenceOfCervixDiagnoses:
-  [Condition: "Diagnosis of Absence of cervix"]
+  Common.ValidCondition([Condition: "Diagnosis of Absence of cervix"])
 
 define PregnancyDiagnoses:
   C3F.Confirmed(
@@ -244,27 +244,27 @@ define PregnancyDiagnoses:
   )
 
 define HivDiagnoses:
-  [Condition: "HIV"]
+  Common.ValidCondition([Condition: "HIV"])
 
 define SolidOrganTransplantDiagnoses:
-  [Condition: "Solid Organ Transplant Diagnosis Codes"]
+  Common.ValidCondition([Condition: "Solid Organ Transplant Diagnosis Codes"])
 
 define SystemicLupusErythematosusDiagnoses:
-  [Condition: "Systemic Lupus Erythematosus"] union
-  [Condition: "Systemic lupus erythematosus ICD-9-CM Code"]
+  Common.ValidCondition([Condition: "Systemic Lupus Erythematosus"]) union
+  Common.ValidCondition([Condition: "Systemic lupus erythematosus ICD-9-CM Code"])
 
 define HematopoieticStemCellTransplantDiagnoses:
-  [Condition: "Hematopoietic stem cell transplant"]
+  Common.ValidCondition([Condition: "Hematopoietic stem cell transplant"])
 
 define InflammatoryBowelDisease:
-  [Condition: "ICD10CM Value Set for Crohn's Disease"] union
-  [Condition: "SNOMED Value Set for Crohn's Disease"] union
-  [Condition: "ICD10CM Value Set for Ulcerative Colitis"] union
-  [Condition: "SNOMED Value Set for Ulcerative Colitis"]
+  Common.ValidCondition([Condition: "ICD10CM Value Set for Crohn's Disease"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Crohn's Disease"]) union
+  Common.ValidCondition([Condition: "ICD10CM Value Set for Ulcerative Colitis"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Ulcerative Colitis"])
 
 define RheumatoidArthritisDiagnoses:
-  [Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"] union
-  [Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"]
+  Common.ValidCondition([Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"])
 
 define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses:
   InflammatoryBowelDisease union
@@ -277,16 +277,16 @@ define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppress
     null
 
 define ChronicGraftVersusHostDiseaseDiagnoses:
-  [Condition: "Chronic Graft versus Host Disease"] union
-  [Condition: "Chronic GvHD ICD-9 Code"] union
-  [Condition: "Chronic GvHD ICD-10 Code"]
+  Common.ValidCondition([Condition: "Chronic Graft versus Host Disease"]) union
+  Common.ValidCondition([Condition: "Chronic GvHD ICD-9 Code"]) union
+  Common.ValidCondition([Condition: "Chronic GvHD ICD-10 Code"])
 
 define ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell:
   ChronicGraftVersusHostDiseaseDiagnoses C
   where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define GenitalGraftVersusHostDiseaseDiagnoses:
-  [Condition: "Diagnosis of Genital GvHD"]
+  Common.ValidCondition([Condition: "Diagnosis of Genital GvHD"])
 
 define GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell:
   GenitalGraftVersusHostDiseaseDiagnoses C
@@ -303,7 +303,7 @@ define ImmunocompromisedConditions:
   GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
-  [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
+  Common.ValidCondition([Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"])
 
 define PertinentConditions:
   CervicalCancerDiagnoses union
