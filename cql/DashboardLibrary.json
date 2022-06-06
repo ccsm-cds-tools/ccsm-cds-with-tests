@@ -4545,15 +4545,20 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "dataType" : "{http://hl7.org/fhir}Immunization",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/Immunization",
-               "codeProperty" : "vaccineCode",
-               "codeComparator" : "in",
-               "type" : "Retrieve",
-               "codes" : {
-                  "name" : "HPV Immunization",
-                  "type" : "ValueSetRef"
-               }
+               "name" : "CompletedImmunization",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Immunization",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Immunization",
+                  "codeProperty" : "vaccineCode",
+                  "codeComparator" : "in",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "name" : "HPV Immunization",
+                     "type" : "ValueSetRef"
+                  }
+               } ]
             }
          }, {
             "name" : "PertinentImmunizations",

@@ -422,3 +422,17 @@ define function DateOfFirstProcedure(ProcList List<Procedure>):
       ProcList
     )
   )
+
+/*******************************************************************************
+* Immunization Functions
+*******************************************************************************/
+
+/**
+* Immunizations that are completed.
+* @see http://hl7.org/fhir/R4/valueset-immunization-status.html
+* @param ImmunizationList - a list of Immunizations
+* @returns {List<Immunization>} a list of completed immunizations, or null if null was passed in
+*/
+define function CompletedImmunization(ImmunizationList List<Immunization>):
+  ImmunizationList I
+    where I.status.value = 'completed'

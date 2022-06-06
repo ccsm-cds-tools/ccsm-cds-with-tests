@@ -703,7 +703,7 @@ define PertinentEncountersSummary:
 // hrHPV immunization
 
 define HrHPVImmunizations:
-  [Immunization: "HPV Immunization"]
+  Common.CompletedImmunization([Immunization: "HPV Immunization"])
 
 define PertinentImmunizations:
   HrHPVImmunizations
