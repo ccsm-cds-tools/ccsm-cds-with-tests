@@ -3281,6 +3281,48 @@
                   }
                }
             } ]
+         }, {
+            "name" : "CompletedImmunization",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "I",
+                  "expression" : {
+                     "name" : "ImmunizationList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "path" : "value",
+                     "type" : "Property",
+                     "source" : {
+                        "path" : "status",
+                        "scope" : "I",
+                        "type" : "Property"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "completed",
+                     "type" : "Literal"
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "ImmunizationList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Immunization",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
          } ]
       }
    }

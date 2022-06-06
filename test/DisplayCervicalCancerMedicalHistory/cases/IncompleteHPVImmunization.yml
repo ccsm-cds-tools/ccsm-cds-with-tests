@@ -1,0 +1,22 @@
+---
+name: Incomplete HPV Immunization
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: Immunization
+  status: entered-in-error
+  vaccineCode: CVX#118 human papilloma virus vaccine, bivalent
+  occurrenceDateTime: 2017-05-01
+
+results:
+  HrHPVImmunizations: $should have length 0
+  PertinentImmunizations: $should have length 0

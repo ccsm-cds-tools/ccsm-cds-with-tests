@@ -594,7 +594,7 @@ define PertinentEncountersSummary:
 // hrHPV immunization
 
 define HrHPVImmunizations:
-  [Immunization: "HPV Immunization"]
+  Common.CompletedImmunization([Immunization: "HPV Immunization"])
 
 define PertinentImmunizations:
   HrHPVImmunizations
@@ -607,8 +607,7 @@ define PertinentImmunizationsSummary:
     AdministrationDate: Coalesce(
       I.occurrence,
       Common.DateTimeText(I.occurrence)
-    ),
-    ExpirationDate: Common.DateText(I.expirationDate)
+    )
   }
 
 //------------------------------------------------------------------------------
