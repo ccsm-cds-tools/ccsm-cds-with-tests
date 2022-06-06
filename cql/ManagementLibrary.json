@@ -121,10 +121,6 @@
       },
       "valueSets" : {
          "def" : [ {
-            "name" : "Premenopausal",
-            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254",
-            "accessLevel" : "Public"
-         }, {
             "name" : "All Results of High Risk HPV Test",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233",
             "accessLevel" : "Public"
@@ -223,30 +219,6 @@
             "name" : "Benign Endometrial Cells",
             "id" : "125155008",
             "display" : "Endometrial cells, cytologically benign, in a postmenopausal woman (finding)",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "SNOMED-CT"
-            }
-         }, {
-            "name" : "Premenopausal Menorrhagia",
-            "id" : "627.0",
-            "display" : "Premenopausal menorrhagia",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "ICD-9"
-            }
-         }, {
-            "name" : "Excessive Bleeding in the Premenopausal Period",
-            "id" : "N92.4",
-            "display" : "Excessive bleeding in the premenopausal period",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "ICD-10"
-            }
-         }, {
-            "name" : "Postmenopausal",
-            "id" : "76498008",
-            "display" : "Postmenopausal state (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -4508,101 +4480,48 @@
                }
             }
          }, {
-            "name" : "PremenopausalObservations",
+            "name" : "HasPremenopausalObservationOrCondition",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "Verified",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
+               "type" : "Or",
                "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "type" : "Union",
-                     "operand" : [ {
-                        "dataType" : "{http://hl7.org/fhir}Observation",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                        "codeProperty" : "code",
-                        "codeComparator" : "in",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "name" : "Premenopausal",
-                           "type" : "ValueSetRef"
-                        }
-                     }, {
-                        "dataType" : "{http://hl7.org/fhir}Observation",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                        "codeProperty" : "code",
-                        "codeComparator" : "~",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "type" : "ToList",
-                           "operand" : {
-                              "name" : "Premenopausal Menorrhagia",
-                              "type" : "CodeRef"
-                           }
-                        }
-                     } ]
-                  }, {
-                     "dataType" : "{http://hl7.org/fhir}Observation",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                     "codeProperty" : "code",
-                     "codeComparator" : "~",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "type" : "ToList",
-                        "operand" : {
-                           "name" : "Excessive Bleeding in the Premenopausal Period",
-                           "type" : "CodeRef"
-                        }
-                     }
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "HasPremenopausalObservation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "PremenopausalObservations",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "PostmenopausalObservations",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Verified",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Observation",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                  "codeProperty" : "code",
-                  "codeComparator" : "~",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "Postmenopausal",
-                        "type" : "CodeRef"
-                     }
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PremenopausalObservations",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PremenopausalConditions",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }
          }, {
-            "name" : "HasPostmenopausalObservation",
+            "name" : "HasPostmenopausalObservationOrCondition",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "PostmenopausalObservations",
-                  "type" : "ExpressionRef"
-               }
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PostmenopausalObservations",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PostmenopausalConditions",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
             }
          }, {
             "name" : "Pregnant",
@@ -6039,12 +5958,12 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "name" : "HasPremenopausalObservation",
+                                 "name" : "HasPremenopausalObservationOrCondition",
                                  "type" : "ExpressionRef"
                               }, {
                                  "type" : "Not",
                                  "operand" : {
-                                    "name" : "HasPostmenopausalObservation",
+                                    "name" : "HasPostmenopausalObservationOrCondition",
                                     "type" : "ExpressionRef"
                                  }
                               } ]
@@ -6099,7 +6018,7 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "HasPostmenopausalObservation",
+                           "name" : "HasPostmenopausalObservationOrCondition",
                            "type" : "ExpressionRef"
                         }, {
                            "name" : "MostRecentCytologyReportWasWithinPastFiveYears",

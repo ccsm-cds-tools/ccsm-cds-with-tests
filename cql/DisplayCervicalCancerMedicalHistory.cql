@@ -63,6 +63,7 @@ valueset "Kidney Transplant": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.1
 valueset "Diagnosis of Cervical cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.246'
 valueset "Cervical Precancer Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.228'
 valueset "Diethylstilbestrol (DES) exposure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.198'
+valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "Diagnosis of Absence of cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201' 
 valueset "Absence of cervix observation": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.202' 
 valueset "Colposcopy procedure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.252'
@@ -88,6 +89,9 @@ code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
 code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History of exposure to diethystilbestrol in utero (situation)'
+code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
+code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
+code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
@@ -219,6 +223,18 @@ define ImmunocompromisedConditions:
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   Common.ValidCondition([Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"])
 
+define PremenopausalConditions:
+  Common.ValidCondition(
+    [Condition: "Premenopausal"] union
+    [Condition: "Premenopausal Menorrhagia"] union
+    [Condition: "Excessive Bleeding in the Premenopausal Period"]
+  )
+
+define PostmenopausalConditions:
+  Common.ValidCondition(
+    [Condition: "Postmenopausal"]
+  )
+
 define PertinentConditions:
   CervicalCancerDiagnoses union
   CervicalPrecancerDisorders union
@@ -226,7 +242,9 @@ define PertinentConditions:
   AbsenceOfCervixDiagnoses union
   PregnancyDiagnoses union
   ImmunocompromisedConditions union
-  AbnormalUterineOrVaginalBleedingDiagnoses
+  AbnormalUterineOrVaginalBleedingDiagnoses union
+  PremenopausalConditions union
+  PostmenopausalConditions
 
 define PertinentConditionsSummary:
   (PertinentConditions) C
@@ -278,12 +296,24 @@ define AbsenceOfCervixObservations:
       [Observation: "Absence of cervix observation"]
     )
 
+define PremenopausalObservations:
+  C3F.Verified(
+    [Observation: "Premenopausal"]
+  )
+
+define PostmenopausalObservations:
+  C3F.Verified(
+    [Observation: "Postmenopausal"]
+  )
+
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
   AbsenceOfCervixObservations union
+  PremenopausalObservations union
+  PostmenopausalObservations union
   // Clinician-provided Observations:
   ResponsesToAbnormalBleedingQuestion union
   ResponsesToVisibleLesionQuestion union

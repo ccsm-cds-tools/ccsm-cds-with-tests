@@ -209,6 +209,10 @@
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.198",
             "accessLevel" : "Public"
          }, {
+            "name" : "Premenopausal",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254",
+            "accessLevel" : "Public"
+         }, {
             "name" : "Diagnosis of Absence of cervix",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201",
             "accessLevel" : "Public"
@@ -307,6 +311,30 @@
             "name" : "In utero exposure to DES",
             "id" : "736060002",
             "display" : "History of exposure to diethystilbestrol in utero (situation)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Premenopausal Menorrhagia",
+            "id" : "627.0",
+            "display" : "Premenopausal menorrhagia",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "ICD-9"
+            }
+         }, {
+            "name" : "Excessive Bleeding in the Premenopausal Period",
+            "id" : "N92.4",
+            "display" : "Excessive bleeding in the premenopausal period",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "ICD-10"
+            }
+         }, {
+            "name" : "Postmenopausal",
+            "id" : "76498008",
+            "display" : "Postmenopausal state (finding)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -1268,6 +1296,81 @@
                } ]
             }
          }, {
+            "name" : "PremenopausalConditions",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ValidCondition",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}Condition",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                        "codeProperty" : "code",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Premenopausal",
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "dataType" : "{http://hl7.org/fhir}Condition",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                        "codeProperty" : "code",
+                        "codeComparator" : "~",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "Premenopausal Menorrhagia",
+                              "type" : "CodeRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "dataType" : "{http://hl7.org/fhir}Condition",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Excessive Bleeding in the Premenopausal Period",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "PostmenopausalConditions",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ValidCondition",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Condition",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Postmenopausal",
+                        "type" : "CodeRef"
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "PertinentConditions",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1280,34 +1383,46 @@
                      "operand" : [ {
                         "type" : "Union",
                         "operand" : [ {
-                           "name" : "CervicalCancerDiagnoses",
-                           "type" : "ExpressionRef"
+                           "type" : "Union",
+                           "operand" : [ {
+                              "name" : "CervicalCancerDiagnoses",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CervicalPrecancerDisorders",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "CervicalPrecancerDisorders",
-                           "type" : "ExpressionRef"
+                           "type" : "Union",
+                           "operand" : [ {
+                              "name" : "DesExposureDiagnoses",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "AbsenceOfCervixDiagnoses",
+                              "type" : "ExpressionRef"
+                           } ]
                         } ]
                      }, {
                         "type" : "Union",
                         "operand" : [ {
-                           "name" : "DesExposureDiagnoses",
+                           "name" : "PregnancyDiagnoses",
                            "type" : "ExpressionRef"
                         }, {
-                           "name" : "AbsenceOfCervixDiagnoses",
+                           "name" : "ImmunocompromisedConditions",
                            "type" : "ExpressionRef"
                         } ]
                      } ]
                   }, {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "PregnancyDiagnoses",
+                        "name" : "AbnormalUterineOrVaginalBleedingDiagnoses",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "ImmunocompromisedConditions",
+                        "name" : "PremenopausalConditions",
                         "type" : "ExpressionRef"
                      } ]
                   } ]
                }, {
-                  "name" : "AbnormalUterineOrVaginalBleedingDiagnoses",
+                  "name" : "PostmenopausalConditions",
                   "type" : "ExpressionRef"
                } ]
             }
@@ -1575,6 +1690,49 @@
                } ]
             }
          }, {
+            "name" : "PremenopausalObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Verified",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Observation",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                  "codeProperty" : "code",
+                  "codeComparator" : "in",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "name" : "Premenopausal",
+                     "type" : "ValueSetRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "PostmenopausalObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Verified",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Observation",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Postmenopausal",
+                        "type" : "CodeRef"
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "ResponsesToAbnormalBleedingQuestion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1688,26 +1846,38 @@
                         "operand" : [ {
                            "type" : "Union",
                            "operand" : [ {
-                              "name" : "AbnormalUterineOrVaginalBleedingObservations",
-                              "type" : "ExpressionRef"
+                              "type" : "Union",
+                              "operand" : [ {
+                                 "name" : "AbnormalUterineOrVaginalBleedingObservations",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CervicalOrVaginalLesionObservations",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
-                              "name" : "CervicalOrVaginalLesionObservations",
-                              "type" : "ExpressionRef"
+                              "type" : "Union",
+                              "operand" : [ {
+                                 "name" : "PregnancyObservations",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "DesExposureObservations",
+                                 "type" : "ExpressionRef"
+                              } ]
                            } ]
                         }, {
                            "type" : "Union",
                            "operand" : [ {
-                              "name" : "PregnancyObservations",
+                              "name" : "AbsenceOfCervixObservations",
                               "type" : "ExpressionRef"
                            }, {
-                              "name" : "DesExposureObservations",
+                              "name" : "PremenopausalObservations",
                               "type" : "ExpressionRef"
                            } ]
                         } ]
                      }, {
                         "type" : "Union",
                         "operand" : [ {
-                           "name" : "AbsenceOfCervixObservations",
+                           "name" : "PostmenopausalObservations",
                            "type" : "ExpressionRef"
                         }, {
                            "name" : "ResponsesToAbnormalBleedingQuestion",

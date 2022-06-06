@@ -36,7 +36,6 @@ codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
 codesystem "NULL FLAVOR": 'http://terminology.hl7.org/CodeSystem/v3-NullFlavor'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
-valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "All Results of High Risk HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.233'
 valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
 valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
@@ -53,9 +52,6 @@ code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 
 code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)'
 code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
 code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometrial cells, cytologically benign, in a postmenopausal woman (finding)'
-code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
-code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
-code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "Unknown": 'UNK' from "NULL FLAVOR" display 'Unknown'
 
@@ -657,23 +653,13 @@ define CytologyInterpretedAsHistiocytes:
       return aC ~ "Histiocytes"
   )
 
-define PremenopausalObservations:
-  C3F.Verified(
-    [Observation: "Premenopausal"] union
-    [Observation: "Premenopausal Menorrhagia"] union
-    [Observation: "Excessive Bleeding in the Premenopausal Period"]
-  )
+define HasPremenopausalObservationOrCondition:
+  Exists(Dash.PremenopausalObservations) or
+  Exists(Dash.PremenopausalConditions)
 
-define HasPremenopausalObservation:
-  Exists(PremenopausalObservations)
-
-define PostmenopausalObservations:
-  C3F.Verified(
-    [Observation: "Postmenopausal"]
-  )
-
-define HasPostmenopausalObservation:
-  Exists(PostmenopausalObservations)
+define HasPostmenopausalObservationOrCondition:
+  Exists(Dash.PostmenopausalObservations) or
+  Exists(Dash.PostmenopausalConditions)
 
 define Pregnant:
   Exists(Dash.PregnancyDiagnoses) or
@@ -894,8 +880,8 @@ define RecommendationForRareCytology:
       }
     // G.4 Benign Endometrial Cells in Premenopausal Patients or Benign Glandular Cells in Posthysterectomy patients
     when (
-      HasPremenopausalObservation and
-      not HasPostmenopausalObservation and
+      HasPremenopausalObservationOrCondition and
+      not HasPostmenopausalObservationOrCondition and
       not Symptomatic.IsSymptomatic and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
@@ -909,7 +895,7 @@ define RecommendationForRareCytology:
         text: 'For asymptomatic premenopausal patients with benign endometrial cells, endometrial stromal cells, or histiocytes, no further evaluation is recommended (BII).'
       }
     when (
-      HasPostmenopausalObservation and
+      HasPostmenopausalObservationOrCondition and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsBenignEndometrialCells
     ) then
