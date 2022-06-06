@@ -56,7 +56,8 @@ define Female:
 
 define GenderIdentity:
   Patient.extension E
-    where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity'
+    where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
+      E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
 
 define TransgenderMale:
   exists(
