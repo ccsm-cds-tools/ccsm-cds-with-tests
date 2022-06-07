@@ -27,9 +27,9 @@ Usage: #definition
 * priority = $RPRIOR#routine "Routine"
 * dynamicValue[+].path = "code" // this is the ServiceRequest.code element
 * dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* dynamicValue[=].expression.expression = "ServiceRequest Code"
+* dynamicValue[=].expression.expression = "ServiceRequestCode"
 * dynamicValue[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
 * dynamicValue[+].path = "orderDetail" // this is the ServiceRequest.orderDetail element
 * dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* dynamicValue[=].expression.expression = "ServiceRequest Order Detail"
+* dynamicValue[=].expression.expression = "ServiceRequestOrderDetail"
 * dynamicValue[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"

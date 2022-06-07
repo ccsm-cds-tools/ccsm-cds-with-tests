@@ -5435,7 +5435,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5501,7 +5503,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5543,7 +5547,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5638,7 +5644,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5712,7 +5720,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5754,7 +5764,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5808,7 +5820,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5862,7 +5876,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5926,7 +5942,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -5995,7 +6013,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6050,7 +6070,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6083,7 +6105,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6116,7 +6140,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6138,7 +6164,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -6322,7 +6348,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6355,7 +6383,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6394,7 +6424,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -6416,7 +6448,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -9116,7 +9148,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9173,7 +9207,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9230,7 +9266,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9305,7 +9343,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9381,7 +9421,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9469,7 +9511,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9576,7 +9620,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9651,7 +9697,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9705,7 +9753,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -9759,7 +9809,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -10115,7 +10167,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -10617,7 +10671,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -11006,7 +11062,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -11261,7 +11319,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -11321,7 +11381,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -11369,7 +11431,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -11391,7 +11455,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -12938,7 +13002,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -12965,7 +13031,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -13080,7 +13148,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -13128,7 +13198,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -13173,7 +13245,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -13195,7 +13269,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -14401,7 +14475,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -14467,7 +14543,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -14555,7 +14633,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -14643,7 +14723,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -14804,7 +14886,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -14934,7 +15018,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15032,7 +15118,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15080,7 +15168,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15160,7 +15250,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15307,7 +15399,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -15570,7 +15662,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15618,7 +15712,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15640,7 +15736,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -15869,7 +15965,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15913,7 +16011,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15975,7 +16075,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -15997,7 +16099,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -16737,7 +16839,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -16782,7 +16886,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -16804,7 +16910,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -17474,14 +17580,8 @@ export const ManagementLibrary = {
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "PositivePrimaryHpv",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
+                           "name" : "PositivePrimaryHpv",
+                           "type" : "ExpressionRef"
                         }, {
                            "type" : "Not",
                            "operand" : {
@@ -17530,7 +17630,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "type" : "Null"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17600,8 +17702,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17662,8 +17765,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17758,8 +17862,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17820,8 +17925,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17916,8 +18022,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -17978,8 +18085,9 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "value" : {
-                           "name" : "CommonAbnormalityRecommendationText",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "text",
@@ -18339,7 +18447,7 @@ export const ManagementLibrary = {
                      "element" : [ {
                         "name" : "action",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Any",
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
@@ -18453,14 +18561,81 @@ export const ManagementLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Null"
+               "path" : "action",
+               "type" : "Property",
+               "source" : {
+                  "name" : "ManagementRecommendation",
+                  "type" : "ExpressionRef"
+               }
             }
          }, {
             "name" : "ServiceRequestOrderDetail",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Null"
+               "path" : "text",
+               "type" : "Property",
+               "source" : {
+                  "name" : "ManagementRecommendation",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "RecommendColposcopy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "action",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "ManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Colposcopy",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "RecommendSurveillance",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "action",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "ManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Surveillance",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "RecommendTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "action",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "ManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Treatment",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "ManagePatientUnder25",

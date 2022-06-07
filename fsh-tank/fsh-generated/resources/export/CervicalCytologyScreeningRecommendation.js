@@ -73,7 +73,7 @@ export const CervicalCytologyScreeningRecommendation = {
       "path": "code",
       "expression": {
         "language": "text/cql",
-        "expression": "ServiceRequest Code",
+        "expression": "ServiceRequestCode",
         "reference": "Library/TopLevelScreeningLibrary|1.0"
       }
     },
@@ -81,7 +81,7 @@ export const CervicalCytologyScreeningRecommendation = {
       "path": "orderDetail",
       "expression": {
         "language": "text/cql",
-        "expression": "ServiceRequest Order Detail",
+        "expression": "ServiceRequestOrderDetail",
         "reference": "Library/TopLevelScreeningLibrary|1.0"
       }
     }

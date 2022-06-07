@@ -106,7 +106,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Colposcopy",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -120,7 +120,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Surveillance",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -134,7 +134,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Treatment",
+                "expression": "RecommendTreatment",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -174,7 +174,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Colposcopy",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -188,7 +188,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Surveillance",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -202,7 +202,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Treatment",
+                "expression": "RecommendTreatment",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -242,7 +242,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Colposcopy",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -256,7 +256,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Surveillance",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -270,7 +270,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Treatment",
+                "expression": "RecommendTreatment",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -310,7 +310,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Colposcopy",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -324,7 +324,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Surveillance",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -338,7 +338,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Treatment",
+                "expression": "RecommendTreatment",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -378,7 +378,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Colposcopy",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -392,7 +392,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Surveillance",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
@@ -406,7 +406,7 @@ export const ManageCervicalCommonAbnormalities = {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "Recommend Treatment",
+                "expression": "RecommendTreatment",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }

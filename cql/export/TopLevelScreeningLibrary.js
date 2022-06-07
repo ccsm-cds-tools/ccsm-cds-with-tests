@@ -542,14 +542,14 @@ export const TopLevelScreeningLibrary = {
                } ]
             }
          }, {
-            "name" : "ServiceRequest Code",
+            "name" : "ServiceRequestCode",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Null"
             }
          }, {
-            "name" : "ServiceRequest Order Detail",
+            "name" : "ServiceRequestOrderDetail",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
