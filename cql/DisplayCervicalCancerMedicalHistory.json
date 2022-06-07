@@ -587,7 +587,7 @@
                "libraryName" : "C3F",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "ActiveOrRecurring",
+                  "name" : "ActiveCondition",
                   "libraryName" : "C3F",
                   "type" : "FunctionRef",
                   "operand" : [ {
@@ -1300,23 +1300,41 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ValidCondition",
-               "libraryName" : "Common",
+               "name" : "ActiveOrRecurring",
+               "libraryName" : "C3F",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "type" : "Union",
+                  "name" : "ValidCondition",
+                  "libraryName" : "Common",
+                  "type" : "FunctionRef",
                   "operand" : [ {
                      "type" : "Union",
                      "operand" : [ {
-                        "dataType" : "{http://hl7.org/fhir}Condition",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
-                        "codeProperty" : "code",
-                        "codeComparator" : "in",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "name" : "Premenopausal",
-                           "type" : "ValueSetRef"
-                        }
+                        "type" : "Union",
+                        "operand" : [ {
+                           "dataType" : "{http://hl7.org/fhir}Condition",
+                           "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                           "codeProperty" : "code",
+                           "codeComparator" : "in",
+                           "type" : "Retrieve",
+                           "codes" : {
+                              "name" : "Premenopausal",
+                              "type" : "ValueSetRef"
+                           }
+                        }, {
+                           "dataType" : "{http://hl7.org/fhir}Condition",
+                           "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
+                           "codeProperty" : "code",
+                           "codeComparator" : "~",
+                           "type" : "Retrieve",
+                           "codes" : {
+                              "type" : "ToList",
+                              "operand" : {
+                                 "name" : "Premenopausal Menorrhagia",
+                                 "type" : "CodeRef"
+                              }
+                           }
+                        } ]
                      }, {
                         "dataType" : "{http://hl7.org/fhir}Condition",
                         "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
@@ -1326,24 +1344,11 @@
                         "codes" : {
                            "type" : "ToList",
                            "operand" : {
-                              "name" : "Premenopausal Menorrhagia",
+                              "name" : "Excessive Bleeding in the Premenopausal Period",
                               "type" : "CodeRef"
                            }
                         }
                      } ]
-                  }, {
-                     "dataType" : "{http://hl7.org/fhir}Condition",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Condition",
-                     "codeProperty" : "code",
-                     "codeComparator" : "~",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "type" : "ToList",
-                        "operand" : {
-                           "name" : "Excessive Bleeding in the Premenopausal Period",
-                           "type" : "CodeRef"
-                        }
-                     }
                   } ]
                } ]
             }

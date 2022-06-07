@@ -153,7 +153,7 @@ define AbsenceOfCervixDiagnoses:
 
 define PregnancyDiagnoses:
   C3F.Confirmed(
-    C3F.ActiveOrRecurring(
+    C3F.ActiveCondition(
       C3F.ConditionLookBack(
         [Condition: "Pregnancy"] union [Condition: "Pregnancy (New ICD10 codes published in 2018 and 2020)"],
         42 weeks
@@ -224,10 +224,12 @@ define AbnormalUterineOrVaginalBleedingDiagnoses:
   Common.ValidCondition([Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"])
 
 define PremenopausalConditions:
-  Common.ValidCondition(
-    [Condition: "Premenopausal"] union
-    [Condition: "Premenopausal Menorrhagia"] union
-    [Condition: "Excessive Bleeding in the Premenopausal Period"]
+  C3F.ActiveOrRecurring(
+    Common.ValidCondition(
+      [Condition: "Premenopausal"] union
+      [Condition: "Premenopausal Menorrhagia"] union
+      [Condition: "Excessive Bleeding in the Premenopausal Period"]
+    )
   )
 
 define PostmenopausalConditions:
