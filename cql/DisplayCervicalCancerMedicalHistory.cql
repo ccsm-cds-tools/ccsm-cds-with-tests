@@ -238,6 +238,7 @@ define PostmenopausalConditions:
 define PertinentConditions:
   CervicalCancerDiagnoses union
   CervicalPrecancerDisorders union
+  CervicalOrVaginalLesionDiagnoses union
   DesExposureDiagnoses union
   AbsenceOfCervixDiagnoses union
   PregnancyDiagnoses union
