@@ -45,7 +45,7 @@ context Patient
 // Sex at birth = Female
 //    OR Gender identity = Transgender Male 
 // AND 
-// Date of Birth AFTER 01/01/1980
+// Date of Birth BEFORE 01/01/1980
 // AND
 // Diagnosis of DES Exposure In Utero (accept all clinicalStatus values)
 //    OR DES Exposure In Utero observation (final, amended, corrected)
