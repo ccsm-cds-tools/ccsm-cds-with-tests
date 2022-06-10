@@ -1,0 +1,37 @@
+---
+name: Unsatisfactory Cytology with Positive HPV test without genotyping for HPV 16 or HPV 18 Cotest G2.2
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1979-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#19765-7 Microscopic observation [Identifier] in Cervical or vaginal smear or scraping by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#126481000119106 Vaginal Papanicolaou smear unsatisfactory for evaluation (finding) 
+  effectiveDateTime: 2021-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#708301004 Deoxyribonucleic acid of Human papillomavirus 31 (substance)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'RareCytologyG2.2'
+    text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
+  WhichRarityMadeTheRecommendation: 1

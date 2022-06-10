@@ -103,7 +103,7 @@ code "Abnormal Uterine or Vaginal Bleeding Question": 'AUVBQ' from "LOCAL" displ
 code "Visible Uterine or Vaginal Lesion Question": 'VUVLQ' from "LOCAL" display 'Does the patient have visible uterine or vaginal lesions?'
 code "DES Exposure Question": 'DESEQ' from "LOCAL" display 'Did the patient experience in utero exposure to diethylstilbesterol (DES)?'
 code "Future Pregnancy Concerns Question": 'FPCQ' from "LOCAL" display 'Does the patient have future pregnancy concerns related to treatment options?'
-
+code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
@@ -634,7 +634,8 @@ define ResponsesToFuturePregnancyConcernsQuestion:
   C3F.ObservationLookBack(
     [Observation: "Future Pregnancy Concerns Question"],
     12 months
-  )
+
+
 
 //------------------------------------------------------------------------------
 // FLAGS
@@ -653,9 +654,12 @@ define HasRecentPositiveHpv:
 define RecentAbnormalCytologyResults:
   Common.LookBack(
     (CervicalCytologyReports) C
-      where C.conclusionCode in "Abnormal results of Cervical Cytology Test",
+      where (
+        C.conclusionCode in "Abnormal results of Cervical Cytology Test" or
+        C.conclusionCode ~ "Benign Glandular Cells"
+      ),
     AbnormalTestLookbackPeriod
-  )
+  ) 
 
 define HasRecentAbnormalCytologyResults:
   Exists(RecentAbnormalCytologyResults)
