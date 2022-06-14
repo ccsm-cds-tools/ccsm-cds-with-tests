@@ -118,13 +118,24 @@ export const CCSMCommonFunctions = {
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "ToString",
-               "operand" : {
-                  "path" : "value",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "d",
-                     "type" : "OperandRef"
+               "type" : "First",
+               "source" : {
+                  "type" : "SplitOnMatches",
+                  "stringToSplit" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "d",
+                           "type" : "OperandRef"
+                        }
+                     }
+                  },
+                  "separatorPattern" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "T",
+                     "type" : "Literal"
                   }
                }
             },
