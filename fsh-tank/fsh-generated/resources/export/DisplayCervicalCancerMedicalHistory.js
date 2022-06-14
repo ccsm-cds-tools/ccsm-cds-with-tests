@@ -63,7 +63,7 @@ export const DisplayCervicalCancerMedicalHistory = {
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/DisplayCervicalCancerMedicalHistory|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/DashboardLibrary|1.0.0"
   ],
   "kind": "CommunicationRequest",
   "intent": "proposal",
@@ -74,7 +74,7 @@ export const DisplayCervicalCancerMedicalHistory = {
       "expression": {
         "language": "text/cql",
         "expression": "CervicalCancerScreeningAndMedicalHistory",
-        "reference": "Library/DisplayCervicalCancerMedicalHistory|1.0"
+        "reference": "Library/DashboardLibrary|1.0"
       }
     }
   ]

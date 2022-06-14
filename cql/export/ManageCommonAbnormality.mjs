@@ -29,7 +29,7 @@ export const ManageCommonAbnormality = {
             "version" : "4.0.1"
          }, {
             "localIdentifier" : "Dash",
-            "path" : "DisplayCervicalCancerMedicalHistory",
+            "path" : "DashboardLibrary",
             "version" : "1.0.0"
          }, {
             "localIdentifier" : "Collate",

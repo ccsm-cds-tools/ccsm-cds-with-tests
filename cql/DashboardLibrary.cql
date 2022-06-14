@@ -12,7 +12,7 @@
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
-library DisplayCervicalCancerMedicalHistory version '1.0.0'
+library DashboardLibrary version '1.0.0'
 
 using FHIR version '4.0.1'
 
@@ -942,11 +942,24 @@ define Errors:
 
 define CervicalCancerScreeningAndMedicalHistory:
 {
-  Conditions: PertinentConditionsSummary,
-  Observations: PertinentObservationsSummary,
-  Medications: PertinentMedicationsSummary,
-  Procedures: PertinentProceduresSummary,
-  DiagnosticReports: DiagnosticReportsSummary,
-  Encounters: PertinentEncountersSummary,
-  Immunizations: PertinentImmunizationsSummary
+  patientInfo: {
+    name: null,
+    id: null,
+    isPregnant: null,
+    dateOfBirth: null,
+    sexAtBirth: null,
+    age: null,
+    gender: null,
+    primaryLanguage: null,
+    race: null
+  },
+  patientHistory: {
+    conditions: PertinentConditionsSummary,
+    observations: PertinentObservationsSummary,
+    medications: PertinentMedicationsSummary,
+    procedures: PertinentProceduresSummary,
+    diagnosticReports: DiagnosticReportsSummary,
+    encounters: PertinentEncountersSummary,
+    immunizations: PertinentImmunizationsSummary
+  }
 }

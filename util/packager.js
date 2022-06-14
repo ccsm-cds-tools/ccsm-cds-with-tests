@@ -20,7 +20,7 @@ for (const file of files) {
         varName + 
         ' = ' +
         contentString;
-      const jsFile = file.replace('.json','.js');
+      const jsFile = file.replace('.json','.mjs');
       writeFileSync(inputPath + '/export/' + jsFile, updatedContents);
     } catch(e) {
       continue;

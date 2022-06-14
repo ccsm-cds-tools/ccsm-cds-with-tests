@@ -33,7 +33,7 @@ export const ManageSpecialPopulation = {
             "version" : "1.0.0"
          }, {
             "localIdentifier" : "Dash",
-            "path" : "DisplayCervicalCancerMedicalHistory",
+            "path" : "DashboardLibrary",
             "version" : "1.0.0"
          }, {
             "localIdentifier" : "Collate",

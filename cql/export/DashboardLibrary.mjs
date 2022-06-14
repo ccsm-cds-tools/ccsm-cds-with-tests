@@ -1,11 +1,11 @@
-export const DisplayCervicalCancerMedicalHistory = {
+export const DashboardLibrary = {
    "library" : {
       "annotation" : [ {
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
       "identifier" : {
-         "id" : "DisplayCervicalCancerMedicalHistory",
+         "id" : "DashboardLibrary",
          "version" : "1.0.0"
       },
       "schemaIdentifier" : {
@@ -5358,46 +5358,103 @@ export const DisplayCervicalCancerMedicalHistory = {
             "expression" : {
                "type" : "Tuple",
                "element" : [ {
-                  "name" : "Conditions",
+                  "name" : "patientInfo",
                   "value" : {
-                     "name" : "PertinentConditionsSummary",
-                     "type" : "ExpressionRef"
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "name",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "id",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "isPregnant",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "dateOfBirth",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "sexAtBirth",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "age",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "gender",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "primaryLanguage",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "race",
+                        "value" : {
+                           "type" : "Null"
+                        }
+                     } ]
                   }
                }, {
-                  "name" : "Observations",
+                  "name" : "patientHistory",
                   "value" : {
-                     "name" : "PertinentObservationsSummary",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "Medications",
-                  "value" : {
-                     "name" : "PertinentMedicationsSummary",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "Procedures",
-                  "value" : {
-                     "name" : "PertinentProceduresSummary",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "DiagnosticReports",
-                  "value" : {
-                     "name" : "DiagnosticReportsSummary",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "Encounters",
-                  "value" : {
-                     "name" : "PertinentEncountersSummary",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "name" : "Immunizations",
-                  "value" : {
-                     "name" : "PertinentImmunizationsSummary",
-                     "type" : "ExpressionRef"
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "conditions",
+                        "value" : {
+                           "name" : "PertinentConditionsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "observations",
+                        "value" : {
+                           "name" : "PertinentObservationsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "medications",
+                        "value" : {
+                           "name" : "PertinentMedicationsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "procedures",
+                        "value" : {
+                           "name" : "PertinentProceduresSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "diagnosticReports",
+                        "value" : {
+                           "name" : "DiagnosticReportsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "encounters",
+                        "value" : {
+                           "name" : "PertinentEncountersSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "immunizations",
+                        "value" : {
+                           "name" : "PertinentImmunizationsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
                   }
                } ]
             }

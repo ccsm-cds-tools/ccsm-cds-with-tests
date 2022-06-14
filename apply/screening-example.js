@@ -33,7 +33,7 @@ const elmJsonDependencyArray = [
   JSON.parse(readFileSync('cql/ScreeningDesExposureLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningImmunocompromisedLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningAverageRiskLibrary.json')),
-  JSON.parse(readFileSync('cql/DisplayCervicalCancerMedicalHistory.json')),
+  JSON.parse(readFileSync('cql/DashboardLibrary.json')),
   JSON.parse(readFileSync('cql/CCSMCommonFunctions.json')),
   JSON.parse(readFileSync('cql/CDSConnectCommonsforFHIRv401.json')),
 ];
