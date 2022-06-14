@@ -82,6 +82,8 @@ valueset "High Risk HPV Positive Results": 'http://cts.nlm.nih.gov/fhir/ValueSet
 valueset "High Risk Positive HPV Results Without HPV16 or HPV18": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.263'
 valueset "Histologic CIN3": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.269'
 valueset "HPV Negative Results": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.268'
+valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
+valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 // Standard codes
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
@@ -96,6 +98,13 @@ code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
 code "CIN2": '285838002' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 2 (disorder)'
 code "HSIL, Unspecified": '22725004' from "SNOMED-CT" display 'High-grade squamous intraepithelial lesion (morphologic abnormality)'
+code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
+code "CIN1": '285836003' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 1 (disorder)'
+code "AGC": '441219009' from "SNOMED-CT" display 'Atypical glandular cells on cervical Papanicolaou smear (finding)'
+code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
+code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
+code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
+code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -117,6 +126,77 @@ parameter AbnormalTestLookbackPeriod default 8 years
 /***** BEGIN CDS LOGIC ********************************************************/
 
 context Patient
+
+//------------------------------------------------------------------------------
+// FUNCTIONS
+//------------------------------------------------------------------------------
+
+define function CytologyInterpretation(conclusions List<System.Concept>):
+  if conclusions is not null then
+    (conclusions) c
+    return
+      case
+        when c ~ "NILM" then {text: 'NILM', rank: 1}
+        when c ~ "ASC-US" then {text: 'ASC-US', rank: 2}
+        when c ~ "LSIL" then {text: 'LSIL', rank: 3}
+        when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
+        when c ~ "AGC" then {text: 'AGC', rank: 5}
+        when c in "HSIL" then {text: 'HSIL+', rank: 6}
+        else {text: 'ALL', rank: 0}
+      end
+  else
+    {{text: 'ALL', rank: 0}}
+
+/**
+ * Takes a list of HPV conclusion codes and maps each to a text value and a numerical 
+ * ranking. The text value can be used as input to the risk tables and the numerical 
+ * ranking is meant to convey precendence so that the most specific conclusion can 
+ * be selected from amongst a group of codes. For instance, an HPV test may come back 
+ * both as positive and positive for HPV16. We want to be able to select the latter 
+ * in this case as input to the risk tables.
+ * @param conclusions - a list of CodeableConcepts
+ * @returns List<Tuple { text System.String, rank System.Integer }>
+ */
+define function HpvInterpretation(conclusions List<System.Concept>):
+  (conclusions) c
+  return
+    case
+      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
+      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
+      when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
+      when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 1}
+      else {text: 'ALL', rank: 0}
+    end
+
+/**
+ * Takes the output from HpvInterpretation() and returns the text of the
+ * interpretation with the highest rank. This allows more specific conclusions to
+ * take precedence over more general ones.
+ * @param interpretations - a list of tuples
+ * @returns System.String the text to be used as input to the risk tables
+ */
+define function HighestRankedInterpretation(interpretations List<Tuple { text System.String, rank System.Integer }>):
+  Last(
+    (
+      (interpretations) I sort by rank
+    ) S
+    return S.text
+  )
+
+/**
+ */
+define function BiopsyInterpretation(conclusions List<System.Concept>):
+  (conclusions) c
+  return
+    case
+      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
+      when c ~ "CIN1" then {text: 'CIN1', rank: 2}
+      when c ~ "CIN2" then {text: 'CIN2', rank: 3}
+      when c in "Histologic CIN3" then {text: 'CIN3', rank: 4}
+      when c in "AIS" then {text: 'AIS', rank: 5}
+      when c in "Histologic cancer" then {text: 'Cancer', rank: 6}
+      else {text: 'ALL', rank: 0}
+    end
 
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
@@ -231,12 +311,17 @@ define PertinentConditions:
 define PertinentConditionsSummary:
   (PertinentConditions) C
   return {
-    Name: Common.ConceptText(C.code),
-    Status: C.clinicalStatus.coding[0].code.value,
-    Onset: Common.Onset(C),
-    DateRecorded: Common.DateTimeText(C.recordedDate)
+    name: Common.ConceptText(C.code),
+    value: C.clinicalStatus.coding[0].code.value,
+    date: Common.DateTimeText(
+      Coalesce(
+        C.onset as FHIR.dateTime,
+        C.recordedDate
+      )
+    ),
+    reference: 'Condition/' + C.id
   }
-  sort by (Onset as String) desc
+  sort by (date as String) desc
 
 //------------------------------------------------------------------------------
 // PERTINENT OBSERVATIONS
@@ -293,12 +378,12 @@ define PertinentObservations:
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
   return {
-    Name: Common.ConceptText(Obs.code),
-    Status: Obs.status,
-    Date: Common.ObservationDateString(Obs),
-    Value: Common.ConceptText(Obs.value)
+    name: Common.ConceptText(Obs.code),
+    value: Common.ConceptText(Obs.value),
+    date: Common.ObservationDateString(Obs),
+    reference: 'Observation/' + Obs.id
   }
-  sort by (Date as String) desc
+  sort by (date as String) desc
 
 //------------------------------------------------------------------------------
 // PERTINENT MEDICATIONS
@@ -362,56 +447,56 @@ define PertinentMedicationStatements:
 define PertinentMedicationRequestsSummary:
   (PertinentMedicationRequests) M
   return {
-    Type: 'Request',
-    Name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
-    Start: Common.DateTimeText(M.authoredOn),
-    End:   null as String, // MedicationRequest end date not supported in R4
-    Status: M.status.value
+    name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
+    value: M.status.value,
+    date: Common.DateTimeText(M.authoredOn),
+    reference: 'MedicationRequest/' + M.id
   }
-  sort by Start desc, End desc
+  sort by date desc
 
 define PertinentMedicationDispensesSummary:
   (PertinentMedicationDispenses) M
   return {
-    Type: 'Dispense',
-    Name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
-    Start: Coalesce(
+    name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
+    value: M.status.value,
+    date: Coalesce(
       Common.DateTimeText(M.whenHandedOver),
       Common.DateTimeText(M.whenPrepared)
     ),
-    End:   null as String, // MedicationDispense end date not supported in R4
-    Status: M.status.value
+    reference: 'MedicationDispense/' + M.id
   }
-  sort by Start desc, End desc
+  sort by date desc
 
 define PertinentMedicationAdministrationsSummary:
   (PertinentMedicationAdministrations) M
   return {
-    Type: 'Administration',
-    Name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
-    Start: Common.DateTimeText((M.effective as FHIR.Period)."start"),
-    End:   Common.DateTimeText((M.effective as FHIR.Period)."end"),
-    Status: M.status.value
+    name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
+    value: M.status.value,
+    date: Common.DateTimeText((M.effective as FHIR.Period)."start") +
+      ' to ' +
+      Common.DateTimeText((M.effective as FHIR.Period)."end"),
+    reference: 'MedicationAdministration/' + M.id
   }
-  sort by Start desc, End desc
+  sort by date desc
 
 define PertinentMedicationStatementsSummary:
   (PertinentMedicationStatements) M
   return {
-    Type:  'Statement',
-    Name:  Common.ConceptText(M.medication as FHIR.CodeableConcept),
-    Start: Common.DateTimeText((M.effective as FHIR.Period)."start"),
-    End:   Common.DateTimeText((M.effective as FHIR.Period)."end"),
-    Status: M.status.value
+    name:  Common.ConceptText(M.medication as FHIR.CodeableConcept),
+    value: M.status.value,
+    date: Common.DateTimeText((M.effective as FHIR.Period)."start") +
+      ' to ' +
+      Common.DateTimeText((M.effective as FHIR.Period)."end"),
+    reference: 'MedicationStatement/' + M.id
   }
-  sort by Start desc, End desc
+  sort by date desc
 
 define PertinentMedicationsSummary:
   (PertinentMedicationRequestsSummary union
   PertinentMedicationDispensesSummary union
   PertinentMedicationAdministrationsSummary union
   PertinentMedicationStatementsSummary) M
-  sort by Start desc
+  sort by date desc
 
 //------------------------------------------------------------------------------
 // PERTINENT PROCEDURES
@@ -469,9 +554,10 @@ define PertinentProcedures:
 define PertinentProceduresSummary:
   (PertinentProcedures) P
   return {
-    Type: 'Procedure',
-    Name: Common.ConceptText(P.code),
-    Date: Common.ProcedureDateString(P)
+    name: Common.ConceptText(P.code),
+    value: P.status.value,
+    date: Common.ProcedureDateString(P),
+    reference: 'Procedure/' + P.id
   }
 
 //------------------------------------------------------------------------------
@@ -520,31 +606,28 @@ define HistologyDiagnosticReports:
 define HpvDiagnosticReportsSummary:
   (HpvDiagnosticReports) D
   return {
-    Type: 'HrHPV',
-    Name: Common.ConceptText(D.code),
-    Value: (D.conclusionCode) cC return Common.ConceptText(cC),
-    Status: D.status.value,
-    Date: Common.DiagnosticReportDateString(D)
+    name: Common.ConceptText(D.code),
+    value: HighestRankedInterpretation(HpvInterpretation(D.conclusionCode)),
+    date: Common.DiagnosticReportDateString(D),
+    reference: 'DiagnosticReport/' + D.id
   }
 
 define CervicalCytologyReportsSummary:
   (CervicalCytologyReports) D
   return {
-    Type: 'Cervical Cytology',
-    Name: Common.ConceptText(D.code),
-    Value: (D.conclusionCode) cC return Common.ConceptText(cC),
-    Status: D.status.value,
-    Date: Common.DiagnosticReportDateString(D)
+    name: Common.ConceptText(D.code),
+    value: HighestRankedInterpretation(CytologyInterpretation(D.conclusionCode)),
+    date: Common.DiagnosticReportDateString(D),
+    reference: 'DiagnosticReport/' + D.id
   }
 
 define HistologyDiagnosticReportsSummary:
   (HistologyDiagnosticReports) D
   return {
-    Type: 'Histology',
-    Name: Common.ConceptText(D.code),
-    Value: (D.conclusionCode) cC return Common.ConceptText(cC),
-    Status: D.status.value,
-    Date: Common.DiagnosticReportDateString(D)
+    name: Common.ConceptText(D.code),
+    value: HighestRankedInterpretation(BiopsyInterpretation(D.conclusionCode)),
+    date: Common.DiagnosticReportDateString(D),
+    reference: 'DiagnosticReport/' + D.id
   }
 
 define DiagnosticReportsSummary:
@@ -553,7 +636,7 @@ define DiagnosticReportsSummary:
     CervicalCytologyReportsSummary union
     HistologyDiagnosticReportsSummary
   ) D
-  sort by Date desc
+  sort by date desc
 
 define HighGradeOrCancerHistologyResults:
   HistologyDiagnosticReports H
@@ -582,10 +665,12 @@ define PertinentEncounters:
 define PertinentEncountersSummary:
   (PertinentEncounters) E
   return {
-    Reason: Common.ConceptText(E.reasonCode[0]),
-    Status: E.status,
-    Start: Common.DateTimeText((E.period as FHIR.Period)."start"),
-    End: Common.DateTimeText((E.period as FHIR.Period)."end")
+    name: Common.ConceptText(E.reasonCode[0]),
+    value: E.status,
+    date: Common.DateTimeText((E.period as FHIR.Period)."start") + 
+      ' to ' +
+      Common.DateTimeText((E.period as FHIR.Period)."end"),
+    reference: 'Encounter/' + E.id
   }
 
 //------------------------------------------------------------------------------
@@ -602,13 +687,13 @@ define PertinentImmunizations:
 define PertinentImmunizationsSummary:
   (PertinentImmunizations) I
   return {
-    Name: Common.ConceptText(I.vaccineCode),
-    Status: I.status,
-    AdministrationDate: Coalesce(
+    name: Common.ConceptText(I.vaccineCode),
+    value: I.status,
+    date: Coalesce(
       I.occurrence,
       Common.DateTimeText(I.occurrence)
     ),
-    ExpirationDate: Common.DateText(I.expirationDate)
+    reference: 'Immunization/' + I.id
   }
 
 //------------------------------------------------------------------------------
@@ -807,7 +892,7 @@ define Flags:
 define ErrorDiagnosticReportWithNoConclusonCodes:
   if (
       Exists(DiagnosticReportsSummary) and
-      DiagnosticReportsSummary.Value is null
+      DiagnosticReportsSummary.value is null
     ) then
       'A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.'
   else
@@ -857,7 +942,6 @@ define Errors:
 
 define CervicalCancerScreeningAndMedicalHistory:
 {
-  Age: PatientAge,
   Conditions: PertinentConditionsSummary,
   Observations: PertinentObservationsSummary,
   Medications: PertinentMedicationsSummary,

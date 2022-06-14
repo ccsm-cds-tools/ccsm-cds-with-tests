@@ -24,19 +24,6 @@ include CCSMCommonFunctions version '1.0.0' called Common
 // CODE SYSTEMS, VALUE SETS, AND CODES
 //------------------------------------------------------------------------------
 
-codesystem "SNOMED-CT": 'http://snomed.info/sct'
-
-valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256'
-valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
-
-code "ASC-H": '441088002' from "SNOMED-CT" display 'Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)'
-code "CIN1": '285836003' from "SNOMED-CT" display 'Cervical intraepithelial neoplasia grade 1 (disorder)'
-code "AGC": '441219009' from "SNOMED-CT" display 'Atypical glandular cells on cervical Papanicolaou smear (finding)'
-code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 16 (substance)'
-code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
-code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
-code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
-
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
@@ -59,6 +46,7 @@ define HpvTestingInterval:
 define function HPVTestingIntervalLookBack(LookBackDate System.DateTime):
   Interval[LookBackDate - HpvTestingInterval, LookBackDate)
 
+// TODO: Confirm that we actually need this
 define function GetEarlierDate(d1 System.DateTime, d2 System.DateTime):
   if d1 is not null then
     if d2 is not null then
@@ -70,71 +58,16 @@ define function GetEarlierDate(d1 System.DateTime, d2 System.DateTime):
     else null
 
 define function CytologyInterpretation(conclusions List<System.Concept>):
-  if conclusions is not null then
-    (conclusions) c
-    return
-      case
-        when c ~ Dash."NILM" then {text: 'NILM', rank: 1}
-        when c ~ "ASC-US" then {text: 'ASC-US', rank: 2}
-        when c ~ "LSIL" then {text: 'LSIL', rank: 3}
-        when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
-        when c ~ "AGC" then {text: 'AGC', rank: 5}
-        when c in "HSIL" then {text: 'HSIL+', rank: 6}
-        else {text: 'ALL', rank: 0}
-      end
-  else
-    {{text: 'ALL', rank: 0}}
+  Dash.CytologyInterpretation(conclusions)
 
-/**
- * Takes a list of HPV conclusion codes and maps each to a text value and a numerical 
- * ranking. The text value can be used as input to the risk tables and the numerical 
- * ranking is meant to convey precendence so that the most specific conclusion can 
- * be selected from amongst a group of codes. For instance, an HPV test may come back 
- * both as positive and positive for HPV16. We want to be able to select the latter 
- * in this case as input to the risk tables.
- * @param conclusions - a list of CodeableConcepts
- * @returns List<Tuple { text System.String, rank System.Integer }>
- */
 define function HpvInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
-      when c in Dash."High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
-      when c in Dash."HPV Negative Results" then {text: 'HPV-negative', rank: 1}
-      else {text: 'ALL', rank: 0}
-    end
+  Dash.HpvInterpretation(conclusions)
 
-/**
- * Takes the output from HpvInterpretation() and returns the text of the
- * interpretation with the highest rank. This allows more specific conclusions to
- * take precedence over more general ones.
- * @param interpretations - a list of tuples
- * @returns System.String the text to be used as input to the risk tables
- */
 define function HighestRankedInterpretation(interpretations List<Tuple { text System.String, rank System.Integer }>):
-  Last(
-    (
-      (interpretations) I sort by rank
-    ) S
-    return S.text
-  )
+  Dash.HighestRankedInterpretation(interpretations)
 
-/**
- */
 define function BiopsyInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
-      when c ~ "CIN1" then {text: 'CIN1', rank: 2}
-      when c ~ Dash."CIN2" then {text: 'CIN2', rank: 3}
-      when c in Dash."Histologic CIN3" then {text: 'CIN3', rank: 4}
-      when c in Dash."AIS" then {text: 'AIS', rank: 5}
-      when c in Dash."Histologic cancer" then {text: 'Cancer', rank: 6}
-      else {text: 'ALL', rank: 0}
-    end
+  Dash.BiopsyInterpretation(conclusions)
 
 //------------------------------------------------------------------------------
 // DATA RETRIEVAL

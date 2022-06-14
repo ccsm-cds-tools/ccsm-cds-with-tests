@@ -276,6 +276,14 @@
             "name" : "HPV Negative Results",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.268",
             "accessLevel" : "Public"
+         }, {
+            "name" : "HSIL",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.256",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "Normal Histology Finding",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262",
+            "accessLevel" : "Public"
          } ]
       },
       "codes" : {
@@ -376,6 +384,62 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "ASC-H",
+            "id" : "441088002",
+            "display" : "Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "CIN1",
+            "id" : "285836003",
+            "display" : "Cervical intraepithelial neoplasia grade 1 (disorder)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "AGC",
+            "id" : "441219009",
+            "display" : "Atypical glandular cells on cervical Papanicolaou smear (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "HPV16+",
+            "id" : "708298003",
+            "display" : "Deoxyribonucleic acid of Human papillomavirus 16 (substance)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "HPV18+",
+            "id" : "708299006",
+            "display" : "Deoxyribonucleic acid of Human papillomavirus 18 (substance)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "LSIL",
+            "id" : "62051000119105",
+            "display" : "Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "ASC-US",
+            "id" : "441087007",
+            "display" : "Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Diagnosis of Genital GvHD",
             "id" : "GenitalGvHD",
             "display" : "Diagnosis of Genital GvHD",
@@ -434,6 +498,754 @@
                   "type" : "Retrieve"
                }
             }
+         }, {
+            "name" : "CytologyInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "conclusions",
+                           "type" : "OperandRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "c",
+                     "expression" : {
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Case",
+                        "caseItem" : [ {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "NILM",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "NILM",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "ASC-US",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ASC-US",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "2",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "LSIL",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "LSIL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "3",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "ASC-H",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ASC-H",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "4",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "AGC",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "5",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "HSIL",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HSIL+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "6",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        } ],
+                        "else" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "ALL",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "rank",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "conclusions",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{urn:hl7-org:elm-types:r1}Concept",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
+            "name" : "HpvInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "c",
+                  "expression" : {
+                     "name" : "conclusions",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Case",
+                     "caseItem" : [ {
+                        "when" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV16+",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16+",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "4",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "HPV18+",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16-, HPV18+",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "3",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-positive",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-negative",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "1",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     } ],
+                     "else" : {
+                        "type" : "Tuple",
+                        "element" : [ {
+                           "name" : "text",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ALL",
+                              "type" : "Literal"
+                           }
+                        }, {
+                           "name" : "rank",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "conclusions",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{urn:hl7-org:elm-types:r1}Concept",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
+            "name" : "HighestRankedInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "I",
+                           "expression" : {
+                              "name" : "interpretations",
+                              "type" : "OperandRef"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "sort" : {
+                           "by" : [ {
+                              "direction" : "asc",
+                              "path" : "rank",
+                              "type" : "ByColumn"
+                           } ]
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "path" : "text",
+                        "scope" : "S",
+                        "type" : "Property"
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "interpretations",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "text",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "rank",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            } ]
+         }, {
+            "name" : "BiopsyInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "c",
+                  "expression" : {
+                     "name" : "conclusions",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Case",
+                     "caseItem" : [ {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "Normal Histology Finding",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "<CIN1",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "1",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "CIN1",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "CIN1",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "CIN2",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "CIN2",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "3",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "Histologic CIN3",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "CIN3",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "4",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "AIS",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "AIS",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "5",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "c",
+                              "type" : "AliasRef"
+                           },
+                           "valueset" : {
+                              "name" : "Histologic cancer",
+                              "type" : "ValueSetRef"
+                           }
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "text",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Cancer",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "rank",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "6",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     } ],
+                     "else" : {
+                        "type" : "Tuple",
+                        "element" : [ {
+                           "name" : "text",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ALL",
+                              "type" : "Literal"
+                           }
+                        }, {
+                           "name" : "rank",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "conclusions",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{urn:hl7-org:elm-types:r1}Concept",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
          }, {
             "name" : "PatientAge",
             "context" : "Patient",
@@ -1224,7 +2036,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1236,7 +2048,7 @@
                            } ]
                         }
                      }, {
-                        "name" : "Status",
+                        "name" : "value",
                         "value" : {
                            "path" : "value",
                            "type" : "Property",
@@ -1262,26 +2074,49 @@
                            }
                         }
                      }, {
-                        "name" : "Onset",
-                        "value" : {
-                           "name" : "Onset",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "C",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     }, {
-                        "name" : "DateRecorded",
+                        "name" : "date",
                         "value" : {
                            "name" : "DateTimeText",
                            "libraryName" : "Common",
                            "type" : "FunctionRef",
                            "operand" : [ {
-                              "path" : "recordedDate",
-                              "scope" : "C",
-                              "type" : "Property"
+                              "type" : "Coalesce",
+                              "operand" : [ {
+                                 "strict" : false,
+                                 "type" : "As",
+                                 "operand" : {
+                                    "path" : "onset",
+                                    "scope" : "C",
+                                    "type" : "Property"
+                                 },
+                                 "asTypeSpecifier" : {
+                                    "name" : "{http://hl7.org/fhir}dateTime",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }, {
+                                 "path" : "recordedDate",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Condition/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -1295,7 +2130,7 @@
                         "strict" : false,
                         "type" : "As",
                         "operand" : {
-                           "name" : "Onset",
+                           "name" : "date",
                            "type" : "IdentifierRef"
                         },
                         "asTypeSpecifier" : {
@@ -1642,7 +2477,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1654,25 +2489,7 @@
                            } ]
                         }
                      }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "status",
-                           "scope" : "Obs",
-                           "type" : "Property"
-                        }
-                     }, {
-                        "name" : "Date",
-                        "value" : {
-                           "name" : "ObservationDateString",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "Obs",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     }, {
-                        "name" : "Value",
+                        "name" : "value",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1687,6 +2504,36 @@
                               }
                            } ]
                         }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "ObservationDateString",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "Obs",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "Obs",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
                      } ]
                   }
                },
@@ -1698,7 +2545,7 @@
                         "strict" : false,
                         "type" : "As",
                         "operand" : {
-                           "name" : "Date",
+                           "name" : "date",
                            "type" : "IdentifierRef"
                         },
                         "asTypeSpecifier" : {
@@ -1759,14 +2606,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Request",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1786,7 +2626,18 @@
                            } ]
                         }
                      }, {
-                        "name" : "Start",
+                        "name" : "value",
+                        "value" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
                         "value" : {
                            "name" : "DateTimeText",
                            "libraryName" : "Common",
@@ -1798,28 +2649,23 @@
                            } ]
                         }
                      }, {
-                        "name" : "End",
+                        "name" : "reference",
                         "value" : {
-                           "strict" : false,
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Null"
-                           },
-                           "asTypeSpecifier" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }
-                     }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "value",
-                           "type" : "Property",
-                           "source" : {
-                              "path" : "status",
-                              "scope" : "M",
-                              "type" : "Property"
-                           }
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "MedicationRequest/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "M",
+                                 "type" : "Property"
+                              } ]
+                           } ]
                         }
                      } ]
                   }
@@ -1827,11 +2673,7 @@
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Start",
-                     "type" : "ByColumn"
-                  }, {
-                     "direction" : "desc",
-                     "path" : "End",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -1854,14 +2696,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Dispense",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1881,7 +2716,18 @@
                            } ]
                         }
                      }, {
-                        "name" : "Start",
+                        "name" : "value",
+                        "value" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
                         "value" : {
                            "type" : "Coalesce",
                            "operand" : [ {
@@ -1905,28 +2751,23 @@
                            } ]
                         }
                      }, {
-                        "name" : "End",
+                        "name" : "reference",
                         "value" : {
-                           "strict" : false,
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Null"
-                           },
-                           "asTypeSpecifier" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }
-                     }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "value",
-                           "type" : "Property",
-                           "source" : {
-                              "path" : "status",
-                              "scope" : "M",
-                              "type" : "Property"
-                           }
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "MedicationDispense/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "M",
+                                 "type" : "Property"
+                              } ]
+                           } ]
                         }
                      } ]
                   }
@@ -1934,11 +2775,7 @@
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Start",
-                     "type" : "ByColumn"
-                  }, {
-                     "direction" : "desc",
-                     "path" : "End",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -1961,14 +2798,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Administration",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -1988,55 +2818,7 @@
                            } ]
                         }
                      }, {
-                        "name" : "Start",
-                        "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "start",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "effective",
-                                    "scope" : "M",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        }
-                     }, {
-                        "name" : "End",
-                        "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "end",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "effective",
-                                    "scope" : "M",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        }
-                     }, {
-                        "name" : "Status",
+                        "name" : "value",
                         "value" : {
                            "path" : "value",
                            "type" : "Property",
@@ -2046,17 +2828,87 @@
                               "type" : "Property"
                            }
                         }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "name" : "DateTimeText",
+                                 "libraryName" : "Common",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "strict" : false,
+                                       "type" : "As",
+                                       "operand" : {
+                                          "path" : "effective",
+                                          "scope" : "M",
+                                          "type" : "Property"
+                                       },
+                                       "asTypeSpecifier" : {
+                                          "name" : "{http://hl7.org/fhir}Period",
+                                          "type" : "NamedTypeSpecifier"
+                                       }
+                                    }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "DateTimeText",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "end",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "strict" : false,
+                                    "type" : "As",
+                                    "operand" : {
+                                       "path" : "effective",
+                                       "scope" : "M",
+                                       "type" : "Property"
+                                    },
+                                    "asTypeSpecifier" : {
+                                       "name" : "{http://hl7.org/fhir}Period",
+                                       "type" : "NamedTypeSpecifier"
+                                    }
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "MedicationAdministration/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "M",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
                      } ]
                   }
                },
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Start",
-                     "type" : "ByColumn"
-                  }, {
-                     "direction" : "desc",
-                     "path" : "End",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -2079,14 +2931,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Statement",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -2106,55 +2951,7 @@
                            } ]
                         }
                      }, {
-                        "name" : "Start",
-                        "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "start",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "effective",
-                                    "scope" : "M",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        }
-                     }, {
-                        "name" : "End",
-                        "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "end",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "effective",
-                                    "scope" : "M",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        }
-                     }, {
-                        "name" : "Status",
+                        "name" : "value",
                         "value" : {
                            "path" : "value",
                            "type" : "Property",
@@ -2164,17 +2961,87 @@
                               "type" : "Property"
                            }
                         }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "name" : "DateTimeText",
+                                 "libraryName" : "Common",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "strict" : false,
+                                       "type" : "As",
+                                       "operand" : {
+                                          "path" : "effective",
+                                          "scope" : "M",
+                                          "type" : "Property"
+                                       },
+                                       "asTypeSpecifier" : {
+                                          "name" : "{http://hl7.org/fhir}Period",
+                                          "type" : "NamedTypeSpecifier"
+                                       }
+                                    }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "DateTimeText",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "end",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "strict" : false,
+                                    "type" : "As",
+                                    "operand" : {
+                                       "path" : "effective",
+                                       "scope" : "M",
+                                       "type" : "Property"
+                                    },
+                                    "asTypeSpecifier" : {
+                                       "name" : "{http://hl7.org/fhir}Period",
+                                       "type" : "NamedTypeSpecifier"
+                                    }
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "MedicationStatement/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "M",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
                      } ]
                   }
                },
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Start",
-                     "type" : "ByColumn"
-                  }, {
-                     "direction" : "desc",
-                     "path" : "End",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -2214,7 +3081,7 @@
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Start",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -2410,14 +3277,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Procedure",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -2429,7 +3289,18 @@
                            } ]
                         }
                      }, {
-                        "name" : "Date",
+                        "name" : "value",
+                        "value" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "P",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
                         "value" : {
                            "name" : "ProcedureDateString",
                            "libraryName" : "Common",
@@ -2437,6 +3308,25 @@
                            "operand" : [ {
                               "name" : "P",
                               "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Procedure/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "P",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -2661,14 +3551,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HrHPV",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -2680,43 +3563,40 @@
                            } ]
                         }
                      }, {
-                        "name" : "Value",
+                        "name" : "value",
                         "value" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "cC",
-                              "expression" : {
-                                 "path" : "conclusionCode",
-                                 "scope" : "D",
-                                 "type" : "Property"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
-                                 "name" : "ConceptText",
-                                 "libraryName" : "Common",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "cC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }
-                           }
+                           "name" : "HighestRankedInterpretation",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "HpvInterpretation",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "D",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              } ]
+                           } ]
                         }
                      }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "value",
-                           "type" : "Property",
-                           "source" : {
-                              "path" : "status",
-                              "scope" : "D",
-                              "type" : "Property"
-                           }
-                        }
-                     }, {
-                        "name" : "Date",
+                        "name" : "date",
                         "value" : {
                            "name" : "DiagnosticReportDateString",
                            "libraryName" : "Common",
@@ -2724,6 +3604,25 @@
                            "operand" : [ {
                               "name" : "D",
                               "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -2748,14 +3647,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Cytology",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -2767,43 +3659,40 @@
                            } ]
                         }
                      }, {
-                        "name" : "Value",
+                        "name" : "value",
                         "value" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "cC",
-                              "expression" : {
-                                 "path" : "conclusionCode",
-                                 "scope" : "D",
-                                 "type" : "Property"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
-                                 "name" : "ConceptText",
-                                 "libraryName" : "Common",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "cC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }
-                           }
+                           "name" : "HighestRankedInterpretation",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "CytologyInterpretation",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "D",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              } ]
+                           } ]
                         }
                      }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "value",
-                           "type" : "Property",
-                           "source" : {
-                              "path" : "status",
-                              "scope" : "D",
-                              "type" : "Property"
-                           }
-                        }
-                     }, {
-                        "name" : "Date",
+                        "name" : "date",
                         "value" : {
                            "name" : "DiagnosticReportDateString",
                            "libraryName" : "Common",
@@ -2811,6 +3700,25 @@
                            "operand" : [ {
                               "name" : "D",
                               "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -2835,14 +3743,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Type",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Histology",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -2854,43 +3755,40 @@
                            } ]
                         }
                      }, {
-                        "name" : "Value",
+                        "name" : "value",
                         "value" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "cC",
-                              "expression" : {
-                                 "path" : "conclusionCode",
-                                 "scope" : "D",
-                                 "type" : "Property"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
-                                 "name" : "ConceptText",
-                                 "libraryName" : "Common",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "cC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }
-                           }
+                           "name" : "HighestRankedInterpretation",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "BiopsyInterpretation",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "scope" : "D",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              } ]
+                           } ]
                         }
                      }, {
-                        "name" : "Status",
-                        "value" : {
-                           "path" : "value",
-                           "type" : "Property",
-                           "source" : {
-                              "path" : "status",
-                              "scope" : "D",
-                              "type" : "Property"
-                           }
-                        }
-                     }, {
-                        "name" : "Date",
+                        "name" : "date",
                         "value" : {
                            "name" : "DiagnosticReportDateString",
                            "libraryName" : "Common",
@@ -2898,6 +3796,25 @@
                            "operand" : [ {
                               "name" : "D",
                               "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -2933,7 +3850,7 @@
                "sort" : {
                   "by" : [ {
                      "direction" : "desc",
-                     "path" : "Date",
+                     "path" : "date",
                      "type" : "ByColumn"
                   } ]
                }
@@ -3224,7 +4141,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Reason",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -3243,58 +4160,84 @@
                            } ]
                         }
                      }, {
-                        "name" : "Status",
+                        "name" : "value",
                         "value" : {
                            "path" : "status",
                            "scope" : "E",
                            "type" : "Property"
                         }
                      }, {
-                        "name" : "Start",
+                        "name" : "date",
                         "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
+                           "type" : "Concatenate",
                            "operand" : [ {
-                              "path" : "start",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "period",
-                                    "scope" : "E",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "name" : "DateTimeText",
+                                 "libraryName" : "Common",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "strict" : false,
+                                       "type" : "As",
+                                       "operand" : {
+                                          "path" : "period",
+                                          "scope" : "E",
+                                          "type" : "Property"
+                                       },
+                                       "asTypeSpecifier" : {
+                                          "name" : "{http://hl7.org/fhir}Period",
+                                          "type" : "NamedTypeSpecifier"
+                                       }
+                                    }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "DateTimeText",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "end",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "strict" : false,
+                                    "type" : "As",
+                                    "operand" : {
+                                       "path" : "period",
+                                       "scope" : "E",
+                                       "type" : "Property"
+                                    },
+                                    "asTypeSpecifier" : {
+                                       "name" : "{http://hl7.org/fhir}Period",
+                                       "type" : "NamedTypeSpecifier"
+                                    }
                                  }
-                              }
+                              } ]
                            } ]
                         }
                      }, {
-                        "name" : "End",
+                        "name" : "reference",
                         "value" : {
-                           "name" : "DateTimeText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
+                           "type" : "Concatenate",
                            "operand" : [ {
-                              "path" : "end",
-                              "type" : "Property",
-                              "source" : {
-                                 "strict" : false,
-                                 "type" : "As",
-                                 "operand" : {
-                                    "path" : "period",
-                                    "scope" : "E",
-                                    "type" : "Property"
-                                 },
-                                 "asTypeSpecifier" : {
-                                    "name" : "{http://hl7.org/fhir}Period",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Encounter/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "E",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -3342,7 +4285,7 @@
                   "expression" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "Name",
+                        "name" : "name",
                         "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
@@ -3354,14 +4297,14 @@
                            } ]
                         }
                      }, {
-                        "name" : "Status",
+                        "name" : "value",
                         "value" : {
                            "path" : "status",
                            "scope" : "I",
                            "type" : "Property"
                         }
                      }, {
-                        "name" : "AdministrationDate",
+                        "name" : "date",
                         "value" : {
                            "type" : "Coalesce",
                            "operand" : [ {
@@ -3393,15 +4336,22 @@
                            } ]
                         }
                      }, {
-                        "name" : "ExpirationDate",
+                        "name" : "reference",
                         "value" : {
-                           "name" : "DateText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
+                           "type" : "Concatenate",
                            "operand" : [ {
-                              "path" : "expirationDate",
-                              "scope" : "I",
-                              "type" : "Property"
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Immunization/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "I",
+                                 "type" : "Property"
+                              } ]
                            } ]
                         }
                      } ]
@@ -4231,39 +5181,36 @@
                      }, {
                         "type" : "IsNull",
                         "operand" : {
-                           "type" : "Flatten",
-                           "operand" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "DiagnosticReportsSummary",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "$this",
+                              "expression" : {
+                                 "name" : "DiagnosticReportsSummary",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "where" : {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
                                  "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "Value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "Value",
+                                    "path" : "value",
                                     "type" : "Property",
                                     "source" : {
                                        "name" : "$this",
                                        "type" : "AliasRef"
                                     }
+                                 }
+                              }
+                           },
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "path" : "value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "$this",
+                                    "type" : "AliasRef"
                                  }
                               }
                            }
@@ -4411,12 +5358,6 @@
             "expression" : {
                "type" : "Tuple",
                "element" : [ {
-                  "name" : "Age",
-                  "value" : {
-                     "name" : "PatientAge",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
                   "name" : "Conditions",
                   "value" : {
                      "name" : "PertinentConditionsSummary",
