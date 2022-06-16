@@ -1,0 +1,35 @@
+---
+name: G4.1 Benign Endometrial Cells in Asymptomatic Premenopausal Patients 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: Observation
+  code: SNOMEDCT#32590007 Premenopausal amenorrhea (finding)
+  status: final
+  effectiveDateTime: 2021-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#125155008 Endometrial cells, cytologically benign, in a postmenopausal woman (finding)
+  effectiveDateTime: 2020-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'RareCytologyG4.1'
+    text: 'For asymptomatic premenopausal patients with benign endometrial cells, endometrial stromal cells, or histiocytes, no further evaluation is recommended (BII).'
+  WhichRarityMadeTheRecommendation: 1

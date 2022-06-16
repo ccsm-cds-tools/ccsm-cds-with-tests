@@ -1,0 +1,30 @@
+---
+name: G1.2 Cytology Interpreted as AGC or AIS Without Atypical Endometrial Cells in Patient Older Than 35
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1979-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441219009 Atypical glandular cells on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'RareCytologyG1.2'
+    text: 'For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in nonpregnant patients 35 years or older with all categories of AGC and AIS (AII).'
+  WhichRarityMadeTheRecommendation: 1

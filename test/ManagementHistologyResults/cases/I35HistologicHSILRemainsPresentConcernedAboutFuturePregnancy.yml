@@ -1,0 +1,42 @@
+---
+name: I3.5 Management of Histologic HSIL and CIN2 Remains Present for a 2-year Period in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#22725004 High-grade squamous intraepithelial lesion (morphologic abnormality)
+  effectiveDateTime: 2019-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#22725004 High-grade squamous intraepithelial lesion (morphologic abnormality)
+  effectiveDateTime: 2021-05-01
+- 
+  resourceType: Observation
+  code: http://OUR-PLACEHOLDER-URL.com#FPCQ Does the patient have future pregnancy concerns related to treatment options?
+  status: final
+  valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'ManagementHistologyI3'
+    text: 'If CIN 2 remains present for a 2-year period, treatment is recommended (CII).'

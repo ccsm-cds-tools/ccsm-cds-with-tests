@@ -634,8 +634,7 @@ define ResponsesToFuturePregnancyConcernsQuestion:
   C3F.ObservationLookBack(
     [Observation: "Future Pregnancy Concerns Question"],
     12 months
-
-
+  )
 
 //------------------------------------------------------------------------------
 // FLAGS
@@ -654,12 +653,9 @@ define HasRecentPositiveHpv:
 define RecentAbnormalCytologyResults:
   Common.LookBack(
     (CervicalCytologyReports) C
-      where (
-        C.conclusionCode in "Abnormal results of Cervical Cytology Test" or
-        C.conclusionCode ~ "Benign Glandular Cells"
-      ),
+      where C.conclusionCode in "Abnormal results of Cervical Cytology Test", //or benign glandular cells or AGC Favor Neoplasia
     AbnormalTestLookbackPeriod
-  ) 
+  )
 
 define HasRecentAbnormalCytologyResults:
   Exists(RecentAbnormalCytologyResults)

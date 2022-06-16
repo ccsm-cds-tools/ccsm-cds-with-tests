@@ -1,0 +1,37 @@
+---
+name: Management of Histology of Less than CIN2 Preceded by Cytology HSIL in Patients Younger than 25 Years 3.1b
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2000-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-01-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  SpecialPopulationRecommendation: 
+    action: 'LessThan25HSIL3.1b'
+    text: 'Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+  WhichPopulationMadeTheRecommendation: 5
