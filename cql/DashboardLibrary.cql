@@ -937,18 +937,22 @@ define Errors:
 
 // SUMMARY
 
+define Pregnant:
+  Exists(PregnancyDiagnoses) or
+  Exists(PregnancyObservations)
+
 // The Summary object represents the full Cervical Cancer Screening and Management Medical History to be displayed to the clinician. A robust UI
 // should be created in order to display this information in a Cervical Cancer Screening and Management Dashboard
 
 define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
-    name: null,
-    id: null,
-    isPregnant: null,
-    dateOfBirth: null,
+    name: First(Patient.name.given) + First(Patient.name.family),
+    id: Patient.identifier.value,
+    isPregnant: Pregnant,
+    dateOfBirth: Patient.birthDate,
     sexAtBirth: null,
-    age: null,
+    age: AgeInYears(),
     gender: null,
     primaryLanguage: null,
     race: null

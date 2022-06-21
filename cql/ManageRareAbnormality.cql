@@ -199,10 +199,6 @@ define PostmenopausalObservations:
 define HasPostmenopausalObservation:
   Exists(PostmenopausalObservations)
 
-define Pregnant:
-  Exists(Dash.PregnancyDiagnoses) or
-  Exists(Dash.PregnancyObservations)
-
 define HistologyInterpretedAsCin1:
   AnyTrue(
     (Collate.MostRecentBiopsyReport.allConclusions) aC
@@ -298,28 +294,28 @@ define RecommendationForRareCytology:
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsAgcOrAis and
       not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Pregnant
+      not Dash.Pregnant
     ) then
       {
         action: '',
-        text: 'For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for nonpregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).'
+        text: 'For pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for non-pregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).'
       }
     when (
       AgeInYears() >= 35 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsAgcOrAis and
       not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Pregnant
+      not Dash.Pregnant
     ) then
       {
         action: '',
-        text: 'For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in nonpregnant patients 35 years or older with all categories of AGC and AIS (AII).'
+        text: 'For non-pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in non-pregnant patients 35 years or older with all categories of AGC and AIS (AII).'
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsAgcOrAis and
       CytologyInterpretedAsAtypicalEndometrialCells and
-      not Pregnant
+      not Dash.Pregnant
     ) then
       {
         action: '',
@@ -778,7 +774,7 @@ define RecommendationForHistologyResults:
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
     when ( // 1
       AgeInYears() >= 25 and
-      not Pregnant and
+      not Dash.Pregnant and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin3
     ) then
@@ -788,7 +784,7 @@ define RecommendationForHistologyResults:
       }
     when ( // 2
       AgeInYears() >= 25 and
-      not Pregnant and
+      not Dash.Pregnant and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin2
     ) then

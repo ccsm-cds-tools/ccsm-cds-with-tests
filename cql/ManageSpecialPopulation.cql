@@ -259,7 +259,7 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // 3
       AgeInYears() < 25 and
-      not Rare.Pregnant and
+      not Dash.Pregnant and
       Rare.HistologyInterpretedAsCin1OrNormal and
       (
         Rare.CytologyInterpretedAsHsil or
@@ -270,7 +270,7 @@ define RecommendationForPatientsYoungerThan25:
     ) then
       {
         action: '',
-        text: 'If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is Rare.Pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
+        text: 'If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
       }
     // Heading 4: Management of Histologic HSIL (CIN2 or CIN3) for Patients Younger Than 25 Years
     when ( // 1
@@ -371,7 +371,7 @@ define RecommendationForPregnantPatients:
     // #1 is covered by the Common Abnormality Recommendation section.
     when ( // 2 - Recommendation #1
       AgeInYears() >= 25 and
-      Rare.Pregnant and
+      Dash.Pregnant and
       FirstHistologyAfterPregnancyOnset.date > Now() - 1 year and
       FirstHistologyAfterPregnancyOnset.riskTableInput in {'CIN2','CIN3'}
     ) then
@@ -381,7 +381,7 @@ define RecommendationForPregnantPatients:
       }
     when ( // 2 - Recommendation #2
       AgeInYears() >= 25 and
-      Rare.Pregnant and
+      Dash.Pregnant and
       HistologicAisDuringPregnancy
     ) then
       {

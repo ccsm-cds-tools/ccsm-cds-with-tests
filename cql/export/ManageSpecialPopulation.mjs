@@ -1755,7 +1755,7 @@ export const ManageSpecialPopulation = {
                                     "type" : "Not",
                                     "operand" : {
                                        "name" : "Pregnant",
-                                       "libraryName" : "Rare",
+                                       "libraryName" : "Dash",
                                        "type" : "ExpressionRef"
                                     }
                                  } ]
@@ -1858,7 +1858,7 @@ export const ManageSpecialPopulation = {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is Rare.Pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.",
+                           "value" : "If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.",
                            "type" : "Literal"
                         }
                      } ]
@@ -2460,7 +2460,7 @@ export const ManageSpecialPopulation = {
                               } ]
                            }, {
                               "name" : "Pregnant",
-                              "libraryName" : "Rare",
+                              "libraryName" : "Dash",
                               "type" : "ExpressionRef"
                            } ]
                         }, {
@@ -2549,7 +2549,7 @@ export const ManageSpecialPopulation = {
                            } ]
                         }, {
                            "name" : "Pregnant",
-                           "libraryName" : "Rare",
+                           "libraryName" : "Dash",
                            "type" : "ExpressionRef"
                         } ]
                      }, {

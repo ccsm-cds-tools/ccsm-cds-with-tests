@@ -1192,28 +1192,6 @@ export const ManageRareAbnormality = {
                }
             }
          }, {
-            "name" : "Pregnant",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Or",
-               "operand" : [ {
-                  "type" : "Exists",
-                  "operand" : {
-                     "name" : "PregnancyDiagnoses",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "type" : "Exists",
-                  "operand" : {
-                     "name" : "PregnancyObservations",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }
-               } ]
-            }
-         }, {
             "name" : "HistologyInterpretedAsCin1",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2048,6 +2026,7 @@ export const ManageRareAbnormality = {
                         "type" : "Not",
                         "operand" : {
                            "name" : "Pregnant",
+                           "libraryName" : "Dash",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -2065,7 +2044,7 @@ export const ManageRareAbnormality = {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for nonpregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).",
+                           "value" : "For pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for non-pregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -2116,6 +2095,7 @@ export const ManageRareAbnormality = {
                         "type" : "Not",
                         "operand" : {
                            "name" : "Pregnant",
+                           "libraryName" : "Dash",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -2133,7 +2113,7 @@ export const ManageRareAbnormality = {
                         "name" : "text",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in nonpregnant patients 35 years or older with all categories of AGC and AIS (AII).",
+                           "value" : "For non-pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in non-pregnant patients 35 years or older with all categories of AGC and AIS (AII).",
                            "type" : "Literal"
                         }
                      } ]
@@ -2160,6 +2140,7 @@ export const ManageRareAbnormality = {
                         "type" : "Not",
                         "operand" : {
                            "name" : "Pregnant",
+                           "libraryName" : "Dash",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -5851,6 +5832,7 @@ export const ManageRareAbnormality = {
                               "type" : "Not",
                               "operand" : {
                                  "name" : "Pregnant",
+                                 "libraryName" : "Dash",
                                  "type" : "ExpressionRef"
                               }
                            } ]
@@ -5910,6 +5892,7 @@ export const ManageRareAbnormality = {
                               "type" : "Not",
                               "operand" : {
                                  "name" : "Pregnant",
+                                 "libraryName" : "Dash",
                                  "type" : "ExpressionRef"
                               }
                            } ]
