@@ -606,8 +606,14 @@ define HistologyDiagnosticReports:
 define HpvDiagnosticReportsSummary:
   (HpvDiagnosticReports) D
   return {
-    name: Common.ConceptText(D.code),
+    name: 'HPV Test',
+    longName: Common.ConceptText(D.code),
     value: HighestRankedInterpretation(HpvInterpretation(D.conclusionCode)),
+    longValue: flatten(
+      (D.conclusionCode) cC 
+        return (cC.coding) cCC 
+          return cCC.display
+    ),
     date: Common.DiagnosticReportDateString(D),
     reference: 'DiagnosticReport/' + D.id
   }
@@ -615,8 +621,14 @@ define HpvDiagnosticReportsSummary:
 define CervicalCytologyReportsSummary:
   (CervicalCytologyReports) D
   return {
-    name: Common.ConceptText(D.code),
+    name: 'Cervical Cytology',
+    longName: Common.ConceptText(D.code),
     value: HighestRankedInterpretation(CytologyInterpretation(D.conclusionCode)),
+    longValue: flatten(
+      (D.conclusionCode) cC 
+        return (cC.coding) cCC 
+          return cCC.display
+    ),
     date: Common.DiagnosticReportDateString(D),
     reference: 'DiagnosticReport/' + D.id
   }
@@ -624,8 +636,14 @@ define CervicalCytologyReportsSummary:
 define HistologyDiagnosticReportsSummary:
   (HistologyDiagnosticReports) D
   return {
-    name: Common.ConceptText(D.code),
+    name: 'Cervical Histology',
+    longName: Common.ConceptText(D.code),
     value: HighestRankedInterpretation(BiopsyInterpretation(D.conclusionCode)),
+    longValue: flatten(
+      (D.conclusionCode) cC 
+        return (cC.coding) cCC 
+          return cCC.display
+    ),
     date: Common.DiagnosticReportDateString(D),
     reference: 'DiagnosticReport/' + D.id
   }

@@ -3553,6 +3553,13 @@ export const DashboardLibrary = {
                      "element" : [ {
                         "name" : "name",
                         "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV Test",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
                            "type" : "FunctionRef",
@@ -3594,6 +3601,44 @@ export const DashboardLibrary = {
                                  }
                               } ]
                            } ]
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "D",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
                         }
                      }, {
                         "name" : "date",
@@ -3649,6 +3694,13 @@ export const DashboardLibrary = {
                      "element" : [ {
                         "name" : "name",
                         "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Cytology",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
                            "type" : "FunctionRef",
@@ -3690,6 +3742,44 @@ export const DashboardLibrary = {
                                  }
                               } ]
                            } ]
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "D",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
                         }
                      }, {
                         "name" : "date",
@@ -3745,6 +3835,13 @@ export const DashboardLibrary = {
                      "element" : [ {
                         "name" : "name",
                         "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Histology",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
                            "name" : "ConceptText",
                            "libraryName" : "Common",
                            "type" : "FunctionRef",
@@ -3786,6 +3883,44 @@ export const DashboardLibrary = {
                                  }
                               } ]
                            } ]
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "path" : "conclusionCode",
+                                    "scope" : "D",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
                         }
                      }, {
                         "name" : "date",
