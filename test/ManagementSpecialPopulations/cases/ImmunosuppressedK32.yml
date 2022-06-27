@@ -1,0 +1,32 @@
+---
+name: K3.2 Immunosuppressed 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *Immunocompromised
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  SpecialPopulationRecommendation: 
+    action: 'ImmunosuppressedK3'
+    text: 'Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.'
+  WhichPopulationMadeTheRecommendation: 3

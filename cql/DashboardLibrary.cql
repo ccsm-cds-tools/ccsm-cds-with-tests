@@ -105,6 +105,11 @@ code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Hu
 code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
+code "Atypical Endocervical Cells":	'441094005' from "SNOMED-CT" display 'Atypical endocervical cells on cervical Papanicolaou smear (finding)'
+code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometrial cells, cytologically benign, in a postmenopausal woman (finding)'
+code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
+code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
+code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -112,7 +117,8 @@ code "Abnormal Uterine or Vaginal Bleeding Question": 'AUVBQ' from "LOCAL" displ
 code "Visible Uterine or Vaginal Lesion Question": 'VUVLQ' from "LOCAL" display 'Does the patient have visible uterine or vaginal lesions?'
 code "DES Exposure Question": 'DESEQ' from "LOCAL" display 'Did the patient experience in utero exposure to diethylstilbesterol (DES)?'
 code "Future Pregnancy Concerns Question": 'FPCQ' from "LOCAL" display 'Does the patient have future pregnancy concerns related to treatment options?'
-
+code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
+code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
@@ -756,16 +762,39 @@ define HasRecentPositiveHpv:
 define RecentAbnormalCytologyResults:
   Common.LookBack(
     (CervicalCytologyReports) C
-      where C.conclusionCode in "Abnormal results of Cervical Cytology Test",
+      where (
+        C.conclusionCode in "Abnormal results of Cervical Cytology Test" 
+        ),
     AbnormalTestLookbackPeriod
   )
+
+define RecentRareCytologyResults:
+  Common.LookBack(
+    (CervicalCytologyReports) R
+      where AnyTrue(
+        (R.conclusionCode) cC return 
+          cC ~ "Benign Glandular Cells" or
+          cC ~ "Benign Endometrial Cells" or
+          cC ~ "Endometrial Stromal Cells" or 
+          cC ~ "Histiocytes" or
+          cC ~ "AGC Favor Neoplasia" or
+          cC ~ "Endocervical Cells Favor Neoplasia" or
+          cC ~ "Atypical Endocervical Cells" or
+          cC in "AIS"
+      ),
+    AbnormalTestLookbackPeriod
+  )  
 
 define HasRecentAbnormalCytologyResults:
   Exists(RecentAbnormalCytologyResults)
 
+define HasRecentRareCytologyResults:
+  Exists(RecentRareCytologyResults)
+
 define HasRecentAbnormalScreening:
   HasRecentPositiveHpv or
-  HasRecentAbnormalCytologyResults
+  HasRecentAbnormalCytologyResults or
+  HasRecentRareCytologyResults
 
 define RecentAbnormalHistology:
   Common.LookBack(

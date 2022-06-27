@@ -199,6 +199,10 @@ define PostmenopausalObservations:
 define HasPostmenopausalObservation:
   Exists(PostmenopausalObservations)
 
+//define Pregnant:
+//  Exists(Dash.PregnancyDiagnoses) or
+//  Exists(Dash.PregnancyObservations)
+
 define HistologyInterpretedAsCin1:
   AnyTrue(
     (Collate.MostRecentBiopsyReport.allConclusions) aC
@@ -288,41 +292,8 @@ define AbsenceOrRemovalOfCervix:
 
 define RecommendationForRareCytology:
   case
-    // G.1 Evaluation of Cytology Interpreted as AGC or AIS
-    when (
-      AgeInYears() < 35 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
-    ) then
-      {
-        action: '',
-        text: 'For pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for non-pregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).'
-      }
-    when (
-      AgeInYears() >= 35 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
-    ) then
-      {
-        action: '',
-        text: 'For non-pregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in non-pregnant patients 35 years or older with all categories of AGC and AIS (AII).'
-      }
-    when (
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
-    ) then
-      {
-        action: '',
-        text: 'For patients with atypical endometrial cells specified, initial evaluation limited to endometrial and endocervical sampling is preferred, with colposcopy acceptable at the time of initial evaluation. If colposcopy was deferred and no endometrial pathology is identified, additional evaluation with colposcopy is then recommended.'
-      }
     // Subsequent Management
-    when (
+    when ( // G1.4
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsAgc or
@@ -332,10 +303,10 @@ define RecommendationForRareCytology:
       HistologyInterpretedAsCin1OrNormal
     ) then
       {
-        action: '',
+        action: 'RareCytologyG1.4',
         text: 'For patients with cytology showing AGC not otherwise specified or atypical endocervical cells not otherwise specified in whom histologic HSIL (CIN 2+) or AIS/cancer is not identified, cotesting at one and two years is recommended. If both cotests are negative, repeat cotesting at 3 years is recommended. If any test is abnormal, then colposcopy is recommended (BII).'
       }
-    when (
+    when ( // G1.5
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
         CytologyInterpretedAsAgcFavorNeoplasia or
@@ -351,11 +322,44 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        action: '',
-        text: 'For patients with atypical glandular or endocervical cells “favor neoplasia” or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
+        action: 'RareCytologyG1.5',
+        text: 'For patients with atypical glandular or endocervical cells \'favor neoplasia\' or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
+      }    
+    // G.1 Evaluation of Cytology Interpreted as AGC or AIS
+    when ( // G1.1
+      AgeInYears() < 35 and
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      CytologyInterpretedAsAgcOrAis and
+      not CytologyInterpretedAsAtypicalEndometrialCells and
+      not Dash.Pregnant
+    ) then
+      {
+        action: 'RareCytologyG1.1',
+        text: 'For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is also recommended for nonpregnant patients younger than 35 years at increased risk of endometrial neoplasia based on clinical indications (e.g., abnormal uterine bleeding, conditions suggesting chronic anovulation, or obesity) (AII).'
+      }
+    when ( // G1.2
+      AgeInYears() >= 35 and
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      CytologyInterpretedAsAgcOrAis and
+      not CytologyInterpretedAsAtypicalEndometrialCells and
+      not Dash.Pregnant
+    ) then
+      {
+        action: 'RareCytologyG1.2',
+        text: 'For nonpregnant patients of all ages with all subcategories of AGC and AIS, except when atypical endometrial cells are specified, colposcopy is recommended regardless of HPV test result; endocervical sampling is recommended at initial colposcopy except in pregnancy (for management in pregnancy, see Section K.2) (AII). Accordingly, triage by reflex HPV testing is not recommended, and triage by repeat cytology is unacceptable (DII). Endometrial sampling is recommended in conjunction with colposcopy and endocervical sampling in nonpregnant patients 35 years or older with all categories of AGC and AIS (AII).'
+      }
+    when ( // G1.3
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      CytologyInterpretedAsAgcOrAis and
+      CytologyInterpretedAsAtypicalEndometrialCells and
+      not Dash.Pregnant
+    ) then
+      {
+        action: 'RareCytologyG1.3',
+        text: 'For patients with atypical endometrial cells specified, initial evaluation limited to endometrial and endocervical sampling is preferred, with colposcopy acceptable at the time of initial evaluation. If colposcopy was deferred and no endometrial pathology is identified, additional evaluation with colposcopy is then recommended.'
       }
     // G.2 Unsatisfactory Cytology
-    when (
+    when ( //G2.1
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
       (
@@ -364,41 +368,41 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        action: '',
+        action: 'RareCytologyG2.1',
         text: 'For patients with an unsatisfactory cytology result and no, unknown, or a negative HPV test result, repeat age-based screening (cytology, cotest, or primary HPV test) in 2 to 4 months is recommended (BIII). Triage using HPV testing is not recommended (DIII). Before repeat cytology, treatment to resolve atrophy or obscuring inflammation when a specific infection is present is acceptable (CIII).'
       }
-    when (
+    when ( //G2.2
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
       PositiveUntypedHpvCotest and
       AgeInYears() >= 25
     ) then
       {
-        action: '',
+        action: 'RareCytologyG2.2',
         text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
       }
-    when (
+    when ( //G2.3
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
       PositiveHpv16or18Cotest and
       AgeInYears() >= 25
     ) then
       {
-        action: '',
+        action: 'Colposcopy',
         text: 'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test with partial genotyping is positive for HPV 16 or HPV 18, direct referral for colposcopy is recommended (BII).'
       }
     // G.3 Absent Transformation Zone on Screening Cytology
-    when (
+    when ( //G3.1
       AgeInYears() in Interval[21,30) and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyAbsentTransformationZone and
       CytologyInterpretedAsNilm
     ) then
       {
-        action: '',
+        action: 'RareCytologyG3.1',
         text: 'Routine screening is recommended (BIII). When cervical cytology alone is performed for screening, HPV testing as a triage test after negative cytology and absent endocervical cells/transformation zone component in this age group is unacceptable (DIII).'
       }
-    when (
+    when ( //G3.2
       AgeInYears() >= 30 and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyAbsentTransformationZone and
@@ -409,11 +413,11 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        action: '',
+        action: 'RareCytologyG3.2',
         text: 'HPV testing is preferred (BIII). Repeat cytology in 3 years is acceptable if HPV testing is not performed (BIII). If HPV testing is performed, manage using Clinical Action Thresholds according to 2019 consensus guidelines.'
       }
     // G.4 Benign Endometrial Cells in Premenopausal Patients or Benign Glandular Cells in Posthysterectomy patients
-    when (
+    when ( //G4.1
       HasPremenopausalObservation and
       not Symptomatic.IsSymptomatic and
       MostRecentCytologyReportWasWithinPastFiveYears and
@@ -424,26 +428,26 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        action: '',
+        action: 'RareCytologyG4.1',
         text: 'For asymptomatic premenopausal patients with benign endometrial cells, endometrial stromal cells, or histiocytes, no further evaluation is recommended (BII).'
       }
-    when (
+    when ( //G4.2
       HasPostmenopausalObservation and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsBenignEndometrialCells
     ) then
       {
-        action: '',
+        action: 'RareCytologyG4.2',
         text: 'For postmenopausal patient with benign endometrial cells found via cytology, endometrial assessment is recommended (BII).'
       }
-    when (
+    when ( //G4.3
       AbsenceOrRemovalOfCervix and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsBenignGlandularCells
     ) then
       {
-        action: '',
-        text: 'For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
+        action: 'RareCytologyG4.3',
+        text: 'For patients \'post-hysterectomy\' with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
       }
     else
       null
@@ -480,7 +484,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
       CytologyInterpretedAsAscH
     ) then
       {
-        action: '',
+        action: 'Colposcopy',
         text: 'For patients with ASC-H cytology, colposcopy is recommended regardless of hrHPV result (AII).'
       }
     when (
@@ -489,8 +493,8 @@ define RecommendationForExceptionsToColposcopyThreshold:
       CytologyInterpretedAsNilm
     ) then
       {
-        action: '',
-        text: 'For patients with hrHPV 18–positive NILM or hrHPV 16-positive NILM, colposcopy is recommended (AII).'
+        action: 'Colposcopy',
+        text: 'For patients with hrHPV 18-positive NILM or hrHPV 16-positive NILM, colposcopy is recommended (AII).'
       }
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
@@ -499,7 +503,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
       SecondMostRecentCytologyUnsatisfactory
     ) then
       {
-        action: '',
+        action: 'Colposcopy',
         text: 'Colposcopy should be performed after 2 consecutive unsatisfactory screening tests (CIII).'
       }
     else
@@ -757,85 +761,44 @@ define CytologyInterpretedAsHsil:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
       return aC in "HSIL"
-  )
+  )  
 
 define RecommendationForHistologyResults:
   case
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified
     when (
       AgeInYears() >= 25 and
+      not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsUnspecifiedHsil
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI1',
         text: 'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3]) (CIII), but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
       }
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
-    when ( // 1
+    when ( // I2.1
       AgeInYears() >= 25 and
       not Dash.Pregnant and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin3
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI2',
         text: 'Treatment is recommended, and observation is unacceptable (AII). When treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable (BI). Outside of the setting of a clinical research trial, nonsurgical therapies, including topical agents, therapeutic vaccines, and other biologics, are unacceptable for the treatment of histologic HSIL (CIN 2 or CIN 3) (DIII). Hysterectomy is unacceptable as primary therapy solely for the treatment of histologic HSIL (CIN 2, CIN 3, or unqualified) (EII). When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in the following circumstances as defined by the WHO: (a) the lesion extends into the canal and (b) when the lesion covers more than 75% of the surface area of the ectocervix or extends beyond the cryotip being used.97 Additional situations for which cryotherapy is not recommended include the following: (a) the squamocolumnar junction or the upper limit of any lesion is not fully visualized; (b) endocervical canal sample is diagnosed as CIN 2+ or CIN that cannot be graded; (c) after previous treatment for CIN 2+; (d) in the setting of inadequate biopsies of the cervix to confirm histologic diagnosis; and (e) if cancer is suspected (EIII).'
       }
-    when ( // 2
+    when ( // I2.2
       AgeInYears() >= 25 and
-      not Dash.Pregnant and
+      not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin2
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI2',
         text: 'Treatment is recommended unless the patient\'s concerns about the effect of treatment on future pregnancy outweigh concerns about cancer (BII). Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded (EIII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.\n\nWhen treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable (BI). Outside of the setting of a clinical research trial, nonsurgical therapies, including topical agents, therapeutic vaccines, and other biologics, are unacceptable for the treatment of histologic HSIL (CIN 2 or CIN 3) (DIII). Hysterectomy is unacceptable as primary therapy solely for the treatment of histologic HSIL (CIN 2, CIN 3, or unqualified) (EII). When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in the following circumstances as defined by the WHO: (a) the lesion extends into the canal and (b) when the lesion covers more than 75% of the surface area of the ectocervix or extends beyond the cryotip being used.97 Additional situations for which cryotherapy is not recommended include the following: (a) the squamocolumnar junction or the upper limit of any lesion is not fully visualized; (b) endocervical canal sample is diagnosed as CIN 2+ or CIN that cannot be graded; (c) after previous treatment for CIN 2+; (d) in the setting of inadequate biopsies of the cervix to confirm histologic diagnosis; and (e) if cancer is suspected (EIII).'
       }
     // I.3 Management of CIN2 in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes
-    when ( // 1
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsCin2 and
-      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
-    ) then
-      {
-        action: '',
-        text: 'For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
-      }
-    when ( // 2
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsUnspecifiedHsil
-      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
-    ) then
-      {
-        action: '',
-        text: 'If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
-      }
-    when ( // 3
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) and
-      MostRecentNegativeHsilSurveillanceResult
-      SecondMostRecentNegativeHsilSurveillanceResult and
-      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
-    ) then
-      {
-        action: '',
-        text: 'Subsequent surveillance with colposcopy and HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
-      }
-    when ( // 4
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) and
-      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
-      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
-      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
-    ) then
-      {
-        action: '',
-        text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
-      }
-    when ( // 5
+    when ( // I3.5
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       (
         HistologyInterpretedAsUnspecifiedHsil or
@@ -844,73 +807,73 @@ define RecommendationForHistologyResults:
       HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI3',
         text: 'If CIN 2 remains present for a 2-year period, treatment is recommended (CII).'
+      }    
+    when ( // I3.4
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) and
+      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
+      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: 'ManagementHistologyI3',
+        text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
+      }    
+    when ( // I3.3
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) and
+      MostRecentNegativeHsilSurveillanceResult
+      SecondMostRecentNegativeHsilSurveillanceResult and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: 'ManagementHistologyI3',
+        text: 'Subsequent surveillance with colposcopy and HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
+      }
+    when ( // I3.2
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsUnspecifiedHsil
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: 'ManagementHistologyI3',
+        text: 'If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+      }
+    when ( // I3.1
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsCin2 and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+    ) then
+      {
+        action: 'ManagementHistologyI3',
+        text: 'For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
       }
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
-    when ( // 1
+    when ( // I4.1
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsHsil
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI4',
         text: 'When CIN 2+ is not identified, HSIL cytology is managed more aggressively than ASC-H cytology. For cytology showing HSIL, but biopsy showing histologic LSIL (CIN 1) or less, either an immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year is acceptable, provided in the latter case that the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2 (BII). When CIN2+ is not identified histologically after an ASC-H or HSIL cytology result, it is acceptable to review the cytologic, histologic, and colposcopic findings. If the review yields a revised interpretation, management should follow guidelines for the revised diagnosis (CIII).'
       }
-    when ( // 2
+    when ( // I4.2
       AgeInYears() >= 25 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsAscH
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI4',
         text: 'For ASC-H, if the colposcopic examination can fully visualize the squamocolumnar junction and the upper limit of any lesion and that the endocervical sampling, if collected, is negative, observation at 1 year with HPV-based testing with cotesting or primary hrHPV testing is recommended; a diagnostic excisional procedure is not recommended (BII).'
       }
-    when ( // 3 - Recommendation #1
-      AgeInYears() >= 25 and
-      (
-        (
-          (
-            MostRecentBiopsyReportWasWithinPast18months and
-            HistologyInterpretedAsNormal and
-            TwoMostRecentBiopsyReportsWithin18monthsApart
-          ) and
-          (
-            HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date > Now() - 18 months and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
-          ) and
-          (
-            SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-            PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil
-          ) and
-          not (
-          MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
-          )
-        ) or
-        (
-          (
-            HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date > Now() - 18 months and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after Collate.MostRecentBiopsyReport.date
-          ) and
-          (
-            HistologyInterpretedAsCin1OrNormal and
-            PrecedingCytologyIsAscH
-          ) and
-          not (
-            MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
-          )
-        )
-      )
-    ) then
-      {
-        action: '',
-        text: 'HPV-based testing (i.e., cotesting or primary hrHPV testing) is recommended 1 year after the initial negative follow up result(s) when observation is elected after a histologic LSIL (CIN1) preceded by ASC-H or HSIL cytology.'
-      }
-    when ( // 3 - Recommendation #2
+    when ( // I4.3 - Recommendation #2
       AgeInYears() >= 25 and
       MostRecentSurveillanceTestNegative and
       Collate.MostRecentHpvReport.date >= Now() - 3.5 years and
@@ -930,9 +893,12 @@ define RecommendationForHistologyResults:
             SecondMostRecentHistologyInterpretedAsCin1OrNormal and
             PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil
           ) and
-          not (
-          MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
-          )
+          (
+            not (
+              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+            ) or
+            MostRecentTreatment is null
+          ) 
         ) or
         (
           (
@@ -944,25 +910,109 @@ define RecommendationForHistologyResults:
             HistologyInterpretedAsCin1OrNormal and
             PrecedingCytologyIsAscH
           ) and
-          not (
-            MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
-          )
+          (
+            not (
+              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+            ) or
+            MostRecentTreatment is null
+          ) 
         )
       )
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI4',
         text: 'Retest with HPV-based testing (i.e., cotesting or primary hrHPV testing) every 3 years after surveillance tests are negative during the 2-year observation period following histologic LSIL (CIN1) or less preceded by ASC-H or HSIL cytology. Proceed with long-term surveillance (i.e., HPV-based testing every 3 years for at least 25 years, even if this is beyond the age of 65 years (BII).'
+      }    
+    when ( // I4.3 - Recommendation #1
+      AgeInYears() >= 25 and
+      (
+        (
+          (
+            MostRecentBiopsyReportWasWithinPast18months and
+            HistologyInterpretedAsNormal and
+            TwoMostRecentBiopsyReportsWithin18monthsApart
+          ) and
+          (
+            HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date > Now() - 18 months and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
+          ) and
+          (
+            SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil
+          ) and
+          (
+            not (
+              MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
+            ) or
+            MostRecentTreatment is null
+          )
+        ) or
+        (
+          (
+            HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date > Now() - 18 months and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after Collate.MostRecentBiopsyReport.date
+          ) and
+          (
+            HistologyInterpretedAsCin1OrNormal and
+            PrecedingCytologyIsAscH
+          ) and
+          (
+            not (
+              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+            ) or
+            MostRecentTreatment is null 
+          ) 
+        )
+      )
+    ) then
+      {
+        action: 'ManagementHistologyI4',
+        text: 'HPV-based testing (i.e., cotesting or primary hrHPV testing) is recommended 1 year after the initial negative follow up result(s) when observation is elected after a histologic LSIL (CIN1) preceded by ASC-H or HSIL cytology.'
       }
-    when ( // 4
+    when ( // I4.5
       AgeInYears() >= 25 and
       HistologyInterpretedAsCin1OrNormal and
       (
         PrecedingCytologyIsHsil or
         PrecedingCytologyIsAscH
       ) and
-      not (
-        MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+      (
+        not (
+          MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+        ) or
+        MostRecentTreatment is null
+      ) and
+      (
+        (
+          CytologyInterpretedAsHsil and
+          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+        ) or
+        (
+          CytologyInterpretedAsAscH and
+          MostRecentCytologyReport.date 2 years or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+        )
+      )
+    ) then
+      {
+        action: 'ManagementHistologyI4',
+        text: 'A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).'
+      }    
+    when ( // I4.4
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      (
+        PrecedingCytologyIsHsil or
+        PrecedingCytologyIsAscH
+      ) and
+      (
+        not (
+          MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+        ) or
+        MostRecentTreatment is null
       ) and
       (
         (
@@ -979,7 +1029,7 @@ define RecommendationForHistologyResults:
           Collate.MostRecentHpvReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
         ) or
         (
-          // TODO: As written, this part of the path will not trigger. Going forward, we should look into a way to clarify the lookback for 'LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology' so that it is not reliant on the Collate.MostRecentBiopsyReport
+          // TODO: As written, this part of the path will not trigger. Going forward, we should look into a way to clarify the lookback for 'LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology' so that it is not reliant on the MostRecentBiopsyReport
           (Collate.MostRecentBiopsyReport is not null) and
           not HistologyInterpretedAsNormal and
           Collate.MostRecentBiopsyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
@@ -988,35 +1038,8 @@ define RecommendationForHistologyResults:
       )
     ) then
       {
-        action: '',
+        action: 'Colposcopy',
         text: 'If any test is abnormal during the observation period after a HSIL and ASC-H cytology, a repeat colposcopy is recommended, and management based on resulting biopsies is recommended.'
-      }
-    when ( // 5
-      AgeInYears() >= 25 and
-      HistologyInterpretedAsCin1OrNormal and
-      (
-        PrecedingCytologyIsHsil or
-        PrecedingCytologyIsAscH
-      ) and
-      not (
-        MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
-      ) and
-      (
-        (
-          CytologyInterpretedAsHsil and
-          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        ) or
-        (
-          CytologyInterpretedAsAscH and
-          MostRecentCytologyReport.date 2 years or more after Collate.MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        )
-      )
-    ) then
-      {
-        action: '',
-        text: 'A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).'
       }
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
     when (
@@ -1027,7 +1050,7 @@ define RecommendationForHistologyResults:
       TwoMostRecentBiopsyReportsWithin15monthsApart
     ) then
       {
-        action: '',
+        action: 'ManagementHistologyI5',
         text: 'For patients 25 years or older with histologic LSIL (CIN 1) who is diagnosed at consecutive visits for at least 2 years, observation is preferred (BII) but treatment is acceptable (CIII). If treatment is selected and the entire squamocolumnar junction and all lesions were fully visualized during colposcopic examination, either excision or ablation treatments are acceptable (CII).'
       }
     // I.6 Management of AIS: Adoption of Society of Gynecologic Oncology Recommendations
@@ -1037,8 +1060,8 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsAis
     ) then
       {
-        action: '',
-        text: 'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma, even when definitive hysterectomy is planned. Excisional procedures should optimally remove an intact specimen to facilitate accurate interpretation of margin status. Although there is no preference for cold knife conization versus LEEP, intentional disruption of the specimen by performance of a LEEP followed by a “top hat” endocervical excision to achieve the desired specimen length is unacceptable. An excisional specimen length of at least 10 mm is preferred, and this can be increased to 18 to 20 mm for patients who are not concerned about the effect of treatment on future pregnancy. These dimensions are preferred regardless of whether hysterectomy is planned. After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS, although fertility-sparing management for appropriately selected patients is acceptable. For patients with confirmed AIS with negative margins on the excisional specimen, simple hysterectomy is preferred. For patients with confirmed AIS with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned. For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable. After hysterectomy, surveillance per the ASCCP surveillance guidelines for treated CIN 2+ is recommended (Section J.3).\n\nFor patients of reproductive age who desire future pregnancy, fertility-sparing management with an excisional procedure is acceptable provided that negative margins have been achieved on the excisional specimen, and the patient is willing and able to adhere to surveillance recommendations. If negative margins cannot be achieved after maximal excisional attempts, fertility-sparing management is not recommended. For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed. For patients who have consistently negative cotesting and endocervical sampling results for 5 years, extending the surveillance interval to every 3 years starting in the sixth year of surveillance is acceptable. Small retrospective studies have shown HPV test results to be the best predictor for recurrent disease. Therefore, for patients who have consistently negative cotesting and endocervical sampling results, continued surveillance is acceptable after completion of childbearing. For patients who have had positive HPV test results or abnormal cytology/histologic results during surveillance, hysterectomy at the completion of childbearing is preferred (see Figure 11).'
+        action: 'ManagementHistologyI6',
+        text: 'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma, even when definitive hysterectomy is planned. Excisional procedures should optimally remove an intact specimen to facilitate accurate interpretation of margin status. Although there is no preference for cold knife conization versus LEEP, intentional disruption of the specimen by performance of a LEEP followed by a \'top hat\' endocervical excision to achieve the desired specimen length is unacceptable. An excisional specimen length of at least 10 mm is preferred, and this can be increased to 18 to 20 mm for patients who are not concerned about the effect of treatment on future pregnancy. These dimensions are preferred regardless of whether hysterectomy is planned. After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS, although fertility-sparing management for appropriately selected patients is acceptable. For patients with confirmed AIS with negative margins on the excisional specimen, simple hysterectomy is preferred. For patients with confirmed AIS with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned. For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable. After hysterectomy, surveillance per the ASCCP surveillance guidelines for treated CIN 2+ is recommended (Section J.3).\n\nFor patients of reproductive age who desire future pregnancy, fertility-sparing management with an excisional procedure is acceptable provided that negative margins have been achieved on the excisional specimen, and the patient is willing and able to adhere to surveillance recommendations. If negative margins cannot be achieved after maximal excisional attempts, fertility-sparing management is not recommended. For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed. For patients who have consistently negative cotesting and endocervical sampling results for 5 years, extending the surveillance interval to every 3 years starting in the sixth year of surveillance is acceptable. Small retrospective studies have shown HPV test results to be the best predictor for recurrent disease. Therefore, for patients who have consistently negative cotesting and endocervical sampling results, continued surveillance is acceptable after completion of childbearing. For patients who have had positive HPV test results or abnormal cytology/histologic results during surveillance, hysterectomy at the completion of childbearing is preferred (see Figure 11).'
       }
     else
       null
@@ -1049,8 +1072,8 @@ define RecommendationForHistologyResults:
 
 define MostRecentTreatment:
   C3F.MostRecentProcedure(
-    Dash.CervicalExcisionProcedures union
-    Dash.CervicalAblationProcedures
+    Dash.CervicalAblationProcedures union
+    Dash.CervicalExcisionProcedures 
   )
 
 define MostRecentTreatmentDate:
@@ -1274,12 +1297,12 @@ define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
 define InitialIntensiveSurveillancePeriod:
   if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 4 then
     (
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
     ) or
     (
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
     )
   else
     false
@@ -1287,49 +1310,49 @@ define InitialIntensiveSurveillancePeriod:
 define RecommendationForSurveillanceAfterAbnormalities:
   case
     // J.2 Short-Term Follow-up After Treatment for Histologic HSIL
-    when ( // 1
-      HasTreatmentInLastYear and
-      HasHistologicHsilWithin12MonthsBeforeTreatment
-    ) then
-      {
-        action: '',
-        text: 'After treatment, hrHPV-based testing is preferred at 6 months regardless of the margin status of the excisional specimen (BII). hrHPV-based testing includes cotesting and primary hrHPV testing. Follow-up at 6 months with colposcopy and ECC is acceptable (BIII). When margins are positive for CIN 2+ or ECC performed at the time of the excisional procedure shows CIN 2+ in patients 25 years or older who are not concerned about the potential effect of treatment on future pregnancy outcomes, repeat excision or observation is acceptable. For observation, HPV-based testing in 6 months is preferred; it is also acceptable to perform a colposcopy and ECC at 6 months.'
-      }
-    when ( // 2
-      PositiveHrHpvTestAfterTreatment and
-      HasHistologicHsilWithin12MonthsBeforeTreatment
-    ) then
-      {
-        action: '',
-        text: 'Colposcopy and appropriate biopsies should be performed if an hrHPV “positive” result after treatment for histologic HSIL (AIII).'
-      }
-    when ( // 3
+    when ( // J2.3
       HistologyInterpretedAsHistologicHsil and
       Collate.MostRecentBiopsyReport.date 5 years or less after MostRecentTreatmentDate and
       SecondMostRecentHistologyInterpretedAsHistologicHsil and
       SecondMostRecentBiopsyReport.date 5 years or less before MostRecentTreatmentDate
     ) then
       {
-        action: '',
+        action: 'ManagementSurveillanceJ2',
         text: 'If recurrent histologic HSIL (CIN 2+) develops after excisional treatment, and repeat excision is not feasible or not desired, hysterectomy is recommended.'
+      }    
+    when ( // J2.2
+      PositiveHrHpvTestAfterTreatment and
+      HasHistologicHsilWithin12MonthsBeforeTreatment
+    ) then
+      {
+        action: 'ManagementSurveillanceJ2',
+        text: 'Colposcopy and appropriate biopsies should be performed if an hrHPV \'positive\' result after treatment for histologic HSIL (AIII).'
+      }    
+    when ( // J2.1
+      HasTreatmentInLastYear and
+      HasHistologicHsilWithin12MonthsBeforeTreatment
+    ) then
+      {
+        action: 'ManagementSurveillanceJ2',
+        text: 'After treatment, hrHPV-based testing is preferred at 6 months regardless of the margin status of the excisional specimen (BII). hrHPV-based testing includes cotesting and primary hrHPV testing. Follow-up at 6 months with colposcopy and ECC is acceptable (BIII). When margins are positive for CIN 2+ or ECC performed at the time of the excisional procedure shows CIN 2+ in patients 25 years or older who are not concerned about the potential effect of treatment on future pregnancy outcomes, repeat excision or observation is acceptable. For observation, HPV-based testing in 6 months is preferred; it is also acceptable to perform a colposcopy and ECC at 6 months.'
       }
     // J.3 Guidance for Long-Term Follow-up After Treatment for High-Grade Histology or Cytology
-    when ( // 1
+    when ( // J3.1
       HasTreatmentForHighGradeHistologyOrCytology and
       TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
       not InitialIntensiveSurveillancePeriod
     ) then
       {
-        action: '',
+        action: 'ManagementSurveillanceJ3',
         text: 'In patients treated for histologic or cytologic HSIL, after the initial HPV-based test at 6 months, annual HPV or cotesting is preferred until 3 consecutive negative tests have been obtained (AII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
       }
-    when ( // 2
+    when ( // J3.2
       HasTreatmentForHighGradeHistologyOrCytology and
       TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
       InitialIntensiveSurveillancePeriod
     ) then
       {
-        action: '',
+        action: 'ManagementSurveillanceJ3',
         text: 'In patients treated for histologic or cytologic HSIL, after the initial intensive surveillance period, continued surveillance at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology (histologic HSIL, CIN 2, CIN 3, or AIS) or high-grade cytology (HSIL, AGC, or persistent ASC-H) even if this is beyond the age of 65 years (BII). When patients with a history of treated high-grade histology or cytology reach the age of 65 years, if they have completed the initial 25-year surveillance period, continued surveillance at 3-year intervals is acceptable and may continue as long as the patient is in reasonably good health (BIII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
       }
     else

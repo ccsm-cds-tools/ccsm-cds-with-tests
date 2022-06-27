@@ -69,9 +69,8 @@ code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intra
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
 
 // Local codes
-code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
 code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
-
+code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
@@ -116,7 +115,8 @@ define IsIncluded:
     HasRecentAbnormalScreening or
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(Dash.HighGradeOrCancerHistologyResults)
+    Exists(Dash.HighGradeOrCancerHistologyResults) or
+    Exists(ManageSpecialPopulation.CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
   )
 
 //------------------------------------------------------------------------------
@@ -141,7 +141,6 @@ define IsIncludedAndNotExcluded:
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR RARE ABNORMALITIES
 //------------------------------------------------------------------------------
-
 define RareAbnormalityRecommendation:
   ManageRareAbnormality.Recommendation
 
@@ -151,7 +150,6 @@ define WhichRarityMadeTheRecommendation:
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR SPECIAL POPULATIONS
 //------------------------------------------------------------------------------
-
 define SpecialPopulationRecommendation:
   ManageSpecialPopulation.Recommendation
 

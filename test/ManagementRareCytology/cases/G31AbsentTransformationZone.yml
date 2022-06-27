@@ -1,0 +1,31 @@
+---
+name: G3.1 Absent Transformation Zone on Screening Cytology in Patient Age 21-30
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#412716005 Cervical smear transformation zone cells absent (situation)
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'RareCytologyG3.1'
+    text: 'Routine screening is recommended (BIII). When cervical cytology alone is performed for screening, HPV testing as a triage test after negative cytology and absent endocervical cells/transformation zone component in this age group is unacceptable (DIII).'
+  WhichRarityMadeTheRecommendation: 1
