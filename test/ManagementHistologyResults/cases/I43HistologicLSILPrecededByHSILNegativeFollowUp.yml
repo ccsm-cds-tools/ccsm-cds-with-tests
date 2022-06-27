@@ -1,5 +1,5 @@
 ---
-name: I4.3 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology 1 Year Negative FollowUp - Recommendation 1
+name: I4.3 Management of LSIL (CIN1) or Less Preceded by HSIL Cytology 1 Year Negative FollowUp - Recommendation 1
 
 externalData:
 - resources
@@ -19,15 +19,10 @@ data:
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: final
   conclusionCode:
-  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
   effectiveDateTime: 2020-01-01
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2020-05-01
+  $iterate: *HistologyCin1OrNormalLastYear
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
@@ -35,7 +30,15 @@ data:
   conclusionCode:
   - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
   effectiveDateTime: 2021-05-01
-  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#309162003 Normal histology findings (finding) 
+  effectiveDateTime: 2021-05-01
+
+
 results:
   IsIncludedAndNotExcluded: true
   RareAbnormalityRecommendation: 

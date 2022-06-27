@@ -15,17 +15,9 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 -
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
-  effectiveDateTime: 2021-01-01
+  $iterate: *HistologicHSILThisYear
 - 
-  resourceType: Procedure
-  code: SNOMED#120038005 Cervix excision (procedure)
-  performedDateTime: 2021-05-01
-  status: completed
+  $iterate: *HasTreatmentThisYear
 
 results:
   IsIncludedAndNotExcluded: true

@@ -1,5 +1,5 @@
 ---
-name: Younger Than 25 ASC-US/HPV-Negative Result 1.4
+name: K3.1 Immunosuppressed HPV Positive ASCUS Chronic Graft Versus Host Disease Diagnoses After Stem Cell
 
 externalData:
 - resources
@@ -9,17 +9,21 @@ data:
   resourceType: Patient
   name: Joanne Smith
   gender: female
-  birthDate: 2000-01-01
+  birthDate: 1991-01-01
   extension:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 - 
+  $iterate: *ChronicGraft
+-
+  $iterate: *HematopoieticStemCellTransplantProcedure
+- 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
-  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
   effectiveDateTime: 2021-05-01
 - 
   resourceType: DiagnosticReport
@@ -32,6 +36,6 @@ data:
 results:
   IsIncludedAndNotExcluded: true
   SpecialPopulationRecommendation: 
-    action: 'Cytology'
-    text: 'Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
-  WhichPopulationMadeTheRecommendation: 5
+    action: 'ImmunosuppressedK3'
+    text: 'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
+  WhichPopulationMadeTheRecommendation: 3

@@ -1,5 +1,5 @@
 ---
-name: Younger Than 25, high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years 3.3
+name: Younger Than 25 Cytologic HSIL or ASC-H Without Histologic HSIL Persists for 2 years 3.3
 
 externalData:
 - resources
@@ -15,26 +15,11 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2019-01-01
+  $iterate: *ASCHOrHSILTwoYearsAgo
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2019-05-01
+  $iterate: *HistologyCin1OrNormalTwoYearsAgo
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2021-05-01
+  $iterate: *ASCHOrHSILThisYear
 
 results:
   IsIncludedAndNotExcluded: true

@@ -1,5 +1,5 @@
 ---
-name: G2.1 Unsatisfactory Cytology 
+name: G2.1 Unsatisfactory Cytology with Unknown Or Negative HPV
 
 externalData:
 - resources
@@ -15,12 +15,9 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#19765-7 Microscopic observation [Identifier] in Cervical or vaginal smear or scraping by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#126481000119106 Vaginal Papanicolaou smear unsatisfactory for evaluation (finding) 
-  effectiveDateTime: 2021-05-01
+  $iterate: *CytoUnsatisfactoryThisYear
+-
+  $iterate: *NegOrUnknownHPVThisYear
 
 results:
   IsIncludedAndNotExcluded: true

@@ -1,5 +1,5 @@
 ---
-name: K3.3 Immunosuppressed 
+name: K3.1 Immunosuppressed HPV Positive ASCUS
 
 externalData:
 - resources
@@ -18,17 +18,22 @@ data:
   $iterate: *Immunocompromised
 - 
   resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-05-01
+- 
+  resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: final
   conclusionCode:
   - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2020-05-01
-- 
-  $iterate: *ASCUSOrAboveOrAISThisYear
+  effectiveDateTime: 2021-05-01
 
 results:
   IsIncludedAndNotExcluded: true
   SpecialPopulationRecommendation: 
-    action: 'Colposcopy'
-    text: 'Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.'
+    action: 'ImmunosuppressedK3'
+    text: 'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
   WhichPopulationMadeTheRecommendation: 3

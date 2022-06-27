@@ -15,17 +15,9 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 - 
-  resourceType: Observation
-  code: SNOMEDCT#32590007 Premenopausal amenorrhea (finding)
-  status: final
-  effectiveDateTime: 2021-05-01
+  $iterate: *Premenopausal
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#125155008 Endometrial cells, cytologically benign, in a postmenopausal woman (finding)
-  effectiveDateTime: 2020-05-01
+  $iterate: *BenignEndometrialCellsOrEndometrialStromalCellsOrHistiocytesThisYear
 
 results:
   IsIncludedAndNotExcluded: true

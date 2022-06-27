@@ -15,21 +15,18 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 - 
-  resourceType: Procedure
-  code: SNOMEDCT#116140006 Total hysterectomy (procedure)
-  status: completed
-  performedDateTime: 2010-05-01
+  $iterate: *HxOfAbsenceOrRemovalOfCervix 
 - 
   resourceType: DiagnosticReport
   code: LOINC#19765-7 Microscopic observation [Identifier] in Cervical or vaginal smear or scraping by Cyto stain
   status: final
   conclusionCode:
-  - LOCAL#BGC Benign Glandular Cells
-  effectiveDateTime: 2020-05-01
+  - http://OUR-PLACEHOLDER-URL.com#BGC Benign Glandular Cells
+  effectiveDateTime: 2018-05-01
 
 results:
   IsIncludedAndNotExcluded: true
   RareAbnormalityRecommendation: 
     action: 'RareCytologyG4.3'
-    text: 'For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
+    text: "For patients 'post-hysterectomy' with benign glandular cells identified via cytology, no further evaluation is recommended (BII)."
   WhichRarityMadeTheRecommendation: 1

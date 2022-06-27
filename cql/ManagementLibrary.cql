@@ -194,7 +194,8 @@ define IsIncluded:
     HasRecentAbnormalScreening or
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
-    Exists(Dash.HighGradeOrCancerHistologyResults)
+    Exists(Dash.HighGradeOrCancerHistologyResults) or
+    Exists(CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
   )
 
 //------------------------------------------------------------------------------
@@ -797,7 +798,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: 'RareCytologyG1.5',
-        text: 'For patients with atypical glandular or endocervical cells “favor neoplasia” or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
+        text: 'For patients with atypical glandular or endocervical cells \'favor neoplasia\' or endocervical AIS cytology, if invasive disease is not identified during initial colposcopic workup, a diagnostic excisional procedure is recommended. The diagnostic excisional procedure used in this setting should provide an intact specimen with interpretable margins (BII). Endocervical sampling above the excisional bed is preferred (BII).'
       }    
     // G.1 Evaluation of Cytology Interpreted as AGC or AIS
     when ( // G1.1
@@ -921,7 +922,7 @@ define RecommendationForRareCytology:
     ) then
       {
         action: 'RareCytologyG4.3',
-        text: 'For patients “post-hysterectomy” with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
+        text: 'For patients \'post-hysterectomy\' with benign glandular cells identified via cytology, no further evaluation is recommended (BII).'
       }
     else
       null
@@ -1417,6 +1418,36 @@ define RecommendationForHistologyResults:
         action: 'ManagementHistologyI4',
         text: 'HPV-based testing (i.e., cotesting or primary hrHPV testing) is recommended 1 year after the initial negative follow up result(s) when observation is elected after a histologic LSIL (CIN1) preceded by ASC-H or HSIL cytology.'
       }
+    when ( // I4.5
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      (
+        PrecedingCytologyIsHsil or
+        PrecedingCytologyIsAscH
+      ) and
+      (
+        not (
+          MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
+        ) or
+        MostRecentTreatment is null
+      ) and
+      (
+        (
+          CytologyInterpretedAsHsil and
+          MostRecentCytologyReport.date 1 year or more after MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
+        ) or
+        (
+          CytologyInterpretedAsAscH and
+          MostRecentCytologyReport.date 2 years or more after MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
+        )
+      )
+    ) then
+      {
+        action: 'ManagementHistologyI4',
+        text: 'A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).'
+      }    
     when ( // I4.4
       AgeInYears() >= 25 and
       HistologyInterpretedAsCin1OrNormal and
@@ -1457,36 +1488,6 @@ define RecommendationForHistologyResults:
         action: 'Colposcopy',
         text: 'If any test is abnormal during the observation period after a HSIL and ASC-H cytology, a repeat colposcopy is recommended, and management based on resulting biopsies is recommended.'
       }
-    when ( // I4.5
-      AgeInYears() >= 25 and
-      HistologyInterpretedAsCin1OrNormal and
-      (
-        PrecedingCytologyIsHsil or
-        PrecedingCytologyIsAscH
-      ) and
-      (
-        not (
-          MostRecentTreatmentDate 1 year or less after MostRecentBiopsyReport.date
-        ) or
-        MostRecentTreatment is null
-      ) and
-      (
-        (
-          CytologyInterpretedAsHsil and
-          MostRecentCytologyReport.date 1 year or more after MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
-        ) or
-        (
-          CytologyInterpretedAsAscH and
-          MostRecentCytologyReport.date 2 years or more after MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after MostRecentBiopsyReport.date
-        )
-      )
-    ) then
-      {
-        action: 'ManagementHistologyI4',
-        text: 'A diagnostic excisional procedure is recommended for patients with HSIL cytology results at either the 1- or 2-year visit, or ASC-H results that persist at the 2-year visit (CIII).'
-      }
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
     when (
       AgeInYears() >= 25 and
@@ -1518,8 +1519,8 @@ define RecommendationForHistologyResults:
 
 define MostRecentTreatment:
   C3F.MostRecentProcedure(
-    Dash.CervicalExcisionProcedures union
-    Dash.CervicalAblationProcedures
+    Dash.CervicalAblationProcedures union
+    Dash.CervicalExcisionProcedures 
   )
 
 define MostRecentTreatmentDate:
@@ -1743,12 +1744,12 @@ define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
 define InitialIntensiveSurveillancePeriod:
   if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 4 then
     (
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
     ) or
     (
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 5 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
     )
   else
     false
@@ -1859,12 +1860,6 @@ define SecondMostRecentCytologyInterpretedAsAscus:
       return aC ~ "ASC-US"
   )
 
-define AssociatedHpvCotest:
-  Coalesce(
-    (SortedHpvReports) H
-      where H.date within 1 day of SecondMostRecentCytologyReport.date
-  )
-
 define ColposcopySinceMostRecentCytology:
   Exists(
     (Dash.ColposcopyProcedures) P
@@ -1919,9 +1914,49 @@ define Under25AndLowGradeCytologyResults:
     )
   )
 
-define TwoMostRecentCytologyReports2To3YearsApart:
-  SecondMostRecentCytologyReport.date 2 years or more before MostRecentCytologyReport.date and
-  SecondMostRecentCytologyReport.date 3 years or less before MostRecentCytologyReport.date
+define Under25And2YearsAgoCytologyResults:
+  (SortedCytologyReports) C
+    where (
+      C.date 2 years or more before MostRecentCytologyReport.date and
+      C.date 3 years or less before MostRecentCytologyReport.date)
+
+define Under25And2YearsAgoCytologyReport:
+  Under25And2YearsAgoCytologyResults[0]
+
+define AssociatedHpvCotest:
+  Coalesce(
+    (SortedHpvReports) H
+      where H.date within 1 day of Under25And2YearsAgoCytologyReport.date
+  )
+
+define Under25And2YearsAgoCytologyReportInterpretedAsLsil:
+  AnyTrue(
+    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+      return aC ~ "LSIL"
+  )
+
+define Under25And2YearsAgoCytologyReportInterpretedAsAscus:
+  AnyTrue(
+    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+      return aC ~ "ASC-US"
+  )
+
+define Under25And2YearsAgoLowGradeCytologyResults: 
+  AgeInYears() < 25 and
+  ( 
+    Exists(Under25And2YearsAgoCytologyResults) and
+    (
+      Under25And2YearsAgoCytologyReportInterpretedAsLsil or
+      (
+        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
+        AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+      ) or
+      (
+        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
+        AssociatedHpvCotest is null
+      )
+    )
+  )
 
 define Under25AndSecondMostRecentLowGradeCytologyResults:
   AgeInYears() < 25 and
@@ -2078,7 +2113,7 @@ define RecommendationForPatientsYoungerThan25:
         CytologyInterpretedAsAgc or
         CytologyInterpretedAsAis
       ) and
-      not BiopsySinceMostRecentCytology //should be biopsy = null? 
+      not BiopsySinceMostRecentCytology
     ) then
       {
         action: 'Colposcopy',
@@ -2113,8 +2148,7 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // 3
       Under25AndLowGradeCytologyResults and
-      Under25AndSecondMostRecentLowGradeCytologyResults
-      and TwoMostRecentCytologyReports2To3YearsApart
+      Under25And2YearsAgoLowGradeCytologyResults
     ) then
       {
         action: 'Colposcopy', // NOTE: Do we want to continue adding 'actions' to the Rare Abnormality recommendations?
@@ -2136,17 +2170,21 @@ define RecommendationForPatientsYoungerThan25:
 
 define PregnancyOnset:
   Coalesce(
-    (Common.Onset(
+    Common.ConditionDate(
       C3F.MostRecentCondition(
         Dash.PregnancyDiagnoses
-      )
-    ) as System.Date),
+      ) 
+    ),
     Common.ObservationDate(
       C3F.MostRecent(
         Dash.PregnancyObservations
       )
-    )
+    ) 
   ) 
+
+define PregnancyDiagnosis:
+  C3F.MostRecentCondition(
+    Dash.PregnancyDiagnoses)
 
 define FirstHistologyAfterPregnancyOnset:
   Last(
@@ -2206,7 +2244,21 @@ define TwoMostRecentCytologyReportsWithin18MonthsApart:
   SecondMostRecentCytologyReport.date within 18 months of MostRecentCytologyReport.date
 
 define RecommendationForImmunosuppressedPatients:
-  case 
+  case      
+    when ( // K3.3
+      Immunocompromised and
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      (
+        CytologyInterpretedAsAscusOrAbove or
+        CytologyInterpretedAsAis
+      ) and
+      SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
+      TwoMostRecentCytologyReportsWithin18MonthsApart
+    ) then
+      {
+        action: 'Colposcopy',
+        text: 'Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.'
+      }
     when ( // K3.1
       Immunocompromised and
       (
@@ -2231,22 +2283,8 @@ define RecommendationForImmunosuppressedPatients:
       {
         action: 'ImmunosuppressedK3',
         text: 'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
-      }       
-    when ( // K3.3
-      Immunocompromised and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      (
-        CytologyInterpretedAsAscusOrAbove or
-        CytologyInterpretedAsAis
-      ) and
-      SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
-      TwoMostRecentCytologyReportsWithin18MonthsApart
-    ) then
-      {
-        action: 'Colposcopy',
-        text: 'Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.'
-      }
-    when ( // K2.2
+      }   
+    when ( // K3.2
       Immunocompromised and
       MostRecentCytologyReportWasWithinPastFiveYears and
       MostRecentCytologyReport.riskTableInput = 'ASC-US'
@@ -2254,7 +2292,7 @@ define RecommendationForImmunosuppressedPatients:
       {
         action: 'ImmunosuppressedK3',
         text: 'Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.'
-      }    
+      }   
     else
       null
   end
@@ -2291,7 +2329,7 @@ define MostRecentCervixRemovalObservationDate:
   )
 
 define MostRecentCervixRemovalDiagnosisDate:
-  Common.Onset(
+  Common.ConditionDate(
     C3F.MostRecentCondition(
       Dash.AbsenceOfCervixDiagnoses
     )
