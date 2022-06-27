@@ -1,14 +1,14 @@
-/*  
+/*
   Library: Cervical Cancer Screening for Individuals of Average Risk
   Author: CMS Alliance to Modernize Healthcare, operated by THE MITRE Corporation.
 
-  (C) 2021 The MITRE Corporation. All Rights Reserved. 
-  Approved for Public Release: 21-1556. 
+  (C) 2021 The MITRE Corporation. All Rights Reserved.
+  Approved for Public Release: 21-1556.
   Distribution Unlimited.
 
-  Unless otherwise noted, this work is available under an Apache 2.0 license. 
-  It was produced by the MITRE Corporation for the Division of Cancer Prevention 
-  and Control, Centers for Disease Control and Prevention in accordance with the 
+  Unless otherwise noted, this work is available under an Apache 2.0 license.
+  It was produced by the MITRE Corporation for the Division of Cancer Prevention
+  and Control, Centers for Disease Control and Prevention in accordance with the
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
@@ -50,7 +50,7 @@ context Patient
 // INCLUSIONS
 //------------------------------------------------------------------------------
 // Age >=21 years old
-// AND 
+// AND
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
 
@@ -64,7 +64,7 @@ define IsIncluded:
       AllowGradeDRecommendation and
       AgeInYears() > 65
     )
-  ) and 
+  ) and
   Entry.FemaleorTransgenderMale
 
 // TODO: Add Grade D Inclusions (negative recommendations) for patients < 21
@@ -75,8 +75,8 @@ define IsIncluded:
 // Included and not excluded from screening logic for symptomatic individuals
 // OR Included and not excluded from screening logic for individuals exposed to DES
 // OR Included and not excluded from screening logic for Immunocompromised individuals
-// OR Diagnosis of High grade pre-cancerous cervical lesion 
-// OR Diagnosis of Cervical cancer 
+// OR Diagnosis of High grade pre-cancerous cervical lesion
+// OR Diagnosis of Cervical cancer
 // OR Cervical histology result = "histologic HSIL (CIN2)" or "histologic HSIL (CIN3)" or “histologic AIS” or “histologic Cancer”
 // OR Abnormal screening result <= 7 years ago (7 years is a parameter in Dash)
 // OR Abnormal histology result <= 7 years ago (7 years is a parameter in Dash)
@@ -129,7 +129,7 @@ define AgeOver65:
   AgeInYears() > 65
 
 define MostRecentNilmCytology:
-  if Exists(Dash.MostRecentNilmCytology) then
+  if (Dash.MostRecentNilmCytology is not null) then
     {
       type: 'Cervical Cytology',
       date: Common.DiagnosticReportDate(Dash.MostRecentNilmCytology)
@@ -138,27 +138,27 @@ define MostRecentNilmCytology:
     null
 
 define DateOfMostRecentNilmCytology:
-  if Exists(MostRecentNilmCytology) then
+  if (MostRecentNilmCytology.date is not null) then
     MostRecentNilmCytology.date
   else null
 
 define MostRecentNegativeHpvTest:
-  if Exists(Dash.MostRecentNegativeHpv) then
+  if (Dash.MostRecentNegativeHpv is not null) then
     {
       type: 'hrHPV',
       date: Common.DiagnosticReportDate(Dash.MostRecentNegativeHpv)
     }
   else
-    null 
+    null
 
 define DateOfMostRecentNegativeHpv:
-  if Exists(MostRecentNegativeHpvTest) then 
+  if (MostRecentNegativeHpvTest is not null) then
     MostRecentNegativeHpvTest.date
-  else 
+  else
     null
 
 define MostRecentNegativeCotest:
-  if Exists(MostRecentNilmCytology) and Exists(MostRecentNegativeHpvTest) then
+  if (MostRecentNilmCytology is not null) and (MostRecentNegativeHpvTest is not null) then
     from Dash."MostRecentNilmCytology" C, Dash."MostRecentNegativeHpv" H
     where
         Common.CoincidentDiagnosticReports(C, H)
@@ -172,9 +172,9 @@ define MostRecentNegativeCotest:
       null
 
 define DateOfMostRecentNegativeCotest:
-  if Exists(MostRecentNegativeCotest) then 
+  if (MostRecentNegativeCotest is not null) then
     MostRecentNegativeCotest.date
-  else 
+  else
     null
 
 define ProposedDateOfNextCytology:
@@ -213,11 +213,11 @@ define RecentScreenings:
   except { null }
 
 define LastScreeningType:
-  if Exists(RecentScreenings) then 
+  if Exists(RecentScreenings) then
     Last(
       (RecentScreenings) T sort by date
     ).type
-  else 
+  else
     'n/a' // Indicates that no recent screening was found
 
 define ProposedScreeningDate:
@@ -301,16 +301,16 @@ define RecommendationText:
             RecommendImmediateCotesting
           ) then
             if LastScreeningType != 'n/a' then
-              'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' + 
-              'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' + 
-              '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' + 
+              'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' +
+              'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' +
+              '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' +
               '3) two consecutive negative cotesting results within 10 years prior to the end of screening, with the most recent test occurring within 5 years. ' +
               'It appears that this patient is on a screening regimen that includes ' + LastScreeningType + '. To meet "adequate testing criteria", ' + LastScreeningType + ' is recommended.'
             else
-              'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' + 
-              'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' + 
-              '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' + 
-              '3) two consecutive negative cotesting results within 10 years prior to the end of screening, with the most recent test occurring within 5 years. ' + 
+              'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' +
+              'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' +
+              '2) two consecutive negative hrHPV results within 10 years prior to the end of screening, with the most recent test occurring within 5 years or ' +
+              '3) two consecutive negative cotesting results within 10 years prior to the end of screening, with the most recent test occurring within 5 years. ' +
               'To meet "adequate testing criteria", a 1) cervical cytology test or, 2) hrHPV test, or 3) a cotest (which includes a cervical cytology test and a hrHPV test) is recommended.'
           else
             if NotAdequatelyScreened then
@@ -345,7 +345,7 @@ define ErrorMissingCytologyResult:
           (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
             return aC is null
         )
-      or 
+      or
         Count(CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) ~ 0
       )
     ) then
@@ -373,7 +373,7 @@ define ErrorMissingHpvResult:
           (HpvTestsForGradeDUnfiltered.conclusionCode) aC
             return aC is null
         )
-      or 
+      or
         Count(HpvTestsForGradeDUnfiltered.conclusionCode) ~ 0
       )
     ) then
@@ -392,14 +392,14 @@ define ErrorUnexpectedHpvResult:
       'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
     else
       null
-    
+
 define Errors:
   {
     ErrorMissingCytologyResult,
     ErrorUnexpectedCytologyResult,
     ErrorMissingHpvResult,
     ErrorUnexpectedHpvResult
-  } 
+  }
   except { null }
   union
     Dash.Errors
@@ -434,7 +434,7 @@ define HasAbsenceOfCervixObservations:
 
 define AbsenceOrRemovalOfCervix: // TODO: This also appears in LP5. We should be able to consolidate.
   HasRemovalOfCervixProcedures or
-  HasAbsenceOfCervixDiagnoses or 
+  HasAbsenceOfCervixDiagnoses or
   HasAbsenceOfCervixObservations
 
 define AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer:
@@ -483,7 +483,7 @@ define HasThreeNegativeCytologyTestsForGradeD:
   if Exists(CervicalCytologyTestsForGradeD) then
     Count(CervicalCytologyTestsForGradeD) >= 3 and
     Last(CervicalCytologyTestsForGradeD).date after Now() - 5 years
-  else 
+  else
     false
 
 define HpvTestsForGradeDUnfiltered:
