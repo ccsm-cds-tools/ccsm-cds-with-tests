@@ -70,7 +70,8 @@ valueset "Colposcopy procedure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.
 valueset "Surgery Female Genital System Cervix Uteri": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.3157.1315'
 valueset "Cervical Excision Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.182'
 valueset "Cervical Ablation Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.241'
-valueset "Removal of Cervix Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1027'
+valueset "SNOMED Value Set for Removal of Cervix Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1027'
+valueset "CPT Value Set for Removal of Cervix Procedures": 'https://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1026'
 
 // Diagnostic reports
 valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059'
@@ -491,7 +492,8 @@ define CervicalAblationProcedures:
 
 define RemovalOfCervixProcedures:
   C3F.Completed(
-    [Procedure: "Removal of Cervix Procedures"]
+    [Procedure: "SNOMED Value Set for Removal of Cervix Procedures"] union
+    [Procedure: "CPT Value Set for Removal of Cervix Procedures"]
   )
 
 define PertinentProcedures:
