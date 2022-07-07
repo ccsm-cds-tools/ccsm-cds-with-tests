@@ -16,18 +16,12 @@ data:
     valueCode: F
 - 
   $iterate: *UnspecifiedHSILorCIN2FiveYearsAgo
-- 
-  resourceType: Observation
-  code: http://OUR-PLACEHOLDER-URL.com#FPCQ Does the patient have future pregnancy concerns related to treatment options?
-  status: final
-  valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
-  effectiveDateTime: 2021-06-01
 -
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
   conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  - SNOMEDCT#309162003 Normal histology findings (finding)
   effectiveDateTime: 2017-12-01
 - 
   resourceType: DiagnosticReport
@@ -37,12 +31,7 @@ data:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
   effectiveDateTime: 2017-12-01  
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
-  effectiveDateTime: 2017-12-01  
+  $iterate: *VariousHPVResultsAt6MonthSurveillance 
 -
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
@@ -58,19 +47,7 @@ data:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
   effectiveDateTime: 2018-06-01  
 - 
-  resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
-  effectiveDateTime: 2018-06-01  
-- 
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2019-06-01
+  $iterate: *VariousHPVResultsAt12MonthSurveillance 
 - 
   resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
@@ -87,13 +64,6 @@ data:
   effectiveDateTime: 2019-06-01   
 - 
   resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2020-06-01
-- 
-  resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: final
   conclusionCode:
@@ -106,10 +76,19 @@ data:
   conclusionCode:
   - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
   effectiveDateTime: 2020-06-01 
--
-  $iterate: *NegativeSurveillanceHistologyThisYear
--
-  $iterate: *NegativeSurveillanceCytologyThisYear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-06-01 
+- 
+  resourceType: Observation
+  code: http://OUR-PLACEHOLDER-URL.com#FPCQ Does the patient have future pregnancy concerns related to treatment options?
+  status: final
+  valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
+  effectiveDateTime: 2021-06-01
 
 results:
   IsIncludedAndNotExcluded: true

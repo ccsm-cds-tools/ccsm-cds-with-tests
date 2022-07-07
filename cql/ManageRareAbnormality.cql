@@ -726,10 +726,11 @@ define SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast
       where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
       AnyTrue(
         (R.allConclusions) aC
-          return
+          return 
             aC ~ "CIN1" or
             aC in "Normal Histology Finding"
       )
+      sort by date asc
   else
     null
 
@@ -739,11 +740,27 @@ define SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6
       where R.date after InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years.date and
       AnyTrue(
         (R.allConclusions) aC
-          return
+          return 
             aC ~ Dash."NILM" or
             aC ~ "LSIL" or
             aC ~ "ASC-US"
       )
+      sort by date asc
+  else
+    null
+
+define FirstNegativeHSILSurveillance:
+  Exists(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years[0]) and 
+  Exists(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years[0])
+
+define SecondNegativeHSILSurveillance:
+  Exists(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years[1]) and 
+  Exists(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years[1])
+
+define NegativeSurveillanceTestsAfterSecondNegativeHSILSurveillance:
+  if SecondNegativeHSILSurveillance then
+    SortedNegativeSurveillanceTests T
+    where T.date > SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years[1].date
   else
     null
 
@@ -813,8 +830,8 @@ define RecommendationForHistologyResults:
     when ( // I3.4
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) and
-      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and
-      Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
+      FirstNegativeHSILSurveillance and SecondNegativeHSILSurveillance and
+      Count(NegativeSurveillanceTestsAfterSecondNegativeHSILSurveillance) = 3 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
