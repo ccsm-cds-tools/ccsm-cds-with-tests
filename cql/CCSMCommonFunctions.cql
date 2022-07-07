@@ -321,7 +321,7 @@ define function MedicationAdministrationDate(a FHIR.MedicationAdministration):
 * Medication administrations that are completed, according to a prescription.
 * @see https://www.hl7.org/fhir/valueset-medication-admin-status.html
 * @param MedList - a list of MedicationAdministrations
-* @returns {List<MedicationRequest>} a list of completed medication administrations, or null if null was passed in
+* @returns {List<MedicationAdministration>} a list of completed medication administrations, or null if null was passed in
 */
 define function CompletedMedicationAdministration(MedList List<MedicationAdministration>):
   MedList M
@@ -346,7 +346,7 @@ define function CompletedDiagnosticReport(DiagnosticReportList List<DiagnosticRe
 * TODO: Rename to LookBack once the execution engine supports overloaded functions.
 * @param MedList - a list of MedicationAdministrations
 * @param LookBack - the lookback period for when the medication was prescribed
-* @returns {List<MedicationStatement>} a list of MedicationAdministrations prescribed in the look back period, or null if null
+* @returns {List<MedicationAdministration>} a list of MedicationAdministrations prescribed in the look back period, or null if null
 * was passed in
 */
 define function LookBack(MedList List<MedicationAdministration>, LookBack System.Quantity):
@@ -365,6 +365,19 @@ define function CompletedMedicationRequest(MedList List<MedicationRequest>):
   MedList M
     where M.status.value = 'completed'
 
+/**
+* Medication requests with an intent of 'order', or one of the sub-categories of 'order'.
+* @see http://hl7.org/fhir/R4/valueset-medicationrequest-intent.html
+* @param MedList - a list of MedicationRequests
+* @returns {List<MedicationRequest>} a list of medication requests with an intent of 'order', or null if null was passed in
+*/
+define function MedicationRequestsWithOrderIntent(MedList List<MedicationRequest>):
+  MedList M
+    where M.intent.value = 'order'
+      or M.intent.value = 'original-order'
+      or M.intent.value = 'reflex-order'
+      or M.intent.value = 'filler-order'
+      or M.intent.value = 'instance-order'
 
 /*******************************************************************************
 * Observation Functions

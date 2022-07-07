@@ -1,0 +1,24 @@
+---
+name: MedicationRequest Of Proposal Intent
+
+externalData:
+- resources
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2010-01-01
+-
+  $iterate: *IbsOrArthritis
+- 
+  resourceType: MedicationRequest
+  status: completed
+  intent: proposal
+  medicationCodeableConcept: RXNORM#1153039 chlorambucil Pill
+  authoredOn: 2021-05-01
+
+results:
+  DateOfImmunosuppressionOnset: null
+  IsIncludedAndNotExcluded: false

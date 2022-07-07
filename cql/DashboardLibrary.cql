@@ -401,10 +401,12 @@ define PertinentObservationsSummary:
 //    Medication Statement (active) < 6 months ago
 
 define ImmunosuppressantMedicationRequests:
-  Common.CompletedMedicationRequest(
-    C3F.MedicationRequestLookBack(
-      [MedicationRequest: "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis"],
-      MedicationLookbackPeriod
+  Common.MedicationRequestsWithOrderIntent(
+    Common.CompletedMedicationRequest(
+      C3F.MedicationRequestLookBack(
+        [MedicationRequest: "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis"],
+        MedicationLookbackPeriod
+      )
     )
   )
 
