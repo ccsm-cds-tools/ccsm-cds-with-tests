@@ -857,26 +857,31 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "CompletedMedicationRequest",
+               "name" : "MedicationRequestsWithOrderIntent",
                "libraryName" : "Common",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "MedicationRequestLookBack",
-                  "libraryName" : "C3F",
+                  "name" : "CompletedMedicationRequest",
+                  "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationRequest",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
-                  }, {
-                     "name" : "MedicationLookbackPeriod",
-                     "type" : "ParameterRef"
+                     "name" : "MedicationRequestLookBack",
+                     "libraryName" : "C3F",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}MedicationRequest",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "name" : "MedicationLookbackPeriod",
+                        "type" : "ParameterRef"
+                     } ]
                   } ]
                } ]
             }

@@ -3001,6 +3001,120 @@
                }
             } ]
          }, {
+            "name" : "MedicationRequestsWithOrderIntent",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "M",
+                  "expression" : {
+                     "name" : "MedList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "path" : "value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "intent",
+                                    "scope" : "M",
+                                    "type" : "Property"
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "order",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "path" : "value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "intent",
+                                    "scope" : "M",
+                                    "type" : "Property"
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "original-order",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "path" : "value",
+                              "type" : "Property",
+                              "source" : {
+                                 "path" : "intent",
+                                 "scope" : "M",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "reflex-order",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "intent",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "filler-order",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "value",
+                        "type" : "Property",
+                        "source" : {
+                           "path" : "intent",
+                           "scope" : "M",
+                           "type" : "Property"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "instance-order",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "MedList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}MedicationRequest",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
             "name" : "ProcedureDate",
             "context" : "Patient",
             "accessLevel" : "Public",
