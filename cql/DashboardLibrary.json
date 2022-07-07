@@ -233,8 +233,12 @@
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.241",
             "accessLevel" : "Public"
          }, {
-            "name" : "Removal of Cervix Procedures",
+            "name" : "SNOMED Value Set for Removal of Cervix Procedures",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1027",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "CPT Value Set for Removal of Cervix Procedures",
+            "id" : "https://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1026",
             "accessLevel" : "Public"
          }, {
             "name" : "HPV Test",
@@ -3381,15 +3385,28 @@
                "libraryName" : "C3F",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Procedure",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                  "codeProperty" : "code",
-                  "codeComparator" : "in",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "name" : "Removal of Cervix Procedures",
-                     "type" : "ValueSetRef"
-                  }
+                  "type" : "Union",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "SNOMED Value Set for Removal of Cervix Procedures",
+                        "type" : "ValueSetRef"
+                     }
+                  }, {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "CPT Value Set for Removal of Cervix Procedures",
+                        "type" : "ValueSetRef"
+                     }
+                  } ]
                } ]
             }
          }, {
