@@ -39,20 +39,41 @@ context Patient
 /* Sex at birth = Female
 OR Gender identity = Transgender Male */
 
+// Sex assigned at birth
+define BirthSex:
+  Patient.extension E
+    where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'
+
+define BirthSexPresent:
+  exists(BirthSex)
+
+define FemaleBirthSex:
+  exists(
+    BirthSex E
+      where E.value = 'F'
+  )
+
+define UnknownBirthSex:
+  exists(
+    BirthSex E
+      where (
+        E.value = 'ASKU' or
+        E.value = 'OTH' or
+        E.value = 'UNK'
+      )
+  )
+
+define BirthSexMissingOrUnknown:
+  not BirthSexPresent or 
+  UnknownBirthSex
+
 // Patient Gender
 define FemaleGender:
   Patient.gender.value = 'female'
 
-// Sex assigned at birth
-define FemaleBirthSex:
-  exists(
-    Patient.extension E
-      where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'
-      and E.value = 'F'
-  )
-
 define Female:
-  FemaleGender or FemaleBirthSex
+  FemaleBirthSex or
+  (BirthSexMissingOrUnknown and FemaleGender)
 
 define GenderIdentity:
   Patient.extension E
