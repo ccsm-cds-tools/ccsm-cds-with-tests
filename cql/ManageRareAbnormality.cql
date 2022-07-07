@@ -813,13 +813,13 @@ define RecommendationForHistologyResults:
     when ( // I3.4
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years is not null) and
-      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
+      Count(SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) = 5 and
       Count(SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years) >= 5 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
         action: 'ManagementHistologyI3',
-        text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
+        text: 'Surveillance with HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
       }    
     when ( // I3.3
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -830,7 +830,7 @@ define RecommendationForHistologyResults:
     ) then
       {
         action: 'ManagementHistologyI3',
-        text: 'Subsequent surveillance with colposcopy and HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
+        text: 'Subsequent surveillance with HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
       }
     when ( // I3.2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -1298,11 +1298,11 @@ define InitialIntensiveSurveillancePeriod:
   if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 4 then
     (
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 3 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
     ) or
     (
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 4 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
+      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
     )
   else
     false
