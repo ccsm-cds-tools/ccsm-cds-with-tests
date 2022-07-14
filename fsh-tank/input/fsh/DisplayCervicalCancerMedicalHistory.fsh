@@ -27,4 +27,4 @@ Usage: #definition
 * dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
 * dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * dynamicValue[=].expression.expression = "CervicalCancerScreeningAndMedicalHistory"
-* dynamicValue[=].expression.reference = "Library/DisplayCervicalCancerMedicalHistory|1.0"
+* dynamicValue[=].expression.reference = "Library/DashboardLibrary|1.0"

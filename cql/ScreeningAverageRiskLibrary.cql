@@ -20,7 +20,7 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
-include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
+include DashboardLibrary version '1.0.0' called Dash
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
 include ScreeningDesExposureLibrary version '1.0.0' called DesExposure
 include ScreeningImmunocompromisedLibrary version '1.0.0' called Immunocompromised

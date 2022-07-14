@@ -18,7 +18,7 @@ using FHIR version '4.0.1'
 
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
-include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
+include DashboardLibrary version '1.0.0' called Dash
 include CCSMCommonFunctions version '1.0.0' called Common
 include TopLevelScreeningLibrary version '1.0.0' called Entry
 
@@ -114,7 +114,7 @@ define IsIncludedAndNotExcluded:
 
 define RecommendationText:
   if IsIncludedAndNotExcluded then
-    'Consider individualized care for this patient due to a gap in evidence-based care recommendations for individuals with DES exposure in utero. Previous guidelines (i.e., "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention”) recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
+    'Consider individualized care for this patient due to a gap in evidence-based care recommendations for individuals with DES exposure in utero. Previous guidelines (i.e., "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention") recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
   else
     null
 

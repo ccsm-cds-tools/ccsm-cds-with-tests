@@ -1,0 +1,27 @@
+---
+name: J2.1 Short-Term Follow-up After Treatment for Histologic HSIL 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *HistologicHSILThisYear
+- 
+  $iterate: *HasTreatmentThisYear
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'ManagementSurveillanceJ2'
+    text: 'After treatment, hrHPV-based testing is preferred at 6 months regardless of the margin status of the excisional specimen (BII). hrHPV-based testing includes cotesting and primary hrHPV testing. Follow-up at 6 months with colposcopy and ECC is acceptable (BIII). When margins are positive for CIN 2+ or ECC performed at the time of the excisional procedure shows CIN 2+ in patients 25 years or older who are not concerned about the potential effect of treatment on future pregnancy outcomes, repeat excision or observation is acceptable. For observation, HPV-based testing in 6 months is preferred; it is also acceptable to perform a colposcopy and ECC at 6 months.'
+  WhichRarityMadeTheRecommendation: 4

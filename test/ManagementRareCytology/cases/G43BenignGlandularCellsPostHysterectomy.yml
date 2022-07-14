@@ -1,0 +1,32 @@
+---
+name: G4.3 Benign Glandular Cells in Post Hysterectomy Patients 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *HxOfAbsenceOrRemovalOfCervix 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#19765-7 Microscopic observation [Identifier] in Cervical or vaginal smear or scraping by Cyto stain
+  status: final
+  conclusionCode:
+  - http://OUR-PLACEHOLDER-URL.com#BGC Benign Glandular Cells
+  effectiveDateTime: 2018-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  RareAbnormalityRecommendation: 
+    action: 'RareCytologyG4.3'
+    text: "For patients 'post-hysterectomy' with benign glandular cells identified via cytology, no further evaluation is recommended (BII)."
+  WhichRarityMadeTheRecommendation: 1

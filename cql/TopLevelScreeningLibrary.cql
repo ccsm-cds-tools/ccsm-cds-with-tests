@@ -77,12 +77,12 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-// TODO: ServiceRequest code element
-define "ServiceRequest Code":
+// TODO: ServiceRequestCode element
+define "ServiceRequestCode":
   null
 
 // TODO: ServiceRequest orderDetail element
-define "ServiceRequest Order Detail":
+define "ServiceRequestOrderDetail":
   null
 
 // TODO: Report errors

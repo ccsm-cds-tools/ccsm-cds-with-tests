@@ -1,0 +1,29 @@
+---
+name: Younger Than 25 Cytologic ASCUS or Above After CIN1 or Less than CIN1 Preceded by Cytologic ASCH AGC AIS or HSIL
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2000-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *ASCHOrHSILLastYear
+- 
+  $iterate: *HistologyCin1OrNormalLastYear
+- 
+  $iterate: *ASCUSOrAboveOrAISThisYear
+
+results:
+  IsIncludedAndNotExcluded: true
+  SpecialPopulationRecommendation: 
+    action: 'Colposcopy'
+    text: 'Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.'
+  WhichPopulationMadeTheRecommendation: 5
