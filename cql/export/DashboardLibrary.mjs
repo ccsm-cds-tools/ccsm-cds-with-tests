@@ -440,6 +440,46 @@ export const DashboardLibrary = {
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "Atypical Endocervical Cells",
+            "id" : "441094005",
+            "display" : "Atypical endocervical cells on cervical Papanicolaou smear (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Benign Endometrial Cells",
+            "id" : "125155008",
+            "display" : "Endometrial cells, cytologically benign, in a postmenopausal woman (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Histiocytes",
+            "id" : "14295007",
+            "display" : "Resident tissue macrophage (cell)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "AGC Favor Neoplasia",
+            "id" : "373883009",
+            "display" : "Atypical glandular cells, favor neoplastic (morphologic abnormality)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Endocervical Cells Favor Neoplasia",
+            "id" : "373882004",
+            "display" : "Atypical endocervical cells, favor neoplastic (morphologic abnormality)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Diagnosis of Genital GvHD",
             "id" : "GenitalGvHD",
             "display" : "Diagnosis of Genital GvHD",
@@ -475,6 +515,22 @@ export const DashboardLibrary = {
             "name" : "Future Pregnancy Concerns Question",
             "id" : "FPCQ",
             "display" : "Does the patient have future pregnancy concerns related to treatment options?",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
+         }, {
+            "name" : "Benign Glandular Cells",
+            "id" : "BGC",
+            "display" : "Benign Glandular Cells",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
+         }, {
+            "name" : "Endometrial Stromal Cells",
+            "id" : "ESC",
+            "display" : "Endometrial stromal cells",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "LOCAL"
@@ -4611,6 +4667,202 @@ export const DashboardLibrary = {
                } ]
             }
          }, {
+            "name" : "RecentRareCytologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "LookBack",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "name" : "CervicalCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "path" : "conclusionCode",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Or",
+                                    "operand" : [ {
+                                       "type" : "Or",
+                                       "operand" : [ {
+                                          "type" : "Or",
+                                          "operand" : [ {
+                                             "type" : "Or",
+                                             "operand" : [ {
+                                                "type" : "Or",
+                                                "operand" : [ {
+                                                   "type" : "Equivalent",
+                                                   "operand" : [ {
+                                                      "name" : "ToConcept",
+                                                      "libraryName" : "FHIRHelpers",
+                                                      "type" : "FunctionRef",
+                                                      "operand" : [ {
+                                                         "name" : "cC",
+                                                         "type" : "AliasRef"
+                                                      } ]
+                                                   }, {
+                                                      "type" : "ToConcept",
+                                                      "operand" : {
+                                                         "name" : "Benign Glandular Cells",
+                                                         "type" : "CodeRef"
+                                                      }
+                                                   } ]
+                                                }, {
+                                                   "type" : "Equivalent",
+                                                   "operand" : [ {
+                                                      "name" : "ToConcept",
+                                                      "libraryName" : "FHIRHelpers",
+                                                      "type" : "FunctionRef",
+                                                      "operand" : [ {
+                                                         "name" : "cC",
+                                                         "type" : "AliasRef"
+                                                      } ]
+                                                   }, {
+                                                      "type" : "ToConcept",
+                                                      "operand" : {
+                                                         "name" : "Benign Endometrial Cells",
+                                                         "type" : "CodeRef"
+                                                      }
+                                                   } ]
+                                                } ]
+                                             }, {
+                                                "type" : "Equivalent",
+                                                "operand" : [ {
+                                                   "name" : "ToConcept",
+                                                   "libraryName" : "FHIRHelpers",
+                                                   "type" : "FunctionRef",
+                                                   "operand" : [ {
+                                                      "name" : "cC",
+                                                      "type" : "AliasRef"
+                                                   } ]
+                                                }, {
+                                                   "type" : "ToConcept",
+                                                   "operand" : {
+                                                      "name" : "Endometrial Stromal Cells",
+                                                      "type" : "CodeRef"
+                                                   }
+                                                } ]
+                                             } ]
+                                          }, {
+                                             "type" : "Equivalent",
+                                             "operand" : [ {
+                                                "name" : "ToConcept",
+                                                "libraryName" : "FHIRHelpers",
+                                                "type" : "FunctionRef",
+                                                "operand" : [ {
+                                                   "name" : "cC",
+                                                   "type" : "AliasRef"
+                                                } ]
+                                             }, {
+                                                "type" : "ToConcept",
+                                                "operand" : {
+                                                   "name" : "Histiocytes",
+                                                   "type" : "CodeRef"
+                                                }
+                                             } ]
+                                          } ]
+                                       }, {
+                                          "type" : "Equivalent",
+                                          "operand" : [ {
+                                             "name" : "ToConcept",
+                                             "libraryName" : "FHIRHelpers",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "cC",
+                                                "type" : "AliasRef"
+                                             } ]
+                                          }, {
+                                             "type" : "ToConcept",
+                                             "operand" : {
+                                                "name" : "AGC Favor Neoplasia",
+                                                "type" : "CodeRef"
+                                             }
+                                          } ]
+                                       } ]
+                                    }, {
+                                       "type" : "Equivalent",
+                                       "operand" : [ {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "cC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }, {
+                                          "type" : "ToConcept",
+                                          "operand" : {
+                                             "name" : "Endocervical Cells Favor Neoplasia",
+                                             "type" : "CodeRef"
+                                          }
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "cC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Atypical Endocervical Cells",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "cC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "AIS",
+                                    "type" : "ValueSetRef"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "AbnormalTestLookbackPeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
             "name" : "HasRecentAbnormalCytologyResults",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4622,16 +4874,33 @@ export const DashboardLibrary = {
                }
             }
          }, {
+            "name" : "HasRecentRareCytologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "RecentRareCytologyResults",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
             "name" : "HasRecentAbnormalScreening",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Or",
                "operand" : [ {
-                  "name" : "HasRecentPositiveHpv",
-                  "type" : "ExpressionRef"
+                  "type" : "Or",
+                  "operand" : [ {
+                     "name" : "HasRecentPositiveHpv",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "HasRecentAbnormalCytologyResults",
+                     "type" : "ExpressionRef"
+                  } ]
                }, {
-                  "name" : "HasRecentAbnormalCytologyResults",
+                  "name" : "HasRecentRareCytologyResults",
                   "type" : "ExpressionRef"
                } ]
             }
@@ -5521,31 +5790,45 @@ export const DashboardLibrary = {
                         "value" : {
                            "type" : "Concatenate",
                            "operand" : [ {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
+                              "type" : "Concatenate",
                               "operand" : [ {
-                                 "type" : "First",
-                                 "source" : {
-                                    "type" : "Flatten",
-                                    "operand" : {
-                                       "type" : "Query",
-                                       "source" : [ {
-                                          "alias" : "$this",
-                                          "expression" : {
-                                             "path" : "name",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "Patient",
-                                                "type" : "ExpressionRef"
+                                 "name" : "ToString",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "First",
+                                    "source" : {
+                                       "type" : "Flatten",
+                                       "operand" : {
+                                          "type" : "Query",
+                                          "source" : [ {
+                                             "alias" : "$this",
+                                             "expression" : {
+                                                "path" : "name",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "Patient",
+                                                   "type" : "ExpressionRef"
+                                                }
                                              }
-                                          }
-                                       } ],
-                                       "where" : {
-                                          "type" : "Not",
-                                          "operand" : {
-                                             "type" : "IsNull",
+                                          } ],
+                                          "where" : {
+                                             "type" : "Not",
                                              "operand" : {
+                                                "type" : "IsNull",
+                                                "operand" : {
+                                                   "path" : "given",
+                                                   "type" : "Property",
+                                                   "source" : {
+                                                      "name" : "$this",
+                                                      "type" : "AliasRef"
+                                                   }
+                                                }
+                                             }
+                                          },
+                                          "return" : {
+                                             "distinct" : false,
+                                             "expression" : {
                                                 "path" : "given",
                                                 "type" : "Property",
                                                 "source" : {
@@ -5554,20 +5837,13 @@ export const DashboardLibrary = {
                                                 }
                                              }
                                           }
-                                       },
-                                       "return" : {
-                                          "distinct" : false,
-                                          "expression" : {
-                                             "path" : "given",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
                                        }
                                     }
-                                 }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " ",
+                                 "type" : "Literal"
                               } ]
                            }, {
                               "name" : "ToString",

@@ -140,6 +140,19 @@ define WhichTableMadeTheRecommendation:
     else null
   end
 
+define CommonAbnormalityGroup:
+  case
+    when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
+    when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
+    when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
+    when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
+    when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
+    else 'N/A'
+  end
+
+define ReflexTestingRecommendationText:
+  'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.'
+
 define J1RecommendationText:
   'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
 
@@ -174,7 +187,7 @@ define PositivePrimaryHpv:
   ) and 
   Collate.MostRecentCytologyCotest is null
 
-define Recommendation:
+define Action:
   case
     when (
       PositivePrimaryHpv and
@@ -182,97 +195,151 @@ define Recommendation:
       not (Collate.MostRecentBiopsyReport.date after Collate.MostRecentHpvReport.date)
     ) then
       {
-        action: '',
-        text: 'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.'
+        short: 'Cytology',
+        date: Today(),
+        details: {
+          ReflexTestingRecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: OneYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        details: {
+          OneYearSurveillanceRecommendationText,
+          J1RecommendationText
+        }
       }
     when (
       AgeInYears() > 65 and
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: OneYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        details: {
+          OneYearSurveillanceRecommendationText,
+          J1RecommendationText,
+          Over65RecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: ThreeYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        details: {
+          ThreeYearSurveillanceRecommendationText,
+          J1RecommendationText
+        }
       }
     when (
       AgeInYears() > 65 and
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: ThreeYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        details: {
+          ThreeYearSurveillanceRecommendationText,
+          J1RecommendationText,
+          Over65RecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: FiveYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 5 years,
+        details: {
+          FiveYearSurveillanceRecommendationText,
+          J1RecommendationText
+        }
       }
     when (
       AgeInYears() > 65 and
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        action: 'Surveillance',
-        text: FiveYearSurveillanceRecommendationText + '\n\n' + J1RecommendationText +  '\n\n' + Over65RecommendationText
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 5 years,
+        details: {
+          FiveYearSurveillanceRecommendationText,
+          J1RecommendationText,
+          Over65RecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and
       TableRecommendation = 'Colposcopy'
     ) then
       {
-        action: TableRecommendation,
-        text: ColposcopyRecommendationText
+        short: TableRecommendation,
+        date: Today(),
+        details: {
+          ColposcopyRecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       TableRecommendation = 'Colposcopy/Treatment'
     ) then
       {
-        action: TableRecommendation,
-        text: ColposcopyOrTreatmentRecommendationText + '\n\n' + TreatmentWithPregnancyConcernsRecommendationText
+        short: TableRecommendation,
+        date: Today(),
+        details: {
+          ColposcopyOrTreatmentRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        }
       }
     when (
       AgeInYears() > 50 and
       TableRecommendation = 'Colposcopy/Treatment'
     ) then
       {
-        action: TableRecommendation,
-        text: ColposcopyOrTreatmentRecommendationText
+        short: TableRecommendation,
+        date: Today(),
+        details: {
+          ColposcopyOrTreatmentRecommendationText
+        }
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       TableRecommendation = 'Treatment'
     ) then
       {
-        action: TableRecommendation,
-        text: TreatmentRecommendationText + '\n\n' + TreatmentWithPregnancyConcernsRecommendationText
+        short: TableRecommendation,
+        date: Today(),
+        details: {
+          TreatmentRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        }
       }
     when (
       AgeInYears() > 50 and
       TableRecommendation = 'Treatment'
     ) then
       {
-        action: TableRecommendation,
-        text: TreatmentRecommendationText
+        short: TableRecommendation,
+        date: Today(),
+        details: {
+          TreatmentRecommendationText
+        }
       }
     else
       null
   end
+
+  define Recommendation: {
+    short: Action.short,
+    date: Action.date,
+    details: Action.details,
+    group: CommonAbnormalityGroup
+  }

@@ -1,6 +1,6 @@
-export const DisplayCervicalCancerMedicalHistory = {
+export const CervicalCancerManagementActivity = {
   "resourceType": "ActivityDefinition",
-  "id": "DisplayCervicalCancerMedicalHistory",
+  "id": "CervicalCancerManagementActivity",
   "meta": {
     "profile": [
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableactivity"
@@ -44,9 +44,9 @@ export const DisplayCervicalCancerMedicalHistory = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory",
-  "name": "DisplayCervicalCancerMedicalHistory",
-  "title": "Display Cervical Cancer Medical History",
+  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity",
+  "name": "CervicalCancerManagementActivity",
+  "title": "CervicalCancerManagementActivity",
   "description": "Natural language description of the activity definition",
   "purpose": "Why this activity definition is defined",
   "usage": "Describes the clinical usage of the activity definition",
@@ -55,19 +55,26 @@ export const DisplayCervicalCancerMedicalHistory = {
       "text": "Insert mesh terms here"
     }
   ],
-  "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/DashboardLibrary|1.0.0"
+  "relatedArtifact": [
+    {
+      "type": "citation",
+      "label": "ASCCP Recommendation",
+      "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
+    }
   ],
-  "kind": "CommunicationRequest",
+  "library": [
+    "http://OUR-PLACEHOLDER-URL.com/Library/ManagementLibrary|1.0.0"
+  ],
+  "kind": "ServiceRequest",
   "intent": "proposal",
   "priority": "routine",
   "dynamicValue": [
     {
-      "path": "payload[0].content.ofType(string)",
+      "path": "orderDetail",
       "expression": {
         "language": "text/cql",
-        "expression": "CervicalCancerScreeningAndMedicalHistory",
-        "reference": "Library/DashboardLibrary|1.0"
+        "expression": "ServiceRequestOrderDetail",
+        "reference": "Library/ManagementLibrary|1.0"
       }
     }
   ]

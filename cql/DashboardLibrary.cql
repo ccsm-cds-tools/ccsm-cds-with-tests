@@ -994,7 +994,7 @@ define Pregnant:
 define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
-    name: First(Patient.name.given) + First(Patient.name.family),
+    name: First(Patient.name.given) + ' ' +First(Patient.name.family),
     id: Patient.identifier.value,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,

@@ -339,6 +339,16 @@ define ThirdMostRecentCytologyResultPostBiopsy:
   else
     null
 
+define MostRecentReports:
+  {
+    MostRecentHpvReport,
+    MostRecentCytologyReport,
+    MostRecentBiopsyReport
+  }
+
+define DateOfMostRecentReport:
+  ToDate(First((MostRecentReports) M sort by date desc).date)
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // TREATMENTS
 

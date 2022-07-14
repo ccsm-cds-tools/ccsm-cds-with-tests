@@ -2432,6 +2432,55 @@ export const CollateManagementData = {
                }
             }
          }, {
+            "name" : "MostRecentReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "name" : "MostRecentHpvReport",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyReport",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentBiopsyReport",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "DateOfMostRecentReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "ToDate",
+               "operand" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "First",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "M",
+                           "expression" : {
+                              "name" : "MostRecentReports",
+                              "type" : "ExpressionRef"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "sort" : {
+                           "by" : [ {
+                              "direction" : "desc",
+                              "path" : "date",
+                              "type" : "ByColumn"
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "Cin2orCin3Biopsies",
             "context" : "Patient",
             "accessLevel" : "Public",
