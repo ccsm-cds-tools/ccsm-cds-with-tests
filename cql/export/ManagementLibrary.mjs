@@ -312,17 +312,17 @@ export const ManagementLibrary = {
                "name" : "SNOMED-CT"
             }
          }, {
-            "name" : "Benign Glandular Cells",
-            "id" : "BGC",
-            "display" : "Benign Glandular Cells",
+            "name" : "Endometrial Stromal Cells",
+            "id" : "ESC",
+            "display" : "Endometrial stromal cells",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "LOCAL"
             }
          }, {
-            "name" : "Endometrial Stromal Cells",
-            "id" : "ESC",
-            "display" : "Endometrial stromal cells",
+            "name" : "Benign Glandular Cells",
+            "id" : "BGC",
+            "display" : "Benign Glandular Cells",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "LOCAL"
@@ -396,21 +396,31 @@ export const ManagementLibrary = {
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "name" : "HasRecentAbnormalScreening",
-                           "type" : "ExpressionRef"
+                           "type" : "Or",
+                           "operand" : [ {
+                              "name" : "HasRecentAbnormalScreening",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "HasHighGradePreCancerCervicalLesion",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "HasHighGradePreCancerCervicalLesion",
+                           "name" : "HasCervicalCancerDiagnoses",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HasCervicalCancerDiagnoses",
-                        "type" : "ExpressionRef"
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "HighGradeOrCancerHistologyResults",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "HighGradeOrCancerHistologyResults",
-                        "libraryName" : "Dash",
+                        "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
+                        "libraryName" : "ManageSpecialPopulation",
                         "type" : "ExpressionRef"
                      }
                   } ]
