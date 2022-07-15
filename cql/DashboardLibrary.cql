@@ -63,6 +63,7 @@ valueset "Kidney Transplant": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.1
 valueset "Diagnosis of Cervical cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.246'
 valueset "Cervical Precancer Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.228'
 valueset "Diethylstilbestrol (DES) exposure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.198'
+valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "Diagnosis of Absence of cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201'
 valueset "Absence of cervix observation": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.202'
 valueset "Colposcopy procedure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.252'
@@ -106,8 +107,12 @@ code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Hu
 code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
+code "SCC": '1162767002' from "SNOMED-CT" display 'Squamous cell carcinoma (morphologic abnormality)'
 code "Atypical Endocervical Cells":	'441094005' from "SNOMED-CT" display 'Atypical endocervical cells on cervical Papanicolaou smear (finding)'
 code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometrial cells, cytologically benign, in a postmenopausal woman (finding)'
+code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
+code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
+code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
@@ -148,7 +153,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "LSIL" then {text: 'LSIL', rank: 3}
         when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
         when c ~ "AGC" then {text: 'AGC', rank: 5}
-        when c in "HSIL" then {text: 'HSIL+', rank: 6}
+        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 6}
         else {text: 'ALL', rank: 0}
       end
   else
@@ -236,7 +241,7 @@ define AbsenceOfCervixDiagnoses:
 
 define PregnancyDiagnoses:
   C3F.Confirmed(
-    C3F.ActiveOrRecurring(
+    C3F.ActiveCondition(
       C3F.ConditionLookBack(
         [Condition: "Pregnancy"] union [Condition: "Pregnancy (New ICD10 codes published in 2018 and 2020)"],
         42 weeks
@@ -306,14 +311,31 @@ define ImmunocompromisedConditions:
 define AbnormalUterineOrVaginalBleedingDiagnoses:
   Common.ValidCondition([Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"])
 
+define PremenopausalConditions:
+  C3F.ActiveOrRecurring(
+    Common.ValidCondition(
+      [Condition: "Premenopausal"] union
+      [Condition: "Premenopausal Menorrhagia"] union
+      [Condition: "Excessive Bleeding in the Premenopausal Period"]
+    )
+  )
+
+define PostmenopausalConditions:
+  Common.ValidCondition(
+    [Condition: "Postmenopausal"]
+  )
+
 define PertinentConditions:
   CervicalCancerDiagnoses union
   CervicalPrecancerDisorders union
+  CervicalOrVaginalLesionDiagnoses union
   DesExposureDiagnoses union
   AbsenceOfCervixDiagnoses union
   PregnancyDiagnoses union
   ImmunocompromisedConditions union
-  AbnormalUterineOrVaginalBleedingDiagnoses
+  AbnormalUterineOrVaginalBleedingDiagnoses union
+  PremenopausalConditions union
+  PostmenopausalConditions
 
 define PertinentConditionsSummary:
   (PertinentConditions) C
@@ -370,12 +392,24 @@ define AbsenceOfCervixObservations:
       [Observation: "Absence of cervix observation"]
     )
 
+define PremenopausalObservations:
+  C3F.Verified(
+    [Observation: "Premenopausal"]
+  )
+
+define PostmenopausalObservations:
+  C3F.Verified(
+    [Observation: "Postmenopausal"]
+  )
+
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
   AbsenceOfCervixObservations union
+  PremenopausalObservations union
+  PostmenopausalObservations union
   // Clinician-provided Observations:
   ResponsesToAbnormalBleedingQuestion union
   ResponsesToVisibleLesionQuestion union

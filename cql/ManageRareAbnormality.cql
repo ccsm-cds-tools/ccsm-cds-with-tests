@@ -181,27 +181,13 @@ define CytologyInterpretedAsHistiocytes:
       return aC ~ "Histiocytes"
   )
 
-define PremenopausalObservations:
-  C3F.Verified(
-    [Observation: "Premenopausal"] union
-    [Observation: "Premenopausal Menorrhagia"] union
-    [Observation: "Excessive Bleeding in the Premenopausal Period"]
-  )
+define HasPremenopausalObservationOrCondition:
+  Exists(Dash.PremenopausalObservations) or
+  Exists(Dash.PremenopausalConditions)
 
-define HasPremenopausalObservation:
-  Exists(PremenopausalObservations)
-
-define PostmenopausalObservations:
-  C3F.Verified(
-    [Observation: "Postmenopausal"]
-  )
-
-define HasPostmenopausalObservation:
-  Exists(PostmenopausalObservations)
-
-//define Pregnant:
-//  Exists(Dash.PregnancyDiagnoses) or
-//  Exists(Dash.PregnancyObservations)
+define HasPostmenopausalObservationOrCondition:
+  Exists(Dash.PostmenopausalObservations) or
+  Exists(Dash.PostmenopausalConditions)
 
 define HistologyInterpretedAsCin1:
   AnyTrue(
@@ -458,7 +444,8 @@ define RecommendationForRareCytology:
       }
     // G.4 Benign Endometrial Cells in Premenopausal Patients or Benign Glandular Cells in Posthysterectomy patients
     when ( //G4.1
-      HasPremenopausalObservation and
+      HasPremenopausalObservationOrCondition and
+      not HasPostmenopausalObservationOrCondition and
       not Symptomatic.IsSymptomatic and
       MostRecentCytologyReportWasWithinPastFiveYears and
       (
@@ -476,7 +463,7 @@ define RecommendationForRareCytology:
         }
       }
     when ( //G4.2
-      HasPostmenopausalObservation and
+      HasPostmenopausalObservationOrCondition and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyInterpretedAsBenignEndometrialCells
     ) then
@@ -1490,7 +1477,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
           'In patients treated for histologic or cytologic HSIL, after the initial HPV-based test at 6 months, annual HPV or cotesting is preferred until 3 consecutive negative tests have been obtained (AII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
         }
       }
-    when ( // J3.2
+    when ( // J3.2, Part 1
       HasTreatmentForHighGradeHistologyOrCytology and
       TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
       InitialIntensiveSurveillancePeriod
@@ -1501,6 +1488,19 @@ define RecommendationForSurveillanceAfterAbnormalities:
         group: 'Management Surveillance (J.3.2)',
         details: {
           'In patients treated for histologic or cytologic HSIL, after the initial intensive surveillance period, continued surveillance at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology (histologic HSIL, CIN 2, CIN 3, or AIS) or high-grade cytology (HSIL, AGC, or persistent ASC-H) even if this is beyond the age of 65 years (BII). When patients with a history of treated high-grade histology or cytology reach the age of 65 years, if they have completed the initial 25-year surveillance period, continued surveillance at 3-year intervals is acceptable and may continue as long as the patient is in reasonably good health (BIII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.'
+        }
+      }
+    when ( // J3.2, Part 2
+      HasTreatmentForHighGradeHistologyOrCytology and
+      TreatmentForHighGradeHistologyOrCytologyDate < Now() - 25 years and
+      InitialIntensiveSurveillancePeriod
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Management Surveillance (J.3.2)',
+        details: {
+          'Continued surveillance with HPV testing or cotesting at 3-year intervals for at least 25 years is recommended after treatment and initial post-treatment management of histologic HSIL, CIN 2, CIN 3, or AIS.'
         }
       }
     else
