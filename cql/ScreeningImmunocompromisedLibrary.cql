@@ -295,7 +295,7 @@ define ProposedDateOfNextScreening:
 
 define ProposeImmediateTesting:
   Count(NilmCytologyReportsSinceImmunosuppressionOnset) = 0 or
-  ProposedDateOfNextScreening same or before Today()
+  ProposedDateOfNextScreening same or before Now()
 
 define RecommendationText:
   if ProposeImmediateTesting then

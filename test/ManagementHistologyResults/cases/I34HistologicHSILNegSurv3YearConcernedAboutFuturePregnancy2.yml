@@ -1,5 +1,5 @@
 ---
-name: I3.4 Management of Histologic HSIL and Negative Surveillance for 3 Years in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes 
+name: I3.4 Management of Histologic HSIL and Negative Surveillance for 3 Years in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes (4 neg surveillance)
 
 externalData:
 - resources
@@ -14,14 +14,19 @@ data:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
-- 
-  $iterate: *UnspecifiedHSILorCIN2FiveYearsAgo
-- 
+-  
   resourceType: Observation
   code: http://OUR-PLACEHOLDER-URL.com#FPCQ Does the patient have future pregnancy concerns related to treatment options?
   status: final
   valueCodeableConcept: SNOMEDCT#373066001 Yes (qualifier value)
   effectiveDateTime: 2021-06-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#22725004 High-grade squamous intraepithelial lesion (morphologic abnormality)
+  effectiveDateTime: 2017-06-01  
 -
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
@@ -80,20 +85,6 @@ data:
   effectiveDateTime: 2019-06-01  
 - 
   resourceType: DiagnosticReport
-<<<<<<< HEAD
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2019-12-01
-- resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
-  effectiveDateTime: 2019-12-01  
-- resourceType: DiagnosticReport
-=======
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
@@ -101,57 +92,28 @@ data:
   effectiveDateTime: 2019-06-01   
 - 
   resourceType: DiagnosticReport
->>>>>>> cf9ba81 (Test branch (#23))
   code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
   conclusionCode:
   - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2020-06-01
-<<<<<<< HEAD
-- resourceType: DiagnosticReport
-=======
+  effectiveDateTime: 2020-07-01
 - 
   resourceType: DiagnosticReport
->>>>>>> cf9ba81 (Test branch (#23))
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: final
   conclusionCode:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
-<<<<<<< HEAD
-  effectiveDateTime: 2020-06-01  
-- resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
-  effectiveDateTime: 2020-12-01
-- resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
-  effectiveDateTime: 2020-12-01
-=======
-  effectiveDateTime: 2020-06-01
+  effectiveDateTime: 2020-07-01
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
   - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
-  effectiveDateTime: 2020-06-01 
->>>>>>> cf9ba81 (Test branch (#23))
--
-  $iterate: *NegativeSurveillanceHistologyThisYear
--
-  $iterate: *NegativeSurveillanceCytologyThisYear
+  effectiveDateTime: 2020-07-01 
 
 results:
   IsIncludedAndNotExcluded: true
   RareAbnormalityRecommendation: 
     action: 'ManagementHistologyI3'
-<<<<<<< HEAD
-    text: 'Surveillance testing with colposcopy and HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
-=======
     text: 'Surveillance with HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
->>>>>>> cf9ba81 (Test branch (#23))

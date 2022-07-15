@@ -1485,10 +1485,7 @@ export const ScreeningImmunocompromisedLibrary = {
                      "name" : "ProposedDateOfNextScreening",
                      "type" : "ExpressionRef"
                   }, {
-                     "type" : "ToDateTime",
-                     "operand" : {
-                        "type" : "Today"
-                     }
+                     "type" : "Now"
                   } ]
                } ]
             }
