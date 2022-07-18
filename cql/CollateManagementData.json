@@ -2436,47 +2436,91 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "List",
-               "element" : [ {
-                  "name" : "MostRecentHpvReport",
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "M",
+                  "expression" : {
+                     "type" : "List",
+                     "element" : [ {
+                        "name" : "MostRecentHpvReport",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "MostRecentCytologyReport",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "M",
+                        "type" : "AliasRef"
+                     }
+                  }
+               },
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "M",
+                     "type" : "Property"
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "desc",
+                     "type" : "ByDirection"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "First",
+               "source" : {
+                  "name" : "MostRecentReports",
                   "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyReport",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyReport",
-                  "type" : "ExpressionRef"
-               } ]
+               }
             }
          }, {
             "name" : "DateOfMostRecentReport",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "ToDate",
-               "operand" : {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "type" : "First",
-                     "source" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "M",
-                           "expression" : {
-                              "name" : "MostRecentReports",
-                              "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "sort" : {
-                           "by" : [ {
-                              "direction" : "desc",
-                              "path" : "date",
-                              "type" : "ByColumn"
-                           } ]
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentReport",
+                           "type" : "ExpressionRef"
                         }
                      }
+                  }
+               },
+               "then" : {
+                  "type" : "ToDate",
+                  "operand" : {
+                     "name" : "MostRecentReport",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Date",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
                   }
                }
             }

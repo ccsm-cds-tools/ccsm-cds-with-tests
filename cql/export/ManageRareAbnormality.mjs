@@ -1095,101 +1095,48 @@ export const ManageRareAbnormality = {
                }
             }
          }, {
-            "name" : "PremenopausalObservations",
+            "name" : "HasPremenopausalObservationOrCondition",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "Verified",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
+               "type" : "Or",
                "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "type" : "Union",
-                     "operand" : [ {
-                        "dataType" : "{http://hl7.org/fhir}Observation",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                        "codeProperty" : "code",
-                        "codeComparator" : "in",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "name" : "Premenopausal",
-                           "type" : "ValueSetRef"
-                        }
-                     }, {
-                        "dataType" : "{http://hl7.org/fhir}Observation",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                        "codeProperty" : "code",
-                        "codeComparator" : "~",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "type" : "ToList",
-                           "operand" : {
-                              "name" : "Premenopausal Menorrhagia",
-                              "type" : "CodeRef"
-                           }
-                        }
-                     } ]
-                  }, {
-                     "dataType" : "{http://hl7.org/fhir}Observation",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                     "codeProperty" : "code",
-                     "codeComparator" : "~",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "type" : "ToList",
-                        "operand" : {
-                           "name" : "Excessive Bleeding in the Premenopausal Period",
-                           "type" : "CodeRef"
-                        }
-                     }
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "HasPremenopausalObservation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "PremenopausalObservations",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "PostmenopausalObservations",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Verified",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Observation",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                  "codeProperty" : "code",
-                  "codeComparator" : "~",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "Postmenopausal",
-                        "type" : "CodeRef"
-                     }
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PremenopausalObservations",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PremenopausalConditions",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }
          }, {
-            "name" : "HasPostmenopausalObservation",
+            "name" : "HasPostmenopausalObservationOrCondition",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "PostmenopausalObservations",
-                  "type" : "ExpressionRef"
-               }
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PostmenopausalObservations",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "PostmenopausalConditions",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
             }
          }, {
             "name" : "HistologyInterpretedAsCin1",
@@ -2798,8 +2745,17 @@ export const ManageRareAbnormality = {
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "HasPremenopausalObservation",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasPremenopausalObservationOrCondition",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "name" : "HasPostmenopausalObservationOrCondition",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
                            }, {
                               "type" : "Not",
                               "operand" : {
@@ -2868,7 +2824,7 @@ export const ManageRareAbnormality = {
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "HasPostmenopausalObservation",
+                           "name" : "HasPostmenopausalObservationOrCondition",
                            "type" : "ExpressionRef"
                         }, {
                            "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
@@ -10640,6 +10596,68 @@ export const ManageRareAbnormality = {
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "In patients treated for histologic or cytologic HSIL, after the initial intensive surveillance period, continued surveillance at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology (histologic HSIL, CIN 2, CIN 3, or AIS) or high-grade cytology (HSIL, AGC, or persistent ASC-H) even if this is beyond the age of 65 years (BII). When patients with a history of treated high-grade histology or cytology reach the age of 65 years, if they have completed the initial 25-year surveillance period, continued surveillance at 3-year intervals is acceptable and may continue as long as the patient is in reasonably good health (BIII). Discontinuation of screening is recommended if a patient has a limited life expectancy. Management according to the highest-grade abnormality found on histology or cytology is recommended.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "HasTreatmentForHighGradeHistologyOrCytology",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Less",
+                           "operand" : [ {
+                              "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 25,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "InitialIntensiveSurveillancePeriod",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "See Details",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Management Surveillance (J.3.2)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Continued surveillance with HPV testing or cotesting at 3-year intervals for at least 25 years is recommended after treatment and initial post-treatment management of histologic HSIL, CIN 2, CIN 3, or AIS.",
                               "type" : "Literal"
                            } ]
                         }
