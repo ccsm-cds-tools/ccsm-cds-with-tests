@@ -2632,15 +2632,47 @@
                "libraryName" : "C3F",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Observation",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-                  "codeProperty" : "code",
-                  "codeComparator" : "in",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "name" : "Premenopausal",
-                     "type" : "ValueSetRef"
-                  }
+                  "type" : "Union",
+                  "operand" : [ {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}Observation",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                        "codeProperty" : "code",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Premenopausal",
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "dataType" : "{http://hl7.org/fhir}Observation",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                        "codeProperty" : "code",
+                        "codeComparator" : "~",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "type" : "ToList",
+                           "operand" : {
+                              "name" : "Premenopausal Menorrhagia",
+                              "type" : "CodeRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "dataType" : "{http://hl7.org/fhir}Observation",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Excessive Bleeding in the Premenopausal Period",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  } ]
                } ]
             }
          }, {

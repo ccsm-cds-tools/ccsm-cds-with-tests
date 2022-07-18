@@ -2034,7 +2034,7 @@ export const ManageRareAbnormality = {
                         "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Rare Cytology G1.4",
+                           "value" : "Rare Cytology (G.1.4)",
                            "type" : "Literal"
                         }
                      }, {
@@ -2401,13 +2401,20 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Repeat Screening",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "Add",
+                           "operand" : [ {
+                              "type" : "Today"
+                           }, {
+                              "value" : 2,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
                         }
                      }, {
                         "name" : "group",
@@ -2472,13 +2479,20 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Cytology/Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "Add",
+                           "operand" : [ {
+                              "type" : "Today"
+                           }, {
+                              "value" : 2,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
                         }
                      }, {
                         "name" : "group",
@@ -2543,7 +2557,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colpolscopy",
+                           "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {

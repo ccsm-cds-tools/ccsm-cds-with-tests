@@ -394,7 +394,9 @@ define AbsenceOfCervixObservations:
 
 define PremenopausalObservations:
   C3F.Verified(
-    [Observation: "Premenopausal"]
+    [Observation: "Premenopausal"] union
+    [Observation: "Premenopausal Menorrhagia"] union
+    [Observation: "Excessive Bleeding in the Premenopausal Period"]
   )
 
 define PostmenopausalObservations:

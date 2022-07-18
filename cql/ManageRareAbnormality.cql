@@ -291,7 +291,7 @@ define RecommendationForRareCytology:
       {
         short: 'Surveillance',
         date: Collate.DateOfMostRecentReport + 1 year,
-        group: 'Rare Cytology G1.4',
+        group: 'Rare Cytology (G.1.4)',
         details: {
           'For patients with cytology showing AGC not otherwise specified or atypical endocervical cells not otherwise specified in whom histologic HSIL (CIN 2+) or AIS/cancer is not identified, cotesting at one and two years is recommended. If both cotests are negative, repeat cotesting at 3 years is recommended. If any test is abnormal, then colposcopy is recommended (BII).'
         }
@@ -374,8 +374,8 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Repeat Screening',
+        date: Today() + 2 months,
         group: 'Rare Cytology (G.2.1)',
         details: {
           'For patients with an unsatisfactory cytology result and no, unknown, or a negative HPV test result, repeat age-based screening (cytology, cotest, or primary HPV test) in 2 to 4 months is recommended (BIII). Triage using HPV testing is not recommended (DIII). Before repeat cytology, treatment to resolve atrophy or obscuring inflammation when a specific infection is present is acceptable (CIII).'
@@ -388,8 +388,8 @@ define RecommendationForRareCytology:
       AgeInYears() >= 25
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Cytology/Colposcopy',
+        date: Today() + 2 months,
         group: 'Rare Cytology (G.2.2)',
         details: {
           'For patients 25 years and older who are cotested and have unsatisfactory cytology and a positive HPV test without genotyping for HPV 16 or HPV 18, repeat cytology in 2 to 4 months or colposcopy is acceptable (BII).'
@@ -402,7 +402,7 @@ define RecommendationForRareCytology:
       AgeInYears() >= 25
     ) then
       {
-        short: 'Colpolscopy',
+        short: 'Colposcopy',
         date: Today(),
         group: 'Rare Cytology (G.2.3)',
         details: {
