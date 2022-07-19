@@ -4262,6 +4262,60 @@
                }
             }
          }, {
+            "name" : "DateK41",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "type" : "Add",
+                  "operand" : [ {
+                     "name" : "CervixRemovalDate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "value" : 1,
+                     "unit" : "year",
+                     "type" : "Quantity"
+                  } ]
+               },
+               "else" : {
+                  "type" : "Add",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "type" : "Last",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "value" : 1,
+                     "unit" : "year",
+                     "type" : "Quantity"
+                  } ]
+               }
+            }
+         }, {
             "name" : "RecommendationForManagingPatientsAfterHysterectomy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4305,13 +4359,17 @@
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Primary HPV or Cotest",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "ToDate",
+                           "operand" : {
+                              "name" : "DateK41",
+                              "type" : "ExpressionRef"
+                           }
                         }
                      }, {
                         "name" : "group",
@@ -4367,13 +4425,22 @@
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Primary HPV or Cotest",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
                         }
                      }, {
                         "name" : "group",

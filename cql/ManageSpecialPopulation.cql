@@ -684,6 +684,12 @@ define InitialIntensiveSurveillancePeriodPostHysterectomy:
   else
     false
 
+define DateK41:
+  if Count(NegativeSurveillanceTestsAfterHysterectomy) = 0 then 
+    CervixRemovalDate + 1 year
+  else
+    Last(NegativeSurveillanceTestsAfterHysterectomy).date + 1 year
+
 define RecommendationForManagingPatientsAfterHysterectomy:
   case
     when ( // K4.1
@@ -692,8 +698,8 @@ define RecommendationForManagingPatientsAfterHysterectomy:
       not InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Primary HPV or Cotest',
+        date: ToDate(DateK41),
         group: 'Hysterectomy (K.4)',
         details: {
           'Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.'
@@ -705,8 +711,8 @@ define RecommendationForManagingPatientsAfterHysterectomy:
       InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Primary HPV or Cotest',
+        date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
           'HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).'
