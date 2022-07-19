@@ -157,7 +157,7 @@ define J1RecommendationText:
   'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
 
 define TreatmentWithPregnancyConcernsRecommendationText:
-  'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+  'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
 
 define OneYearSurveillanceRecommendationText:
   'When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).'
@@ -169,7 +169,7 @@ define FiveYearSurveillanceRecommendationText:
   'When patients have an estimated 5-year CIN 3+ risk of less than 0.15% based on past history and current test results, return to routine screening at 5-year intervals using HPV-based testing is recommended (AII).'
 
 define ColposcopyRecommendationText:
-  'For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
+  'For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII). Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
 
 define ColposcopyOrTreatmentRecommendationText:
   'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ 25% or greater and less than 60% based on history and current results, treatment using an excisional procedure without previous biopsy confirmation or histologic evaluation with colposcopy and biopsy are both acceptable (AII).'
@@ -292,7 +292,7 @@ define Action:
       TableRecommendation = 'Colposcopy/Treatment'
     ) then
       {
-        short: TableRecommendation,
+        short: 'Colposcopy or Treatment',
         date: Today(),
         details: {
           ColposcopyOrTreatmentRecommendationText,
@@ -304,7 +304,7 @@ define Action:
       TableRecommendation = 'Colposcopy/Treatment'
     ) then
       {
-        short: TableRecommendation,
+        short: 'Colposcopy or Treatment',
         date: Today(),
         details: {
           ColposcopyOrTreatmentRecommendationText

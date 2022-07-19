@@ -619,7 +619,7 @@ export const ManageCommonAbnormality = {
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+               "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
                "type" : "Literal"
             }
          }, {
@@ -655,7 +655,7 @@ export const ManageCommonAbnormality = {
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
+               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII). Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
                "type" : "Literal"
             }
          }, {
@@ -1431,8 +1431,9 @@ export const ManageCommonAbnormality = {
                      "element" : [ {
                         "name" : "short",
                         "value" : {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
@@ -1491,8 +1492,9 @@ export const ManageCommonAbnormality = {
                      "element" : [ {
                         "name" : "short",
                         "value" : {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
