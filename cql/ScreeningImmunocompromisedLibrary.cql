@@ -20,7 +20,6 @@ include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 include DashboardLibrary version '1.0.0' called Dash
 include CCSMCommonFunctions version '1.0.0' called Common
-include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
 // PARAMETERS
@@ -61,7 +60,7 @@ define Immunocompromised:
   Dash.Immunocompromised
 
 define IsIncluded:
-  Entry.FemaleorTransgenderMale and
+  Dash.FemaleorTransgenderMale and
   Immunocompromised
 
 //------------------------------------------------------------------------------
@@ -327,6 +326,19 @@ define RecommendImmediateCervicalCytology:
 define RecommendImmediateCotesting:
   ProposeImmediateTesting and
   Age30AndOlder
+
+define ActionShort:
+  if ProposeImmediateTesting then 'Cervical Screening Due Now'
+  else 'Cervical Screening Up To Date'
+
+define Recommendation:
+  if IsIncludedAndNotExcluded then {
+    short: ActionShort,
+    date: ToDate(ProposedDateOfNextScreening),
+    details: { RecommendationText },
+    group: 'Screening: Immunocompromised'
+  }
+  else null
 
 //------------------------------------------------------------------------------
 // ERRORS

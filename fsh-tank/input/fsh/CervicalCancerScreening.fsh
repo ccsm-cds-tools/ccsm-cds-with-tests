@@ -19,104 +19,42 @@ Usage: #definition
 * topic[+].text = "Public Health"
 * topic[+].text = "Cervical Cancer"
 * topic[+].text = "Cancer Screening"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "Symptomatic"
-* relatedArtifact[=].display = "ASCCP Clinical Practice Statement: Evaluation of the Cervix in Patient with Abnormal Vaginal Bleeding (2017)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "In utero DES exposure"
-* relatedArtifact[=].display = "ACOG Cervical Cancer Screening and Prevention. Practice Bulletin No. 168 (2016)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "In utero DES exposure"
-* relatedArtifact[=].display = "Rubin MM. Antenatal Exposure to DES: Lessons Learned…Future Concerns (August 2007)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "In utero DES exposure"
-* relatedArtifact[=].display = "NCI DES and Cancer (May 2020)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "Immunocompromised"
-* relatedArtifact[=].display = "Guidelines for Prevention and Treatment of Opportunistic Infections in Adults and Adolescents with HIV (2020)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "Immunocompromised"
-* relatedArtifact[=].display = "Moscicki, A.B., et al. Guidelines for Cervical Cancer Screening Immunosuppressed Women without HIV Infection (2019)"
-* relatedArtifact[+].type = $RATYPE#citation "Citation"
-* relatedArtifact[=].label = "USPSTF Recommendation"
-* relatedArtifact[=].display = "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-* library = Canonical(TopLevelScreeningLibrary|1.0.0)
+* library = Canonical(ScreeningLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Top-level action just includes inclusion and exclusion criteria
 // -----------------------------------------------------------------------------
 * action[+].title = "Cervical Cancer Screening Actions"
 * action[=].description = "Top level action that defines trigger and criteria for inclusion and exclusion."
+* action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].documentation[+].type = $RATYPE#documentation "Documentation"
+* action[=].documentation[=].label = "Inclusions"
 * action[=].documentation[=].display = "Appropriate for individuals whose sex at birth is recorded as Female or whose gender identity is recorded as Transgender Male."
 * action[=].trigger[+].type = $TTYPE#named-event "Named Event"
 * action[=].trigger[=].name = "encounter-start" // CDS Hook name
 * action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].condition[=].expression.expression = "IsIncludedAndNotExcluded"
-* action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
+* action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 // -----------------------------------------------------------------------------
-// Sub-action #1: Symptomatic Individuals
+// Action #1: Display pertinent medical and screening history
 // -----------------------------------------------------------------------------
-* action[=].action[+].title = "Cervical Cancer Screening Actions (Symptomatic Individuals)"
-* action[=].action[=].description = "Top level action for screening of symptomatic individuals that defines trigger and criteria for inclusion and exclusion."
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "Symptomatic"
-* action[=].action[=].documentation[=].display = "ASCCP Clinical Practice Statement: Evaluation of the Cervix in Patient with Abnormal Vaginal Bleeding (2017)"
+* action[=].action[+].title = "Display pertinent medical history"
+* action[=].action[=].description = "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard"
+* action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0.0)
+// -----------------------------------------------------------------------------
+// Action #2: Screening Recommendations
+// -----------------------------------------------------------------------------
+* action[=].action[+].title = "Screening Recommendations"
+* action[=].action[=].description = "Brief description of the action"
+* action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
-* action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningSymptomaticIndividuals|1.0.0)
+* action[=].action[=].condition[=].expression.expression = "HasRecommendation"
+* action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActions|1.0.0)
 // -----------------------------------------------------------------------------
-// Sub-action #2: Individuals with Exposure to DES
-// -----------------------------------------------------------------------------
-* action[=].action[+].title = "Cervical Cancer Screening Actions (In Utero DES Exposure)"
-* action[=].action[=].description = "Top level action for screening of individuals exposed to DES in utero that defines trigger and criteria for inclusion and exclusion."
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "In utero DES exposure"
-* action[=].action[=].documentation[=].display = "ACOG Cervical Cancer Screening and Prevention. Practice Bulletin No. 168 (2016)"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "In utero DES exposure"
-* action[=].action[=].documentation[=].display = "Rubin MM. Antenatal Exposure to DES: Lessons Learned…Future Concerns (August 2007)"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "In utero DES exposure"
-* action[=].action[=].documentation[=].display = "NCI DES and Cancer (May 2020)"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
-* action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningDesExposure|1.0.0)
-// -----------------------------------------------------------------------------
-// Sub-action #3: Immunocompromised Individuals
-// -----------------------------------------------------------------------------
-* action[=].action[+].title = "Cervical Cancer Screening Actions (Immunocompromised Individuals)"
-* action[=].action[=].description = "Top level action for screening of immunocompromised individuals that defines trigger and criteria for inclusion and exclusion."
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "Immunocompromised"
-* action[=].action[=].documentation[=].display = "Guidelines for Prevention and Treatment of Opportunistic Infections in Adults and Adolescents with HIV (2020)"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "Immunocompromised"
-* action[=].action[=].documentation[=].display = "Moscicki, A.B., et al. Guidelines for Cervical Cancer Screening Immunosuppressed Women without HIV Infection (2019)"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
-* action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningImmunocompromisedIndividuals|1.0.0)
-// -----------------------------------------------------------------------------
-// Sub-action #4: Average Risk Individuals
-// -----------------------------------------------------------------------------
-* action[=].action[+].title = "Cervical Cancer Screening Actions (Average Risk)"
-* action[=].action[=].description = "Top level action for average risk screening that defines trigger and criteria for inclusion and exclusion."
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "USPSTF Recommendation"
-* action[=].action[=].documentation[=].display = "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "NoErrorsHaveOccurred"
-* action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningAverageRisk|1.0.0)
-// -----------------------------------------------------------------------------
-// Sub-action #5: 
+// Action #3: Handle Errors
 // -----------------------------------------------------------------------------
 * action[=].action[+].title = "Handle Errors"
 * action[=].action[=].description = "Brief description of the action"
@@ -124,6 +62,5 @@ Usage: #definition
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
-* action[=].action[=].condition[=].expression.reference = "Library/TopLevelScreeningLibrary|1.0"
+* action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)
-// TODO: Add dynamic value for error message

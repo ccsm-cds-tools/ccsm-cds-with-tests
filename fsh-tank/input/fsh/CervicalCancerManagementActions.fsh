@@ -24,7 +24,11 @@ Usage: #definition
 * action[+].title = "Management Decision Aids"
 * action[=].description = "Management Decision Aids"
 * action[=].textEquivalent = "Management Decision Aids"
-* action[=].definitionCanonical = Canonical(CervicalCancerManagementDecisionAids|1.0.0)
+* action[=].definitionCanonical = Canonical(CervicalCancerDecisionAids|1.0.0)
+* action[=].dynamicValue[+].path = "payload[0].content.ofType(string)" // this is the CommunicationRequest.payload element
+* action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].dynamicValue[=].expression.expression = "DecisionAids"
+* action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 // -----------------------------------------------------------------------------
 // Action #2: Recommended Management Activities
 // -----------------------------------------------------------------------------

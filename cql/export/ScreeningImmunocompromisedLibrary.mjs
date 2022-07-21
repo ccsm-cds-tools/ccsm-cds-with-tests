@@ -39,10 +39,6 @@ export const ScreeningImmunocompromisedLibrary = {
             "localIdentifier" : "Common",
             "path" : "CCSMCommonFunctions",
             "version" : "1.0.0"
-         }, {
-            "localIdentifier" : "Entry",
-            "path" : "TopLevelScreeningLibrary",
-            "version" : "1.0.0"
          } ]
       },
       "parameters" : {
@@ -90,7 +86,7 @@ export const ScreeningImmunocompromisedLibrary = {
                "type" : "And",
                "operand" : [ {
                   "name" : "FemaleorTransgenderMale",
-                  "libraryName" : "Entry",
+                  "libraryName" : "Dash",
                   "type" : "ExpressionRef"
                }, {
                   "name" : "Immunocompromised",
@@ -1672,6 +1668,118 @@ export const ScreeningImmunocompromisedLibrary = {
                   "name" : "Age30AndOlder",
                   "type" : "ExpressionRef"
                } ]
+            }
+         }, {
+            "name" : "ActionShort",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "ProposeImmediateTesting",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Screening Due Now",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Screening Up To Date",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "Recommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "short",
+                     "value" : {
+                        "name" : "ActionShort",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "ToDate",
+                        "operand" : {
+                           "name" : "ProposedDateOfNextScreening",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "details",
+                     "value" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "name" : "RecommendationText",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  }, {
+                     "name" : "group",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Screening: Immunocompromised",
+                        "type" : "Literal"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "group",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
             }
          }, {
             "name" : "ErrorCotestWithMissingHpvResult",

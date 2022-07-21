@@ -29,6 +29,7 @@ codesystem "SNOMED-CT": 'http://snomed.info/sct'
 codesystem "RXNORM": 'http://www.nlm.nih.gov/research/umls/rxnorm'
 codesystem "ICD-9": 'http://hl7.org/fhir/sid/icd-9-cm'
 codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
+codesystem "GENDER-IDENTITY": 'http://hl7.org/fhir/gender-identity'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 // Symptomatic value sets
@@ -88,6 +89,7 @@ valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.103
 valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 // Standard codes
+code "Transgender Male Code": 'transgender-male' from "GENDER-IDENTITY" display 'transgender male'
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
@@ -217,6 +219,56 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 
 define PatientAge:
   AgeInYears()
+
+// Sex assigned at birth
+define BirthSex:
+  Patient.extension E
+    where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'
+
+define BirthSexPresent:
+  exists(BirthSex)
+
+define FemaleBirthSex:
+  exists(
+    BirthSex E
+      where E.value = 'F'
+  )
+
+define UnknownBirthSex:
+  exists(
+    BirthSex E
+      where (
+        E.value = 'ASKU' or
+        E.value = 'OTH' or
+        E.value = 'UNK'
+      )
+  )
+
+define BirthSexMissingOrUnknown:
+  not BirthSexPresent or 
+  UnknownBirthSex
+
+// Patient Gender
+define FemaleGender:
+  Patient.gender.value = 'female'
+
+define Female:
+  FemaleBirthSex or
+  (BirthSexMissingOrUnknown and FemaleGender)
+
+define GenderIdentity:
+  Patient.extension E
+    where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
+      E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
+
+define TransgenderMale:
+  exists(
+    GenderIdentity E
+      where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+  )
+
+define FemaleorTransgenderMale:
+  Female or TransgenderMale
 
 //------------------------------------------------------------------------------
 // PERTINENT CONDITIONS

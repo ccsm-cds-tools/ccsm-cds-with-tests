@@ -19,7 +19,6 @@ using FHIR version '4.0.1'
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include CCSMCommonFunctions version '1.0.0' called Common
-include TopLevelScreeningLibrary version '1.0.0' called Entry
 include DashboardLibrary version '1.0.0' called Dash
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
 include ScreeningDesExposureLibrary version '1.0.0' called DesExposure
@@ -65,7 +64,7 @@ define IsIncluded:
       AgeInYears() > 65
     )
   ) and
-  Entry.FemaleorTransgenderMale
+  Dash.FemaleorTransgenderMale
 
 // TODO: Add Grade D Inclusions (negative recommendations) for patients < 21
 
@@ -285,6 +284,11 @@ define RecommendImmediateCotesting:
     )
   )
 
+define RecommendImmediateScreening:
+  RecommendImmediateCervicalCytology or
+  RecommendImmediatePrimaryHpv or
+  RecommendImmediateCotesting
+
 define RecommendationText:
   if IsIncludedAndNotExcluded then
     if (
@@ -295,11 +299,7 @@ define RecommendationText:
     else
       if AgeOver65 then
         if AllowGradeDRecommendation then
-          if (
-            RecommendImmediateCervicalCytology or
-            RecommendImmediatePrimaryHpv or
-            RecommendImmediateCotesting
-          ) then
+          if RecommendImmediateScreening then
             if LastScreeningType != 'n/a' then
               'Per USPSTF guidelines, this patient is due for cervical cancer screening because they have not been adequately screened in the past. ' +
               'Adequate testing is defined as having: 1) three consecutive negative cytology results within 10 years prior to screening, ' +
@@ -321,17 +321,26 @@ define RecommendationText:
         else
           null
       else // Age 65 or younger
-        if (
-          RecommendImmediateCervicalCytology or
-          RecommendImmediatePrimaryHpv or
-          RecommendImmediateCotesting
-        ) then
+        if RecommendImmediateScreening then
           'Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
         else
           LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) +
           '. Note: ' + LastScreeningType + ' seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
   else
     null
+
+define ActionShort:
+  if RecommendImmediateScreening then 'Cervical Screening Due Now'
+  else 'Cervical Screening Up To Date'
+
+define Recommendation: 
+  if IsIncludedAndNotExcluded then{
+    short: ActionShort,
+    date: ToDate(ProposedScreeningDate),
+    details: { RecommendationText },
+    group: 'Screening: Average Risk'
+  }
+  else null
 
 //------------------------------------------------------------------------------
 // ERRORS

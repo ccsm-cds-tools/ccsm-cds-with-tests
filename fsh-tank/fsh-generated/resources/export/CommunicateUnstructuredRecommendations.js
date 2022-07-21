@@ -56,7 +56,7 @@ export const CommunicateUnstructuredRecommendations = {
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/TopLevelScreeningLibrary|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
   ],
   "kind": "CommunicationRequest",
   "intent": "proposal",

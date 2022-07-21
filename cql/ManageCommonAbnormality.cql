@@ -337,9 +337,9 @@ define Action:
       null
   end
 
-  define Recommendation: {
-    short: Action.short,
-    date: Action.date,
-    details: Action.details,
-    group: CommonAbnormalityGroup
-  }
+define Recommendation: {
+  short: Action.short,
+  date: Action.date,
+  details: Action.details,
+  group: CommonAbnormalityGroup
+}

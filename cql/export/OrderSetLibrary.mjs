@@ -38,6 +38,30 @@ export const OrderSetLibrary = {
       },
       "codes" : {
          "def" : [ {
+            "name" : "Primary HPV",
+            "id" : "hpv",
+            "display" : "Primary HPV",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
+         }, {
+            "name" : "Cytology",
+            "id" : "cytology",
+            "display" : "Cytology",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
+         }, {
+            "name" : "Cotest",
+            "id" : "cotest",
+            "display" : "Cotest",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOCAL"
+            }
+         }, {
             "name" : "Colposcopy",
             "id" : "colposcopy",
             "display" : "Colposcopy",
@@ -129,6 +153,42 @@ export const OrderSetLibrary = {
                   "type" : "NamedTypeSpecifier"
                }
             } ]
+         }, {
+            "name" : "PrimaryHpvCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ToCodeableConcept",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "Primary HPV",
+                  "type" : "CodeRef"
+               } ]
+            }
+         }, {
+            "name" : "CytologyCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ToCodeableConcept",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "Cytology",
+                  "type" : "CodeRef"
+               } ]
+            }
+         }, {
+            "name" : "CotestCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ToCodeableConcept",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "Cotest",
+                  "type" : "CodeRef"
+               } ]
+            }
          }, {
             "name" : "ColposcopyCodeableConcept",
             "context" : "Patient",

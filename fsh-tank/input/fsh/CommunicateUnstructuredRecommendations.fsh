@@ -17,7 +17,7 @@ Usage: #definition
 * purpose = "Why this activity definition is defined"
 * usage = "Describes the clinical usage of the activity definition"
 * topic[+].text = "Insert mesh terms here" // TODO: Find suitable MeSH terms
-* library = Canonical(TopLevelScreeningLibrary|1.0.0)
+* library = Canonical(ScreeningLibrary|1.0.0)
 * kind = $RRTYPE#CommunicationRequest "CommunicationRequest"
 * intent = $RINTENT#proposal "Proposal"
 * priority = $RPRIOR#routine "Routine"

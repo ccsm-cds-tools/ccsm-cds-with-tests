@@ -56,7 +56,7 @@ export const CommunicateErrors = {
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/TopLevelScreeningLibrary|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
   ],
   "kind": "CommunicationRequest",
   "intent": "proposal",
@@ -67,7 +67,7 @@ export const CommunicateErrors = {
       "expression": {
         "language": "text/cql",
         "expression": "Errors To Communicate",
-        "reference": "Library/TopLevelScreeningLibrary|1.0"
+        "reference": "Library/ScreeningLibrary|1.0"
       }
     }
   ]

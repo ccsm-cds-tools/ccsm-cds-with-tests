@@ -63,7 +63,7 @@ export const PrimaryHpvScreeningRecommendation = {
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/TopLevelScreeningLibrary|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
   ],
   "kind": "ServiceRequest",
   "intent": "proposal",
@@ -74,7 +74,7 @@ export const PrimaryHpvScreeningRecommendation = {
       "expression": {
         "language": "text/cql",
         "expression": "ServiceRequestCode",
-        "reference": "Library/TopLevelScreeningLibrary|1.0"
+        "reference": "Library/ScreeningLibrary|1.0"
       }
     },
     {
@@ -82,7 +82,7 @@ export const PrimaryHpvScreeningRecommendation = {
       "expression": {
         "language": "text/cql",
         "expression": "ServiceRequestOrderDetail",
-        "reference": "Library/TopLevelScreeningLibrary|1.0"
+        "reference": "Library/ScreeningLibrary|1.0"
       }
     }
   ]

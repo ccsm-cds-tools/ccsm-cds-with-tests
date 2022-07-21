@@ -17,7 +17,7 @@ Usage: #definition
 * purpose = "Why this plan definition is defined"
 * usage = "Describes the clinical usage of the plan"
 * topic[+].text = "Insert mesh terms here" // TODO: Find suitable MeSH terms
-* library = Canonical(TopLevelScreeningLibrary|1.0.0)
+* library = Canonical(ScreeningLibrary|1.0.0)
 // -----------------------------------------------------------------------------
 // Action #1: Communicate Errors
 // -----------------------------------------------------------------------------

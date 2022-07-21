@@ -79,7 +79,17 @@ export const CervicalCancerManagementActions = {
       "title": "Management Decision Aids",
       "description": "Management Decision Aids",
       "textEquivalent": "Management Decision Aids",
-      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementDecisionAids|1.0.0"
+      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids|1.0.0",
+      "dynamicValue": [
+        {
+          "path": "payload[0].content.ofType(string)",
+          "expression": {
+            "language": "text/cql",
+            "expression": "DecisionAids",
+            "reference": "Library/ManagementLibrary|1.0"
+          }
+        }
+      ]
     },
     {
       "title": "Recommended Management Activities",
