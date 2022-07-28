@@ -18,11 +18,15 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 
 // ## Code Systems
 codesystem "GENDER-IDENTITY": 'http://hl7.org/fhir/gender-identity'
+codesystem "LOINC": 'http://loinc.org'
+codesystem "SNOMED-CT": 'http://snomed.info/sct'
 
 // ## Value sets
 
 // ## Individual codes
+code "Gender Identity": '76691-5' from "LOINC" display 'Gender identity'
 code "Transgender Male Code": 'transgender-male' from "GENDER-IDENTITY" display 'transgender male'
+code "Female-to-male Transsexual": '407377005' from "SNOMED-CT" display 'Female-to-male transsexual (finding)'
 
 // # Parameters
 
@@ -54,15 +58,26 @@ define FemaleBirthSex:
 define Female:
   FemaleGender or FemaleBirthSex
 
-define GenderIdentity:
+define GenderIdentityExtension:
   Patient.extension E
     where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity'
+    or E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
+
+define TransgenderMaleExtension:
+  GenderIdentityExtension E
+    where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+    or E.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
+
+define GenderIdentityObservation:
+  [Observation: "Gender Identity"]
+
+define TransgenderMaleObservation:
+  GenderIdentityObservation O
+  where O.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+  or O.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
 
 define TransgenderMale:
-  exists(
-    GenderIdentity E
-      where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
-  )
+  exists(TransgenderMaleExtension) or exists(TransgenderMaleObservation)
 
 define FemaleorTransgenderMale:
   Female or TransgenderMale
