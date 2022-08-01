@@ -343,3 +343,16 @@ define Recommendation: {
   details: Action.details,
   group: CommonAbnormalityGroup
 }
+
+//------------------------------------------------------------------------------
+// ERRORS
+//------------------------------------------------------------------------------
+
+define Errors:
+  {}
+
+define ErrorsHaveOccurred:
+  Exists(Errors)
+
+define NoErrorsHaveOccurred:
+  not ErrorsHaveOccurred

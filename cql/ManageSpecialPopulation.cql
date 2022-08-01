@@ -748,3 +748,16 @@ define WhichPopulationMadeTheRecommendation:
     else null
   end
 
+//------------------------------------------------------------------------------
+// ERRORS
+//------------------------------------------------------------------------------
+
+define Errors:
+  {}
+
+define ErrorsHaveOccurred:
+  Exists(Errors)
+
+define NoErrorsHaveOccurred:
+  not ErrorsHaveOccurred
+

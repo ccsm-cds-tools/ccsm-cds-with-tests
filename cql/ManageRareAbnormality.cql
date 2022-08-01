@@ -1524,3 +1524,16 @@ define WhichRarityMadeTheRecommendation:
     when RecommendationForRareCytology is not null then 1
     else null
   end
+
+//------------------------------------------------------------------------------
+// ERRORS
+//------------------------------------------------------------------------------
+
+define Errors:
+  {}
+
+define ErrorsHaveOccurred:
+  Exists(Errors)
+
+define NoErrorsHaveOccurred:
+  not ErrorsHaveOccurred
