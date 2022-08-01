@@ -139,7 +139,30 @@
               }
             }
           ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/HandleErrors|1.0.0"
+          "action": [
+            {
+              "title": "Communicate Errors",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors|1.0.0",
+              "dynamicValue": [
+                {
+                  "path": "payload[0].contentString",
+                  "expression": {
+                    "language": "text/cql",
+                    "expression": "Errors",
+                    "reference": "Library/ManagementLibrary|1.0"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Prompt for More Information",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ProvideMoreInformation|1.0.0"
+            }
+          ]
         }
       ]
     }

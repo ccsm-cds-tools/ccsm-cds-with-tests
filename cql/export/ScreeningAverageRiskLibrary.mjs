@@ -2382,7 +2382,7 @@ export const ScreeningAverageRiskLibrary = {
                }
             }
          }, {
-            "name" : "ErrorMissingCytologyResult",
+            "name" : "ErrorNonNilmCytologyResult",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2391,200 +2391,65 @@ export const ScreeningAverageRiskLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "CervicalCytologyTestsForGradeDUnfiltered",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "AnyTrue",
-                           "source" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "aC",
-                                 "expression" : {
-                                    "type" : "Flatten",
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "type" : "Flatten",
+                              "operand" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "$this",
+                                    "expression" : {
+                                       "name" : "CervicalCytologyReports",
+                                       "libraryName" : "Dash",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ],
+                                 "where" : {
+                                    "type" : "Not",
                                     "operand" : {
-                                       "type" : "Query",
-                                       "source" : [ {
-                                          "alias" : "$this",
-                                          "expression" : {
-                                             "name" : "CervicalCytologyTestsForGradeDUnfiltered",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       } ],
-                                       "where" : {
-                                          "type" : "Not",
-                                          "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "path" : "conclusionCode",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       },
-                                       "return" : {
-                                          "distinct" : false,
-                                          "expression" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "conclusionCode",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "$this",
+                                             "type" : "AliasRef"
                                           }
                                        }
                                     }
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "return" : {
-                                 "expression" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
+                                 },
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "$this",
+                                          "type" : "AliasRef"
+                                       }
                                     }
                                  }
                               }
                            }
-                        }, {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "type" : "Count",
-                              "source" : {
-                                 "type" : "Flatten",
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Not",
                                  "operand" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "name" : "CervicalCytologyTestsForGradeDUnfiltered",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "cC",
+                                       "type" : "AliasRef"
                                     }
                                  }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "0",
-                              "type" : "Literal"
-                           } ]
-                        } ]
-                     } ]
-                  }
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A cytology test was found with no result. Please review patient record to resolve.",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "ErrorUnexpectedCytologyResult",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "ErrorMissingCytologyResult",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "type" : "AnyTrue",
-                        "source" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "aC",
-                              "expression" : {
-                                 "type" : "Flatten",
-                                 "operand" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "name" : "CervicalCytologyTestsForGradeDUnfiltered",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
+                              }, {
                                  "type" : "Not",
                                  "operand" : {
                                     "type" : "Equivalent",
@@ -2593,7 +2458,7 @@ export const ScreeningAverageRiskLibrary = {
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
                                        "operand" : [ {
-                                          "name" : "aC",
+                                          "name" : "cC",
                                           "type" : "AliasRef"
                                        } ]
                                     }, {
@@ -2605,15 +2470,15 @@ export const ScreeningAverageRiskLibrary = {
                                        }
                                     } ]
                                  }
-                              }
+                              } ]
                            }
                         }
-                     } ]
+                     }
                   }
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A Cytology test was found with a non-NILM result. Consider cervical cancer management.",
+                  "value" : "A cytology test was found with a non-NILM result. Consider cervical cancer management.",
                   "type" : "Literal"
                },
                "else" : {
@@ -2625,7 +2490,7 @@ export const ScreeningAverageRiskLibrary = {
                }
             }
          }, {
-            "name" : "ErrorMissingHpvResult",
+            "name" : "ErrorNonNegativeHpvResult",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2634,200 +2499,65 @@ export const ScreeningAverageRiskLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "HpvTestsForGradeDUnfiltered",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "AnyTrue",
-                           "source" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "aC",
-                                 "expression" : {
-                                    "type" : "Flatten",
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "cC",
+                           "expression" : {
+                              "type" : "Flatten",
+                              "operand" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "$this",
+                                    "expression" : {
+                                       "name" : "HpvDiagnosticReports",
+                                       "libraryName" : "Dash",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ],
+                                 "where" : {
+                                    "type" : "Not",
                                     "operand" : {
-                                       "type" : "Query",
-                                       "source" : [ {
-                                          "alias" : "$this",
-                                          "expression" : {
-                                             "name" : "HpvTestsForGradeDUnfiltered",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       } ],
-                                       "where" : {
-                                          "type" : "Not",
-                                          "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "path" : "conclusionCode",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       },
-                                       "return" : {
-                                          "distinct" : false,
-                                          "expression" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "conclusionCode",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "$this",
+                                             "type" : "AliasRef"
                                           }
                                        }
                                     }
+                                 },
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "path" : "conclusionCode",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "$this",
+                                          "type" : "AliasRef"
+                                       }
+                                    }
                                  }
-                              } ],
-                              "relationship" : [ ],
-                              "return" : {
-                                 "expression" : {
+                              }
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Not",
+                                 "operand" : {
                                     "type" : "IsNull",
                                     "operand" : {
-                                       "name" : "aC",
+                                       "name" : "cC",
                                        "type" : "AliasRef"
                                     }
                                  }
-                              }
-                           }
-                        }, {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "type" : "Count",
-                              "source" : {
-                                 "type" : "Flatten",
-                                 "operand" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "name" : "HpvTestsForGradeDUnfiltered",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "0",
-                              "type" : "Literal"
-                           } ]
-                        } ]
-                     } ]
-                  }
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "An hrHPV test was found with no result. Please review patient record to resolve.",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "ErrorUnexpectedHpvResult",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "ErrorMissingHpvResult",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "type" : "AnyTrue",
-                        "source" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "aC",
-                              "expression" : {
-                                 "type" : "Flatten",
-                                 "operand" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "name" : "HpvTestsForGradeDUnfiltered",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
+                              }, {
                                  "type" : "Not",
                                  "operand" : {
                                     "type" : "InValueSet",
@@ -2836,7 +2566,7 @@ export const ScreeningAverageRiskLibrary = {
                                        "libraryName" : "FHIRHelpers",
                                        "type" : "FunctionRef",
                                        "operand" : [ {
-                                          "name" : "aC",
+                                          "name" : "cC",
                                           "type" : "AliasRef"
                                        } ]
                                     },
@@ -2846,15 +2576,15 @@ export const ScreeningAverageRiskLibrary = {
                                        "type" : "ValueSetRef"
                                     }
                                  }
-                              }
+                              } ]
                            }
                         }
-                     } ]
+                     }
                   }
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "An hrHPV test was found with a non-NILM result. Consider cervical cancer management.",
+                  "value" : "An HPV test was found with a non-negative result. Consider cervical cancer management.",
                   "type" : "Literal"
                },
                "else" : {
@@ -2866,55 +2596,68 @@ export const ScreeningAverageRiskLibrary = {
                }
             }
          }, {
+            "name" : "AbnormalResultInRecord",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "ErrorNonNilmCytologyResult",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "ErrorNonNegativeHpvResult",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "Errors",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Union",
+               "type" : "Except",
                "operand" : [ {
-                  "type" : "Except",
-                  "operand" : [ {
-                     "type" : "List",
-                     "element" : [ {
-                        "name" : "ErrorMissingCytologyResult",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "ErrorUnexpectedCytologyResult",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "ErrorMissingHpvResult",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "ErrorUnexpectedHpvResult",
-                        "type" : "ExpressionRef"
-                     } ]
+                  "type" : "List",
+                  "element" : [ {
+                     "name" : "ErrorNonNilmCytologyResult",
+                     "type" : "ExpressionRef"
                   }, {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "X",
-                        "expression" : {
-                           "type" : "List",
-                           "element" : [ {
-                              "type" : "Null"
-                           } ]
-                        }
-                     } ],
-                     "return" : {
-                        "distinct" : false,
-                        "expression" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "As",
-                           "operand" : {
-                              "name" : "X",
-                              "type" : "AliasRef"
-                           }
-                        }
-                     }
+                     "name" : "ErrorNonNegativeHpvResult",
+                     "type" : "ExpressionRef"
                   } ]
                }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "X",
+                     "expression" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "type" : "Null"
+                        } ]
+                     }
+                  } ],
+                  "return" : {
+                     "distinct" : false,
+                     "expression" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "X",
+                           "type" : "AliasRef"
+                        }
+                     }
+                  }
                } ]
             }
          }, {

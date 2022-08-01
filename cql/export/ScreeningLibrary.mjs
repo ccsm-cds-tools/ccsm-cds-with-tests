@@ -189,9 +189,19 @@ export const ScreeningLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-               "value" : "false",
-               "type" : "Literal"
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "AbnormalResultInRecord",
+                  "libraryName" : "Average",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "IsSymptomatic",
+                     "libraryName" : "Sympto",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
             }
          }, {
             "name" : "IsIncludedAndNotExcluded",
@@ -217,11 +227,39 @@ export const ScreeningLibrary = {
             "expression" : {
                "type" : "Union",
                "operand" : [ {
-                  "type" : "List"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "type" : "List"
+                     }, {
+                        "name" : "Errors",
+                        "libraryName" : "Average",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "type" : "Union",
+                     "operand" : [ {
+                        "name" : "Errors",
+                        "libraryName" : "Immuno",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "Errors",
+                        "libraryName" : "Sympto",
+                        "type" : "ExpressionRef"
+                     } ]
+                  } ]
                }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "Errors",
+                     "libraryName" : "DesExpo",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "Errors",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  } ]
                } ]
             }
          }, {
@@ -426,6 +464,105 @@ export const ScreeningLibrary = {
                }
             }
          }, {
+            "name" : "SuggestedOrders",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Except",
+               "operand" : [ {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "RecommendPrimaryHpv",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Primary HPV",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        }
+                     }
+                  }, {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "RecommendCytology",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cytology",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        }
+                     }
+                  }, {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "RecommendCotesting",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cotest",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        }
+                     }
+                  } ]
+               }, {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "X",
+                     "expression" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "type" : "Null"
+                        } ]
+                     }
+                  } ],
+                  "return" : {
+                     "distinct" : false,
+                     "expression" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "X",
+                           "type" : "AliasRef"
+                        }
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "DecisionAids",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -471,18 +608,14 @@ export const ScreeningLibrary = {
                   "name" : "disclaimer",
                   "value" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "",
+                     "value" : "An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.",
                      "type" : "Literal"
                   }
                }, {
                   "name" : "suggestedOrders",
                   "value" : {
-                     "type" : "List",
-                     "element" : [ {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "",
-                        "type" : "Literal"
-                     } ]
+                     "name" : "SuggestedOrders",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }

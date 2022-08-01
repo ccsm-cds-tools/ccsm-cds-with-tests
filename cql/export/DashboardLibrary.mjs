@@ -667,7 +667,7 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "1",
+                                    "value" : "2",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -699,7 +699,7 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "2",
+                                    "value" : "3",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -731,7 +731,7 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "3",
+                                    "value" : "4",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -763,7 +763,7 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "4",
+                                    "value" : "5",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -795,7 +795,7 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "5",
+                                    "value" : "6",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -840,8 +840,37 @@ export const DashboardLibrary = {
                                  "name" : "rank",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "6",
+                                    "value" : "7",
                                     "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "type" : "Negate",
+                                    "operand" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "1",
+                                       "type" : "Literal"
+                                    }
                                  }
                               } ]
                            }
@@ -852,14 +881,14 @@ export const DashboardLibrary = {
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ALL",
+                                 "value" : "UNK",
                                  "type" : "Literal"
                               }
                            }, {
                               "name" : "rank",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "0",
+                                 "value" : "1",
                                  "type" : "Literal"
                               }
                            } ]
@@ -905,131 +934,195 @@ export const DashboardLibrary = {
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "c",
-                  "expression" : {
-                     "name" : "conclusions",
-                     "type" : "OperandRef"
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "conclusions",
+                           "type" : "OperandRef"
+                        }
+                     }
                   }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Case",
-                     "caseItem" : [ {
-                        "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "HPV16+",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV16+",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "4",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "HPV18+",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV16-, HPV18+",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "3",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "c",
+                     "expression" : {
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Case",
+                        "caseItem" : [ {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "HPV16+",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
                            },
-                           "valueset" : {
-                              "name" : "High Risk HPV Positive Results",
-                              "type" : "ValueSetRef"
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV16+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "5",
+                                    "type" : "Literal"
+                                 }
+                              } ]
                            }
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "2",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "HPV18+",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
                            },
-                           "valueset" : {
-                              "name" : "HPV Negative Results",
-                              "type" : "ValueSetRef"
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV16-, HPV18+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "4",
+                                    "type" : "Literal"
+                                 }
+                              } ]
                            }
-                        },
-                        "then" : {
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "High Risk HPV Positive Results",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV-positive",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "3",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "HPV Negative Results",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV-negative",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "2",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "type" : "Negate",
+                                    "operand" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "1",
+                                       "type" : "Literal"
+                                    }
+                                 }
+                              } ]
+                           }
+                        } ],
+                        "else" : {
                            "type" : "Tuple",
                            "element" : [ {
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-negative",
+                                 "value" : "UNK",
                                  "type" : "Literal"
                               }
                            }, {
@@ -1041,26 +1134,29 @@ export const DashboardLibrary = {
                               }
                            } ]
                         }
-                     } ],
-                     "else" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "text",
-                           "value" : {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ALL",
-                              "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "rank",
-                           "value" : {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "0",
-                              "type" : "Literal"
-                           }
-                        } ]
                      }
                   }
+               },
+               "else" : {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "rank",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  } ]
                }
             },
             "operand" : [ {
@@ -1141,37 +1237,255 @@ export const DashboardLibrary = {
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "c",
-                  "expression" : {
-                     "name" : "conclusions",
-                     "type" : "OperandRef"
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "conclusions",
+                           "type" : "OperandRef"
+                        }
+                     }
                   }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Case",
-                     "caseItem" : [ {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "c",
+                     "expression" : {
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Case",
+                        "caseItem" : [ {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "Normal Histology Finding",
+                                 "type" : "ValueSetRef"
+                              }
                            },
-                           "valueset" : {
-                              "name" : "Normal Histology Finding",
-                              "type" : "ValueSetRef"
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "<CIN1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "2",
+                                    "type" : "Literal"
+                                 }
+                              } ]
                            }
-                        },
-                        "then" : {
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN1",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "3",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "CIN2",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN2",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "4",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "Histologic CIN3",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN3",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "5",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "AIS",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "6",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "Histologic cancer",
+                                 "type" : "ValueSetRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cancer",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "7",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "type" : "Negate",
+                                    "operand" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "1",
+                                       "type" : "Literal"
+                                    }
+                                 }
+                              } ]
+                           }
+                        } ],
+                        "else" : {
                            "type" : "Tuple",
                            "element" : [ {
                               "name" : "text",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "<CIN1",
+                                 "value" : "UNK",
                                  "type" : "Literal"
                               }
                            }, {
@@ -1183,180 +1497,29 @@ export const DashboardLibrary = {
                               }
                            } ]
                         }
-                     }, {
-                        "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "CIN1",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "CIN1",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "2",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "CIN2",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "CIN2",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "3",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           },
-                           "valueset" : {
-                              "name" : "Histologic CIN3",
-                              "type" : "ValueSetRef"
-                           }
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "CIN3",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "4",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           },
-                           "valueset" : {
-                              "name" : "AIS",
-                              "type" : "ValueSetRef"
-                           }
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "AIS",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "5",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     }, {
-                        "when" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "c",
-                              "type" : "AliasRef"
-                           },
-                           "valueset" : {
-                              "name" : "Histologic cancer",
-                              "type" : "ValueSetRef"
-                           }
-                        },
-                        "then" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "text",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Cancer",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "rank",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "6",
-                                 "type" : "Literal"
-                              }
-                           } ]
-                        }
-                     } ],
-                     "else" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "text",
-                           "value" : {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ALL",
-                              "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "rank",
-                           "value" : {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "0",
-                              "type" : "Literal"
-                           }
-                        } ]
                      }
                   }
+               },
+               "else" : {
+                  "type" : "List",
+                  "element" : [ {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "text",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "rank",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  } ]
                }
             },
             "operand" : [ {
@@ -7236,6 +7399,192 @@ export const DashboardLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "HpvDiagnosticReports",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "Exists",
+                                 "operand" : {
+                                    "type" : "Flatten",
+                                    "operand" : {
+                                       "type" : "Query",
+                                       "source" : [ {
+                                          "alias" : "$this",
+                                          "expression" : {
+                                             "name" : "HpvDiagnosticReports",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ],
+                                       "where" : {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "conclusionCode",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "$this",
+                                                   "type" : "AliasRef"
+                                                }
+                                             }
+                                          }
+                                       },
+                                       "return" : {
+                                          "distinct" : false,
+                                          "expression" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "CervicalCytologyReports",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "Exists",
+                                 "operand" : {
+                                    "type" : "Flatten",
+                                    "operand" : {
+                                       "type" : "Query",
+                                       "source" : [ {
+                                          "alias" : "$this",
+                                          "expression" : {
+                                             "name" : "CervicalCytologyReports",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ],
+                                       "where" : {
+                                          "type" : "Not",
+                                          "operand" : {
+                                             "type" : "IsNull",
+                                             "operand" : {
+                                                "path" : "conclusionCode",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "$this",
+                                                   "type" : "AliasRef"
+                                                }
+                                             }
+                                          }
+                                       },
+                                       "return" : {
+                                          "distinct" : false,
+                                          "expression" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "HistologyDiagnosticReports",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "type" : "Flatten",
+                                 "operand" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "$this",
+                                       "expression" : {
+                                          "name" : "HistologyDiagnosticReports",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    } ],
+                                    "where" : {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "conclusionCode",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "$this",
+                                                "type" : "AliasRef"
+                                             }
+                                          }
+                                       }
+                                    },
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "path" : "conclusionCode",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "$this",
+                                             "type" : "AliasRef"
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        } ]
+                     } ]
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A laboratory test was found without a result. Please review patient record to resolve.",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "ErrorDiagnosticReportWithUnsupportedConclusonCode",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
                      "type" : "And",
                      "operand" : [ {
                         "type" : "Exists",
@@ -7244,39 +7593,29 @@ export const DashboardLibrary = {
                            "type" : "ExpressionRef"
                         }
                      }, {
-                        "type" : "IsNull",
-                        "operand" : {
+                        "type" : "AnyTrue",
+                        "source" : {
                            "type" : "Query",
                            "source" : [ {
-                              "alias" : "$this",
+                              "alias" : "DRS",
                               "expression" : {
                                  "name" : "DiagnosticReportsSummary",
                                  "type" : "ExpressionRef"
                               }
                            } ],
-                           "where" : {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           },
+                           "relationship" : [ ],
                            "return" : {
-                              "distinct" : false,
                               "expression" : {
-                                 "path" : "value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "$this",
-                                    "type" : "AliasRef"
-                                 }
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "path" : "value",
+                                    "scope" : "DRS",
+                                    "type" : "Property"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "UNK",
+                                    "type" : "Literal"
+                                 } ]
                               }
                            }
                         }
@@ -7285,91 +7624,7 @@ export const DashboardLibrary = {
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "ErrorHistologyWithUnexpectedCode",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "value" : "false",
-                     "type" : "Literal"
-                  }
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A histology test was found but with an enexpected result code. Please review patient record to resolve.",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "ErrorCytologyyWithUnexpectedCode",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "value" : "false",
-                     "type" : "Literal"
-                  }
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
-            }
-         }, {
-            "name" : "ErrorHpvWithUnexpectedCode",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "value" : "false",
-                     "type" : "Literal"
-                  }
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "An HPV test was found but with an enexpected result code. Please review patient record to resolve.",
+                  "value" : "A laboratory test was found with an unexpected result code. Please review patient record to resolve.",
                   "type" : "Literal"
                },
                "else" : {
@@ -7390,6 +7645,9 @@ export const DashboardLibrary = {
                   "type" : "List",
                   "element" : [ {
                      "name" : "ErrorDiagnosticReportWithNoConclusonCodes",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ErrorDiagnosticReportWithUnsupportedConclusonCode",
                      "type" : "ExpressionRef"
                   } ]
                }, {

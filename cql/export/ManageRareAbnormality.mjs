@@ -10815,6 +10815,35 @@ export const ManageRareAbnormality = {
                   }
                }
             }
+         }, {
+            "name" : "Errors",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List"
+            }
+         }, {
+            "name" : "ErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "Errors",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "NoErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "name" : "ErrorsHaveOccurred",
+                  "type" : "ExpressionRef"
+               }
+            }
          } ]
       }
    }

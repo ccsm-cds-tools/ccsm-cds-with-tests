@@ -476,14 +476,7 @@ export const ScreeningDesExposureLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "type" : "List"
-               }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               } ]
+               "type" : "List"
             }
          }, {
             "name" : "ErrorsHaveOccurred",

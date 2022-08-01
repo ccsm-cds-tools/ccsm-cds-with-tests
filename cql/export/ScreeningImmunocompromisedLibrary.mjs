@@ -2027,45 +2027,38 @@ export const ScreeningImmunocompromisedLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Union",
+               "type" : "Except",
                "operand" : [ {
-                  "type" : "Except",
-                  "operand" : [ {
-                     "type" : "List",
-                     "element" : [ {
-                        "name" : "ErrorCotestWithMissingHpvResult",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "ErrorCotestWithNonNegativeHpvResult",
-                        "type" : "ExpressionRef"
-                     } ]
+                  "type" : "List",
+                  "element" : [ {
+                     "name" : "ErrorCotestWithMissingHpvResult",
+                     "type" : "ExpressionRef"
                   }, {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "X",
-                        "expression" : {
-                           "type" : "List",
-                           "element" : [ {
-                              "type" : "Null"
-                           } ]
-                        }
-                     } ],
-                     "return" : {
-                        "distinct" : false,
-                        "expression" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "As",
-                           "operand" : {
-                              "name" : "X",
-                              "type" : "AliasRef"
-                           }
-                        }
-                     }
+                     "name" : "ErrorCotestWithNonNegativeHpvResult",
+                     "type" : "ExpressionRef"
                   } ]
                }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "X",
+                     "expression" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "type" : "Null"
+                        } ]
+                     }
+                  } ],
+                  "return" : {
+                     "distinct" : false,
+                     "expression" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "X",
+                           "type" : "AliasRef"
+                        }
+                     }
+                  }
                } ]
             }
          }, {
