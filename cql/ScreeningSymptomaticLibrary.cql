@@ -207,8 +207,7 @@ define Recommendation:
 //------------------------------------------------------------------------------
 
 define Errors:
-  {} union
-  Dash.Errors
+  {}
 
 define ErrorsHaveOccurred:
   Exists(Errors)

@@ -378,8 +378,6 @@ define Errors:
     ErrorCotestWithNonNegativeHpvResult
   } 
   except { null }
-  union
-    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)

@@ -219,6 +219,14 @@ define TreatmentOrderCode:
 define ServiceRequestOrderDetail:
   (ManagementRecommendation.details) D return { text: D }
 
+define SuggestedOrders:
+  {
+    if RecommendColposcopy then 'Colposcopy' else null,
+    if RecommendSurveillance then 'Surveillance' else null,
+    if RecommendTreatment then 'Treatment' else null
+  }
+  except {null}
+
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
@@ -229,8 +237,6 @@ define DecisionAids:
     recommendationGroup: ManagementRecommendation.group,
     recommendationDetails: ManagementRecommendation.details,
     errors: Errors,
-    disclaimer: '',
-    suggestedOrders: {
-      ''
-    }
+    disclaimer: 'An evidence based recommendation is provided based on clinical data available in the patient\'s electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.',
+    suggestedOrders: SuggestedOrders
   }

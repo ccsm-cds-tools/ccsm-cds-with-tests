@@ -63,4 +63,15 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)
+* action[=].action[=].action[+].title = "Communicate Errors"
+* action[=].action[=].action[=].description = "Description"
+* action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].action[=].action[=].definitionCanonical = Canonical(CommunicateErrors|1.0.0)
+* action[=].action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
+* action[=].action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].action[=].dynamicValue[=].expression.expression = "Errors"
+* action[=].action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
+* action[=].action[=].action[+].title = "Prompt for More Information"
+* action[=].action[=].action[=].description = "Description"
+* action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].action[=].action[=].definitionCanonical = Canonical(ProvideMoreInformation|1.0.0)

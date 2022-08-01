@@ -75,9 +75,8 @@ define FemaleorTransgenderMale:
 define IsIncluded:
   Dash.FemaleorTransgenderMale
 
-// No exclusions at the top level
 define Excluded:
-  false
+  Average.AbnormalResultInRecord and not Sympto.IsSymptomatic
 
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
@@ -88,6 +87,10 @@ define IsIncludedAndNotExcluded:
 
 define Errors:
   {} union
+  Average.Errors union
+  Immuno.Errors union
+  Sympto.Errors union
+  DesExpo.Errors union
   Dash.Errors
 
 define ErrorsHaveOccurred:
@@ -163,6 +166,14 @@ define CotestingOrderCode:
 define ServiceRequestOrderDetail:
   (ScreeningRecommendation.details) D return { text: D }
 
+define SuggestedOrders:
+  {
+    if RecommendPrimaryHpv then 'Primary HPV' else null,
+    if RecommendCytology then 'Cytology' else null,
+    if RecommendCotesting then 'Cotest' else null
+  }
+  except {null}
+
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
@@ -173,8 +184,6 @@ define DecisionAids:
     recommendationGroup: ScreeningRecommendation.group,
     recommendationDetails: ScreeningRecommendation.details,
     errors: Errors,
-    disclaimer: '',
-    suggestedOrders: {
-      ''
-    }
+    disclaimer: 'An evidence based recommendation is provided based on clinical data available in the patient\'s electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.',
+    suggestedOrders: SuggestedOrders
   }

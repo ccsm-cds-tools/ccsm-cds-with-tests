@@ -150,13 +150,14 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     (conclusions) c
     return
       case
-        when c ~ "NILM" then {text: 'NILM', rank: 1}
-        when c ~ "ASC-US" then {text: 'ASC-US', rank: 2}
-        when c ~ "LSIL" then {text: 'LSIL', rank: 3}
-        when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
-        when c ~ "AGC" then {text: 'AGC', rank: 5}
-        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 6}
-        else {text: 'ALL', rank: 0}
+        when c ~ "NILM" then {text: 'NILM', rank: 2}
+        when c ~ "ASC-US" then {text: 'ASC-US', rank: 3}
+        when c ~ "LSIL" then {text: 'LSIL', rank: 4}
+        when c ~ "ASC-H" then {text: 'ASC-H', rank: 5}
+        when c ~ "AGC" then {text: 'AGC', rank: 6}
+        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
       end
   else
     {{text: 'ALL', rank: 0}}
@@ -172,15 +173,19 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
  * @returns List<Tuple { text System.String, rank System.Integer }>
  */
 define function HpvInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
-      when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
-      when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 1}
-      else {text: 'ALL', rank: 0}
-    end
+  if conclusions is not null then
+    (conclusions) c
+    return
+      case
+        when c ~ "HPV16+" then {text: 'HPV16+', rank: 5}
+        when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 4}
+        when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 3}
+        when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 2}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
+      end
+  else
+    {{text: 'ALL', rank: 0}}
 
 /**
  * Takes the output from HpvInterpretation() and returns the text of the
@@ -200,17 +205,21 @@ define function HighestRankedInterpretation(interpretations List<Tuple { text Sy
 /**
  */
 define function BiopsyInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
-      when c ~ "CIN1" then {text: 'CIN1', rank: 2}
-      when c ~ "CIN2" then {text: 'CIN2', rank: 3}
-      when c in "Histologic CIN3" then {text: 'CIN3', rank: 4}
-      when c in "AIS" then {text: 'AIS', rank: 5}
-      when c in "Histologic cancer" then {text: 'Cancer', rank: 6}
-      else {text: 'ALL', rank: 0}
-    end
+  if conclusions is not null then
+    (conclusions) c
+    return
+      case
+        when c in "Normal Histology Finding" then {text: '<CIN1', rank: 2}
+        when c ~ "CIN1" then {text: 'CIN1', rank: 3}
+        when c ~ "CIN2" then {text: 'CIN2', rank: 4}
+        when c in "Histologic CIN3" then {text: 'CIN3', rank: 5}
+        when c in "AIS" then {text: 'AIS', rank: 6}
+        when c in "Histologic cancer" then {text: 'Cancer', rank: 7}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
+      end
+  else
+    {{text: 'ALL', rank: 0}}
 
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
@@ -1029,50 +1038,40 @@ define Flags:
 //------------------------------------------------------------------------------
 
 define ErrorDiagnosticReportWithNoConclusonCodes:
-  if (
-      Exists(DiagnosticReportsSummary) and
-      DiagnosticReportsSummary.value is null
+  if 
+    (
+      Exists(HpvDiagnosticReports) and
+      not exists(HpvDiagnosticReports.conclusionCode)
+    ) or
+    (
+      Exists(CervicalCytologyReports) and
+      not exists(CervicalCytologyReports.conclusionCode)
+    ) or
+    (
+      Exists(HistologyDiagnosticReports) and
+      not exists(HistologyDiagnosticReports.conclusionCode)
     ) then
-      'A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.'
+      'A laboratory test was found without a result. Please review patient record to resolve.'
   else
     null
 
-define ErrorHistologyWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'A histology test was found but with an enexpected result code. Please review patient record to resolve.'
-  else
-    null
-
-define ErrorCytologyyWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.'
-  else
-    null
-
-define ErrorHpvWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'An HPV test was found but with an enexpected result code. Please review patient record to resolve.'
+define ErrorDiagnosticReportWithUnsupportedConclusonCode:
+  if (
+    Exists(DiagnosticReportsSummary) and 
+    AnyTrue(
+      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
+    )
+  ) then
+    'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'
   else
     null
 
 define Errors:
   {
-    ErrorDiagnosticReportWithNoConclusonCodes
-  //   ErrorHistologyWithUnexpectedCode,
-  //   ErrorCytologyyWithUnexpectedCode,
-  //   ErrorHpvWithUnexpectedCode
+    ErrorDiagnosticReportWithNoConclusonCodes,
+    ErrorDiagnosticReportWithUnsupportedConclusonCode
   }
   except {null}
-  // TODO: DiagnosticReports without conclusionCodes
-  // TODO: Histology with a code that isn't one we expect
-  // TODO: Cervical Cytology with a code we don't expect
-  // TODO: HPV with a code we don't expect
 
 // SUMMARY
 

@@ -17,25 +17,3 @@ RuleSet: CommonMetadata
 * editor[+].name = "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
 * reviewer[+].name = "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
 * endorser[+].name = "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
-
-RuleSet: ManagementActions
-* action[=].groupingBehavior = http://hl7.org/fhir/action-grouping-behavior#visual-group "Visual Group" // TODO: Discuss whether action-grouping-behavior code should be "visual-group" or "logical-group"
-* action[=].selectionBehavior = http://hl7.org/fhir/action-selection-behavior#at-most-one "At Most One"
-* action[=].action[+].title = "Colposcopy"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "RecommendColposcopy"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ColposcopyActivityDefinition|1.0.0)
-* action[=].action[+].title = "Surveillance"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "RecommendSurveillance"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(SurveillanceActivityDefinition|1.0.0)
-* action[=].action[+].title = "Treatment"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "RecommendTreatment"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(TreatmentActivityDefinition|1.0.0)

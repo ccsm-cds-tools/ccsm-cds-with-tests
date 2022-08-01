@@ -346,72 +346,45 @@ define Recommendation:
 // ERRORS
 //------------------------------------------------------------------------------
 
-define ErrorMissingCytologyResult:
-  if (
-      Exists(CervicalCytologyTestsForGradeDUnfiltered) and
-      (
-        AnyTrue(
-          (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
-            return aC is null
-        )
-      or
-        Count(CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) ~ 0
-      )
-    ) then
-      'A cytology test was found with no result. Please review patient record to resolve.'
-  else
-    null
-
-define ErrorUnexpectedCytologyResult:
+define ErrorNonNilmCytologyResult:
     if (
-      ErrorMissingCytologyResult is null and
       AnyTrue(
-        (CervicalCytologyTestsForGradeDUnfiltered.conclusionCode) aC
-          return aC !~ Dash."NILM"
+        (Dash.CervicalCytologyReports.conclusionCode) cC
+          return (
+            cC is not null and
+            cC !~ Dash."NILM"
+          )
       )
     ) then
-      'A Cytology test was found with a non-NILM result. Consider cervical cancer management.'
+      'A cytology test was found with a non-NILM result. Consider cervical cancer management.'
     else
       null
 
-define ErrorMissingHpvResult:
-  if (
-      Exists(HpvTestsForGradeDUnfiltered) and
-      (
-        AnyTrue(
-          (HpvTestsForGradeDUnfiltered.conclusionCode) aC
-            return aC is null
-        )
-      or
-        Count(HpvTestsForGradeDUnfiltered.conclusionCode) ~ 0
-      )
-    ) then
-      'An hrHPV test was found with no result. Please review patient record to resolve.'
-  else
-    null
 
-define ErrorUnexpectedHpvResult:
+define ErrorNonNegativeHpvResult:
     if (
-      ErrorMissingHpvResult is null and
       AnyTrue(
-        (HpvTestsForGradeDUnfiltered.conclusionCode) aC
-          return not (aC in Dash."HPV Negative Results")
+        (Dash.HpvDiagnosticReports.conclusionCode) cC
+          return (
+            cC is not null and
+            not (cC in Dash."HPV Negative Results")
+          )
       )
     ) then
-      'An hrHPV test was found with a non-NILM result. Consider cervical cancer management.'
+      'An HPV test was found with a non-negative result. Consider cervical cancer management.'
     else
       null
+
+define AbnormalResultInRecord:
+  ErrorNonNilmCytologyResult is not null or
+  ErrorNonNegativeHpvResult is not null
 
 define Errors:
   {
-    ErrorMissingCytologyResult,
-    ErrorUnexpectedCytologyResult,
-    ErrorMissingHpvResult,
-    ErrorUnexpectedHpvResult
+    ErrorNonNilmCytologyResult,
+    ErrorNonNegativeHpvResult
   }
   except { null }
-  union
-    Dash.Errors
 
 define ErrorsHaveOccurred:
   Exists(Errors)
