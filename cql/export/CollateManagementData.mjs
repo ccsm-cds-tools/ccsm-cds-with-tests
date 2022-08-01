@@ -2432,6 +2432,99 @@ export const CollateManagementData = {
                }
             }
          }, {
+            "name" : "MostRecentReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "M",
+                  "expression" : {
+                     "type" : "List",
+                     "element" : [ {
+                        "name" : "MostRecentHpvReport",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "MostRecentCytologyReport",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "M",
+                        "type" : "AliasRef"
+                     }
+                  }
+               },
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "M",
+                     "type" : "Property"
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "desc",
+                     "type" : "ByDirection"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "First",
+               "source" : {
+                  "name" : "MostRecentReports",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "DateOfMostRecentReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "ToDate",
+                  "operand" : {
+                     "name" : "MostRecentReport",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Date",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
             "name" : "Cin2orCin3Biopsies",
             "context" : "Patient",
             "accessLevel" : "Public",

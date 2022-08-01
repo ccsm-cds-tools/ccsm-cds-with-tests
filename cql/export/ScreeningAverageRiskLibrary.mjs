@@ -36,10 +36,6 @@ export const ScreeningAverageRiskLibrary = {
             "path" : "CCSMCommonFunctions",
             "version" : "1.0.0"
          }, {
-            "localIdentifier" : "Entry",
-            "path" : "TopLevelScreeningLibrary",
-            "version" : "1.0.0"
-         }, {
             "localIdentifier" : "Dash",
             "path" : "DashboardLibrary",
             "version" : "1.0.0"
@@ -206,7 +202,7 @@ export const ScreeningAverageRiskLibrary = {
                   } ]
                }, {
                   "name" : "FemaleorTransgenderMale",
-                  "libraryName" : "Entry",
+                  "libraryName" : "Dash",
                   "type" : "ExpressionRef"
                } ]
             }
@@ -1850,6 +1846,26 @@ export const ScreeningAverageRiskLibrary = {
                } ]
             }
          }, {
+            "name" : "RecommendImmediateScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "name" : "RecommendImmediateCervicalCytology",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "RecommendImmediatePrimaryHpv",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "RecommendImmediateCotesting",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "HasRemovalOfCervixProcedures",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1999,20 +2015,8 @@ export const ScreeningAverageRiskLibrary = {
                               "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                               "type" : "As",
                               "operand" : {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "type" : "Or",
-                                    "operand" : [ {
-                                       "name" : "RecommendImmediateCervicalCytology",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "name" : "RecommendImmediatePrimaryHpv",
-                                       "type" : "ExpressionRef"
-                                    } ]
-                                 }, {
-                                    "name" : "RecommendImmediateCotesting",
-                                    "type" : "ExpressionRef"
-                                 } ]
+                                 "name" : "RecommendImmediateScreening",
+                                 "type" : "ExpressionRef"
                               }
                            },
                            "then" : {
@@ -2202,20 +2206,8 @@ export const ScreeningAverageRiskLibrary = {
                            "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                            "type" : "As",
                            "operand" : {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "RecommendImmediateCervicalCytology",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "name" : "RecommendImmediatePrimaryHpv",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "name" : "RecommendImmediateCotesting",
-                                 "type" : "ExpressionRef"
-                              } ]
+                              "name" : "RecommendImmediateScreening",
+                              "type" : "ExpressionRef"
                            }
                         },
                         "then" : {
@@ -2274,6 +2266,118 @@ export const ScreeningAverageRiskLibrary = {
                   "type" : "As",
                   "operand" : {
                      "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "ActionShort",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "RecommendImmediateScreening",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Screening Due Now",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Screening Up To Date",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "Recommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "short",
+                     "value" : {
+                        "name" : "ActionShort",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "ToDate",
+                        "operand" : {
+                           "name" : "ProposedScreeningDate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "details",
+                     "value" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "name" : "RecommendationText",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  }, {
+                     "name" : "group",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Screening: Average Risk",
+                        "type" : "Literal"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "group",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
                   }
                }
             }

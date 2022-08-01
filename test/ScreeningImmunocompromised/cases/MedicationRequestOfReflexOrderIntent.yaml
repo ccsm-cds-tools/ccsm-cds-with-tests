@@ -1,0 +1,24 @@
+---
+name: MedicationRequest Of Reflex Order Intent
+
+externalData:
+- resources
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2010-01-01
+-
+  $iterate: *IbsOrArthritis
+- 
+  resourceType: MedicationRequest
+  status: completed
+  intent: reflex-order
+  medicationCodeableConcept: RXNORM#1153039 chlorambucil Pill
+  authoredOn: 2021-05-01
+
+results:
+  DateOfImmunosuppressionOnset: '2017-05-01T00:00:00.000+00:00'
+  IsIncludedAndNotExcluded: true

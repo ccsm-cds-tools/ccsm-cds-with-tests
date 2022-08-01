@@ -20,7 +20,6 @@ include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 include DashboardLibrary version '1.0.0' called Dash
 include CCSMCommonFunctions version '1.0.0' called Common
-include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
 // CODE SYSTEMS, VALUE SETS, AND CODES
@@ -96,7 +95,7 @@ define IsSymptomatic:
   RecentlyRespondedYesToAbnormalBleedingQuestion
 
 define IsIncluded:
-  Entry.FemaleorTransgenderMale and
+  Dash.FemaleorTransgenderMale and
   IsSymptomatic
 
 //------------------------------------------------------------------------------
@@ -191,13 +190,24 @@ define Citation:
   else
     null
 
+define ActionShort:
+  'See Details'
+
+define Recommendation:
+  if IsIncludedAndNotExcluded then {
+    short: ActionShort,
+    date: Today(),
+    details: { RecommendationText },
+    group: 'Screening: Symptomatic'
+  }
+  else null
+
 //------------------------------------------------------------------------------
 // ERRORS
 //------------------------------------------------------------------------------
 
 define Errors:
-  {} union
-  Dash.Errors
+  {}
 
 define ErrorsHaveOccurred:
   Exists(Errors)

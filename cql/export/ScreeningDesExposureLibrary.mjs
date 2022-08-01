@@ -39,10 +39,6 @@ export const ScreeningDesExposureLibrary = {
             "localIdentifier" : "Common",
             "path" : "CCSMCommonFunctions",
             "version" : "1.0.0"
-         }, {
-            "localIdentifier" : "Entry",
-            "path" : "TopLevelScreeningLibrary",
-            "version" : "1.0.0"
          } ]
       },
       "parameters" : {
@@ -217,7 +213,7 @@ export const ScreeningDesExposureLibrary = {
                   "type" : "And",
                   "operand" : [ {
                      "name" : "FemaleorTransgenderMale",
-                     "libraryName" : "Entry",
+                     "libraryName" : "Dash",
                      "type" : "ExpressionRef"
                   }, {
                      "name" : "BornOnOrBeforeBirthdayThreshold",
@@ -380,6 +376,98 @@ export const ScreeningDesExposureLibrary = {
                   "type" : "As",
                   "operand" : {
                      "type" : "Null"
+                  }
+               }
+            }
+         }, {
+            "name" : "ActionShort",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "See Details",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "Recommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "short",
+                     "value" : {
+                        "name" : "ActionShort",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "Today"
+                     }
+                  }, {
+                     "name" : "details",
+                     "value" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "name" : "RecommendationText",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  }, {
+                     "name" : "group",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Screening: DES Exposure",
+                        "type" : "Literal"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "group",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
                   }
                }
             }

@@ -1202,6 +1202,15 @@
                }
             }
          }, {
+            "name" : "ShouldSwitchToRiskAt25Text",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "RecommendationForPatientsYoungerThan25",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1333,18 +1342,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan253.3",
+                           "value" : "See Details",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.",
+                           "value" : "Younger Than 25 (K.1.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -1504,18 +1528,36 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result.",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1599,18 +1641,45 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25HSIL3.1b",
+                           "value" : "Colposcopy and Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis.",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1694,18 +1763,45 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25HAscH3.1c",
+                           "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation is recommended with cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a ASC-H, AGC or AIS cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation is recommended with cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a ASC-H, AGC or AIS cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis.",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1827,18 +1923,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Treatment",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment is recommended. Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.",
+                           "value" : "Younger Than 25 (K.1.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Treatment is recommended. Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -1909,18 +2020,42 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25HSILSurveillance",
+                           "value" : "Colposcopy and Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Surveillance with colposcopy and cervical cytology should be performed at 1 year after the most recent cervical histology and cytology tests following an earlier histology HSIL (CIN2) or histologic HSIL, unspecified result.",
+                           "value" : "Younger Than 25 (K.1.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Surveillance with colposcopy and cervical cytology should be performed at 1 year after the most recent cervical histology and cytology tests following an earlier histology HSIL (CIN2) or histologic HSIL, unspecified result.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -1961,18 +2096,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Treatment",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Treatment is recommended, and observation is unacceptable (EII)",
+                           "value" : "Younger Than 25 (K.1.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Treatment is recommended, and observation is unacceptable (EII).",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -2013,18 +2163,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25Cin2",
+                           "value" : "See Details",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation is preferred, and treatment is acceptable (BII). Observation includes colposcopy and cytology at 6-month intervals.",
+                           "value" : "Younger Than 25 (K.1.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation is preferred, and treatment is acceptable (BII). Observation includes colposcopy and cytology at 6-month intervals.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -2065,18 +2230,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25Unspecified",
+                           "value" : "See Details",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Observation or treatment is acceptable after an unspecified histologic HSIL result. Observation includes colposcopy and cytology at 6-month intervals.",
+                           "value" : "Younger Than 25 (K.1.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation or treatment is acceptable after an unspecified histologic HSIL result. Observation includes colposcopy and cytology at 6-month intervals.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -2147,18 +2327,36 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended for individuals under 25 years old with cytologic HSIL, ASC-H, AGC or AIS (BII). Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended for individuals under 25 years old with cytologic HSIL, ASC-H, AGC or AIS (BII). Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2220,18 +2418,45 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result. Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result.",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2266,18 +2491,45 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25LSIL5a",
+                           "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For patients under 25 years old perform cervical cytology one year following cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "For patients under 25 years old perform cervical cytology one year following cervical histologic LSIL(CIN1) or <CIN1 result (BIII).",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2337,18 +2589,36 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LessThan25LSIL5b",
+                           "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII).",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2366,18 +2636,36 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII).",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2389,18 +2677,45 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII). Clinicians should switch to using risk estimates when patients reach the age of 25 years.",
+                           "value" : "Younger Than 25 (K.1.1)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII).",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ShouldSwitchToRiskAt25Text",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -2413,16 +2728,31 @@
                   "asTypeSpecifier" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
                         }
                      } ]
                   }
@@ -2662,18 +2992,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "PregnantPatientK2",
+                           "value" : "See Details",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Surveillance colposcopy and testing (with diagnostic cytology or HPV depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable (BII). In postpartum period, colposcopy is recommended no earlier than 4 weeks after delivery (BII). In patients diagnosed with histologic HSIL (CIN2 or CIN3) during pregnancy, if a lesion is detected at postpartum colposcopy, an excisional treatment procedure or full diagnostic evaluation (cervical cytology, HPV, and biopsy) is acceptable (BII). In the absence of a lesion on colposcopy, a full diagnostic evaluation is recommended/ expedited treatment is not recommended (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+                           "value" : "Pregnant (K.2)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Surveillance colposcopy and testing (with diagnostic cytology or HPV depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable (BII). In postpartum period, colposcopy is recommended no earlier than 4 weeks after delivery (BII). In patients diagnosed with histologic HSIL (CIN2 or CIN3) during pregnancy, if a lesion is detected at postpartum colposcopy, an excisional treatment procedure or full diagnostic evaluation (cervical cytology, HPV, and biopsy) is acceptable (BII). In the absence of a lesion on colposcopy, a full diagnostic evaluation is recommended/ expedited treatment is not recommended (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -2713,18 +3058,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "PregnantPatientK2",
+                           "value" : "See Details",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).",
+                           "value" : "Pregnant (K.2)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -2737,16 +3097,31 @@
                   "asTypeSpecifier" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
                         }
                      } ]
                   }
@@ -2913,18 +3288,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.",
+                           "value" : "Immunosuppressed (K.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -3045,18 +3435,33 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ImmunosuppressedK3",
+                           "value" : "Colposcopy",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.",
+                           "value" : "Immunosuppressed (K.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -3093,18 +3498,42 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ImmunosuppressedK3",
+                           "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 6,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.",
+                           "value" : "Immunosuppressed (K.3)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -3117,16 +3546,31 @@
                   "asTypeSpecifier" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
                         }
                      } ]
                   }
@@ -3818,6 +4262,60 @@
                }
             }
          }, {
+            "name" : "DateK41",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "type" : "Add",
+                  "operand" : [ {
+                     "name" : "CervixRemovalDate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "value" : 1,
+                     "unit" : "year",
+                     "type" : "Quantity"
+                  } ]
+               },
+               "else" : {
+                  "type" : "Add",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "type" : "Last",
+                        "source" : {
+                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "value" : 1,
+                     "unit" : "year",
+                     "type" : "Quantity"
+                  } ]
+               }
+            }
+         }, {
             "name" : "RecommendationForManagingPatientsAfterHysterectomy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3858,18 +4356,37 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HysterectomyK4",
+                           "value" : "Primary HPV or Cotest",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "ToDate",
+                           "operand" : {
+                              "name" : "DateK41",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.",
+                           "value" : "Hysterectomy (K.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -3905,18 +4422,42 @@
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HysterectomyK4",
+                           "value" : "Primary HPV or Cotest",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).",
+                           "value" : "Hysterectomy (K.4)",
                            "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).",
+                              "type" : "Literal"
+                           } ]
                         }
                      } ]
                   }
@@ -3929,16 +4470,31 @@
                   "asTypeSpecifier" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
+                        "type" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
                         }
                      } ]
                   }
@@ -4050,6 +4606,35 @@
                   "operand" : {
                      "type" : "Null"
                   }
+               }
+            }
+         }, {
+            "name" : "Errors",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List"
+            }
+         }, {
+            "name" : "ErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "Errors",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "NoErrorsHaveOccurred",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Not",
+               "operand" : {
+                  "name" : "ErrorsHaveOccurred",
+                  "type" : "ExpressionRef"
                }
             }
          } ]

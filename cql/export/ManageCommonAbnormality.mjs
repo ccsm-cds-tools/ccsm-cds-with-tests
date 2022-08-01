@@ -503,6 +503,108 @@ export const ManageCommonAbnormality = {
                }
             }
          }, {
+            "name" : "CommonAbnormalityGroup",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "PostTreatmentManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Post Treatment (Table 5)",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "PostColposcopyManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Post Colposcopy (Table 4)",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "ColposcopyResultsManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Colposcopy Results (Table 3)",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "SurveillanceManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Surveillance (Table 2)",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "GeneralScreeningManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "General Screening (Table 1)",
+                     "type" : "Literal"
+                  }
+               } ],
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "N/A",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "ReflexTestingRecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "J1RecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -517,7 +619,7 @@ export const ManageCommonAbnormality = {
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).\n\nFor patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+               "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
                "type" : "Literal"
             }
          }, {
@@ -553,7 +655,7 @@ export const ManageCommonAbnormality = {
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII).\n\nEndocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
+               "value" : "For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII). Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).",
                "type" : "Literal"
             }
          }, {
@@ -636,7 +738,7 @@ export const ManageCommonAbnormality = {
                } ]
             }
          }, {
-            "name" : "Recommendation",
+            "name" : "Action",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -699,18 +801,25 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "",
+                           "value" : "Cytology",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.",
-                           "type" : "Literal"
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ReflexTestingRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -771,26 +880,33 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "OneYearSurveillanceRecommendationText",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "OneYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "J1RecommendationText",
                               "type" : "ExpressionRef"
@@ -834,39 +950,36 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "name" : "OneYearSurveillanceRecommendationText",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "\n\n",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "name" : "J1RecommendationText",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "OneYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "Over65RecommendationText",
                               "type" : "ExpressionRef"
@@ -931,26 +1044,33 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "ThreeYearSurveillanceRecommendationText",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ThreeYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "J1RecommendationText",
                               "type" : "ExpressionRef"
@@ -994,39 +1114,36 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "name" : "ThreeYearSurveillanceRecommendationText",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "\n\n",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "name" : "J1RecommendationText",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ThreeYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "Over65RecommendationText",
                               "type" : "ExpressionRef"
@@ -1091,26 +1208,33 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "FiveYearSurveillanceRecommendationText",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "FiveYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "J1RecommendationText",
                               "type" : "ExpressionRef"
@@ -1154,39 +1278,36 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
+                           "type" : "Add",
                            "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "name" : "FiveYearSurveillanceRecommendationText",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "\n\n",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "name" : "J1RecommendationText",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "FiveYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "J1RecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "Over65RecommendationText",
                               "type" : "ExpressionRef"
@@ -1230,16 +1351,24 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "name" : "TableRecommendation",
                            "type" : "ExpressionRef"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "name" : "ColposcopyRecommendationText",
-                           "type" : "ExpressionRef"
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ColposcopyRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1300,25 +1429,24 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "ColposcopyOrTreatmentRecommendationText",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ColposcopyOrTreatmentRecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "TreatmentWithPregnancyConcernsRecommendationText",
                               "type" : "ExpressionRef"
@@ -1362,16 +1490,25 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "name" : "ColposcopyOrTreatmentRecommendationText",
-                           "type" : "ExpressionRef"
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "ColposcopyOrTreatmentRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1432,25 +1569,23 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "name" : "TableRecommendation",
                            "type" : "ExpressionRef"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "TreatmentRecommendationText",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\n\n",
-                                 "type" : "Literal"
-                              } ]
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "TreatmentRecommendationText",
+                              "type" : "ExpressionRef"
                            }, {
                               "name" : "TreatmentWithPregnancyConcernsRecommendationText",
                               "type" : "ExpressionRef"
@@ -1494,16 +1629,24 @@ export const ManageCommonAbnormality = {
                   "then" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "value" : {
                            "name" : "TableRecommendation",
                            "type" : "ExpressionRef"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "value" : {
-                           "name" : "TreatmentRecommendationText",
-                           "type" : "ExpressionRef"
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "TreatmentRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ]
                   }
@@ -1516,20 +1659,73 @@ export const ManageCommonAbnormality = {
                   "asTypeSpecifier" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "action",
+                        "name" : "short",
                         "type" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
-                        "name" : "text",
+                        "name" : "date",
                         "type" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "type" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
                         }
                      } ]
                   }
                }
+            }
+         }, {
+            "name" : "Recommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "short",
+                  "value" : {
+                     "path" : "short",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Action",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Action",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "details",
+                  "value" : {
+                     "path" : "details",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Action",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "group",
+                  "value" : {
+                     "name" : "CommonAbnormalityGroup",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
             }
          } ]
       }

@@ -29,6 +29,7 @@ codesystem "SNOMED-CT": 'http://snomed.info/sct'
 codesystem "RXNORM": 'http://www.nlm.nih.gov/research/umls/rxnorm'
 codesystem "ICD-9": 'http://hl7.org/fhir/sid/icd-9-cm'
 codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
+codesystem "GENDER-IDENTITY": 'http://hl7.org/fhir/gender-identity'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
 
 // Symptomatic value sets
@@ -63,13 +64,15 @@ valueset "Kidney Transplant": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.1
 valueset "Diagnosis of Cervical cancer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.246'
 valueset "Cervical Precancer Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.228'
 valueset "Diethylstilbestrol (DES) exposure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.198'
+valueset "Premenopausal": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.254' // AKA: Premenopausal
 valueset "Diagnosis of Absence of cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.201'
 valueset "Absence of cervix observation": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.202'
 valueset "Colposcopy procedure": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.252'
 valueset "Surgery Female Genital System Cervix Uteri": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.3157.1315'
 valueset "Cervical Excision Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.182'
 valueset "Cervical Ablation Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.241'
-valueset "Removal of Cervix Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1027'
+valueset "SNOMED Value Set for Removal of Cervix Procedures": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1027'
+valueset "CPT Value Set for Removal of Cervix Procedures": 'https://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.11.1026'
 
 // Diagnostic reports
 valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059'
@@ -86,6 +89,7 @@ valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.103
 valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 // Standard codes
+code "Transgender Male Code": 'transgender-male' from "GENDER-IDENTITY" display 'transgender male'
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
@@ -105,8 +109,12 @@ code "HPV16+": '708298003' from "SNOMED-CT" display 'Deoxyribonucleic acid of Hu
 code "HPV18+": '708299006' from "SNOMED-CT" display 'Deoxyribonucleic acid of Human papillomavirus 18 (substance)'
 code "LSIL": '62051000119105' from "SNOMED-CT" display 'Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)'
 code "ASC-US": '441087007' from "SNOMED-CT" display 'Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)'
+code "SCC": '1162767002' from "SNOMED-CT" display 'Squamous cell carcinoma (morphologic abnormality)'
 code "Atypical Endocervical Cells":	'441094005' from "SNOMED-CT" display 'Atypical endocervical cells on cervical Papanicolaou smear (finding)'
 code "Benign Endometrial Cells": '125155008' from "SNOMED-CT" display 'Endometrial cells, cytologically benign, in a postmenopausal woman (finding)'
+code "Premenopausal Menorrhagia": '627.0' from "ICD-9" display 'Premenopausal menorrhagia' // AKA: Premenopausal
+code "Excessive Bleeding in the Premenopausal Period": 'N92.4' from "ICD-10" display 'Excessive bleeding in the premenopausal period' // AKA: Premenopausal
+code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state (finding)'
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
@@ -142,13 +150,14 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     (conclusions) c
     return
       case
-        when c ~ "NILM" then {text: 'NILM', rank: 1}
-        when c ~ "ASC-US" then {text: 'ASC-US', rank: 2}
-        when c ~ "LSIL" then {text: 'LSIL', rank: 3}
-        when c ~ "ASC-H" then {text: 'ASC-H', rank: 4}
-        when c ~ "AGC" then {text: 'AGC', rank: 5}
-        when c in "HSIL" then {text: 'HSIL+', rank: 6}
-        else {text: 'ALL', rank: 0}
+        when c ~ "NILM" then {text: 'NILM', rank: 2}
+        when c ~ "ASC-US" then {text: 'ASC-US', rank: 3}
+        when c ~ "LSIL" then {text: 'LSIL', rank: 4}
+        when c ~ "ASC-H" then {text: 'ASC-H', rank: 5}
+        when c ~ "AGC" then {text: 'AGC', rank: 6}
+        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
       end
   else
     {{text: 'ALL', rank: 0}}
@@ -164,15 +173,19 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
  * @returns List<Tuple { text System.String, rank System.Integer }>
  */
 define function HpvInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c ~ "HPV16+" then {text: 'HPV16+', rank: 4}
-      when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 3}
-      when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 2}
-      when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 1}
-      else {text: 'ALL', rank: 0}
-    end
+  if conclusions is not null then
+    (conclusions) c
+    return
+      case
+        when c ~ "HPV16+" then {text: 'HPV16+', rank: 5}
+        when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 4}
+        when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 3}
+        when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 2}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
+      end
+  else
+    {{text: 'ALL', rank: 0}}
 
 /**
  * Takes the output from HpvInterpretation() and returns the text of the
@@ -192,17 +205,21 @@ define function HighestRankedInterpretation(interpretations List<Tuple { text Sy
 /**
  */
 define function BiopsyInterpretation(conclusions List<System.Concept>):
-  (conclusions) c
-  return
-    case
-      when c in "Normal Histology Finding" then {text: '<CIN1', rank: 1}
-      when c ~ "CIN1" then {text: 'CIN1', rank: 2}
-      when c ~ "CIN2" then {text: 'CIN2', rank: 3}
-      when c in "Histologic CIN3" then {text: 'CIN3', rank: 4}
-      when c in "AIS" then {text: 'AIS', rank: 5}
-      when c in "Histologic cancer" then {text: 'Cancer', rank: 6}
-      else {text: 'ALL', rank: 0}
-    end
+  if conclusions is not null then
+    (conclusions) c
+    return
+      case
+        when c in "Normal Histology Finding" then {text: '<CIN1', rank: 2}
+        when c ~ "CIN1" then {text: 'CIN1', rank: 3}
+        when c ~ "CIN2" then {text: 'CIN2', rank: 4}
+        when c in "Histologic CIN3" then {text: 'CIN3', rank: 5}
+        when c in "AIS" then {text: 'AIS', rank: 6}
+        when c in "Histologic cancer" then {text: 'Cancer', rank: 7}
+        when c is null then {text: 'NULL', rank: -1}
+        else {text: 'UNK', rank: 1}
+      end
+  else
+    {{text: 'ALL', rank: 0}}
 
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
@@ -212,6 +229,56 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 define PatientAge:
   AgeInYears()
 
+// Sex assigned at birth
+define BirthSex:
+  Patient.extension E
+    where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'
+
+define BirthSexPresent:
+  exists(BirthSex)
+
+define FemaleBirthSex:
+  exists(
+    BirthSex E
+      where E.value = 'F'
+  )
+
+define UnknownBirthSex:
+  exists(
+    BirthSex E
+      where (
+        E.value = 'ASKU' or
+        E.value = 'OTH' or
+        E.value = 'UNK'
+      )
+  )
+
+define BirthSexMissingOrUnknown:
+  not BirthSexPresent or 
+  UnknownBirthSex
+
+// Patient Gender
+define FemaleGender:
+  Patient.gender.value = 'female'
+
+define Female:
+  FemaleBirthSex or
+  (BirthSexMissingOrUnknown and FemaleGender)
+
+define GenderIdentity:
+  Patient.extension E
+    where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
+      E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
+
+define TransgenderMale:
+  exists(
+    GenderIdentity E
+      where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+  )
+
+define FemaleorTransgenderMale:
+  Female or TransgenderMale
+
 //------------------------------------------------------------------------------
 // PERTINENT CONDITIONS
 //------------------------------------------------------------------------------
@@ -219,23 +286,23 @@ define PatientAge:
 //    Allow all clinical statues and no lookback restriction
 
 define CervicalCancerDiagnoses:
-  [Condition: "Diagnosis of Cervical cancer"]
+  Common.ValidCondition([Condition: "Diagnosis of Cervical cancer"])
 
 define CervicalPrecancerDisorders:
-  [Condition: "Cervical Precancer Disorders"]
+  Common.ValidCondition([Condition: "Cervical Precancer Disorders"])
 
 define CervicalOrVaginalLesionDiagnoses:
-  [Condition: "Observed Cervical and/or Vaginal Lesions"]
+  Common.ValidCondition([Condition: "Observed Cervical and/or Vaginal Lesions"])
 
 define DesExposureDiagnoses:
-  [Condition: "Diethylstilbestrol (DES) exposure"]
+  Common.ValidCondition([Condition: "Diethylstilbestrol (DES) exposure"])
 
 define AbsenceOfCervixDiagnoses:
-  [Condition: "Diagnosis of Absence of cervix"]
+  Common.ValidCondition([Condition: "Diagnosis of Absence of cervix"])
 
 define PregnancyDiagnoses:
   C3F.Confirmed(
-    C3F.ActiveOrRecurring(
+    C3F.ActiveCondition(
       C3F.ConditionLookBack(
         [Condition: "Pregnancy"] union [Condition: "Pregnancy (New ICD10 codes published in 2018 and 2020)"],
         42 weeks
@@ -244,27 +311,27 @@ define PregnancyDiagnoses:
   )
 
 define HivDiagnoses:
-  [Condition: "HIV"]
+  Common.ValidCondition([Condition: "HIV"])
 
 define SolidOrganTransplantDiagnoses:
-  [Condition: "Solid Organ Transplant Diagnosis Codes"]
+  Common.ValidCondition([Condition: "Solid Organ Transplant Diagnosis Codes"])
 
 define SystemicLupusErythematosusDiagnoses:
-  [Condition: "Systemic Lupus Erythematosus"] union
-  [Condition: "Systemic lupus erythematosus ICD-9-CM Code"]
+  Common.ValidCondition([Condition: "Systemic Lupus Erythematosus"]) union
+  Common.ValidCondition([Condition: "Systemic lupus erythematosus ICD-9-CM Code"])
 
 define HematopoieticStemCellTransplantDiagnoses:
-  [Condition: "Hematopoietic stem cell transplant"]
+  Common.ValidCondition([Condition: "Hematopoietic stem cell transplant"])
 
 define InflammatoryBowelDisease:
-  [Condition: "ICD10CM Value Set for Crohn's Disease"] union
-  [Condition: "SNOMED Value Set for Crohn's Disease"] union
-  [Condition: "ICD10CM Value Set for Ulcerative Colitis"] union
-  [Condition: "SNOMED Value Set for Ulcerative Colitis"]
+  Common.ValidCondition([Condition: "ICD10CM Value Set for Crohn's Disease"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Crohn's Disease"]) union
+  Common.ValidCondition([Condition: "ICD10CM Value Set for Ulcerative Colitis"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Ulcerative Colitis"])
 
 define RheumatoidArthritisDiagnoses:
-  [Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"] union
-  [Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"]
+  Common.ValidCondition([Condition: "ICD10CM Value Set Adult Rheumatoid Arthritis"]) union
+  Common.ValidCondition([Condition: "SNOMED Value Set for Adult Rheumatoid Arthritis"])
 
 define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses:
   InflammatoryBowelDisease union
@@ -277,16 +344,16 @@ define InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppress
     null
 
 define ChronicGraftVersusHostDiseaseDiagnoses:
-  [Condition: "Chronic Graft versus Host Disease"] union
-  [Condition: "Chronic GvHD ICD-9 Code"] union
-  [Condition: "Chronic GvHD ICD-10 Code"]
+  Common.ValidCondition([Condition: "Chronic Graft versus Host Disease"]) union
+  Common.ValidCondition([Condition: "Chronic GvHD ICD-9 Code"]) union
+  Common.ValidCondition([Condition: "Chronic GvHD ICD-10 Code"])
 
 define ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell:
   ChronicGraftVersusHostDiseaseDiagnoses C
   where Common.ConditionDate(C) after DateOfFirstHematopoieticStemCellTransplantProcedure
 
 define GenitalGraftVersusHostDiseaseDiagnoses:
-  [Condition: "Diagnosis of Genital GvHD"]
+  Common.ValidCondition([Condition: "Diagnosis of Genital GvHD"])
 
 define GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell:
   GenitalGraftVersusHostDiseaseDiagnoses C
@@ -303,16 +370,33 @@ define ImmunocompromisedConditions:
   GenitalGraftVersusHostDiseaseDiagnoses
 
 define AbnormalUterineOrVaginalBleedingDiagnoses:
-  [Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"]
+  Common.ValidCondition([Condition: "Abnormal Uterine or Vaginal Bleeding Disorders"])
+
+define PremenopausalConditions:
+  C3F.ActiveOrRecurring(
+    Common.ValidCondition(
+      [Condition: "Premenopausal"] union
+      [Condition: "Premenopausal Menorrhagia"] union
+      [Condition: "Excessive Bleeding in the Premenopausal Period"]
+    )
+  )
+
+define PostmenopausalConditions:
+  Common.ValidCondition(
+    [Condition: "Postmenopausal"]
+  )
 
 define PertinentConditions:
   CervicalCancerDiagnoses union
   CervicalPrecancerDisorders union
+  CervicalOrVaginalLesionDiagnoses union
   DesExposureDiagnoses union
   AbsenceOfCervixDiagnoses union
   PregnancyDiagnoses union
   ImmunocompromisedConditions union
-  AbnormalUterineOrVaginalBleedingDiagnoses
+  AbnormalUterineOrVaginalBleedingDiagnoses union
+  PremenopausalConditions union
+  PostmenopausalConditions
 
 define PertinentConditionsSummary:
   (PertinentConditions) C
@@ -369,12 +453,26 @@ define AbsenceOfCervixObservations:
       [Observation: "Absence of cervix observation"]
     )
 
+define PremenopausalObservations:
+  C3F.Verified(
+    [Observation: "Premenopausal"] union
+    [Observation: "Premenopausal Menorrhagia"] union
+    [Observation: "Excessive Bleeding in the Premenopausal Period"]
+  )
+
+define PostmenopausalObservations:
+  C3F.Verified(
+    [Observation: "Postmenopausal"]
+  )
+
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
   CervicalOrVaginalLesionObservations union
   PregnancyObservations union
   DesExposureObservations union
   AbsenceOfCervixObservations union
+  PremenopausalObservations union
+  PostmenopausalObservations union
   // Clinician-provided Observations:
   ResponsesToAbnormalBleedingQuestion union
   ResponsesToVisibleLesionQuestion union
@@ -401,10 +499,12 @@ define PertinentObservationsSummary:
 //    Medication Statement (active) < 6 months ago
 
 define ImmunosuppressantMedicationRequests:
-  Common.CompletedMedicationRequest(
-    C3F.MedicationRequestLookBack(
-      [MedicationRequest: "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis"],
-      MedicationLookbackPeriod
+  Common.MedicationRequestsWithOrderIntent(
+    Common.CompletedMedicationRequest(
+      C3F.MedicationRequestLookBack(
+        [MedicationRequest: "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis"],
+        MedicationLookbackPeriod
+      )
     )
   )
 
@@ -547,7 +647,8 @@ define CervicalAblationProcedures:
 
 define RemovalOfCervixProcedures:
   C3F.Completed(
-    [Procedure: "Removal of Cervix Procedures"]
+    [Procedure: "SNOMED Value Set for Removal of Cervix Procedures"] union
+    [Procedure: "CPT Value Set for Removal of Cervix Procedures"]
   )
 
 define PertinentProcedures:
@@ -703,7 +804,7 @@ define PertinentEncountersSummary:
 // hrHPV immunization
 
 define HrHPVImmunizations:
-  [Immunization: "HPV Immunization"]
+  Common.CompletedImmunization([Immunization: "HPV Immunization"])
 
 define PertinentImmunizations:
   HrHPVImmunizations
@@ -937,50 +1038,40 @@ define Flags:
 //------------------------------------------------------------------------------
 
 define ErrorDiagnosticReportWithNoConclusonCodes:
-  if (
-      Exists(DiagnosticReportsSummary) and
-      DiagnosticReportsSummary.value is null
+  if 
+    (
+      Exists(HpvDiagnosticReports) and
+      not exists(HpvDiagnosticReports.conclusionCode)
+    ) or
+    (
+      Exists(CervicalCytologyReports) and
+      not exists(CervicalCytologyReports.conclusionCode)
+    ) or
+    (
+      Exists(HistologyDiagnosticReports) and
+      not exists(HistologyDiagnosticReports.conclusionCode)
     ) then
-      'A Diagnostic Report was found but contained no computable ConclusionCodes. Please review patient record to resolve.'
+      'A laboratory test was found without a result. Please review patient record to resolve.'
   else
     null
 
-define ErrorHistologyWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'A histology test was found but with an enexpected result code. Please review patient record to resolve.'
-  else
-    null
-
-define ErrorCytologyyWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'A cervical cytology test was found but with an enexpected result code. Please review patient record to resolve.'
-  else
-    null
-
-define ErrorHpvWithUnexpectedCode:
-  if
-    false // TODO: Determine criteria for an "unexpected code"
-    then
-    'An HPV test was found but with an enexpected result code. Please review patient record to resolve.'
+define ErrorDiagnosticReportWithUnsupportedConclusonCode:
+  if (
+    Exists(DiagnosticReportsSummary) and 
+    AnyTrue(
+      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
+    )
+  ) then
+    'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'
   else
     null
 
 define Errors:
   {
-    ErrorDiagnosticReportWithNoConclusonCodes
-  //   ErrorHistologyWithUnexpectedCode,
-  //   ErrorCytologyyWithUnexpectedCode,
-  //   ErrorHpvWithUnexpectedCode
+    ErrorDiagnosticReportWithNoConclusonCodes,
+    ErrorDiagnosticReportWithUnsupportedConclusonCode
   }
   except {null}
-  // TODO: DiagnosticReports without conclusionCodes
-  // TODO: Histology with a code that isn't one we expect
-  // TODO: Cervical Cytology with a code we don't expect
-  // TODO: HPV with a code we don't expect
 
 // SUMMARY
 
@@ -994,7 +1085,7 @@ define Pregnant:
 define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
-    name: First(Patient.name.given) + First(Patient.name.family),
+    name: First(Patient.name.given) + ' ' +First(Patient.name.family),
     id: Patient.identifier.value,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,

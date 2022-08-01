@@ -33,49 +33,26 @@ Usage: #definition
 * action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].condition[=].expression.expression = "IsIncludedAndNotExcluded"
 * action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-// TODO: Define inputs and outputs for this plan definition
-// * action[=].input
-// * action[=].output
 // -----------------------------------------------------------------------------
 // Action #1: Display pertinent medical and screening history
 // -----------------------------------------------------------------------------
 * action[=].action[+].title = "Display pertinent medical history"
 * action[=].action[=].description = "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "ASCCP Recommendation"
-* action[=].action[=].documentation[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
 * action[=].action[=].definitionCanonical = Canonical(DisplayCervicalCancerMedicalHistory|1.0.0)
 // -----------------------------------------------------------------------------
-// Action #2: Rare Abnormalities
+// Action #2: Management Recommendations
 // -----------------------------------------------------------------------------
-* action[=].action[+].title = "Rare Abnormalities"
+* action[=].action[+].title = "Management Recommendations"
 * action[=].action[=].description = "Brief description of the action"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "ASCCP Recommendation"
-* action[=].action[=].documentation[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "RareAbnormalityPresent"
+* action[=].action[=].condition[=].expression.expression = "HasRecommendation"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ManageCervicalRareAbnormalities|1.0.0)
+* action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActions|1.0.0)
 // -----------------------------------------------------------------------------
-// Action #3: Common Abnormalities
-// -----------------------------------------------------------------------------
-* action[=].action[+].title = "Common Abnormalities"
-* action[=].action[=].description = "Brief description of the action"
-* action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].documentation[+].type = $RATYPE#citation "Citation"
-* action[=].action[=].documentation[=].label = "ASCCP Recommendation"
-* action[=].action[=].documentation[=].display = "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-* action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].action[=].condition[=].expression.expression = "CommonAbnormalityPresent"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(ManageCervicalCommonAbnormalities|1.0.0)
-// -----------------------------------------------------------------------------
-// Action #4: Handle Errors
+// Action #3: Handle Errors
 // -----------------------------------------------------------------------------
 * action[=].action[+].title = "Handle Errors"
 * action[=].action[=].description = "Brief description of the action"
@@ -84,4 +61,15 @@ Usage: #definition
 * action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
-* action[=].action[=].definitionCanonical = Canonical(HandleErrors|1.0.0)
+* action[=].action[=].action[+].title = "Communicate Errors"
+* action[=].action[=].action[=].description = "Description"
+* action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].action[=].action[=].definitionCanonical = Canonical(CommunicateErrors|1.0.0)
+* action[=].action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
+* action[=].action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].action[=].dynamicValue[=].expression.expression = "Errors"
+* action[=].action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
+* action[=].action[=].action[+].title = "Prompt for More Information"
+* action[=].action[=].action[=].description = "Description"
+* action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].action[=].action[=].definitionCanonical = Canonical(ProvideMoreInformation|1.0.0)

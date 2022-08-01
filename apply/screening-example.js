@@ -23,7 +23,7 @@ const treatmentActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resour
 const provideMoreInformationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ProvideMoreInformation.json'));
 
 // Bring in an example patient bundle from the test folder
-const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Under_30_and_have_had_recent_cytology_test.json'));
+const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Age_between_21_and_29_and_have_had_recent_cytology_test.json'));
 const examplePatientResources = examplePatientBundle.entry.map(r => r.resource); // convert from bundle to flat array
 
 // Read in ELM JSON representation of CDS logic
