@@ -6049,7 +6049,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance or Treatment",
                            "type" : "Literal"
                         }
                      }, {
@@ -6124,7 +6124,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Treatment",
                            "type" : "Literal"
                         }
                      }, {
@@ -6208,7 +6208,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance or Treatment",
                            "type" : "Literal"
                         }
                      }, {
@@ -6243,54 +6243,60 @@ export const ManageRareAbnormality = {
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "GreaterOrEqual",
+                              "type" : "And",
                               "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
                               }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
+                                 "type" : "LessOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
                               } ]
                            }, {
-                              "type" : "LessOrEqual",
+                              "type" : "Or",
                               "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
+                                 "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                                 "type" : "ExpressionRef"
                               }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "50",
-                                 "type" : "Literal"
+                                 "name" : "HistologyInterpretedAsCin2",
+                                 "type" : "ExpressionRef"
                               } ]
                            } ]
                         }, {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "name" : "HistologyInterpretedAsUnspecifiedHsil",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "HistologyInterpretedAsCin2",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                        "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
                         "type" : "ExpressionRef"
                      } ]
                   },
@@ -6300,7 +6306,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance or Treatment",
                            "type" : "Literal"
                         }
                      }, {
@@ -6424,13 +6430,20 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "Add",
+                           "operand" : [ {
+                              "type" : "Today"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
                         }
                      }, {
                         "name" : "group",
@@ -6529,13 +6542,20 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance",
                            "type" : "Literal"
                         }
                      }, {
                         "name" : "date",
                         "value" : {
-                           "type" : "Today"
+                           "type" : "Add",
+                           "operand" : [ {
+                              "type" : "Today"
+                           }, {
+                              "value" : 1,
+                              "unit" : "year",
+                              "type" : "Quantity"
+                           } ]
                         }
                      }, {
                         "name" : "group",
@@ -6622,7 +6642,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance or Treatment",
                            "type" : "Literal"
                         }
                      }, {
@@ -6714,7 +6734,7 @@ export const ManageRareAbnormality = {
                         "name" : "short",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "See Details",
+                           "value" : "Surveillance or Treatment",
                            "type" : "Literal"
                         }
                      }, {

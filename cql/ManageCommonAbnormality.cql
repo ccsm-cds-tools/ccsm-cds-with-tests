@@ -49,7 +49,7 @@ define LookUpTable1:
   )
 
 define GeneralScreeningManagementRecommendation:
-  if LookUpTable1 is not null then LookUpTable1
+  if LookUpTable1 is not null then LookUpTable1.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -66,7 +66,7 @@ define LookUpTable2: // NOTE: Review whether we are correctly handling the multi
   )
 
 define SurveillanceManagementRecommendation:
-  if LookUpTable2 is not null then LookUpTable2
+  if LookUpTable2 is not null then LookUpTable2.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -80,7 +80,7 @@ define LookUpTable3: // NOTE: Review whether we need to look at history going fu
   )
 
 define ColposcopyResultsManagementRecommendation:
-  if LookUpTable3 is not null then LookUpTable3
+  if LookUpTable3 is not null then LookUpTable3.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -100,7 +100,7 @@ define LookUpTable4:
   )
 
 define PostColposcopyManagementRecommendation:
-  if LookUpTable4 is not null then LookUpTable4
+  if LookUpTable4 is not null then LookUpTable4.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -118,7 +118,7 @@ define LookUpTable5:
   )
 
 define PostTreatmentManagementRecommendation:
-  if LookUpTable5 is not null then LookUpTable5
+  if LookUpTable5 is not null then LookUpTable5.action
   else null
 
 define TableRecommendation:
@@ -343,6 +343,82 @@ define Recommendation: {
   details: Action.details,
   group: CommonAbnormalityGroup
 }
+
+//------------------------------------------------------------------------------
+// RISK TABLE SUMMARY
+//------------------------------------------------------------------------------
+
+define TableTitle:
+  'Risk Estimates'
+
+define TableSubtitle:
+  CommonAbnormalityGroup
+
+define TableHeaders:
+  {
+    {
+      key: 'relevantHpv',
+      display: 'Relevant HPV Result'
+    },
+    {
+      key: 'relevantCyto',
+      display: 'Relevant Cytology Result'
+    },
+    {
+      key: 'immediateRisk',
+      display: 'CIN 3+ Immediate Risk (%)'
+    },
+    {
+      key: 'fiveYearRisk',
+      display: 'CIN 3+ 5 yr Risk (%)'
+    }
+  }
+
+define Risk:
+  case
+    when PostTreatmentManagementRecommendation is not null then LookUpTable5
+    when PostColposcopyManagementRecommendation is not null then LookUpTable4
+    when ColposcopyResultsManagementRecommendation is not null then LookUpTable3
+    when SurveillanceManagementRecommendation is not null then LookUpTable2
+    when GeneralScreeningManagementRecommendation is not null then LookUpTable1
+    else null
+  end
+
+define RelevantHpv:
+  case
+    when PostTreatmentManagementRecommendation is not null then Collate.MostRecentHpvResultAfterTreatment
+    when PostColposcopyManagementRecommendation is not null then Collate.MostRecentHpvResultPostBiopsy
+    when ColposcopyResultsManagementRecommendation is not null then Collate.ReferringHpvResult
+    when SurveillanceManagementRecommendation is not null then Collate.MostRecentHpvResult
+    when GeneralScreeningManagementRecommendation is not null then Collate.MostRecentHpvResult
+    else null
+  end
+
+define RelevantCytology:
+  case
+    when PostTreatmentManagementRecommendation is not null then Collate.MostRecentCytologyResultAfterTreatment
+    when PostColposcopyManagementRecommendation is not null then Collate.MostRecentCytologyResultPostBiopsy
+    when ColposcopyResultsManagementRecommendation is not null then Collate.ReferringCytologyResult
+    when SurveillanceManagementRecommendation is not null then Collate.MostRecentCytologyCotestResult
+    when GeneralScreeningManagementRecommendation is not null then Collate.MostRecentCytologyCotestResult
+    else null
+  end
+
+define RelevantRow:
+  {
+    relevantHpv: RelevantHpv,
+    relevantCyto: RelevantCytology,
+    immediateRisk: Risk.riskNow,
+    fiveYearRisk: Risk.risk5yr
+  }
+
+define RiskTableSummary:
+  {
+    title: TableTitle,
+    subtitle: TableSubtitle,
+    headers: TableHeaders,
+    relevant: RelevantRow
+  }
 
 //------------------------------------------------------------------------------
 // ERRORS

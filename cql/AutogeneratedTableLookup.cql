@@ -76,14 +76,22 @@ define function GetGeneralScreeningManagement(prevHpvVal String, prevPapVal Stri
       where T.history = ScreeningText(prevHpvVal, prevPapVal, '/', 'NO HISTORY')
         and T.hpv = currHpvVal
         and T.pap = currPapVal
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     ),
     Coalesce( // Case 2: Current cytology is 'High Grade'
       GeneralScreeningTable T
       where T.history = ScreeningText(prevHpvVal, prevPapVal, '/', 'NO HISTORY')
         and T.hpv = currHpvVal
         and T.pap = HighGradePap(currPapVal)
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     )
   )
 
@@ -128,7 +136,11 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = currPapVal
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     ),
     Coalesce( // Case 2: 'ASC_US' instead of 'ASC-US'
       SurveillanceTable T
@@ -136,7 +148,11 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = AscusAlternativeSpelling(currPapVal)
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     ),
     Coalesce( // Case 3: 'ASC-US, LSIL' or 'High Grade'
       SurveillanceTable T
@@ -144,7 +160,11 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = HighGradeOrAscusLsilPap(currPapVal)
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     ),
     Coalesce( // Case 4: No recent cytology result
       SurveillanceTable T
@@ -152,7 +172,11 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = 'ALL'
-        return T.management
+        return {
+          action: T.management,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     )
   )
 
@@ -162,13 +186,21 @@ define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsy
       ColposcopyResultsTable T
         where T.referral_screen_result = ScreeningText(preBiopsyHpvVal, preBiopsyPapVal, ' ', 'none')
           and T.biopsy = biopsyVal
-          return T.management
+          return {
+            action: T.management,
+            riskNow: convert T.value.immediate to Decimal,
+            risk5yr: convert T.value.five_year to Decimal
+          }
     ),
     Coalesce( // Case 2: Just Cytology results
       ColposcopyResultsTable T
         where T.referral_screen_result = preBiopsyPapVal
           and T.biopsy = biopsyVal
-          return T.management
+          return {
+            action: T.management,
+            riskNow: convert T.value.immediate to Decimal,
+            risk5yr: convert T.value.five_year to Decimal
+          }
     )
   )
   
@@ -251,7 +283,11 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
             and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
             and T.hpv = currHpvVal
             and T.pap = currPapVal
-            return T.management // TODO: Return table number and risk scores
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 2: Current cytology might be specified as 'High Grade'
         PostColposcopyTable T
@@ -259,7 +295,11 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
             and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
             and T.hpv = currHpvVal
             and T.pap = HighOrLowGradeResults(currHpvVal, currPapVal)
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 3: Current cytology might be specified as 'ASC-US/LSIL'
         PostColposcopyTable T
@@ -267,7 +307,11 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
             and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
             and T.hpv = currHpvVal
             and T.pap = AscusLsilPap(currPapVal)
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 4: Current cytology might be specified as 'ALL'
         PostColposcopyTable T
@@ -275,7 +319,11 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
             and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
             and T.hpv = currHpvVal
             and T.pap = 'ALL'
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       )
     )
   else
@@ -332,28 +380,44 @@ define function GetPostTreatmentManagement(biopsyVal String, prev2HpvVal String,
           where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
             and T.hpv = LongTermSurveillance(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal)
             and T.pap = 'none'
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 2: Explicit current cytology
         PostTreatmentTable T
           where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
             and T.hpv = currHpvVal
             and T.pap = currPapVal
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 3: Current cytology might be specified as 'High Grade'
         PostTreatmentTable T
           where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
             and T.hpv = currHpvVal
             and T.pap = HighOrLowGradeResults(currHpvVal, currPapVal)
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       ),
       Coalesce( // Case 4: Current cytology might be specified as 'ASC-US/LSIL'
         PostTreatmentTable T
           where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
             and T.hpv = currHpvVal
             and T.pap = AscusLsilPap(currPapVal)
-            return T.management
+            return {
+              action: T.management,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
       )
     )
   else

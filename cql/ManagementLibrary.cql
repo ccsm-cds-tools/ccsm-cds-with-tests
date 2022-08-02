@@ -200,14 +200,18 @@ define HasRecommendation:
 
 define RecommendColposcopy:
   ManagementRecommendation.short = 'Colposcopy' or 
-  ManagementRecommendation.short = 'Colposcopy/Treatment'
+  ManagementRecommendation.short = 'Colposcopy or Surveillance' or
+  ManagementRecommendation.short = 'Colposcopy or Treatment'
 
 define RecommendSurveillance:
-  ManagementRecommendation.short = 'Surveillance'
+  ManagementRecommendation.short = 'Surveillance' or
+  ManagementRecommendation.short = 'Colposcopy or Surveillance' or
+  ManagementRecommendation.short = 'Surveillance or Treatment'
 
 define RecommendTreatment:
   ManagementRecommendation.short = 'Treatment' or 
-  ManagementRecommendation.short = 'Colposcopy/Treatment'
+  ManagementRecommendation.short = 'Colposcopy or Treatment' or
+  ManagementRecommendation.short = 'Surveillance or Treatment'
 
 define ColposcopyOrderCode:
   Orders.ColposcopyCodeableConcept
@@ -233,6 +237,15 @@ define SuggestedOrders:
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
 
+define RiskTableSummary:
+  ManageCommonAbnormality.RiskTableSummary
+  // if (
+  //   SpecialPopulationRecommendation is null and
+  //   RareAbnormalityRecommendation is null and
+  //   CommonAbnormalityRecommendation is not null
+  // ) then ManageCommonAbnormality.RiskTableSummary
+  // else null
+
 define DecisionAids:
   {
     recommendation: ManagementRecommendation.short,
@@ -240,5 +253,6 @@ define DecisionAids:
     recommendationDetails: ManagementRecommendation.details,
     errors: Errors,
     disclaimer: 'An evidence based recommendation is provided based on clinical data available in the patient\'s electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.',
-    suggestedOrders: SuggestedOrders
+    suggestedOrders: SuggestedOrders,
+    riskTable: RiskTableSummary
   }

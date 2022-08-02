@@ -595,18 +595,35 @@ export const ManagementLibrary = {
             "expression" : {
                "type" : "Or",
                "operand" : [ {
-                  "type" : "Equal",
+                  "type" : "Or",
                   "operand" : [ {
-                     "path" : "short",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "ManagementRecommendation",
-                        "type" : "ExpressionRef"
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Colposcopy",
+                        "type" : "Literal"
+                     } ]
                   }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy",
-                     "type" : "Literal"
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Colposcopy or Surveillance",
+                        "type" : "Literal"
+                     } ]
                   } ]
                }, {
                   "type" : "Equal",
@@ -619,7 +636,7 @@ export const ManagementLibrary = {
                      }
                   }, {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy/Treatment",
+                     "value" : "Colposcopy or Treatment",
                      "type" : "Literal"
                   } ]
                } ]
@@ -629,39 +646,37 @@ export const ManagementLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Equal",
-               "operand" : [ {
-                  "path" : "short",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "ManagementRecommendation",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "Surveillance",
-                  "type" : "Literal"
-               } ]
-            }
-         }, {
-            "name" : "RecommendTreatment",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
                "type" : "Or",
                "operand" : [ {
-                  "type" : "Equal",
+                  "type" : "Or",
                   "operand" : [ {
-                     "path" : "short",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "ManagementRecommendation",
-                        "type" : "ExpressionRef"
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Surveillance",
+                        "type" : "Literal"
+                     } ]
                   }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Treatment",
-                     "type" : "Literal"
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Colposcopy or Surveillance",
+                        "type" : "Literal"
+                     } ]
                   } ]
                }, {
                   "type" : "Equal",
@@ -674,7 +689,60 @@ export const ManagementLibrary = {
                      }
                   }, {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Colposcopy/Treatment",
+                     "value" : "Surveillance or Treatment",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "RecommendTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Treatment",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "short",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "ManagementRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Colposcopy or Treatment",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }, {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "path" : "short",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "ManagementRecommendation",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Surveillance or Treatment",
                      "type" : "Literal"
                   } ]
                } ]
@@ -837,6 +905,15 @@ export const ManagementLibrary = {
                } ]
             }
          }, {
+            "name" : "RiskTableSummary",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "RiskTableSummary",
+               "libraryName" : "ManageCommonAbnormality",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "DecisionAids",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -889,6 +966,12 @@ export const ManagementLibrary = {
                   "name" : "suggestedOrders",
                   "value" : {
                      "name" : "SuggestedOrders",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "riskTable",
+                  "value" : {
+                     "name" : "RiskTableSummary",
                      "type" : "ExpressionRef"
                   }
                } ]

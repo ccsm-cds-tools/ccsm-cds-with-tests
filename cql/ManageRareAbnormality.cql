@@ -824,7 +824,7 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsUnspecifiedHsil
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.1)',
         details: {
@@ -839,7 +839,7 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsCin3
     ) then
       {
-        short: 'See Details',
+        short: 'Treatment',
         date: Today(),
         group: 'Managing Histology (I.2)',
         details: {
@@ -853,7 +853,7 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsCin2
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.2)',
         details: {
@@ -867,10 +867,11 @@ define RecommendationForHistologyResults:
         HistologyInterpretedAsUnspecifiedHsil or
         HistologyInterpretedAsCin2
       ) and
-      HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy
+      HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy and
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
@@ -885,8 +886,8 @@ define RecommendationForHistologyResults:
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Surveillance',
+        date: Today() + 3 years,
         group: 'Managing Histology (I.3)',
         details: {
           'Surveillance with HPV-based testing is recommended every 3 years for 25 years after histologic HSIL (unspecified or CIN2) even if beyond the age of 65 (BII).'
@@ -900,8 +901,8 @@ define RecommendationForHistologyResults:
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
-        short: 'See Details',
-        date: Today(),
+        short: 'Surveillance',
+        date: Today() + 1 year,
         group: 'Managing Histology (I.3)',
         details: {
           'Subsequent surveillance with HPV-based testing should occur every year since the patient has demonstrated less than CIN2 and less than ASC-H during surveillance following a histologic unspecified or CIN2 result.'
@@ -914,7 +915,7 @@ define RecommendationForHistologyResults:
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
@@ -928,7 +929,7 @@ define RecommendationForHistologyResults:
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
