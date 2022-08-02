@@ -1,6 +1,6 @@
-{
+export const CervicalCancerManagementActions = {
   "resourceType": "PlanDefinition",
-  "id": "CervicalCancerManagement",
+  "id": "CervicalCancerManagementActions",
   "meta": {
     "profile": [
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
@@ -44,9 +44,9 @@
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
-  "name": "CervicalCancerManagement",
-  "title": "ASCCP Recommendations for Cervical Cancer Management",
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions",
+  "name": "CervicalCancerManagementActions",
+  "title": "CervicalCancerManagementActions",
   "type": {
     "coding": [
       {
@@ -76,93 +76,99 @@
   ],
   "action": [
     {
-      "title": "Cervical Cancer Management Actions",
-      "description": "Brief description of the action",
-      "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-      "documentation": [
+      "title": "Management Decision Aids",
+      "description": "Management Decision Aids",
+      "textEquivalent": "Management Decision Aids",
+      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids|1.0.0",
+      "dynamicValue": [
         {
-          "type": "citation",
-          "label": "ASCCP Recommendation",
-          "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-        }
-      ],
-      "trigger": [
-        {
-          "type": "named-event",
-          "name": "encounter-start"
-        }
-      ],
-      "condition": [
-        {
-          "kind": "applicability",
+          "path": "payload[0].content.ofType(string)",
           "expression": {
             "language": "text/cql",
-            "expression": "IsIncludedAndNotExcluded",
+            "expression": "DecisionAids",
             "reference": "Library/ManagementLibrary|1.0"
           }
         }
-      ],
+      ]
+    },
+    {
+      "title": "Recommended Management Activities",
+      "description": "Recommended Management Activities",
+      "textEquivalent": "Recommended Management Activities",
+      "groupingBehavior": "visual-group",
+      "selectionBehavior": "at-most-one",
       "action": [
         {
-          "title": "Display pertinent medical history",
-          "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
-          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory|1.0.0"
-        },
-        {
-          "title": "Management Recommendations",
-          "description": "Brief description of the action",
-          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "title": "Colposcopy",
           "condition": [
             {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "HasRecommendation",
+                "expression": "RecommendColposcopy",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
           ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions|1.0.0"
+          "dynamicValue": [
+            {
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "ColposcopyOrderCode",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
+            }
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0"
         },
         {
-          "title": "Handle Errors",
-          "description": "Brief description of the action",
-          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "title": "Surveillance",
           "condition": [
             {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "ErrorsHaveOccurred",
+                "expression": "RecommendSurveillance",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
           ],
-          "action": [
+          "dynamicValue": [
             {
-              "title": "Communicate Errors",
-              "description": "Description",
-              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors|1.0.0",
-              "dynamicValue": [
-                {
-                  "path": "payload[0].content.ofType(string)",
-                  "expression": {
-                    "language": "text/cql",
-                    "expression": "Errors",
-                    "reference": "Library/ManagementLibrary|1.0"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Prompt for More Information",
-              "description": "Description",
-              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ProvideMoreInformation|1.0.0"
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "SurveillanceOrderCode",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
             }
-          ]
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0"
+        },
+        {
+          "title": "Treatment",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql",
+                "expression": "RecommendTreatment",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
+            }
+          ],
+          "dynamicValue": [
+            {
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "TreatmentOrderCode",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
+            }
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0"
         }
       ]
     }

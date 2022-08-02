@@ -1,6 +1,6 @@
-{
+export const CervicalCancerManagement = {
   "resourceType": "PlanDefinition",
-  "id": "CervicalCancerScreening",
+  "id": "CervicalCancerManagement",
   "meta": {
     "profile": [
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
@@ -44,9 +44,9 @@
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreening",
-  "name": "CervicalCancerScreening",
-  "title": "Cervical Cancer Screening",
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
+  "name": "CervicalCancerManagement",
+  "title": "ASCCP Recommendations for Cervical Cancer Management",
   "type": {
     "coding": [
       {
@@ -56,54 +56,34 @@
       }
     ]
   },
-  "description": "This CDS tool provides care cervical cancer screening recommendations to a diverse population of individuals (i.e., those experiencing abnormal uterine or vaginal bleeding, have in utero exposure to diethylstilbestrol [DES], are immunocompromised, or are at “average risk” for cervical cancer). The evidence sources that inspired this tool are listed in the relatedArtifact metadata field.",
-  "useContext": [
-    {
-      "code": {
-        "code": "gender",
-        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
-        "display": "Gender"
-      },
-      "valueCodeableConcept": {
-        "coding": [
-          {
-            "code": "F",
-            "system": "http://terminology.hl7.org/CodeSystem/v3-AdministrativeGender",
-            "display": "Female"
-          }
-        ]
-      }
-    }
-  ],
-  "purpose": "This CDS identifies individuals for whom cervical cancer screening is indicated. It delivers patient-specific evidence-based screening recommendations based on information in the patient’s health record. It also gathers relevant information in the patient record to display to the clinician as a dashboard in support of care decisions. The dashboard includes information such as evidence of previous pre-cancer or cancerous lesions, previous colposcopies and biopsy results, previous surgeries, etc. The CDS integrates tightly with a companion CDS component (i.e., “Management CDS”), which provides evidence-based care recommendations if screening results are “abnormal”.",
-  "usage": "This artifact is intended for use by healthcare personnel working in primary healthcare settings who care for adolescent and adult patients (i.e., physicians, general practitioners, nurse practitioners, physician assistants, and obstetricians).",
+  "description": "Natural language description of the plan definition",
+  "purpose": "Why this plan definition is defined",
+  "usage": "Describes the clinical usage of the plan",
   "topic": [
     {
-      "text": "Preventive Medicine"
-    },
+      "text": "Insert mesh terms here"
+    }
+  ],
+  "relatedArtifact": [
     {
-      "text": "Public Health"
-    },
-    {
-      "text": "Cervical Cancer"
-    },
-    {
-      "text": "Cancer Screening"
+      "type": "citation",
+      "label": "ASCCP Recommendation",
+      "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/ManagementLibrary|1.0.0"
   ],
   "action": [
     {
-      "title": "Cervical Cancer Screening Actions",
-      "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
+      "title": "Cervical Cancer Management Actions",
+      "description": "Brief description of the action",
       "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
       "documentation": [
         {
-          "type": "documentation",
-          "label": "Inclusions",
-          "display": "Appropriate for individuals whose sex at birth is recorded as Female or whose gender identity is recorded as Transgender Male."
+          "type": "citation",
+          "label": "ASCCP Recommendation",
+          "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
         }
       ],
       "trigger": [
@@ -118,7 +98,7 @@
           "expression": {
             "language": "text/cql",
             "expression": "IsIncludedAndNotExcluded",
-            "reference": "Library/ScreeningLibrary|1.0"
+            "reference": "Library/ManagementLibrary|1.0"
           }
         }
       ],
@@ -130,7 +110,7 @@
           "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory|1.0.0"
         },
         {
-          "title": "Screening Recommendations",
+          "title": "Management Recommendations",
           "description": "Brief description of the action",
           "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
           "condition": [
@@ -139,11 +119,11 @@
               "expression": {
                 "language": "text/cql",
                 "expression": "HasRecommendation",
-                "reference": "Library/ScreeningLibrary|1.0"
+                "reference": "Library/ManagementLibrary|1.0"
               }
             }
           ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningActions|1.0.0"
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions|1.0.0"
         },
         {
           "title": "Handle Errors",
@@ -155,7 +135,7 @@
               "expression": {
                 "language": "text/cql",
                 "expression": "ErrorsHaveOccurred",
-                "reference": "Library/ScreeningLibrary|1.0"
+                "reference": "Library/ManagementLibrary|1.0"
               }
             }
           ],
@@ -171,7 +151,7 @@
                   "expression": {
                     "language": "text/cql",
                     "expression": "Errors",
-                    "reference": "Library/ScreeningLibrary|1.0"
+                    "reference": "Library/ManagementLibrary|1.0"
                   }
                 }
               ]

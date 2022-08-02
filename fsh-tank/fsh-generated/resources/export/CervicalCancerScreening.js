@@ -1,4 +1,4 @@
-{
+export const CervicalCancerScreening = {
   "resourceType": "PlanDefinition",
   "id": "CervicalCancerScreening",
   "meta": {
