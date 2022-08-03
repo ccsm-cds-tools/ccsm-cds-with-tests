@@ -673,6 +673,12 @@ define PertinentProceduresSummary:
 // Diagnostic reports relevant to cervical cancer
 //    Status of (final, amended, corrected, appended).
 
+define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>):
+  D.conclusionCode union
+  (ObsList) O
+    where Exists( (D.result) R where R.reference = 'Observation/' + O.id )
+    return O.value as FHIR.CodeableConcept
+
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
@@ -681,13 +687,16 @@ define HpvDiagnosticReports:
     )
   )
 
+define HpvObservations:
+  [Observation: "HPV Test"]
+
 define MostRecentHpvReport:
   Common.MostRecentDiagnosticReport(HpvDiagnosticReports)
 
 define MostRecentNegativeHpv:
   MostRecentHpvReport R
     where (
-      R.conclusionCode in "HPV Negative Results"
+      CollateConclusionCodes(R,HpvObservations) in "HPV Negative Results"
     )
 
 define CervicalCytologyReports:
@@ -698,26 +707,32 @@ define CervicalCytologyReports:
     )
   )
 
+define CytologyObservations:
+  [Observation: "Pap Test"]
+
 define MostRecentCytologyReport:
   Common.MostRecentDiagnosticReport(CervicalCytologyReports)
 
 define MostRecentNilmCytology:
   (MostRecentCytologyReport) R
     where AnyTrue(
-      (R.conclusionCode) cC return cC ~ "NILM"
+      (CollateConclusionCodes(R,CytologyObservations)) cC return cC ~ "NILM"
     )
 
 define HistologyDiagnosticReports:
   Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])
+
+define HistologyObservations:
+  [Observation: "Biopsy Report"]
 
 define HpvDiagnosticReportsSummary:
   (HpvDiagnosticReports) D
   return {
     name: 'HPV Test',
     longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(HpvInterpretation(D.conclusionCode)),
+    value: HighestRankedInterpretation(HpvInterpretation(CollateConclusionCodes(D,HpvObservations))),
     longValue: flatten(
-      (D.conclusionCode) cC 
+      (CollateConclusionCodes(D,HpvObservations)) cC 
         return (cC.coding) cCC 
           return cCC.display
     ),
@@ -730,9 +745,9 @@ define CervicalCytologyReportsSummary:
   return {
     name: 'Cervical Cytology',
     longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(CytologyInterpretation(D.conclusionCode)),
+    value: HighestRankedInterpretation(CytologyInterpretation(CollateConclusionCodes(D,CytologyObservations))),
     longValue: flatten(
-      (D.conclusionCode) cC 
+      (CollateConclusionCodes(D,CytologyObservations)) cC 
         return (cC.coding) cCC 
           return cCC.display
     ),
@@ -745,9 +760,9 @@ define HistologyDiagnosticReportsSummary:
   return {
     name: 'Cervical Histology',
     longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(BiopsyInterpretation(D.conclusionCode)),
+    value: HighestRankedInterpretation(BiopsyInterpretation(CollateConclusionCodes(D,HistologyObservations))),
     longValue: flatten(
-      (D.conclusionCode) cC 
+      (CollateConclusionCodes(D,HistologyObservations)) cC 
         return (cC.coding) cCC 
           return cCC.display
     ),
@@ -764,12 +779,13 @@ define DiagnosticReportsSummary:
   sort by date desc
 
 define HighGradeOrCancerHistologyResults:
-  HistologyDiagnosticReports H
-    where H.conclusionCode includes ToConcept("CIN2") or
-      H.conclusionCode in "Histologic CIN3" or
-      H.conclusionCode includes ToConcept("HSIL, Unspecified") or
-      H.conclusionCode in "AIS" or
-      H.conclusionCode in "Histologic cancer"
+  HistologyDiagnosticReports D
+    let cC: CollateConclusionCodes(D,HistologyObservations)
+    where cC includes ToConcept("CIN2") or
+      cC in "Histologic CIN3" or
+      cC includes ToConcept("HSIL, Unspecified") or
+      cC in "AIS" or
+      cC in "Histologic cancer"
 
 //------------------------------------------------------------------------------
 // PERTINENT ENCOUNTERS
@@ -852,8 +868,8 @@ define ResponsesToFuturePregnancyConcernsQuestion:
 
 define RecentPositiveHpv:
   Common.LookBack(
-    (HpvDiagnosticReports) H
-      where H.conclusionCode in "High Risk HPV Positive Results",
+    (HpvDiagnosticReports) D
+      where CollateConclusionCodes(D,HpvObservations) in "High Risk HPV Positive Results",
     AbnormalTestLookbackPeriod
   )
 
@@ -862,18 +878,18 @@ define HasRecentPositiveHpv:
 
 define RecentAbnormalCytologyResults:
   Common.LookBack(
-    (CervicalCytologyReports) C
+    (CervicalCytologyReports) D
       where (
-        C.conclusionCode in "Abnormal results of Cervical Cytology Test" 
-        ),
+        CollateConclusionCodes(D,CytologyObservations) in "Abnormal results of Cervical Cytology Test" 
+      ),
     AbnormalTestLookbackPeriod
   )
 
 define RecentRareCytologyResults:
   Common.LookBack(
-    (CervicalCytologyReports) R
+    (CervicalCytologyReports) D
       where AnyTrue(
-        (R.conclusionCode) cC return 
+        (CollateConclusionCodes(D,CytologyObservations)) cC return 
           cC ~ "Benign Glandular Cells" or
           cC ~ "Benign Endometrial Cells" or
           cC ~ "Endometrial Stromal Cells" or 
@@ -899,8 +915,8 @@ define HasRecentAbnormalScreening:
 
 define RecentAbnormalHistology:
   Common.LookBack(
-    HistologyDiagnosticReports H
-      where not (H.conclusionCode includes ToConcept("Negative")),
+    HistologyDiagnosticReports D
+      where not (CollateConclusionCodes(D,HistologyObservations) includes ToConcept("Negative")),
     AbnormalTestLookbackPeriod
   )
 
@@ -1041,15 +1057,21 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
   if 
     (
       Exists(HpvDiagnosticReports) and
-      not exists(HpvDiagnosticReports.conclusionCode)
+      AnyTrue(
+        (HpvDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HpvObservations))
+      )
     ) or
     (
       Exists(CervicalCytologyReports) and
-      not exists(CervicalCytologyReports.conclusionCode)
+      AnyTrue(
+        (CervicalCytologyReports) D return not Exists(CollateConclusionCodes(D,CytologyObservations))
+      )
     ) or
     (
       Exists(HistologyDiagnosticReports) and
-      not exists(HistologyDiagnosticReports.conclusionCode)
+      AnyTrue(
+        (HistologyDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HistologyObservations))
+      )
     ) then
       'A laboratory test was found without a result. Please review patient record to resolve.'
   else
