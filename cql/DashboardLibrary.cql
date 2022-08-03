@@ -676,7 +676,9 @@ define PertinentProceduresSummary:
 define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>):
   D.conclusionCode union
   (ObsList) O
-    where Exists( (D.result) R where R.reference = 'Observation/' + O.id )
+    where 
+      Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+      Exists( (O.basedOn) B where Last(Split(B.reference,'/')) =  D.id )
     return O.value as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:
@@ -869,7 +871,10 @@ define ResponsesToFuturePregnancyConcernsQuestion:
 define RecentPositiveHpv:
   Common.LookBack(
     (HpvDiagnosticReports) D
-      where CollateConclusionCodes(D,HpvObservations) in "High Risk HPV Positive Results",
+      where Exists(
+        (CollateConclusionCodes(D,HpvObservations)) cC 
+          where cC in "High Risk HPV Positive Results"
+      ),
     AbnormalTestLookbackPeriod
   )
 
@@ -879,8 +884,9 @@ define HasRecentPositiveHpv:
 define RecentAbnormalCytologyResults:
   Common.LookBack(
     (CervicalCytologyReports) D
-      where (
-        CollateConclusionCodes(D,CytologyObservations) in "Abnormal results of Cervical Cytology Test" 
+      where Exists(
+        (CollateConclusionCodes(D,CytologyObservations)) cC
+          where cC in "Abnormal results of Cervical Cytology Test" 
       ),
     AbnormalTestLookbackPeriod
   )

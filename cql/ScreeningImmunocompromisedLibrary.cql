@@ -115,24 +115,36 @@ define RecentCytologyReportsSinceImmunosuppressionOnset:
 define OneNilmCytologySinceImmunosuppressionOnset:
   Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 0 and
   AnyTrue(
-    (RecentCytologyReportsSinceImmunosuppressionOnset[0].conclusionCode) cC 
-    return cC ~ Dash."NILM"
+    (
+      Dash.CollateConclusionCodes(
+        RecentCytologyReportsSinceImmunosuppressionOnset[0],
+        Dash.CytologyObservations
+      )
+    ) cC return cC ~ Dash."NILM"
   )
 
 define TwoNilmCytologiesSinceImmunosuppressionOnset:
   Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 1 and
   OneNilmCytologySinceImmunosuppressionOnset and
   AnyTrue(
-    (RecentCytologyReportsSinceImmunosuppressionOnset[1].conclusionCode) cC 
-    return cC ~ Dash."NILM"
+    (
+      Dash.CollateConclusionCodes(
+        RecentCytologyReportsSinceImmunosuppressionOnset[1],
+        Dash.CytologyObservations
+      )
+    ) cC return cC ~ Dash."NILM"
   )
 
 define ThreeNilmCytologiesSinceImmunosuppressionOnset:
   Count(RecentCytologyReportsSinceImmunosuppressionOnset) > 2 and
   TwoNilmCytologiesSinceImmunosuppressionOnset and
   AnyTrue(
-    (RecentCytologyReportsSinceImmunosuppressionOnset[2].conclusionCode) cC 
-    return cC ~ Dash."NILM"
+    (
+      Dash.CollateConclusionCodes(
+        RecentCytologyReportsSinceImmunosuppressionOnset[2],
+        Dash.CytologyObservations
+      )
+    ) cC return cC ~ Dash."NILM"
   )
 
 define RecentCytologyReportsSinceImmunosuppressionOnsetFilterForNilm:
@@ -262,12 +274,12 @@ define CoincidentHpvTests:
     return R
 
 define NegativeCotests:
-  CoincidentHpvTests R
+  CoincidentHpvTests D
     where
-      R.conclusionCode in Dash."HPV Negative Results"
+      Dash.CollateConclusionCodes(D,Dash.HpvObservations) in Dash."HPV Negative Results"
     return {
       type: 'DiagnosticReport',
-      date: Common.DiagnosticReportDate(R)
+      date: Common.DiagnosticReportDate(D)
     }
 
 define LastCytologyWasCotest:

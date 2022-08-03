@@ -347,33 +347,30 @@ define Recommendation:
 //------------------------------------------------------------------------------
 
 define ErrorNonNilmCytologyResult:
-    if (
-      AnyTrue(
-        (Dash.CervicalCytologyReports.conclusionCode) cC
-          return (
-            cC is not null and
-            cC !~ Dash."NILM"
-          )
+  if Exists(
+    (Dash.CervicalCytologyReports) D 
+      let CCC: Dash.CollateConclusionCodes(D,Dash.CytologyObservations)
+      where (
+        Exists(CCC) and
+        AnyTrue((CCC) cC return cC !~ Dash."NILM")
       )
-    ) then
-      'A cytology test was found with a non-NILM result. Consider cervical cancer management.'
-    else
-      null
-
+  ) then
+    'A cytology test was found with a non-NILM result. Consider cervical cancer management.'
+  else
+    null
 
 define ErrorNonNegativeHpvResult:
-    if (
-      AnyTrue(
-        (Dash.HpvDiagnosticReports.conclusionCode) cC
-          return (
-            cC is not null and
-            not (cC in Dash."HPV Negative Results")
-          )
+  if Exists(
+    (Dash.HpvDiagnosticReports) D 
+      let CCC: Dash.CollateConclusionCodes(D,Dash.HpvObservations)
+      where (
+        Exists(CCC) and
+        AnyTrue((CCC) cC return (cC in Dash."HPV Negative Results") = false)
       )
-    ) then
-      'An HPV test was found with a non-negative result. Consider cervical cancer management.'
-    else
-      null
+  ) then
+    'An HPV test was found with a non-negative result. Consider cervical cancer management.'
+  else
+    null
 
 define AbnormalResultInRecord:
   ErrorNonNilmCytologyResult is not null or

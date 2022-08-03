@@ -79,15 +79,18 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
 define HpvReports:
   Dash.HpvDiagnosticReports
 
+define HpvObservations:
+  Dash.HpvObservations
+
 define SortedHpvReports:
   (HpvReports) H
   return {
     riskTableInput: HighestRankedInterpretation(
       HpvInterpretation(
-        H.conclusionCode
+        Dash.CollateConclusionCodes(H,HpvObservations)
       )
     ),
-    allConclusions: H.conclusionCode,
+    allConclusions: Dash.CollateConclusionCodes(H,HpvObservations),
     date: Common.DiagnosticReportDate(H)
   }
   sort by date desc
@@ -146,15 +149,18 @@ define FourthMostRecentHpvResult:
 define CervicalCytologyReports:
   Dash.CervicalCytologyReports
 
+define CytologyObservations:
+  Dash.CytologyObservations
+
 define SortedCytologyReports:
   (CervicalCytologyReports) C
   return {
     riskTableInput: HighestRankedInterpretation(
       CytologyInterpretation(
-        C.conclusionCode
+        Dash.CollateConclusionCodes(C,CytologyObservations)
       )
     ),
-    allConclusions: C.conclusionCode,
+    allConclusions: Dash.CollateConclusionCodes(C,CytologyObservations),
     date: Common.DiagnosticReportDate(C)
   }
   sort by date desc
@@ -243,15 +249,18 @@ define BiopsyReports:
     BiopsyLookbackPeriod
   )
 
+define HistologyObservations:
+  Dash.HistologyObservations
+
 define SortedBiopsyReports:
   (BiopsyReports) B
   return {
     riskTableInput: HighestRankedInterpretation(
       BiopsyInterpretation(
-        B.conclusionCode
+        Dash.CollateConclusionCodes(B,CytologyObservations)
       )
     ),
-    allConclusions: B.conclusionCode,
+    allConclusions: Dash.CollateConclusionCodes(B,CytologyObservations),
     date: Common.DiagnosticReportDate(B)
   }
   sort by date desc

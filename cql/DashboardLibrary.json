@@ -5233,38 +5233,45 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "R",
-                           "expression" : {
-                              "path" : "result",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "D",
-                                 "type" : "OperandRef"
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Exists",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "R",
+                              "expression" : {
+                                 "path" : "result",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "D",
+                                    "type" : "OperandRef"
+                                 }
                               }
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "where" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
+                           } ],
+                           "relationship" : [ ],
+                           "where" : {
+                              "type" : "Equal",
                               "operand" : [ {
-                                 "path" : "reference",
-                                 "scope" : "R",
-                                 "type" : "Property"
-                              } ]
-                           }, {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Observation/",
-                                 "type" : "Literal"
+                                 "type" : "Last",
+                                 "source" : {
+                                    "type" : "Split",
+                                    "stringToSplit" : {
+                                       "name" : "ToString",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "path" : "reference",
+                                          "scope" : "R",
+                                          "type" : "Property"
+                                       } ]
+                                    },
+                                    "separator" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "/",
+                                       "type" : "Literal"
+                                    }
+                                 }
                               }, {
                                  "name" : "ToString",
                                  "libraryName" : "FHIRHelpers",
@@ -5275,9 +5282,59 @@
                                     "type" : "Property"
                                  } ]
                               } ]
-                           } ]
+                           }
                         }
-                     }
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "B",
+                              "expression" : {
+                                 "path" : "basedOn",
+                                 "scope" : "O",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "where" : {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "type" : "Last",
+                                 "source" : {
+                                    "type" : "Split",
+                                    "stringToSplit" : {
+                                       "name" : "ToString",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "path" : "reference",
+                                          "scope" : "B",
+                                          "type" : "Property"
+                                       } ]
+                                    },
+                                    "separator" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "/",
+                                       "type" : "Literal"
+                                    }
+                                 }
+                              }, {
+                                 "name" : "ToString",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "id",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "D",
+                                       "type" : "OperandRef"
+                                    }
+                                 } ]
+                              } ]
+                           }
+                        }
+                     } ]
                   },
                   "return" : {
                      "expression" : {
@@ -6601,11 +6658,11 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "X",
+                           "alias" : "cC",
                            "expression" : {
                               "name" : "CollateConclusionCodes",
                               "type" : "FunctionRef",
@@ -6618,22 +6675,23 @@
                               } ]
                            }
                         } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "X",
+                                 "name" : "cC",
                                  "type" : "AliasRef"
                               } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "type" : "ValueSetRef"
                            }
                         }
-                     },
-                     "valueset" : {
-                        "name" : "High Risk HPV Positive Results",
-                        "type" : "ValueSetRef"
                      }
                   }
                }, {
@@ -6671,11 +6729,11 @@
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "X",
+                           "alias" : "cC",
                            "expression" : {
                               "name" : "CollateConclusionCodes",
                               "type" : "FunctionRef",
@@ -6688,22 +6746,23 @@
                               } ]
                            }
                         } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "X",
+                                 "name" : "cC",
                                  "type" : "AliasRef"
                               } ]
+                           },
+                           "valueset" : {
+                              "name" : "Abnormal results of Cervical Cytology Test",
+                              "type" : "ValueSetRef"
                            }
                         }
-                     },
-                     "valueset" : {
-                        "name" : "Abnormal results of Cervical Cytology Test",
-                        "type" : "ValueSetRef"
                      }
                   }
                }, {
