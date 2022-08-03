@@ -697,8 +697,8 @@ define MostRecentHpvReport:
 
 define MostRecentNegativeHpv:
   MostRecentHpvReport R
-    where (
-      CollateConclusionCodes(R,HpvObservations) in "HPV Negative Results"
+    where AnyTrue(
+      (CollateConclusionCodes(R,HpvObservations)) CCC return CCC in "HPV Negative Results"
     )
 
 define CervicalCytologyReports:

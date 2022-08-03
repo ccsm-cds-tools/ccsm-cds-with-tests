@@ -5440,11 +5440,11 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "AnyInValueSet",
-                  "codes" : {
+                  "type" : "AnyTrue",
+                  "source" : {
                      "type" : "Query",
                      "source" : [ {
-                        "alias" : "X",
+                        "alias" : "CCC",
                         "expression" : {
                            "name" : "CollateConclusionCodes",
                            "type" : "FunctionRef",
@@ -5457,22 +5457,25 @@
                            } ]
                         }
                      } ],
+                     "relationship" : [ ],
                      "return" : {
-                        "distinct" : false,
                         "expression" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "X",
-                              "type" : "AliasRef"
-                           } ]
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "CCC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "type" : "ValueSetRef"
+                           }
                         }
                      }
-                  },
-                  "valueset" : {
-                     "name" : "HPV Negative Results",
-                     "type" : "ValueSetRef"
                   }
                }
             }
