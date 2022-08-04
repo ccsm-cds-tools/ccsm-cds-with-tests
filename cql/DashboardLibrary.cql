@@ -676,10 +676,12 @@ define PertinentProceduresSummary:
 define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>):
   D.conclusionCode union
   (ObsList) O
-    where 
-      Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
-      Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
-      C3F.FindDate(O) = Common.DiagnosticReportDate(D)
+    where
+      O.code = D.code and (
+        Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+        Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+        C3F.FindDate(O) = Common.DiagnosticReportDate(D)
+      )
     return O.value as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:
