@@ -89,7 +89,9 @@ valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.103
 valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 // Standard codes
+code "Gender Identity": '76691-5' from "LOINC" display 'Gender identity'
 code "Transgender Male Code": 'transgender-male' from "GENDER-IDENTITY" display 'transgender male'
+code "Female-to-male Transsexual": '407377005' from "SNOMED-CT" display 'Female-to-male transsexual (finding)'
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
@@ -265,16 +267,26 @@ define Female:
   FemaleBirthSex or
   (BirthSexMissingOrUnknown and FemaleGender)
 
-define GenderIdentity:
+define GenderIdentityExtension:
   Patient.extension E
     where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
       E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
 
+define TransgenderMaleExtension:
+  GenderIdentityExtension E
+    where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+    or E.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
+
+define GenderIdentityObservation:
+  [Observation: "Gender Identity"]
+
+define TransgenderMaleObservation:
+  GenderIdentityObservation O
+  where O.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+  or O.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
+
 define TransgenderMale:
-  exists(
-    GenderIdentity E
-      where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
-  )
+  exists(TransgenderMaleExtension) or exists(TransgenderMaleObservation)
 
 define FemaleorTransgenderMale:
   Female or TransgenderMale
