@@ -354,6 +354,15 @@ export const CollateManagementData = {
                "type" : "ExpressionRef"
             }
          }, {
+            "name" : "HpvObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HpvObservations",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "SortedHpvReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -383,9 +392,16 @@ export const CollateManagementData = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "H",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "libraryName" : "Dash",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "H",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "HpvObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -406,9 +422,16 @@ export const CollateManagementData = {
                      }, {
                         "name" : "allConclusions",
                         "value" : {
-                           "path" : "conclusionCode",
-                           "scope" : "H",
-                           "type" : "Property"
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "H",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      }, {
                         "name" : "date",
@@ -1024,6 +1047,15 @@ export const CollateManagementData = {
                "type" : "ExpressionRef"
             }
          }, {
+            "name" : "CytologyObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "CytologyObservations",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "SortedCytologyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1053,9 +1085,16 @@ export const CollateManagementData = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "C",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "libraryName" : "Dash",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "C",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "CytologyObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -1076,9 +1115,16 @@ export const CollateManagementData = {
                      }, {
                         "name" : "allConclusions",
                         "value" : {
-                           "path" : "conclusionCode",
-                           "scope" : "C",
-                           "type" : "Property"
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "C",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "CytologyObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      }, {
                         "name" : "date",
@@ -1723,6 +1769,15 @@ export const CollateManagementData = {
                } ]
             }
          }, {
+            "name" : "HistologyObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HistologyObservations",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "SortedBiopsyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1752,9 +1807,16 @@ export const CollateManagementData = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "B",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "libraryName" : "Dash",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "B",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "CytologyObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -1775,9 +1837,16 @@ export const CollateManagementData = {
                      }, {
                         "name" : "allConclusions",
                         "value" : {
-                           "path" : "conclusionCode",
-                           "scope" : "B",
-                           "type" : "Property"
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "B",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "CytologyObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      }, {
                         "name" : "date",
