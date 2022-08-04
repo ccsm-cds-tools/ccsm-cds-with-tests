@@ -1,4 +1,4 @@
-{
+export const FHIRHelpersv41000 = {
    "library" : {
       "annotation" : [ {
          "translatorOptions" : "",
@@ -6,7 +6,7 @@
       } ],
       "identifier" : {
          "id" : "FHIRHelpers",
-         "version" : "4.0.1"
+         "version" : "4.1.000"
       },
       "schemaIdentifier" : {
          "id" : "urn:hl7-org:elm",
@@ -1572,7 +1572,45 @@
             "operand" : [ {
                "name" : "resource",
                "operandTypeSpecifier" : {
-                  "name" : "{http://hl7.org/fhir}Resource",
+                  "name" : "{http://hl7.org/fhir}DomainResource",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "url",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "modifierExtension",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "external" : true,
+            "type" : "FunctionDef",
+            "operand" : [ {
+               "name" : "element",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}BackboneElement",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "url",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "modifierExtension",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "external" : true,
+            "type" : "FunctionDef",
+            "operand" : [ {
+               "name" : "resource",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}DomainResource",
                   "type" : "NamedTypeSpecifier"
                }
             }, {

@@ -30,7 +30,7 @@ export const ManagementLibrary = {
          }, {
             "localIdentifier" : "FHIRHelpers",
             "path" : "FHIRHelpers",
-            "version" : "4.0.1"
+            "version" : "4.1.000"
          }, {
             "localIdentifier" : "Dash",
             "path" : "DashboardLibrary",

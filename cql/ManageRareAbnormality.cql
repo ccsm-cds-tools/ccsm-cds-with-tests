@@ -16,7 +16,7 @@ library ManageRareAbnormality version '1.1.0'
 
 using FHIR version '4.0.1'
 
-include FHIRHelpers version '4.0.1' called FHIRHelpers
+include FHIRHelpers version '4.1.000' called FHIRHelpers
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include DashboardLibrary version '1.0.0' called Dash
 include CollateManagementData version '1.1.0' called Collate

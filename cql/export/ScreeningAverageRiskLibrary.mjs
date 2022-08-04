@@ -26,7 +26,7 @@ export const ScreeningAverageRiskLibrary = {
          "def" : [ {
             "localIdentifier" : "FHIRHelpers",
             "path" : "FHIRHelpers",
-            "version" : "4.0.1"
+            "version" : "4.1.000"
          }, {
             "localIdentifier" : "C3F",
             "path" : "CDSConnectCommonsforFHIRv401",
