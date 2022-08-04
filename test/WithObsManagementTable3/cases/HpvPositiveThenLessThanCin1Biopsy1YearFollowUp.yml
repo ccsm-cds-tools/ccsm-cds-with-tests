@@ -1,0 +1,50 @@
+---
+name: Positive HPV Then Less Than CIN1 Biopsy - 1 Year Follow Up
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-05-01
+-
+  $iterate: *LessThanCin1BiopsyHpvPositive1YearFollowUp
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: amended
+  basedOn:
+  - reference: ServiceRequest/123
+  effectiveDateTime: 2021-05-14
+- 
+  resourceType: Observation
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  basedOn:
+  - reference: ServiceRequest/123
+  valueCodeableConcept: SNOMEDCT#165324008 Biopsy result normal (finding)
+  effectiveDateTime: 2021-05-15
+
+results:
+  Recommendation:
+    short: 'Surveillance'
+    date: '2022-05-14'
+    group: 'Colposcopy Results (Table 3)'
+    details:
+    - 'When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).'
+    - 'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
+  WhichTableMadeTheRecommendation: 3
