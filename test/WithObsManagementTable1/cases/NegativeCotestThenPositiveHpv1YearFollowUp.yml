@@ -1,0 +1,62 @@
+---
+name: Negative Cotest History Positive HPV - 1 Year Follow Up (obs)
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2016-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  effectiveDateTime: 2016-05-01
+- 
+  resourceType: Observation
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  valueCodeableConcept: SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2016-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-05-01
+  basedOn: 
+  - reference: ServiceRequest/c1ea3ca9-bb14-a6e7-055c-be10173272fc
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  effectiveDateTime: 2021-05-01
+  basedOn: 
+  - reference: ServiceRequest/c1ea3ca9-bb14-a6e7-055c-be10173272fc
+-
+  $iterate: *NegativeCotestHistoryPositiveHpv1YearFollowUp
+
+results:
+  Recommendation:
+    short: 'Surveillance'
+    date: '2022-05-01'
+    group: 'General Screening (Table 1)'
+    details:
+    - 'When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).'
+    - 'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
+  WhichTableMadeTheRecommendation: 1
