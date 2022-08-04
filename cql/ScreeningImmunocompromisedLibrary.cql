@@ -332,10 +332,12 @@ define RecommendationText:
     end
 
 define RecommendImmediateCervicalCytology:
+  IsIncludedAndNotExcluded and 
   ProposeImmediateTesting and
   (Age21Through29 or Age30AndOlder)
 
 define RecommendImmediateCotesting:
+  IsIncludedAndNotExcluded and 
   ProposeImmediateTesting and
   Age30AndOlder
 

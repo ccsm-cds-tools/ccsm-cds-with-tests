@@ -1,0 +1,47 @@
+---
+name: NILM cytology and negative HPV test within last 3 years - Diagnostic exam (obs)
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $import: *SymptomaticInclusionCriteria
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: amended
+  result:
+  -
+    type: 'Observation'
+    reference: 'Observation/1234'
+  effectiveDateTime: 2020-05-01
+-
+  resourceType: Observation
+  id: 1234
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: amended
+  valueCodeableConcept: SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2020-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2020-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  IsAge21YearsOrYounger: false
+  HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years: true
+  RecommendationText: 'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
