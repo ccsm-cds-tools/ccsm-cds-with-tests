@@ -5209,6 +5209,183 @@ export const DashboardLibrary = {
                }
             }
          }, {
+            "name" : "CollateConclusionCodes",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "path" : "conclusionCode",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "D",
+                     "type" : "OperandRef"
+                  }
+               }, {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "O",
+                     "expression" : {
+                        "name" : "ObsList",
+                        "type" : "OperandRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "R",
+                                 "expression" : {
+                                    "path" : "result",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "D",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "type" : "Last",
+                                    "source" : {
+                                       "type" : "Split",
+                                       "stringToSplit" : {
+                                          "name" : "ToString",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "path" : "reference",
+                                             "scope" : "R",
+                                             "type" : "Property"
+                                          } ]
+                                       },
+                                       "separator" : {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "/",
+                                          "type" : "Literal"
+                                       }
+                                    }
+                                 }, {
+                                    "name" : "ToString",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "id",
+                                       "scope" : "O",
+                                       "type" : "Property"
+                                    } ]
+                                 } ]
+                              }
+                           }
+                        }, {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "oB",
+                                 "expression" : {
+                                    "path" : "basedOn",
+                                    "scope" : "O",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "AnyTrue",
+                                 "source" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "dB",
+                                       "expression" : {
+                                          "path" : "basedOn",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "D",
+                                             "type" : "OperandRef"
+                                          }
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "name" : "dB",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "oB",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "FindDate",
+                           "libraryName" : "C3F",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "O",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "OperandRef"
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "return" : {
+                     "expression" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "scope" : "O",
+                           "type" : "Property"
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}CodeableConcept",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "D",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "ObsList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Observation",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            } ]
+         }, {
             "name" : "HpvDiagnosticReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5235,6 +5412,21 @@ export const DashboardLibrary = {
                      "type" : "ParameterRef"
                   } ]
                } ]
+            }
+         }, {
+            "name" : "HpvObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Observation",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+               "codeProperty" : "code",
+               "codeComparator" : "in",
+               "type" : "Retrieve",
+               "codes" : {
+                  "name" : "HPV Test",
+                  "type" : "ValueSetRef"
+               }
             }
          }, {
             "name" : "MostRecentHpvReport",
@@ -5264,33 +5456,42 @@ export const DashboardLibrary = {
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "AnyInValueSet",
-                  "codes" : {
+                  "type" : "AnyTrue",
+                  "source" : {
                      "type" : "Query",
                      "source" : [ {
-                        "alias" : "X",
+                        "alias" : "CCC",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "return" : {
-                        "distinct" : false,
-                        "expression" : {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
+                           "name" : "CollateConclusionCodes",
                            "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "X",
+                              "name" : "R",
                               "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
+                              "type" : "ExpressionRef"
                            } ]
                         }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "CCC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "type" : "ValueSetRef"
+                           }
+                        }
                      }
-                  },
-                  "valueset" : {
-                     "name" : "HPV Negative Results",
-                     "type" : "ValueSetRef"
                   }
                }
             }
@@ -5321,6 +5522,21 @@ export const DashboardLibrary = {
                      "type" : "ParameterRef"
                   } ]
                } ]
+            }
+         }, {
+            "name" : "CytologyObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Observation",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+               "codeProperty" : "code",
+               "codeComparator" : "in",
+               "type" : "Retrieve",
+               "codes" : {
+                  "name" : "Pap Test",
+                  "type" : "ValueSetRef"
+               }
             }
          }, {
             "name" : "MostRecentCytologyReport",
@@ -5356,9 +5572,15 @@ export const DashboardLibrary = {
                      "source" : [ {
                         "alias" : "cC",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "scope" : "R",
-                           "type" : "Property"
+                           "name" : "CollateConclusionCodes",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "CytologyObservations",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ],
                      "relationship" : [ ],
@@ -5409,6 +5631,24 @@ export const DashboardLibrary = {
                } ]
             }
          }, {
+            "name" : "HistologyObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Observation",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+               "codeProperty" : "code",
+               "codeComparator" : "~",
+               "type" : "Retrieve",
+               "codes" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "Biopsy Report",
+                     "type" : "CodeRef"
+                  }
+               }
+            }
+         }, {
             "name" : "HpvDiagnosticReportsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5457,9 +5697,15 @@ export const DashboardLibrary = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "D",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "D",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "HpvObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -5486,9 +5732,15 @@ export const DashboardLibrary = {
                               "source" : [ {
                                  "alias" : "cC",
                                  "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "D",
-                                    "type" : "Property"
+                                    "name" : "CollateConclusionCodes",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "D",
+                                       "type" : "AliasRef"
+                                    }, {
+                                       "name" : "HpvObservations",
+                                       "type" : "ExpressionRef"
+                                    } ]
                                  }
                               } ],
                               "relationship" : [ ],
@@ -5598,9 +5850,15 @@ export const DashboardLibrary = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "D",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "D",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "CytologyObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -5627,9 +5885,15 @@ export const DashboardLibrary = {
                               "source" : [ {
                                  "alias" : "cC",
                                  "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "D",
-                                    "type" : "Property"
+                                    "name" : "CollateConclusionCodes",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "D",
+                                       "type" : "AliasRef"
+                                    }, {
+                                       "name" : "CytologyObservations",
+                                       "type" : "ExpressionRef"
+                                    } ]
                                  }
                               } ],
                               "relationship" : [ ],
@@ -5739,9 +6003,15 @@ export const DashboardLibrary = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "D",
-                                       "type" : "Property"
+                                       "name" : "CollateConclusionCodes",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "D",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "HistologyObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
                                     }
                                  } ],
                                  "return" : {
@@ -5768,9 +6038,15 @@ export const DashboardLibrary = {
                               "source" : [ {
                                  "alias" : "cC",
                                  "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "D",
-                                    "type" : "Property"
+                                    "name" : "CollateConclusionCodes",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "D",
+                                       "type" : "AliasRef"
+                                    }, {
+                                       "name" : "HistologyObservations",
+                                       "type" : "ExpressionRef"
+                                    } ]
                                  }
                               } ],
                               "relationship" : [ ],
@@ -5872,10 +6148,24 @@ export const DashboardLibrary = {
             "expression" : {
                "type" : "Query",
                "source" : [ {
-                  "alias" : "H",
+                  "alias" : "D",
                   "expression" : {
                      "name" : "HistologyDiagnosticReports",
                      "type" : "ExpressionRef"
+                  }
+               } ],
+               "let" : [ {
+                  "identifier" : "cC",
+                  "expression" : {
+                     "name" : "CollateConclusionCodes",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }, {
+                        "name" : "HistologyObservations",
+                        "type" : "ExpressionRef"
+                     } ]
                   }
                } ],
                "relationship" : [ ],
@@ -5894,9 +6184,8 @@ export const DashboardLibrary = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "H",
-                                       "type" : "Property"
+                                       "name" : "cC",
+                                       "type" : "QueryLetRef"
                                     }
                                  } ],
                                  "return" : {
@@ -5925,9 +6214,8 @@ export const DashboardLibrary = {
                                  "source" : [ {
                                     "alias" : "X",
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "scope" : "H",
-                                       "type" : "Property"
+                                       "name" : "cC",
+                                       "type" : "QueryLetRef"
                                     }
                                  } ],
                                  "return" : {
@@ -5955,9 +6243,8 @@ export const DashboardLibrary = {
                               "source" : [ {
                                  "alias" : "X",
                                  "expression" : {
-                                    "path" : "conclusionCode",
-                                    "scope" : "H",
-                                    "type" : "Property"
+                                    "name" : "cC",
+                                    "type" : "QueryLetRef"
                                  }
                               } ],
                               "return" : {
@@ -5987,9 +6274,8 @@ export const DashboardLibrary = {
                            "source" : [ {
                               "alias" : "X",
                               "expression" : {
-                                 "path" : "conclusionCode",
-                                 "scope" : "H",
-                                 "type" : "Property"
+                                 "name" : "cC",
+                                 "type" : "QueryLetRef"
                               }
                            } ],
                            "return" : {
@@ -6017,9 +6303,8 @@ export const DashboardLibrary = {
                         "source" : [ {
                            "alias" : "X",
                            "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
+                              "name" : "cC",
+                              "type" : "QueryLetRef"
                            }
                         } ],
                         "return" : {
@@ -6384,7 +6669,7 @@ export const DashboardLibrary = {
                "operand" : [ {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "H",
+                     "alias" : "D",
                      "expression" : {
                         "name" : "HpvDiagnosticReports",
                         "type" : "ExpressionRef"
@@ -6392,33 +6677,40 @@ export const DashboardLibrary = {
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "X",
+                           "alias" : "cC",
                            "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "H",
-                              "type" : "Property"
+                              "name" : "CollateConclusionCodes",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "name" : "HpvObservations",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }
                         } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "X",
+                                 "name" : "cC",
                                  "type" : "AliasRef"
                               } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "type" : "ValueSetRef"
                            }
                         }
-                     },
-                     "valueset" : {
-                        "name" : "High Risk HPV Positive Results",
-                        "type" : "ValueSetRef"
                      }
                   }
                }, {
@@ -6448,7 +6740,7 @@ export const DashboardLibrary = {
                "operand" : [ {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "C",
+                     "alias" : "D",
                      "expression" : {
                         "name" : "CervicalCytologyReports",
                         "type" : "ExpressionRef"
@@ -6456,33 +6748,40 @@ export const DashboardLibrary = {
                   } ],
                   "relationship" : [ ],
                   "where" : {
-                     "type" : "AnyInValueSet",
-                     "codes" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "X",
+                           "alias" : "cC",
                            "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "C",
-                              "type" : "Property"
+                              "name" : "CollateConclusionCodes",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "name" : "CytologyObservations",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }
                         } ],
-                        "return" : {
-                           "distinct" : false,
-                           "expression" : {
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "InValueSet",
+                           "code" : {
                               "name" : "ToConcept",
                               "libraryName" : "FHIRHelpers",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "X",
+                                 "name" : "cC",
                                  "type" : "AliasRef"
                               } ]
+                           },
+                           "valueset" : {
+                              "name" : "Abnormal results of Cervical Cytology Test",
+                              "type" : "ValueSetRef"
                            }
                         }
-                     },
-                     "valueset" : {
-                        "name" : "Abnormal results of Cervical Cytology Test",
-                        "type" : "ValueSetRef"
                      }
                   }
                }, {
@@ -6501,7 +6800,7 @@ export const DashboardLibrary = {
                "operand" : [ {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "R",
+                     "alias" : "D",
                      "expression" : {
                         "name" : "CervicalCytologyReports",
                         "type" : "ExpressionRef"
@@ -6515,9 +6814,15 @@ export const DashboardLibrary = {
                         "source" : [ {
                            "alias" : "cC",
                            "expression" : {
-                              "path" : "conclusionCode",
-                              "scope" : "R",
-                              "type" : "Property"
+                              "name" : "CollateConclusionCodes",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "name" : "CytologyObservations",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }
                         } ],
                         "relationship" : [ ],
@@ -6739,7 +7044,7 @@ export const DashboardLibrary = {
                "operand" : [ {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "H",
+                     "alias" : "D",
                      "expression" : {
                         "name" : "HistologyDiagnosticReports",
                         "type" : "ExpressionRef"
@@ -6755,9 +7060,15 @@ export const DashboardLibrary = {
                            "source" : [ {
                               "alias" : "X",
                               "expression" : {
-                                 "path" : "conclusionCode",
-                                 "scope" : "H",
-                                 "type" : "Property"
+                                 "name" : "CollateConclusionCodes",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "D",
+                                    "type" : "AliasRef"
+                                 }, {
+                                    "name" : "HistologyObservations",
+                                    "type" : "ExpressionRef"
+                                 } ]
                               }
                            } ],
                            "return" : {
@@ -7411,43 +7722,32 @@ export const DashboardLibrary = {
                                  "type" : "ExpressionRef"
                               }
                            }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "Exists",
-                                 "operand" : {
-                                    "type" : "Flatten",
-                                    "operand" : {
-                                       "type" : "Query",
-                                       "source" : [ {
-                                          "alias" : "$this",
-                                          "expression" : {
-                                             "name" : "HpvDiagnosticReports",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       } ],
-                                       "where" : {
-                                          "type" : "Not",
+                              "type" : "AnyTrue",
+                              "source" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "D",
+                                    "expression" : {
+                                       "name" : "HpvDiagnosticReports",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ],
+                                 "relationship" : [ ],
+                                 "return" : {
+                                    "expression" : {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "Exists",
                                           "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "path" : "conclusionCode",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       },
-                                       "return" : {
-                                          "distinct" : false,
-                                          "expression" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
+                                             "name" : "CollateConclusionCodes",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "D",
                                                 "type" : "AliasRef"
-                                             }
+                                             }, {
+                                                "name" : "HpvObservations",
+                                                "type" : "ExpressionRef"
+                                             } ]
                                           }
                                        }
                                     }
@@ -7463,43 +7763,32 @@ export const DashboardLibrary = {
                                  "type" : "ExpressionRef"
                               }
                            }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "Exists",
-                                 "operand" : {
-                                    "type" : "Flatten",
-                                    "operand" : {
-                                       "type" : "Query",
-                                       "source" : [ {
-                                          "alias" : "$this",
-                                          "expression" : {
-                                             "name" : "CervicalCytologyReports",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       } ],
-                                       "where" : {
-                                          "type" : "Not",
+                              "type" : "AnyTrue",
+                              "source" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "D",
+                                    "expression" : {
+                                       "name" : "CervicalCytologyReports",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ],
+                                 "relationship" : [ ],
+                                 "return" : {
+                                    "expression" : {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "Exists",
                                           "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "path" : "conclusionCode",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       },
-                                       "return" : {
-                                          "distinct" : false,
-                                          "expression" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
+                                             "name" : "CollateConclusionCodes",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "D",
                                                 "type" : "AliasRef"
-                                             }
+                                             }, {
+                                                "name" : "CytologyObservations",
+                                                "type" : "ExpressionRef"
+                                             } ]
                                           }
                                        }
                                     }
@@ -7516,43 +7805,32 @@ export const DashboardLibrary = {
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "type" : "Flatten",
-                                 "operand" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "name" : "HistologyDiagnosticReports",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "D",
+                                 "expression" : {
+                                    "name" : "HistologyDiagnosticReports",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "Exists",
                                        "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "conclusionCode",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
+                                          "name" : "CollateConclusionCodes",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "D",
                                              "type" : "AliasRef"
-                                          }
+                                          }, {
+                                             "name" : "HistologyObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
                                        }
                                     }
                                  }

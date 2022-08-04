@@ -621,7 +621,7 @@ export const ManageCommonAbnormality = {
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient’s history of abnormal results in order to provide an evidence-based care recommendation.",
+               "value" : "Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient's history of abnormal results in order to provide an evidence-based care recommendation.",
                "type" : "Literal"
             }
          }, {

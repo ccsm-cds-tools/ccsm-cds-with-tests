@@ -2391,87 +2391,80 @@ export const ScreeningAverageRiskLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "AnyTrue",
-                     "source" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "cC",
+                           "alias" : "D",
                            "expression" : {
-                              "type" : "Flatten",
+                              "name" : "CervicalCytologyReports",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           }
+                        } ],
+                        "let" : [ {
+                           "identifier" : "CCC",
+                           "expression" : {
+                              "name" : "CollateConclusionCodes",
+                              "libraryName" : "Dash",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "name" : "CytologyObservations",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "where" : {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Exists",
                               "operand" : {
+                                 "name" : "CCC",
+                                 "type" : "QueryLetRef"
+                              }
+                           }, {
+                              "type" : "AnyTrue",
+                              "source" : {
                                  "type" : "Query",
                                  "source" : [ {
-                                    "alias" : "$this",
+                                    "alias" : "cC",
                                     "expression" : {
-                                       "name" : "CervicalCytologyReports",
-                                       "libraryName" : "Dash",
-                                       "type" : "ExpressionRef"
+                                       "name" : "CCC",
+                                       "type" : "QueryLetRef"
                                     }
                                  } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
+                                 "relationship" : [ ],
                                  "return" : {
-                                    "distinct" : false,
                                     "expression" : {
-                                       "path" : "conclusionCode",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "Equivalent",
+                                          "operand" : [ {
+                                             "name" : "ToConcept",
+                                             "libraryName" : "FHIRHelpers",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "cC",
+                                                "type" : "AliasRef"
+                                             } ]
+                                          }, {
+                                             "type" : "ToConcept",
+                                             "operand" : {
+                                                "name" : "NILM",
+                                                "libraryName" : "Dash",
+                                                "type" : "CodeRef"
+                                             }
+                                          } ]
                                        }
                                     }
                                  }
                               }
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "return" : {
-                           "expression" : {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "cC",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }, {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "Equivalent",
-                                    "operand" : [ {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "cC",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }, {
-                                       "type" : "ToConcept",
-                                       "operand" : {
-                                          "name" : "NILM",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       }
-                                    } ]
-                                 }
-                              } ]
-                           }
+                           } ]
                         }
                      }
                   }
@@ -2499,85 +2492,82 @@ export const ScreeningAverageRiskLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "AnyTrue",
-                     "source" : {
+                     "type" : "Exists",
+                     "operand" : {
                         "type" : "Query",
                         "source" : [ {
-                           "alias" : "cC",
+                           "alias" : "D",
                            "expression" : {
-                              "type" : "Flatten",
-                              "operand" : {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "HpvDiagnosticReports",
-                                       "libraryName" : "Dash",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "conclusionCode",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "conclusionCode",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              }
+                              "name" : "HpvDiagnosticReports",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           }
+                        } ],
+                        "let" : [ {
+                           "identifier" : "CCC",
+                           "expression" : {
+                              "name" : "CollateConclusionCodes",
+                              "libraryName" : "Dash",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "name" : "HpvObservations",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }
                         } ],
                         "relationship" : [ ],
-                        "return" : {
-                           "expression" : {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "cC",
-                                       "type" : "AliasRef"
+                        "where" : {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "CCC",
+                                 "type" : "QueryLetRef"
+                              }
+                           }, {
+                              "type" : "AnyTrue",
+                              "source" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "cC",
+                                    "expression" : {
+                                       "name" : "CCC",
+                                       "type" : "QueryLetRef"
                                     }
-                                 }
-                              }, {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "InValueSet",
-                                    "code" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
+                                 } ],
+                                 "relationship" : [ ],
+                                 "return" : {
+                                    "expression" : {
+                                       "type" : "Equal",
                                        "operand" : [ {
-                                          "name" : "cC",
-                                          "type" : "AliasRef"
+                                          "type" : "InValueSet",
+                                          "code" : {
+                                             "name" : "ToConcept",
+                                             "libraryName" : "FHIRHelpers",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "name" : "cC",
+                                                "type" : "AliasRef"
+                                             } ]
+                                          },
+                                          "valueset" : {
+                                             "name" : "HPV Negative Results",
+                                             "libraryName" : "Dash",
+                                             "type" : "ValueSetRef"
+                                          }
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                                          "value" : "false",
+                                          "type" : "Literal"
                                        } ]
-                                    },
-                                    "valueset" : {
-                                       "name" : "HPV Negative Results",
-                                       "libraryName" : "Dash",
-                                       "type" : "ValueSetRef"
                                     }
                                  }
-                              } ]
-                           }
+                              }
+                           } ]
                         }
                      }
                   }

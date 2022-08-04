@@ -678,7 +678,8 @@ define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observat
   (ObsList) O
     where 
       Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
-      Exists( (O.basedOn) B where Last(Split(B.reference,'/')) =  D.id )
+      Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+      C3F.FindDate(O) = Common.DiagnosticReportDate(D)
     return O.value as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:

@@ -275,9 +275,10 @@ export const ScreeningImmunocompromisedLibrary = {
                      "source" : [ {
                         "alias" : "cC",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "type" : "Property",
-                           "source" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
                               "type" : "Indexer",
                               "operand" : [ {
                                  "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
@@ -287,7 +288,11 @@ export const ScreeningImmunocompromisedLibrary = {
                                  "value" : "0",
                                  "type" : "Literal"
                               } ]
-                           }
+                           }, {
+                              "name" : "CytologyObservations",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ],
                      "relationship" : [ ],
@@ -347,9 +352,10 @@ export const ScreeningImmunocompromisedLibrary = {
                      "source" : [ {
                         "alias" : "cC",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "type" : "Property",
-                           "source" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
                               "type" : "Indexer",
                               "operand" : [ {
                                  "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
@@ -359,7 +365,11 @@ export const ScreeningImmunocompromisedLibrary = {
                                  "value" : "1",
                                  "type" : "Literal"
                               } ]
-                           }
+                           }, {
+                              "name" : "CytologyObservations",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ],
                      "relationship" : [ ],
@@ -419,9 +429,10 @@ export const ScreeningImmunocompromisedLibrary = {
                      "source" : [ {
                         "alias" : "cC",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "type" : "Property",
-                           "source" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
                               "type" : "Indexer",
                               "operand" : [ {
                                  "name" : "RecentCytologyReportsSinceImmunosuppressionOnset",
@@ -431,7 +442,11 @@ export const ScreeningImmunocompromisedLibrary = {
                                  "value" : "2",
                                  "type" : "Literal"
                               } ]
-                           }
+                           }, {
+                              "name" : "CytologyObservations",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ],
                      "relationship" : [ ],
@@ -1283,7 +1298,7 @@ export const ScreeningImmunocompromisedLibrary = {
             "expression" : {
                "type" : "Query",
                "source" : [ {
-                  "alias" : "R",
+                  "alias" : "D",
                   "expression" : {
                      "name" : "CoincidentHpvTests",
                      "type" : "ExpressionRef"
@@ -1297,9 +1312,17 @@ export const ScreeningImmunocompromisedLibrary = {
                      "source" : [ {
                         "alias" : "X",
                         "expression" : {
-                           "path" : "conclusionCode",
-                           "scope" : "R",
-                           "type" : "Property"
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
                         }
                      } ],
                      "return" : {
@@ -1338,7 +1361,7 @@ export const ScreeningImmunocompromisedLibrary = {
                            "libraryName" : "Common",
                            "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "R",
+                              "name" : "D",
                               "type" : "AliasRef"
                            } ]
                         }
@@ -1642,8 +1665,14 @@ export const ScreeningImmunocompromisedLibrary = {
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "name" : "ProposeImmediateTesting",
-                  "type" : "ExpressionRef"
+                  "type" : "And",
+                  "operand" : [ {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ProposeImmediateTesting",
+                     "type" : "ExpressionRef"
+                  } ]
                }, {
                   "type" : "Or",
                   "operand" : [ {
@@ -1662,8 +1691,14 @@ export const ScreeningImmunocompromisedLibrary = {
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "name" : "ProposeImmediateTesting",
-                  "type" : "ExpressionRef"
+                  "type" : "And",
+                  "operand" : [ {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ProposeImmediateTesting",
+                     "type" : "ExpressionRef"
+                  } ]
                }, {
                   "name" : "Age30AndOlder",
                   "type" : "ExpressionRef"

@@ -5235,105 +5235,121 @@
                   "where" : {
                      "type" : "Or",
                      "operand" : [ {
-                        "type" : "Exists",
-                        "operand" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "R",
-                              "expression" : {
-                                 "path" : "result",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "D",
-                                    "type" : "OperandRef"
-                                 }
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "where" : {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "type" : "Last",
-                                 "source" : {
-                                    "type" : "Split",
-                                    "stringToSplit" : {
-                                       "name" : "ToString",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "path" : "reference",
-                                          "scope" : "R",
-                                          "type" : "Property"
-                                       } ]
-                                    },
-                                    "separator" : {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "/",
-                                       "type" : "Literal"
-                                    }
-                                 }
-                              }, {
-                                 "name" : "ToString",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "path" : "id",
-                                    "scope" : "O",
-                                    "type" : "Property"
-                                 } ]
-                              } ]
-                           }
-                        }
-                     }, {
-                        "type" : "Exists",
-                        "operand" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "B",
-                              "expression" : {
-                                 "path" : "basedOn",
-                                 "scope" : "O",
-                                 "type" : "Property"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "where" : {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "type" : "Last",
-                                 "source" : {
-                                    "type" : "Split",
-                                    "stringToSplit" : {
-                                       "name" : "ToString",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "path" : "reference",
-                                          "scope" : "B",
-                                          "type" : "Property"
-                                       } ]
-                                    },
-                                    "separator" : {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "/",
-                                       "type" : "Literal"
-                                    }
-                                 }
-                              }, {
-                                 "name" : "ToString",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "path" : "id",
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "R",
+                                 "expression" : {
+                                    "path" : "result",
                                     "type" : "Property",
                                     "source" : {
                                        "name" : "D",
                                        "type" : "OperandRef"
                                     }
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "type" : "Last",
+                                    "source" : {
+                                       "type" : "Split",
+                                       "stringToSplit" : {
+                                          "name" : "ToString",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "path" : "reference",
+                                             "scope" : "R",
+                                             "type" : "Property"
+                                          } ]
+                                       },
+                                       "separator" : {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "/",
+                                          "type" : "Literal"
+                                       }
+                                    }
+                                 }, {
+                                    "name" : "ToString",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "id",
+                                       "scope" : "O",
+                                       "type" : "Property"
+                                    } ]
                                  } ]
-                              } ]
+                              }
                            }
-                        }
+                        }, {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "oB",
+                                 "expression" : {
+                                    "path" : "basedOn",
+                                    "scope" : "O",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "AnyTrue",
+                                 "source" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "dB",
+                                       "expression" : {
+                                          "path" : "basedOn",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "D",
+                                             "type" : "OperandRef"
+                                          }
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "name" : "dB",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "oB",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "FindDate",
+                           "libraryName" : "C3F",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "O",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "OperandRef"
+                           } ]
+                        } ]
                      } ]
                   },
                   "return" : {
