@@ -257,10 +257,10 @@ define SortedBiopsyReports:
   return {
     riskTableInput: HighestRankedInterpretation(
       BiopsyInterpretation(
-        Dash.CollateConclusionCodes(B,CytologyObservations)
+        Dash.CollateConclusionCodes(B,HistologyObservations)
       )
     ),
-    allConclusions: Dash.CollateConclusionCodes(B,CytologyObservations),
+    allConclusions: Dash.CollateConclusionCodes(B,HistologyObservations),
     date: Common.DiagnosticReportDate(B)
   }
   sort by date desc
