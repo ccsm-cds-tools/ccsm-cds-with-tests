@@ -76,6 +76,14 @@ export const CervicalCancerManagementActivity = {
         "expression": "ServiceRequestOrderDetail",
         "reference": "Library/ManagementLibrary|1.0"
       }
+    },
+    {
+      "path": "occurrenceDateTime",
+      "expression": {
+        "language": "text/cql",
+        "expression": "OrderDate",
+        "reference": "Library/ManagementLibrary|1.0"
+      }
     }
   ]
 }

@@ -24,3 +24,7 @@ Usage: #definition
 * dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * dynamicValue[=].expression.expression = "ServiceRequestOrderDetail"
 * dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
+* dynamicValue[+].path = "occurrenceDateTime" // this is the ServiceRequest.occurrence element
+* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* dynamicValue[=].expression.expression = "OrderDate"
+* dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"

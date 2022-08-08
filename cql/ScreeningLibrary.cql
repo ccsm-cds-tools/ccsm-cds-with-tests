@@ -174,6 +174,9 @@ define SuggestedOrders:
   }
   except {null}
 
+define OrderDate:
+  ToString(ScreeningRecommendation.date)
+
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
 //------------------------------------------------------------------------------
@@ -183,6 +186,7 @@ define DecisionAids:
     recommendation: ScreeningRecommendation.short,
     recommendationGroup: ScreeningRecommendation.group,
     recommendationDetails: ScreeningRecommendation.details,
+    recommendationDate: OrderDate,
     errors: Errors,
     disclaimer: 'An evidence based recommendation is provided based on clinical data available in the patient\'s electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.',
     suggestedOrders: SuggestedOrders

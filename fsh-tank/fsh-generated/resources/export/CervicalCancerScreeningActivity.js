@@ -76,6 +76,14 @@ export const CervicalCancerScreeningActivity = {
         "expression": "ServiceRequestOrderDetail",
         "reference": "Library/ScreeningLibrary|1.0"
       }
+    },
+    {
+      "path": "occurrenceDateTime",
+      "expression": {
+        "language": "text/cql",
+        "expression": "OrderDate",
+        "reference": "Library/ScreeningLibrary|1.0"
+      }
     }
   ]
 }

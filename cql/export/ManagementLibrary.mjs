@@ -905,6 +905,21 @@ export const ManagementLibrary = {
                } ]
             }
          }, {
+            "name" : "OrderDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "ToString",
+               "operand" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "ManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
             "name" : "RiskTableSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -948,6 +963,12 @@ export const ManagementLibrary = {
                         "name" : "ManagementRecommendation",
                         "type" : "ExpressionRef"
                      }
+                  }
+               }, {
+                  "name" : "recommendationDate",
+                  "value" : {
+                     "name" : "OrderDate",
+                     "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "errors",
