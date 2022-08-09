@@ -89,7 +89,9 @@ valueset "HSIL": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.103
 valueset "Normal Histology Finding": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.262'
 
 // Standard codes
+code "Gender Identity": '76691-5' from "LOINC" display 'Gender identity'
 code "Transgender Male Code": 'transgender-male' from "GENDER-IDENTITY" display 'transgender male'
+code "Female-to-male Transsexual": '407377005' from "SNOMED-CT" display 'Female-to-male transsexual (finding)'
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
@@ -231,21 +233,21 @@ define PatientAge:
 
 // Sex assigned at birth
 define BirthSex:
-  Patient.extension E
+  (Patient.extension) E
     where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'
 
 define BirthSexPresent:
-  exists(BirthSex)
+  Exists(BirthSex)
 
 define FemaleBirthSex:
-  exists(
-    BirthSex E
+  Exists(
+    (BirthSex) E
       where E.value = 'F'
   )
 
 define UnknownBirthSex:
   exists(
-    BirthSex E
+    (BirthSex) E
       where (
         E.value = 'ASKU' or
         E.value = 'OTH' or
@@ -257,6 +259,15 @@ define BirthSexMissingOrUnknown:
   not BirthSexPresent or 
   UnknownBirthSex
 
+define BirthSexCode:
+  if BirthSexMissingOrUnknown then 'Unknown'
+  else Coalesce(BirthSex.value)
+
+define BirthSexText:
+  if BirthSexCode = 'F' then 'Female'
+  else if BirthSexCode = 'M' then 'Male'
+  else 'Unknown'
+
 // Patient Gender
 define FemaleGender:
   Patient.gender.value = 'female'
@@ -265,19 +276,59 @@ define Female:
   FemaleBirthSex or
   (BirthSexMissingOrUnknown and FemaleGender)
 
-define GenderIdentity:
-  Patient.extension E
-    where E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
+define GenderIdentityExtension:
+  (Patient.extension) E
+    where 
+      E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
       E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
 
+define TransgenderMaleExtension:
+  (GenderIdentityExtension) E
+    where 
+      E.value as FHIR.CodeableConcept ~ "Transgender Male Code" or 
+      E.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
+
+define GenderIdentityObservation:
+  [Observation: "Gender Identity"]
+
+define TransgenderMaleObservation:
+  (GenderIdentityObservation) O
+  where O.value as FHIR.CodeableConcept ~ "Transgender Male Code"
+  or O.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
+
 define TransgenderMale:
-  exists(
-    GenderIdentity E
-      where E.value as FHIR.CodeableConcept ~ "Transgender Male Code"
-  )
+  Exists(TransgenderMaleExtension) or Exists(TransgenderMaleObservation)
 
 define FemaleorTransgenderMale:
   Female or TransgenderMale
+
+define GenderText:
+  if Exists(GenderIdentityExtension) then Coalesce(GenderIdentityExtension.value)
+  else 'Unknown'
+
+define RaceExtensionValues:
+  (Patient.extension) E
+    where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-race'
+    return (E.extension) X where X.url = 'text' return FHIRHelpers.ToString(X.value as FHIR.string)
+
+define RaceText:
+  Coalesce(Coalesce(RaceExtensionValues))
+
+define EthnicityExtensionValues:
+  (Patient.extension) E
+    where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity'
+    return (E.extension) X where X.url = 'text' return FHIRHelpers.ToString(X.value as FHIR.string)
+
+define EthnicityText:
+  Coalesce(Coalesce(EthnicityExtensionValues))
+
+define LanguageText:
+  case
+    when Patient.language = 'el' then 'English'
+    when Patient.language = 'es' then 'Spanish'
+    when Patient.language = 'fr' then 'French'
+    else 'Unknown'
+  end
 
 //------------------------------------------------------------------------------
 // PERTINENT CONDITIONS
@@ -1120,11 +1171,11 @@ define CervicalCancerScreeningAndMedicalHistory:
     id: Patient.identifier.value,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,
-    sexAtBirth: null,
+    sexAtBirth: BirthSexText,
     age: AgeInYears(),
-    gender: null,
-    primaryLanguage: null,
-    race: null
+    gender: GenderText,
+    primaryLanguage: LanguageText,
+    race: RaceText + '; ' + EthnicityText
   },
   patientHistory: {
     conditions: PertinentConditionsSummary,

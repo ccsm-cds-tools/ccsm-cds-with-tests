@@ -14,11 +14,18 @@ data:
   -
     url: http://hl7.org/fhir/StructureDefinition/patient-genderIdentity
     valueCodeableConcept: http://hl7.org/fhir/gender-identity#transgender-male transgender male
-
+- 
+  resourceType: Observation
+  code: LOINC#76691-5 Gender identity
+  status: final
+  valueCodeableConcept: SNOMEDCT#407377005 Female-to-male transsexual (finding)
+  effectiveDateTime: 2021-05-01
 
 results:
   FemaleGender: true
   FemaleBirthSex: true
   Female: true
+  TransgenderMaleExtension: $should exist
+  TransgenderMaleObservation: $should exist
   TransgenderMale: true
   FemaleorTransgenderMale: true

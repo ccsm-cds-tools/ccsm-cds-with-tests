@@ -1814,7 +1814,7 @@ export const CollateManagementData = {
                                           "name" : "B",
                                           "type" : "AliasRef"
                                        }, {
-                                          "name" : "CytologyObservations",
+                                          "name" : "HistologyObservations",
                                           "type" : "ExpressionRef"
                                        } ]
                                     }
@@ -1844,7 +1844,7 @@ export const CollateManagementData = {
                               "name" : "B",
                               "type" : "AliasRef"
                            }, {
-                              "name" : "CytologyObservations",
+                              "name" : "HistologyObservations",
                               "type" : "ExpressionRef"
                            } ]
                         }

@@ -63,8 +63,17 @@ define FemaleGender:
 define Female:
   Dash.Female
 
-define GenderIdentity:
-  Dash.GenderIdentity
+define GenderIdentityExtension:
+  Dash.GenderIdentityExtension
+
+define GenderIdentityObservation:
+  Dash.GenderIdentityObservation
+
+define TransgenderMaleExtension:
+  Dash.TransgenderMaleExtension
+
+define TransgenderMaleObservation:
+  Dash.TransgenderMaleObservation
 
 define TransgenderMale:
   Dash.TransgenderMale

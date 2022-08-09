@@ -6,6 +6,7 @@ export const ScreeningDesExposureLibrary = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computablelibrary"
     ]
   },
+  "url": "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningDesExposureLibrary",
   "content": [
     {
       "contentType": "text/cql",
@@ -50,7 +51,6 @@ export const ScreeningDesExposureLibrary = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningDesExposureLibrary",
   "name": "ScreeningDesExposureLibrary",
   "title": "DES Exposure Screening Library",
   "type": {

@@ -149,11 +149,38 @@ export const ScreeningLibrary = {
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "GenderIdentity",
+            "name" : "GenderIdentityExtension",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GenderIdentity",
+               "name" : "GenderIdentityExtension",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "GenderIdentityObservation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GenderIdentityObservation",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "TransgenderMaleExtension",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "TransgenderMaleExtension",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "TransgenderMaleObservation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "TransgenderMaleObservation",
                "libraryName" : "Dash",
                "type" : "ExpressionRef"
             }

@@ -6,6 +6,7 @@ export const CervicalCancerManagementActions = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -44,7 +45,6 @@ export const CervicalCancerManagementActions = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions",
   "name": "CervicalCancerManagementActions",
   "title": "CervicalCancerManagementActions",
   "type": {
