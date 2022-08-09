@@ -180,11 +180,16 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
     )
   )
 
+define function AnyHpv(hpvVal String):
+  if hpvVal = 'HPV16+' then 'HPV-positive'
+  else if hpvVal = 'HPV16-, HPV18+' then 'HPV-positive'
+  else hpvVal
+
 define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
   Coalesce(
     Coalesce( // Case 1: Combined HPV and Cytology results separated by a space
       ColposcopyResultsTable T
-        where T.referral_screen_result = ScreeningText(preBiopsyHpvVal, preBiopsyPapVal, ' ', 'none')
+        where T.referral_screen_result = ScreeningText(AnyHpv(preBiopsyHpvVal), preBiopsyPapVal, ' ', 'none')
           and T.biopsy = biopsyVal
           return {
             action: T.management,

@@ -369,9 +369,16 @@ export const ScreeningLibrary = {
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "RecommendImmediatePrimaryHpv",
-               "libraryName" : "Average",
-               "type" : "ExpressionRef"
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "RecommendImmediateScreening",
+                  "libraryName" : "Average",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "Age30Through65",
+                  "libraryName" : "Average",
+                  "type" : "ExpressionRef"
+               } ]
             }
          }, {
             "name" : "RecommendCytology",
@@ -380,7 +387,7 @@ export const ScreeningLibrary = {
             "expression" : {
                "type" : "Or",
                "operand" : [ {
-                  "name" : "RecommendImmediateCervicalCytology",
+                  "name" : "RecommendImmediateScreening",
                   "libraryName" : "Average",
                   "type" : "ExpressionRef"
                }, {
@@ -396,9 +403,16 @@ export const ScreeningLibrary = {
             "expression" : {
                "type" : "Or",
                "operand" : [ {
-                  "name" : "RecommendImmediateCotesting",
-                  "libraryName" : "Average",
-                  "type" : "ExpressionRef"
+                  "type" : "And",
+                  "operand" : [ {
+                     "name" : "RecommendImmediateScreening",
+                     "libraryName" : "Average",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "Age30Through65",
+                     "libraryName" : "Average",
+                     "type" : "ExpressionRef"
+                  } ]
                }, {
                   "name" : "RecommendImmediateCotesting",
                   "libraryName" : "Immuno",
@@ -563,6 +577,21 @@ export const ScreeningLibrary = {
                } ]
             }
          }, {
+            "name" : "OrderDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "ToString",
+               "operand" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "ScreeningRecommendation",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
             "name" : "DecisionAids",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -597,6 +626,12 @@ export const ScreeningLibrary = {
                         "name" : "ScreeningRecommendation",
                         "type" : "ExpressionRef"
                      }
+                  }
+               }, {
+                  "name" : "recommendationDate",
+                  "value" : {
+                     "name" : "OrderDate",
+                     "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "errors",
