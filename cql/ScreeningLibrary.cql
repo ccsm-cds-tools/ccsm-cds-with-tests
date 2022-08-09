@@ -144,14 +144,17 @@ define HasRecommendation:
 //------------------------------------------------------------------------------
 
 define RecommendPrimaryHpv:
-  Average.RecommendImmediatePrimaryHpv
+  Average.RecommendImmediateScreening and Average.Age30Through65
 
 define RecommendCytology:
-  Average.RecommendImmediateCervicalCytology or
+  Average.RecommendImmediateScreening or
   Immuno.RecommendImmediateCervicalCytology
 
 define RecommendCotesting:
-  Average.RecommendImmediateCotesting or
+  (
+    Average.RecommendImmediateScreening and
+    Average.Age30Through65
+  ) or
   Immuno.RecommendImmediateCotesting
 
 define PrimaryHpvOrderCode:

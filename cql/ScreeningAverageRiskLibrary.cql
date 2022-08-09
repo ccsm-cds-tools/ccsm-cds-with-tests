@@ -203,19 +203,41 @@ define ProposedDateOfNextCotest:
   else
     Now()
 
-define RecentScreenings:
-  {
-    MostRecentNilmCytology,
-    MostRecentNegativeHpvTest,
-    MostRecentNegativeCotest
-  }
-  except { null }
+// define RecentScreenings:
+//   {
+//     MostRecentNilmCytology,
+//     MostRecentNegativeHpvTest,
+//     MostRecentNegativeCotest
+//   }
+//   except { null }
+
+// define LastScreeningType:
+//   if Exists(RecentScreenings) then
+//     Last(
+//       (RecentScreenings) T sort by date, rank desc
+//     ).type
+//   else
+//     'n/a' // Indicates that no recent screening was found
 
 define LastScreeningType:
-  if Exists(RecentScreenings) then
-    Last(
-      (RecentScreenings) T sort by date
-    ).type
+  if (DateOfMostRecentNegativeCotest is not null) then
+    if (
+      DateOfMostRecentNegativeCotest occurs on or after DateOfMostRecentNilmCytology and
+      DateOfMostRecentNegativeCotest occurs on or after DateOfMostRecentNegativeHpv
+    ) then 'Cotesting with hrHPV and Cervical Cytology'
+    else if (
+      DateOfMostRecentNilmCytology occurs after DateOfMostRecentNegativeHpv
+    ) then 'Cervical Cytology'
+    else 'hrHPV'
+  else if (DateOfMostRecentNilmCytology is not null) then
+    if (DateOfMostRecentNegativeHpv is not null) then
+      if (
+        DateOfMostRecentNilmCytology occurs after DateOfMostRecentNegativeHpv
+      ) then 'Cervical Cytology'
+      else 'hrHPV'
+    else 'Cervical Cytology'
+  else if (DateOfMostRecentNegativeHpv is not null) then
+    'hrHPV'
   else
     'n/a' // Indicates that no recent screening was found
 

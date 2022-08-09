@@ -1011,63 +1011,6 @@ export const ScreeningAverageRiskLibrary = {
                }
             }
          }, {
-            "name" : "RecentScreenings",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Except",
-               "operand" : [ {
-                  "type" : "List",
-                  "element" : [ {
-                     "name" : "MostRecentNilmCytology",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "MostRecentNegativeHpvTest",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "MostRecentNegativeCotest",
-                     "type" : "ExpressionRef"
-                  } ]
-               }, {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "X",
-                     "expression" : {
-                        "type" : "List",
-                        "element" : [ {
-                           "type" : "Null"
-                        } ]
-                     }
-                  } ],
-                  "return" : {
-                     "distinct" : false,
-                     "expression" : {
-                        "type" : "As",
-                        "operand" : {
-                           "name" : "X",
-                           "type" : "AliasRef"
-                        },
-                        "asTypeSpecifier" : {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "type",
-                              "type" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "type" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
             "name" : "LastScreeningType",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1077,42 +1020,169 @@ export const ScreeningAverageRiskLibrary = {
                   "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
                   "type" : "As",
                   "operand" : {
-                     "type" : "Exists",
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "RecentScreenings",
-                        "type" : "ExpressionRef"
-                     }
-                  }
-               },
-               "then" : {
-                  "path" : "type",
-                  "type" : "Property",
-                  "source" : {
-                     "type" : "Last",
-                     "source" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "T",
-                           "expression" : {
-                              "name" : "RecentScreenings",
-                              "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "sort" : {
-                           "by" : [ {
-                              "direction" : "asc",
-                              "path" : "date",
-                              "type" : "ByColumn"
-                           } ]
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
                         }
                      }
                   }
                },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "SameOrAfter",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DateOfMostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "type" : "SameOrAfter",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Cotesting with hrHPV and Cervical Cytology",
+                     "type" : "Literal"
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "After",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "hrHPV",
+                        "type" : "Literal"
+                     }
+                  }
+               },
                "else" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "n/a",
-                  "type" : "Literal"
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfMostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }
+                  },
+                  "then" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfMostRecentNegativeHpv",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     },
+                     "then" : {
+                        "type" : "If",
+                        "condition" : {
+                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                           "type" : "As",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "name" : "DateOfMostRecentNilmCytology",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "DateOfMostRecentNegativeHpv",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        },
+                        "then" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Cytology",
+                           "type" : "Literal"
+                        },
+                        "else" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "hrHPV",
+                           "type" : "Literal"
+                        }
+                     },
+                     "else" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     }
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfMostRecentNegativeHpv",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     },
+                     "then" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "hrHPV",
+                        "type" : "Literal"
+                     },
+                     "else" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "n/a",
+                        "type" : "Literal"
+                     }
+                  }
                }
             }
          }, {
