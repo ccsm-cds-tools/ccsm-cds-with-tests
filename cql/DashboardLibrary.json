@@ -300,12 +300,28 @@
       },
       "codes" : {
          "def" : [ {
+            "name" : "Gender Identity",
+            "id" : "76691-5",
+            "display" : "Gender identity",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOINC"
+            }
+         }, {
             "name" : "Transgender Male Code",
             "id" : "transgender-male",
             "display" : "transgender male",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "GENDER-IDENTITY"
+            }
+         }, {
+            "name" : "Female-to-male Transsexual",
+            "id" : "407377005",
+            "display" : "Female-to-male transsexual (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
             }
          }, {
             "name" : "Yes",
@@ -2716,7 +2732,7 @@
                } ]
             }
          }, {
-            "name" : "GenderIdentity",
+            "name" : "GenderIdentityExtension",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2771,22 +2787,22 @@
                }
             }
          }, {
-            "name" : "TransgenderMale",
+            "name" : "TransgenderMaleExtension",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "E",
-                     "expression" : {
-                        "name" : "GenderIdentity",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "name" : "GenderIdentityExtension",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Or",
+                  "operand" : [ {
                      "type" : "Equivalent",
                      "operand" : [ {
                         "name" : "ToConcept",
@@ -2812,8 +2828,143 @@
                            "type" : "CodeRef"
                         }
                      } ]
+                  }, {
+                     "type" : "Equivalent",
+                     "operand" : [ {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "strict" : false,
+                           "type" : "As",
+                           "operand" : {
+                              "path" : "value",
+                              "scope" : "E",
+                              "type" : "Property"
+                           },
+                           "asTypeSpecifier" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Female-to-male Transsexual",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "GenderIdentityObservation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "dataType" : "{http://hl7.org/fhir}Observation",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+               "codeProperty" : "code",
+               "codeComparator" : "~",
+               "type" : "Retrieve",
+               "codes" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "Gender Identity",
+                     "type" : "CodeRef"
                   }
                }
+            }
+         }, {
+            "name" : "TransgenderMaleObservation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "O",
+                  "expression" : {
+                     "name" : "GenderIdentityObservation",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equivalent",
+                     "operand" : [ {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "strict" : false,
+                           "type" : "As",
+                           "operand" : {
+                              "path" : "value",
+                              "scope" : "O",
+                              "type" : "Property"
+                           },
+                           "asTypeSpecifier" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Transgender Male Code",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  }, {
+                     "type" : "Equivalent",
+                     "operand" : [ {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "strict" : false,
+                           "type" : "As",
+                           "operand" : {
+                              "path" : "value",
+                              "scope" : "O",
+                              "type" : "Property"
+                           },
+                           "asTypeSpecifier" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Female-to-male Transsexual",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "TransgenderMale",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "TransgenderMaleExtension",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "TransgenderMaleObservation",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
             }
          }, {
             "name" : "FemaleorTransgenderMale",
