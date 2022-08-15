@@ -1,26 +1,25 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { applyPlan, simpleResolver } from 'encender';
 
-// PlanDefintion resources
-const screeningPlan = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreening.json'));
-const symptomaticScreeningPlan = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningSymptomaticIndividuals.json'));
-const desExposureScreeningPlan = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningDesExposure.json'));
-const immunocompromisedScreeningPlan = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningImmunocompromisedIndividuals.json'));
-const averageRiskScreeningPlan = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningAverageRisk.json'));
-
-// ActivityDefinition resources
-const cytologyActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CervicalCytologyScreeningRecommendation.json'));
-const colposcopyActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-ColposcopyActivityDefinition.json'));
-const errorActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CommunicateErrors.json'));
-const communicateActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CommunicateUnstructuredRecommendations.json'));
-const cotestActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CotestingScreeningRecommendation.json'));
-const dashboardActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-DisplayCervicalCancerMedicalHistory.json'));
-const hpvActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-PrimaryHpvScreeningRecommendation.json'));
-const surveillanceActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-SurveillanceActivityDefinition.json'));
-const treatmentActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-TreatmentActivityDefinition.json'));
-
-// Questionnaire resources
-const provideMoreInformationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ProvideMoreInformation.json'));
+const CervicalCancerDecisionAids = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CervicalCancerDecisionAids.json'));
+const CervicalCancerManagementActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CervicalCancerManagementActivity.json'));
+const CervicalCancerScreeningActivity = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CervicalCancerScreeningActivity.json'));
+const CommunicateErrors = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-CommunicateErrors.json'));
+const DisplayCervicalCancerMedicalHistory = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-DisplayCervicalCancerMedicalHistory.json'));
+const DashboardLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-DashboardLibrary.json'));
+const ManagementLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ManagementLibrary.json'));
+const OrderSetLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-OrderSetLibrary.json'));
+const ScreeningAverageRiskLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ScreeningAverageRiskLibrary.json'));
+const ScreeningDesExposureLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ScreeningDesExposureLibrary.json'));
+const ScreeningImmunocompromisedLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ScreeningImmunocompromisedLibrary.json'));
+const ScreeningLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ScreeningLibrary.json'));
+const ScreeningSymptomaticLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-ScreeningSymptomaticLibrary.json'));
+const CervicalCancerManagement = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerManagement.json'));
+const CervicalCancerManagementActions = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerManagementActions.json'));
+const CervicalCancerScreening = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreening.json'));
+const CervicalCancerScreeningActions = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningActions.json'));
+const CervicalCancerScreeningAndManagementClinicalDecisionSupport = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningAndManagementClinicalDecisionSupport.json'));
+const ProvideMoreInformation = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ProvideMoreInformation.json'));
 
 // Bring in an example patient bundle from the test folder
 const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Age_between_21_and_29_and_have_had_recent_cytology_test.json'));
@@ -28,14 +27,23 @@ const examplePatientResources = examplePatientBundle.entry.map(r => r.resource);
 
 // Read in ELM JSON representation of CDS logic
 const elmJsonDependencyArray = [
-  JSON.parse(readFileSync('cql/TopLevelScreeningLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningDesExposureLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningImmunocompromisedLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningAverageRiskLibrary.json')),
-  JSON.parse(readFileSync('cql/DashboardLibrary.json')),
+  JSON.parse(readFileSync('cql/AutogeneratedRiskTables.json')),
+  JSON.parse(readFileSync('cql/AutogeneratedTableLookup.json')),
   JSON.parse(readFileSync('cql/CCSMCommonFunctions.json')),
   JSON.parse(readFileSync('cql/CDSConnectCommonsforFHIRv401.json')),
+  JSON.parse(readFileSync('cql/CollateManagementData.json')),
+  JSON.parse(readFileSync('cql/DashboardLibrary.json')),
+  JSON.parse(readFileSync('cql/FHIRHelpers-4.0.1.json')),
+  JSON.parse(readFileSync('cql/ManageCommonAbnormality.json')),
+  JSON.parse(readFileSync('cql/ManageRareAbnormality.json')),
+  JSON.parse(readFileSync('cql/ManageSpecialPopulation.json')),
+  JSON.parse(readFileSync('cql/ManagementLibrary.json')),
+  JSON.parse(readFileSync('cql/OrderSetLibrary.json')),
+  JSON.parse(readFileSync('cql/ScreeningAverageRiskLibrary.json')),
+  JSON.parse(readFileSync('cql/ScreeningDesExposureLibrary.json')),
+  JSON.parse(readFileSync('cql/ScreeningImmunocompromisedLibrary.json')),
+  JSON.parse(readFileSync('cql/ScreeningLibrary.json')),
+  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json'))
 ];
 
 // Reformat ELM JSON value set references to match what is expected by the 
@@ -73,21 +81,25 @@ valueSetJson = Object.keys(valueSetJson).reduce((acc,vs) => {
 
 // Put all FHIR resources into a single flat array
 let fhirJsonArray = [
-  screeningPlan,
-  symptomaticScreeningPlan,
-  desExposureScreeningPlan,
-  immunocompromisedScreeningPlan,
-  averageRiskScreeningPlan,
-  cytologyActivity,
-  colposcopyActivity,
-  errorActivity,
-  communicateActivity,
-  cotestActivity,
-  dashboardActivity,
-  hpvActivity,
-  surveillanceActivity,
-  treatmentActivity,
-  provideMoreInformationQuestionnaire,
+  CervicalCancerDecisionAids,
+  CervicalCancerManagementActivity,
+  CervicalCancerScreeningActivity,
+  CommunicateErrors,
+  DisplayCervicalCancerMedicalHistory,
+  DashboardLibrary,
+  ManagementLibrary,
+  OrderSetLibrary,
+  ScreeningAverageRiskLibrary,
+  ScreeningDesExposureLibrary,
+  ScreeningImmunocompromisedLibrary,
+  ScreeningLibrary,
+  ScreeningSymptomaticLibrary,
+  CervicalCancerManagement,
+  CervicalCancerManagementActions,
+  CervicalCancerScreening,
+  CervicalCancerScreeningActions,
+  CervicalCancerScreeningAndManagementClinicalDecisionSupport,
+  ProvideMoreInformation,
   ...examplePatientResources
 ];
 
@@ -105,7 +117,7 @@ const aux = {
 };
 
 // Run the $apply operations
-const [CarePlan, RequestGroup, ...otherResources] = await applyPlan(screeningPlan, patientReference, resolver, aux);
+const [CarePlan, RequestGroup, ...otherResources] = await applyPlan(CervicalCancerScreening, patientReference, resolver, aux);
 
 // Concatenate all the resources created by $apply operation
 let outputResources = [
