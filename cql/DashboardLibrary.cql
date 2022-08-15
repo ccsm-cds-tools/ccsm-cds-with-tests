@@ -780,51 +780,42 @@ define HistologyDiagnosticReports:
 
 define HistologyObservations:
   [Observation: "Biopsy Report"]
+  
+define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
+  (DrList) D
+  let CollatedCodes: CollateConclusionCodes(D,ObsList)
+  return {
+    name: ReportType,
+    longName: Common.ConceptText(D.code),
+    value: HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType)),
+    longValue: flatten(
+      (CollatedCodes) cC 
+        return (cC.coding) cCC 
+          return cCC.display
+    ),
+    date: Common.DiagnosticReportDateString(D),
+    reference: 'DiagnosticReport/' + D.id,
+    edited: HasBeenLocallyEdited(D)
+  }
+
+define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
+  if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
+  else if ReportType = 'Cervical Cytology' then CytologyInterpretation(CollatedCodes)
+  else if ReportType = 'Cervical Histology' then BiopsyInterpretation(CollatedCodes)
+  else null
+
+define function HasBeenLocallyEdited(D DiagnosticReport):
+  if IsNull(D.identifier) then false
+  else AnyTrue( (D.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
 
 define HpvDiagnosticReportsSummary:
-  (HpvDiagnosticReports) D
-  return {
-    name: 'HPV Test',
-    longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(HpvInterpretation(CollateConclusionCodes(D,HpvObservations))),
-    longValue: flatten(
-      (CollateConclusionCodes(D,HpvObservations)) cC 
-        return (cC.coding) cCC 
-          return cCC.display
-    ),
-    date: Common.DiagnosticReportDateString(D),
-    reference: 'DiagnosticReport/' + D.id
-  }
+  FormatReports(HpvDiagnosticReports, HpvObservations, 'HPV Test')
 
 define CervicalCytologyReportsSummary:
-  (CervicalCytologyReports) D
-  return {
-    name: 'Cervical Cytology',
-    longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(CytologyInterpretation(CollateConclusionCodes(D,CytologyObservations))),
-    longValue: flatten(
-      (CollateConclusionCodes(D,CytologyObservations)) cC 
-        return (cC.coding) cCC 
-          return cCC.display
-    ),
-    date: Common.DiagnosticReportDateString(D),
-    reference: 'DiagnosticReport/' + D.id
-  }
+  FormatReports(CervicalCytologyReports, CytologyObservations, 'Cervical Cytology')
 
 define HistologyDiagnosticReportsSummary:
-  (HistologyDiagnosticReports) D
-  return {
-    name: 'Cervical Histology',
-    longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(BiopsyInterpretation(CollateConclusionCodes(D,HistologyObservations))),
-    longValue: flatten(
-      (CollateConclusionCodes(D,HistologyObservations)) cC 
-        return (cC.coding) cCC 
-          return cCC.display
-    ),
-    date: Common.DiagnosticReportDateString(D),
-    reference: 'DiagnosticReport/' + D.id
-  }
+  FormatReports(HistologyDiagnosticReports, HistologyObservations, 'Cervical Histology')
 
 define DiagnosticReportsSummary:
   (

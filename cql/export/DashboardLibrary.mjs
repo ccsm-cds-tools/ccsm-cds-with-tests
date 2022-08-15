@@ -8024,16 +8024,281 @@ export const DashboardLibrary = {
                }
             }
          }, {
-            "name" : "HpvDiagnosticReportsSummary",
+            "name" : "Interpretation",
             "context" : "Patient",
             "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV Test",
+                        "type" : "Literal"
+                     } ]
+                  }
+               },
+               "then" : {
+                  "name" : "HpvInterpretation",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "X",
+                        "expression" : {
+                           "name" : "CollatedCodes",
+                           "type" : "OperandRef"
+                        }
+                     } ],
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "X",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Cytology",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  },
+                  "then" : {
+                     "name" : "CytologyInterpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "X",
+                           "expression" : {
+                              "name" : "CollatedCodes",
+                              "type" : "OperandRef"
+                           }
+                        } ],
+                        "return" : {
+                           "distinct" : false,
+                           "expression" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "X",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     } ]
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "ReportType",
+                              "type" : "OperandRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cervical Histology",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     },
+                     "then" : {
+                        "name" : "BiopsyInterpretation",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "X",
+                              "expression" : {
+                                 "name" : "CollatedCodes",
+                                 "type" : "OperandRef"
+                              }
+                           } ],
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "X",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }
+                           }
+                        } ]
+                     },
+                     "else" : {
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        },
+                        "asTypeSpecifier" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "type" : "TupleTypeSpecifier",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "type" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "type" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "CollatedCodes",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}CodeableConcept",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ReportType",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "HasBeenLocallyEdited",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "identifier",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "D",
+                           "type" : "OperandRef"
+                        }
+                     }
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "I",
+                        "expression" : {
+                           "path" : "identifier",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "D",
+                              "type" : "OperandRef"
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "system",
+                                 "scope" : "I",
+                                 "type" : "Property"
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "http://OUR-PLACEHOLDER-URL.com",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "D",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "FormatReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
             "expression" : {
                "type" : "Query",
                "source" : [ {
                   "alias" : "D",
                   "expression" : {
-                     "name" : "HpvDiagnosticReports",
-                     "type" : "ExpressionRef"
+                     "name" : "DrList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "let" : [ {
+                  "identifier" : "CollatedCodes",
+                  "expression" : {
+                     "name" : "CollateConclusionCodes",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }, {
+                        "name" : "ObsList",
+                        "type" : "OperandRef"
+                     } ]
                   }
                } ],
                "relationship" : [ ],
@@ -8043,9 +8308,8 @@ export const DashboardLibrary = {
                      "element" : [ {
                         "name" : "name",
                         "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HPV Test",
-                           "type" : "Literal"
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
                         }
                      }, {
                         "name" : "longName",
@@ -8065,36 +8329,14 @@ export const DashboardLibrary = {
                            "name" : "HighestRankedInterpretation",
                            "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "HpvInterpretation",
+                              "name" : "Interpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "D",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HpvObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
-                                    }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 "name" : "CollatedCodes",
+                                 "type" : "QueryLetRef"
+                              }, {
+                                 "name" : "ReportType",
+                                 "type" : "OperandRef"
                               } ]
                            } ]
                         }
@@ -8107,15 +8349,8 @@ export const DashboardLibrary = {
                               "source" : [ {
                                  "alias" : "cC",
                                  "expression" : {
-                                    "name" : "CollateConclusionCodes",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "D",
-                                       "type" : "AliasRef"
-                                    }, {
-                                       "name" : "HpvObservations",
-                                       "type" : "ExpressionRef"
-                                    } ]
+                                    "name" : "CollatedCodes",
+                                    "type" : "QueryLetRef"
                                  }
                               } ],
                               "relationship" : [ ],
@@ -8172,315 +8407,101 @@ export const DashboardLibrary = {
                               } ]
                            } ]
                         }
+                     }, {
+                        "name" : "edited",
+                        "value" : {
+                           "name" : "HasBeenLocallyEdited",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
                      } ]
                   }
                }
+            },
+            "operand" : [ {
+               "name" : "DrList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ObsList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Observation",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ReportType",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "HpvDiagnosticReportsSummary",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "FormatReports",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HpvDiagnosticReports",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "HpvObservations",
+                  "type" : "ExpressionRef"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "HPV Test",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "CervicalCytologyReportsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "D",
-                  "expression" : {
-                     "name" : "CervicalCytologyReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "name",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Cytology",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "longName",
-                        "value" : {
-                           "name" : "ConceptText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "code",
-                              "scope" : "D",
-                              "type" : "Property"
-                           } ]
-                        }
-                     }, {
-                        "name" : "value",
-                        "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "CytologyInterpretation",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "D",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "CytologyObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
-                                    }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           } ]
-                        }
-                     }, {
-                        "name" : "longValue",
-                        "value" : {
-                           "type" : "Flatten",
-                           "operand" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "cC",
-                                 "expression" : {
-                                    "name" : "CollateConclusionCodes",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "D",
-                                       "type" : "AliasRef"
-                                    }, {
-                                       "name" : "CytologyObservations",
-                                       "type" : "ExpressionRef"
-                                    } ]
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "return" : {
-                                 "expression" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "cCC",
-                                       "expression" : {
-                                          "path" : "coding",
-                                          "scope" : "cC",
-                                          "type" : "Property"
-                                       }
-                                    } ],
-                                    "relationship" : [ ],
-                                    "return" : {
-                                       "expression" : {
-                                          "path" : "display",
-                                          "scope" : "cCC",
-                                          "type" : "Property"
-                                       }
-                                    }
-                                 }
-                              }
-                           }
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "DiagnosticReportDateString",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "D",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     }, {
-                        "name" : "reference",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "DiagnosticReport/",
-                              "type" : "Literal"
-                           }, {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "path" : "id",
-                                 "scope" : "D",
-                                 "type" : "Property"
-                              } ]
-                           } ]
-                        }
-                     } ]
-                  }
-               }
+               "name" : "FormatReports",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "CervicalCytologyReports",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "CytologyObservations",
+                  "type" : "ExpressionRef"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Cytology",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "HistologyDiagnosticReportsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "D",
-                  "expression" : {
-                     "name" : "HistologyDiagnosticReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "name",
-                        "value" : {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Histology",
-                           "type" : "Literal"
-                        }
-                     }, {
-                        "name" : "longName",
-                        "value" : {
-                           "name" : "ConceptText",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "code",
-                              "scope" : "D",
-                              "type" : "Property"
-                           } ]
-                        }
-                     }, {
-                        "name" : "value",
-                        "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "BiopsyInterpretation",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "D",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HistologyObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
-                                    }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           } ]
-                        }
-                     }, {
-                        "name" : "longValue",
-                        "value" : {
-                           "type" : "Flatten",
-                           "operand" : {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "cC",
-                                 "expression" : {
-                                    "name" : "CollateConclusionCodes",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "D",
-                                       "type" : "AliasRef"
-                                    }, {
-                                       "name" : "HistologyObservations",
-                                       "type" : "ExpressionRef"
-                                    } ]
-                                 }
-                              } ],
-                              "relationship" : [ ],
-                              "return" : {
-                                 "expression" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "cCC",
-                                       "expression" : {
-                                          "path" : "coding",
-                                          "scope" : "cC",
-                                          "type" : "Property"
-                                       }
-                                    } ],
-                                    "relationship" : [ ],
-                                    "return" : {
-                                       "expression" : {
-                                          "path" : "display",
-                                          "scope" : "cCC",
-                                          "type" : "Property"
-                                       }
-                                    }
-                                 }
-                              }
-                           }
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "DiagnosticReportDateString",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "D",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     }, {
-                        "name" : "reference",
-                        "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "DiagnosticReport/",
-                              "type" : "Literal"
-                           }, {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "path" : "id",
-                                 "scope" : "D",
-                                 "type" : "Property"
-                              } ]
-                           } ]
-                        }
-                     } ]
-                  }
-               }
+               "name" : "FormatReports",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HistologyDiagnosticReports",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "HistologyObservations",
+                  "type" : "ExpressionRef"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical Histology",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "DiagnosticReportsSummary",
