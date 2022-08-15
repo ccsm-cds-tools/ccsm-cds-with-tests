@@ -110,6 +110,9 @@ npx cql-to-elm cql
 
 but note that this requires installing Java 11 SE Development Kit on your system. See [documentation](https://github.com/AHRQ-CDS/CQL-Testing-Framework/blob/master/README.md#translating-cql-to-elm) from the CQL Testing Framework for more information.
 
+### Package ELM JSON into FHIR Library resources
+In order to execute CDS logic, the FHIR Clinical Guidelines Implementation guide requires ELM JSON logic to be converted into base64 and embedded into a corresponding FHIR Library resource. `npm run packager` runs the script in `util/packager.js`, encoding ELM JSON files in `cql/` as base64 strings, and overwritting the content strings in the corresponding Library resources in `fsh-tank/`. The script also saves the unencoded ELM JSON off into .js files so it is easier for the dashboard to import them.
+
 ### Run CQL Tests
 
 To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a UMLS account and VSAC API key; please see documentation for the [CQL Testing Framework](https://github.com/AHRQ-CDS/CQL-Testing-Framework) for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
