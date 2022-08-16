@@ -48,6 +48,22 @@ define LookUpTable1:
     Collate.MostRecentCytologyCotestResult
   )
 
+define RowTable1:
+  RiskTableLookup.GetRowTable1(
+    Collate.SecondMostRecentHpvResult,
+    Collate.SecondMostRecentCytologyCotestResult,
+    Collate.MostRecentHpvResult,
+    Collate.MostRecentCytologyCotestResult
+  )
+
+define AdjacentRowsTable1:
+  RiskTableLookup.GetAdjacentRowsTable1(
+    Collate.SecondMostRecentHpvResult,
+    Collate.SecondMostRecentCytologyCotestResult,
+    Collate.MostRecentHpvResult,
+    Collate.MostRecentCytologyCotestResult
+  )
+
 define GeneralScreeningManagementRecommendation:
   if LookUpTable1 is not null then LookUpTable1.action
   else null
@@ -65,6 +81,26 @@ define LookUpTable2: // NOTE: Review whether we are correctly handling the multi
     Collate.MostRecentCytologyCotestResult
   )
 
+define RowTable2:
+  RiskTableLookup.GetRowTable2(
+    Collate.ThirdMostRecentHpvResult,
+    Collate.ThirdMostRecentCytologyCotestResult,
+    Collate.SecondMostRecentHpvResult,
+    Collate.SecondMostRecentCytologyCotestResult,
+    Collate.MostRecentHpvResult,
+    Collate.MostRecentCytologyCotestResult
+  )
+
+define AdjacentRowsTable2:
+  RiskTableLookup.GetAdjacentRowsTable2(
+    Collate.ThirdMostRecentHpvResult,
+    Collate.ThirdMostRecentCytologyCotestResult,
+    Collate.SecondMostRecentHpvResult,
+    Collate.SecondMostRecentCytologyCotestResult,
+    Collate.MostRecentHpvResult,
+    Collate.MostRecentCytologyCotestResult
+  )
+
 define SurveillanceManagementRecommendation:
   if LookUpTable2 is not null then LookUpTable2.action
   else null
@@ -74,6 +110,20 @@ define SurveillanceManagementRecommendation:
 // Table 3
 define LookUpTable3: // NOTE: Review whether we need to look at history going further back
   RiskTableLookup.GetColposcopyResultsManagement(
+    Collate.ReferringHpvResult,
+    Collate.ReferringCytologyResult,
+    Collate.MostRecentBiopsyResult
+  )
+
+define RowTable3:
+  RiskTableLookup.GetRowTable3(
+    Collate.ReferringHpvResult,
+    Collate.ReferringCytologyResult,
+    Collate.MostRecentBiopsyResult
+  )
+
+define AdjacentRowsTable3:
+  RiskTableLookup.GetAdjacentRowsTable3(
     Collate.ReferringHpvResult,
     Collate.ReferringCytologyResult,
     Collate.MostRecentBiopsyResult
@@ -99,6 +149,32 @@ define LookUpTable4:
     Collate.MostRecentCytologyResultPostBiopsy
   )
 
+define RowTable4:
+  RiskTableLookup.GetRowTable4(
+    Collate.ReferringHpvResult,
+    Collate.ReferringCytologyResult,
+    Collate.MostRecentBiopsyResult,
+    Collate.ThirdMostRecentHpvResultPostBiopsy,
+    Collate.ThirdMostRecentCytologyResultPostBiopsy,
+    Collate.SecondMostRecentHpvResultPostBiopsy,
+    Collate.SecondMostRecentCytologyResultPostBiopsy,
+    Collate.MostRecentHpvResultPostBiopsy,
+    Collate.MostRecentCytologyResultPostBiopsy
+  )
+
+define AdjacentRowsTable4:
+  RiskTableLookup.GetAdjacentRowsTable4(
+    Collate.ReferringHpvResult,
+    Collate.ReferringCytologyResult,
+    Collate.MostRecentBiopsyResult,
+    Collate.ThirdMostRecentHpvResultPostBiopsy,
+    Collate.ThirdMostRecentCytologyResultPostBiopsy,
+    Collate.SecondMostRecentHpvResultPostBiopsy,
+    Collate.SecondMostRecentCytologyResultPostBiopsy,
+    Collate.MostRecentHpvResultPostBiopsy,
+    Collate.MostRecentCytologyResultPostBiopsy
+  )
+
 define PostColposcopyManagementRecommendation:
   if LookUpTable4 is not null then LookUpTable4.action
   else null
@@ -108,6 +184,28 @@ define PostColposcopyManagementRecommendation:
 // Tables 5A and 5B
 define LookUpTable5:
   RiskTableLookup.GetPostTreatmentManagement(
+    Collate.MostRecentBiopsyResult,
+    Collate.ThirdMostRecentHpvResultAfterTreatment,
+    Collate.ThirdMostRecentCytologyResultAfterTreatment,
+    Collate.SecondMostRecentHpvResultAfterTreatment,
+    Collate.SecondMostRecentCytologyResultAfterTreatment,
+    Collate.MostRecentHpvResultAfterTreatment,
+    Collate.MostRecentCytologyResultAfterTreatment
+  )
+
+define RowTable5:
+  RiskTableLookup.GetRowTable5(
+    Collate.MostRecentBiopsyResult,
+    Collate.ThirdMostRecentHpvResultAfterTreatment,
+    Collate.ThirdMostRecentCytologyResultAfterTreatment,
+    Collate.SecondMostRecentHpvResultAfterTreatment,
+    Collate.SecondMostRecentCytologyResultAfterTreatment,
+    Collate.MostRecentHpvResultAfterTreatment,
+    Collate.MostRecentCytologyResultAfterTreatment
+  )
+
+define AdjacentRowsTable5:
+  RiskTableLookup.GetAdjacentRowsTable5(
     Collate.MostRecentBiopsyResult,
     Collate.ThirdMostRecentHpvResultAfterTreatment,
     Collate.ThirdMostRecentCytologyResultAfterTreatment,
@@ -354,70 +452,167 @@ define TableTitle:
 define TableSubtitle:
   CommonAbnormalityGroup
 
-define TableHeaders:
+define HeaderTable1:
   {
     {
-      key: 'relevantHpv',
-      display: 'Relevant HPV Result'
+      key: 'history',
+      display: 'History'
     },
     {
-      key: 'relevantCyto',
-      display: 'Relevant Cytology Result'
+      key: 'hpv',
+      display: 'Current HPV Result'
     },
     {
-      key: 'immediateRisk',
+      key: 'cyto',
+      display: 'Current Cytology Result'
+    },
+    {
+      key: 'riskNow',
       display: 'CIN 3+ Immediate Risk (%)'
     },
     {
-      key: 'fiveYearRisk',
+      key: 'risk5yr',
       display: 'CIN 3+ 5 yr Risk (%)'
     }
   }
 
-define Risk:
-  case
-    when PostTreatmentManagementRecommendation is not null then LookUpTable5
-    when PostColposcopyManagementRecommendation is not null then LookUpTable4
-    when ColposcopyResultsManagementRecommendation is not null then LookUpTable3
-    when SurveillanceManagementRecommendation is not null then LookUpTable2
-    when GeneralScreeningManagementRecommendation is not null then LookUpTable1
-    else null
-  end
+define HeaderTable2:
+  {
+    {
+      key: 'prev2',
+      display: 'Second Previous'
+    },
+    {
+      key: 'prev1',
+      display: 'Previous'
+    },
+    {
+      key: 'hpv',
+      display: 'Current HPV Result'
+    },
+    {
+      key: 'cyto',
+      display: 'Current Cytology Result'
+    },
+    {
+      key: 'riskNow',
+      display: 'CIN 3+ Immediate Risk (%)'
+    },
+    {
+      key: 'risk5yr',
+      display: 'CIN 3+ 5 yr Risk (%)'
+    }
+  }
 
-define RelevantHpv:
-  case
-    when PostTreatmentManagementRecommendation is not null then Collate.MostRecentHpvResultAfterTreatment
-    when PostColposcopyManagementRecommendation is not null then Collate.MostRecentHpvResultPostBiopsy
-    when ColposcopyResultsManagementRecommendation is not null then Collate.ReferringHpvResult
-    when SurveillanceManagementRecommendation is not null then Collate.MostRecentHpvResult
-    when GeneralScreeningManagementRecommendation is not null then Collate.MostRecentHpvResult
-    else null
-  end
+define HeaderTable3:
+  {
+    {
+      key: 'referral',
+      display: 'Referring Result'
+    },
+    {
+      key: 'biopsy',
+      display: 'Biopsy Result'
+    },
+    {
+      key: 'riskNow',
+      display: 'CIN 3+ Immediate Risk (%)'
+    },
+    {
+      key: 'risk5yr',
+      display: 'CIN 3+ 5 yr Risk (%)'
+    }
+  }
 
-define RelevantCytology:
+define HeaderTable4:
+  {
+    {
+      key: 'preColposcopyResult',
+      display: 'Pre-Colposcopy History'
+    },
+    {
+      key: 'postColposcopyPastHistory',
+      display: 'Post-Colposcopy History'
+    },
+    {
+      key: 'hpv',
+      display: 'Current HPV Result'
+    },
+    {
+      key: 'cyto',
+      display: 'Current Cytology Result'
+    },
+    {
+      key: 'riskNow',
+      display: 'CIN 3+ Immediate Risk (%)'
+    },
+    {
+      key: 'risk5yr',
+      display: 'CIN 3+ 5 yr Risk (%)'
+    }
+  }
+
+define HeaderTable5:
+  {
+    {
+      key: 'biopsy',
+      display: 'Biopsy Result'
+    },
+    {
+      key: 'hpv',
+      display: 'Current HPV Result'
+    },
+    {
+      key: 'cyto',
+      display: 'Current Cytology Result'
+    },
+    {
+      key: 'riskNow',
+      display: 'CIN 3+ Immediate Risk (%)'
+    },
+    {
+      key: 'risk5yr',
+      display: 'CIN 3+ 5 yr Risk (%)'
+    }
+  }
+
+define TableHeaders:
   case
-    when PostTreatmentManagementRecommendation is not null then Collate.MostRecentCytologyResultAfterTreatment
-    when PostColposcopyManagementRecommendation is not null then Collate.MostRecentCytologyResultPostBiopsy
-    when ColposcopyResultsManagementRecommendation is not null then Collate.ReferringCytologyResult
-    when SurveillanceManagementRecommendation is not null then Collate.MostRecentCytologyCotestResult
-    when GeneralScreeningManagementRecommendation is not null then Collate.MostRecentCytologyCotestResult
+    when WhichTableMadeTheRecommendation = 5 then HeaderTable5
+    when WhichTableMadeTheRecommendation = 4 then HeaderTable4
+    when WhichTableMadeTheRecommendation = 3 then HeaderTable3
+    when WhichTableMadeTheRecommendation = 2 then HeaderTable2
+    when WhichTableMadeTheRecommendation = 1 then HeaderTable1
     else null
   end
 
 define RelevantRow:
-  {
-    relevantHpv: RelevantHpv,
-    relevantCyto: RelevantCytology,
-    immediateRisk: Risk.riskNow,
-    fiveYearRisk: Risk.risk5yr
-  }
+  case
+    when WhichTableMadeTheRecommendation = 5 then RowTable5
+    when WhichTableMadeTheRecommendation = 4 then RowTable4
+    when WhichTableMadeTheRecommendation = 3 then RowTable3
+    when WhichTableMadeTheRecommendation = 2 then RowTable2
+    when WhichTableMadeTheRecommendation = 1 then RowTable1
+    else null
+  end
+
+define AdjacentRows:
+  case
+    when WhichTableMadeTheRecommendation = 5 then AdjacentRowsTable5
+    when WhichTableMadeTheRecommendation = 4 then AdjacentRowsTable4
+    when WhichTableMadeTheRecommendation = 3 then AdjacentRowsTable3
+    when WhichTableMadeTheRecommendation = 2 then AdjacentRowsTable2
+    when WhichTableMadeTheRecommendation = 1 then AdjacentRowsTable1
+    else null
+  end
 
 define RiskTableSummary:
   {
     title: TableTitle,
     subtitle: TableSubtitle,
     headers: TableHeaders,
-    relevant: RelevantRow
+    relevant: RelevantRow,
+    adjacent: AdjacentRows
   }
 
 //------------------------------------------------------------------------------
