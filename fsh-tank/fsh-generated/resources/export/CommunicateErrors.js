@@ -6,7 +6,6 @@ export const CommunicateErrors = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableactivity"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -45,6 +44,7 @@ export const CommunicateErrors = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
+  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors",
   "name": "CommunicateErrors",
   "title": "Communicate Errors",
   "description": "Natural language description of the activity definition",

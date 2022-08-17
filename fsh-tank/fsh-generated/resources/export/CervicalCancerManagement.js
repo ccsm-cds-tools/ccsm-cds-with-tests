@@ -6,7 +6,6 @@ export const CervicalCancerManagement = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -45,6 +44,7 @@ export const CervicalCancerManagement = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
   "name": "CervicalCancerManagement",
   "title": "ASCCP Recommendations for Cervical Cancer Management",
   "type": {

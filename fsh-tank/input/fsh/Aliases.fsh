@@ -9,3 +9,6 @@ Alias: $RRTYPE = http://hl7.org/fhir/request-resource-types
 Alias: $RINTENT = http://hl7.org/fhir/request-intent
 Alias: $RPRIOR = http://hl7.org/fhir/request-priority
 Alias: $LTYPE = http://terminology.hl7.org/CodeSystem/library-type
+Alias: $PUBSTAT = http://hl7.org/fhir/publication-status
+Alias: $JURIS = urn:iso:std:iso:3166
+Alias: $SNOMED = http://snomed.info/sct

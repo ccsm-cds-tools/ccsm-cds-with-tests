@@ -6,7 +6,6 @@ export const CervicalCancerScreeningActions = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningActions",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -45,6 +44,7 @@ export const CervicalCancerScreeningActions = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningActions",
   "name": "CervicalCancerScreeningActions",
   "title": "CervicalCancerScreeningActions",
   "type": {

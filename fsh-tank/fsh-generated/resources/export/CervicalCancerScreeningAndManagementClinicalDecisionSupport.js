@@ -6,7 +6,6 @@ export const CervicalCancerScreeningAndManagementClinicalDecisionSupport = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -45,6 +44,7 @@ export const CervicalCancerScreeningAndManagementClinicalDecisionSupport = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
   "name": "CervicalCancerScreeningAndManagementClinicalDecisionSupport",
   "title": "Cervical Cancer Screening And Management Clinical Decision Support",
   "type": {

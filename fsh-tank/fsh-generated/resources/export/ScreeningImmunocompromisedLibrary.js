@@ -6,7 +6,6 @@ export const ScreeningImmunocompromisedLibrary = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computablelibrary"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningImmunocompromisedLibrary",
   "content": [
     {
       "contentType": "text/cql",
@@ -51,6 +50,7 @@ export const ScreeningImmunocompromisedLibrary = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
+  "url": "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningImmunocompromisedLibrary",
   "name": "ScreeningImmunocompromisedLibrary",
   "title": "Immunocompromised Screening Library",
   "type": {
