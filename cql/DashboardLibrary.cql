@@ -703,7 +703,7 @@ define RemovalOfCervixProcedures:
   )
 
 define PertinentProcedures:
-  ImmunocompromisedProcedures
+  ImmunocompromisedProcedures union
   ColposcopyProcedures union
   CervicalExcisionProcedures union
   CervicalAblationProcedures union
@@ -716,7 +716,7 @@ define PertinentProceduresSummary:
     value: P.status.value,
     date: Common.ProcedureDateString(P),
     reference: 'Procedure/' + P.id
-  }
+  } sort by date desc
 
 //------------------------------------------------------------------------------
 // PERTINENT DIAGNOSTIC REPORTS

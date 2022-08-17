@@ -7468,28 +7468,27 @@ export const DashboardLibrary = {
                "operand" : [ {
                   "type" : "Union",
                   "operand" : [ {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "ColposcopyProcedures",
-                        "expression" : {
-                           "name" : "ImmunocompromisedProcedures",
-                           "type" : "ExpressionRef"
-                        }
-                     } ],
-                     "relationship" : [ ]
+                     "type" : "Union",
+                     "operand" : [ {
+                        "name" : "ImmunocompromisedProcedures",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "ColposcopyProcedures",
+                        "type" : "ExpressionRef"
+                     } ]
                   }, {
-                     "name" : "CervicalExcisionProcedures",
-                     "type" : "ExpressionRef"
+                     "type" : "Union",
+                     "operand" : [ {
+                        "name" : "CervicalExcisionProcedures",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "CervicalAblationProcedures",
+                        "type" : "ExpressionRef"
+                     } ]
                   } ]
                }, {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "name" : "CervicalAblationProcedures",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "RemovalOfCervixProcedures",
-                     "type" : "ExpressionRef"
-                  } ]
+                  "name" : "RemovalOfCervixProcedures",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -7564,6 +7563,13 @@ export const DashboardLibrary = {
                         }
                      } ]
                   }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "desc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
                }
             }
          }, {
