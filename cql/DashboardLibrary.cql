@@ -535,13 +535,18 @@ define PertinentObservations:
   ResponsesToDesExposureQuestion union
   ResponsesToFuturePregnancyConcernsQuestion
 
+define function HasBeenLocallyEdited(Obs Observation):
+  if IsNull(Obs.identifier) then false
+  else AnyTrue( (Obs.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
+
 define PertinentObservationsSummary:
   (PertinentObservations) Obs
   return {
     name: Common.ConceptText(Obs.code),
     value: Common.ConceptText(Obs.value),
     date: Common.ObservationDateString(Obs),
-    reference: 'Observation/' + Obs.id
+    reference: 'Observation/' + Obs.id,
+    edited: HasBeenLocallyEdited(Obs)
   }
   sort by (date as String) desc
 
