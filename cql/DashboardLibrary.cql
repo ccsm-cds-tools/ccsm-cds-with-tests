@@ -449,6 +449,10 @@ define PertinentConditions:
   PremenopausalConditions union
   PostmenopausalConditions
 
+define function HasBeenLocallyEdited(C Condition):
+  if IsNull(C.identifier) then false
+  else AnyTrue( (C.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
+
 define PertinentConditionsSummary:
   (PertinentConditions) C
   return {
@@ -460,7 +464,8 @@ define PertinentConditionsSummary:
         C.recordedDate
       )
     ),
-    reference: 'Condition/' + C.id
+    reference: 'Condition/' + C.id,
+    edited: HasBeenLocallyEdited(C)
   }
   sort by (date as String) desc
 
@@ -709,13 +714,18 @@ define PertinentProcedures:
   CervicalAblationProcedures union
   RemovalOfCervixProcedures
 
+define function HasBeenLocallyEdited(P Procedure):
+  if IsNull(P.identifier) then false
+  else AnyTrue( (P.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
+
 define PertinentProceduresSummary:
   (PertinentProcedures) P
   return {
     name: Common.ConceptText(P.code),
     value: P.status.value,
     date: Common.ProcedureDateString(P),
-    reference: 'Procedure/' + P.id
+    reference: 'Procedure/' + P.id,
+    edited: HasBeenLocallyEdited(P)
   } sort by date desc
 
 //------------------------------------------------------------------------------

@@ -1,15 +1,15 @@
-{
+export const PertinentConditionQuestionnaire = {
   "resourceType": "Questionnaire",
-  "id": "PertinentProcedureQuestionnaire",
+  "id": "PertinentConditionQuestionnaire",
   "meta": {
     "profile": [
       "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentProcedureQuestionnaire",
+  "url": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentConditionQuestionnaire",
   "version": "1.0.0",
-  "name": "PertinentProcedureQuestionnaire",
-  "title": "PertinentProcedureQuestionnaire",
+  "name": "PertinentConditionQuestionnaire",
+  "title": "PertinentConditionQuestionnaire",
   "status": "draft",
   "subjectType": [
     "Patient"
@@ -22,20 +22,20 @@
   ],
   "item": [
     {
-      "linkId": "procedure-type",
-      "text": "Procedure Type",
+      "linkId": "condition-type",
+      "text": "Condition Type",
       "required": true,
       "type": "choice",
       "repeats": false,
-      "answerValueSet": "http://OUR-PLACEHOLDER-URL.com/ValueSet/PertinentProcedureShortList"
+      "answerValueSet": "http://OUR-PLACEHOLDER-URL.com/ValueSet/PertinentConditionShortList"
     },
     {
-      "linkId": "procedure-date",
-      "text": "Procedure Date",
+      "linkId": "condition-date",
+      "text": "Onset Date",
       "required": true,
       "enableWhen": [
         {
-          "question": "procedure-type",
+          "question": "condition-type",
           "operator": "exists",
           "answerBoolean": true
         }

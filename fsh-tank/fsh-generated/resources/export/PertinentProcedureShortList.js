@@ -24,7 +24,7 @@ export const PertinentProcedureShortList = {
     "include": [
       {
         "system": "http://snomed.info/sct",
-        "version": "20220301",
+        "version": "2022-03",
         "concept": [
           {
             "code": "392003006",

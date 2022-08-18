@@ -131,8 +131,8 @@ export const PertinentConditionShortList = {
             ]
           },
           {
-            "code": "22636003",
-            "display": "Premenopausal",
+            "code": "76498008",
+            "display": "Postmenopausal",
             "designation": [
               {
                 "use": {
@@ -140,7 +140,7 @@ export const PertinentConditionShortList = {
                   "system": "http://snomed.info/sct",
                   "display": "Fully specified name"
                 },
-                "value": "Premenopausal state (finding)"
+                "value": "Postmenopausal state (finding)"
               }
             ]
           },

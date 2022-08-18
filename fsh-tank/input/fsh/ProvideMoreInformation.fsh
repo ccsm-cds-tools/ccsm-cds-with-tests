@@ -12,7 +12,7 @@ Usage: #definition
 * name = "ProvideMoreInformation"
 * title = "Form for capturing additional information from the provider"
 * status = http://hl7.org/fhir/publication-status#draft "Draft"
-* subjectType = http://hl7.org/fhir/resource-types#Practitioner "Practitioner"
+* subjectType = http://hl7.org/fhir/resource-types#Patient "Patient"
 * item[+].linkId = "Unique id for item in questionnaire"
 * item[=].text = "Primary text for the item"
 * item[=].type = http://hl7.org/fhir/item-type#display "Display"

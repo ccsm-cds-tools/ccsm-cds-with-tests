@@ -12,7 +12,7 @@ Usage: #definition
 * name = "ScreeningAndManagementHistoryQuestionnaire"
 * title = "ScreeningAndManagementHistoryQuestionnaire"
 * status = http://hl7.org/fhir/publication-status#draft "Draft"
-* subjectType = http://hl7.org/fhir/resource-types#Practitioner "Practitioner"
+* subjectType = http://hl7.org/fhir/resource-types#Patient "Patient"
 * extension[+].url = "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode"
 * extension[=].valueCode = #random
 

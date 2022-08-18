@@ -12,7 +12,7 @@ export const ScreeningAndManagementHistoryQuestionnaire = {
   "title": "ScreeningAndManagementHistoryQuestionnaire",
   "status": "draft",
   "subjectType": [
-    "Practitioner"
+    "Patient"
   ],
   "extension": [
     {

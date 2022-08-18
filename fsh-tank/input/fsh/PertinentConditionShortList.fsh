@@ -44,10 +44,10 @@ Usage: #definition
 * compose.include[=].concept[=].display = "Premenopausal"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Premenopausal state (finding)"
-* compose.include[=].concept[+].code = #22636003
-* compose.include[=].concept[=].display = "Premenopausal"
+* compose.include[=].concept[+].code = #76498008
+* compose.include[=].concept[=].display = "Postmenopausal"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
-* compose.include[=].concept[=].designation.value = "Premenopausal state (finding)"
+* compose.include[=].concept[=].designation.value = "Postmenopausal state (finding)"
 * compose.include[=].concept[+].code = #289794001
 * compose.include[=].concept[=].display = "Lesion of Cervix"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"

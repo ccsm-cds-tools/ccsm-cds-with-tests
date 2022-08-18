@@ -12,7 +12,7 @@ export const PertinentProcedureQuestionnaire = {
   "title": "PertinentProcedureQuestionnaire",
   "status": "draft",
   "subjectType": [
-    "Practitioner"
+    "Patient"
   ],
   "extension": [
     {

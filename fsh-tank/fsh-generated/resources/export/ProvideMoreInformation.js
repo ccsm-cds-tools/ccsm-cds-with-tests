@@ -12,7 +12,7 @@ export const ProvideMoreInformation = {
   "title": "Form for capturing additional information from the provider",
   "status": "draft",
   "subjectType": [
-    "Practitioner"
+    "Patient"
   ],
   "item": [
     {
