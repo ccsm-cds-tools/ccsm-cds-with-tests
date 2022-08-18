@@ -22,6 +22,24 @@ export const PertinentConditionQuestionnaire = {
   ],
   "item": [
     {
+      "linkId": "condition-to-amend",
+      "text": "ID",
+      "type": "string",
+      "readOnly": true,
+      "initial": [
+        {
+          "valueString": "n/a"
+        }
+      ],
+      "enableWhen": [
+        {
+          "question": "condition-to-amend",
+          "operator": "!=",
+          "answerString": "n/a"
+        }
+      ]
+    },
+    {
       "linkId": "condition-type",
       "text": "Condition Type",
       "required": true,

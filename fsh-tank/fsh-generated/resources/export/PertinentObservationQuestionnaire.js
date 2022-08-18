@@ -22,6 +22,24 @@ export const PertinentObservationQuestionnaire = {
   ],
   "item": [
     {
+      "linkId": "observation-to-amend",
+      "text": "ID",
+      "type": "string",
+      "readOnly": true,
+      "initial": [
+        {
+          "valueString": "n/a"
+        }
+      ],
+      "enableWhen": [
+        {
+          "question": "observation-to-amend",
+          "operator": "!=",
+          "answerString": "n/a"
+        }
+      ]
+    },
+    {
       "linkId": "observation-type",
       "text": "Observation Type",
       "required": true,

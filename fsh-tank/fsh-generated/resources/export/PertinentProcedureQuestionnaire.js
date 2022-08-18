@@ -22,6 +22,24 @@ export const PertinentProcedureQuestionnaire = {
   ],
   "item": [
     {
+      "linkId": "procedure-to-amend",
+      "text": "ID",
+      "type": "string",
+      "readOnly": true,
+      "initial": [
+        {
+          "valueString": "n/a"
+        }
+      ],
+      "enableWhen": [
+        {
+          "question": "procedure-to-amend",
+          "operator": "!=",
+          "answerString": "n/a"
+        }
+      ]
+    },
+    {
       "linkId": "procedure-type",
       "text": "Procedure Type",
       "required": true,

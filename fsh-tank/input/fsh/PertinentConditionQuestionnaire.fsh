@@ -16,6 +16,15 @@ Usage: #definition
 * extension[+].url = "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode"
 * extension[=].valueCode = #random
 
+* item[+].linkId = "condition-to-amend"
+* item[=].text = "ID"
+* item[=].type = #string
+* item[=].readOnly = true
+* item[=].initial.valueString = "n/a"
+* item[=].enableWhen[+].question = "condition-to-amend"
+* item[=].enableWhen[=].operator = #!=
+* item[=].enableWhen[=].answerString = "n/a"
+
 * item[+].linkId = "condition-type"
 * item[=].text = "Condition Type"
 * item[=].required = true
