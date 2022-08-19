@@ -96,14 +96,14 @@ define function ScreeningText(hpvResult String, cytoResult String, spacerString 
 //   )
 
 define function GetGeneralScreeningManagement(prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  Coalesce(
+  // Coalesce(
     ( GetRowTable1(prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
       return {
         action: R.action,
         riskNow: R.riskNow,
         risk5yr: R.risk5yr
       }
-  )
+  // )
 
 define function GetRowTable1(prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
@@ -255,14 +255,14 @@ define function historyLeadingSpace(history String):
 //   )
 
 define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  Coalesce(
+  // Coalesce(
     ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
       return {
         action: R.action,
         riskNow: R.riskNow,
         risk5yr: R.risk5yr
       }
-  )
+  // )
 
 define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
@@ -403,14 +403,14 @@ define function AnyHpv(hpvVal String):
 //   )
 
 define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
-  Coalesce(
+  // Coalesce(
     ( GetRowTable3(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal) ) R
       return {
         action: R.action,
         riskNow: R.riskNow,
         risk5yr: R.risk5yr
       }
-  )
+  // )
 
 define function GetRowTable3(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
   Coalesce(
@@ -601,14 +601,14 @@ define function AscusLsilPap(currPapVal String):
 //     null
 
 define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  Coalesce(
+  // Coalesce(
     ( GetRowTable4(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
       return {
         action: R.action,
         riskNow: R.riskNow,
         risk5yr: R.risk5yr
       }
-  )
+  // )
 
 define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   if biopsyVal = '<CIN1' or biopsyVal = 'CIN1' then
@@ -817,14 +817,14 @@ define function LongTermSurveillance(prev2HpvVal String, prev2PapVal String, pre
 //     null
 
 define function GetPostTreatmentManagement(biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  Coalesce(
+  // Coalesce(
     ( GetRowTable5(biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
       return {
         action: R.action,
         riskNow: R.riskNow,
         risk5yr: R.risk5yr
       }
-  )
+  // )
 
 define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   if biopsyVal = 'CIN2' or biopsyVal = 'CIN3' then

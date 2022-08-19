@@ -887,6 +887,10 @@ define HrHPVImmunizations:
 define PertinentImmunizations:
   HrHPVImmunizations
 
+define function HasBeenLocallyEdited(Imm Immunization):
+  if IsNull(Imm.identifier) then false
+  else AnyTrue( (Imm.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
+
 define PertinentImmunizationsSummary:
   (PertinentImmunizations) I
   return {
@@ -896,7 +900,8 @@ define PertinentImmunizationsSummary:
       I.occurrence,
       Common.DateTimeText(I.occurrence)
     ),
-    reference: 'Immunization/' + I.id
+    reference: 'Immunization/' + I.id,
+    edited: HasBeenLocallyEdited(I)
   }
 
 //------------------------------------------------------------------------------

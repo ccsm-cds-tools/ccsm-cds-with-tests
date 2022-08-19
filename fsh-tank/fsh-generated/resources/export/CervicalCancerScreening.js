@@ -180,7 +180,25 @@ export const CervicalCancerScreening = {
               "title": "Prompt for More Information",
               "description": "Description",
               "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ProvideMoreInformation|1.0.0"
+              "groupingBehavior": "visual-group",
+              "selectionBehavior": "at-most-one",
+              "action": [
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentConditionQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentObservationQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentProcedureQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ScreeningAndManagementHistoryQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentVaccinationQuestionnaire|1.0.0"
+                }
+              ]
             }
           ]
         }

@@ -72,4 +72,10 @@ Usage: #definition
 * action[=].action[=].action[+].title = "Prompt for More Information"
 * action[=].action[=].action[=].description = "Description"
 * action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].action[=].definitionCanonical = Canonical(ProvideMoreInformation|1.0.0)
+* action[=].action[=].action[=].groupingBehavior = http://hl7.org/fhir/action-grouping-behavior#visual-group "Visual Group"
+* action[=].action[=].action[=].selectionBehavior = http://hl7.org/fhir/action-selection-behavior#at-most-one "At Most One"
+* action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentConditionQuestionnaire|1.0.0)
+* action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentObservationQuestionnaire|1.0.0)
+* action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentProcedureQuestionnaire|1.0.0)
+* action[=].action[=].action[=].action[+].definitionCanonical = Canonical(ScreeningAndManagementHistoryQuestionnaire|1.0.0)
+* action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentVaccinationQuestionnaire|1.0.0)

@@ -19,7 +19,11 @@ const CervicalCancerManagementActions = JSON.parse(readFileSync('fsh-tank/fsh-ge
 const CervicalCancerScreening = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreening.json'));
 const CervicalCancerScreeningActions = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningActions.json'));
 const CervicalCancerScreeningAndManagementClinicalDecisionSupport = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerScreeningAndManagementClinicalDecisionSupport.json'));
-const ProvideMoreInformation = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ProvideMoreInformation.json'));
+const PertinentConditionQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentConditionQuestionnaire.json'));
+const PertinentObservationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentObservationQuestionnaire.json'));
+const PertinentProcedureQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentProcedureQuestionnaire.json'));
+const PertinentVaccinationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentVaccinationQuestionnaire.json'));
+const ScreeningAndManagementHistoryQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ScreeningAndManagementHistoryQuestionnaire.json'));
 
 // Bring in an example patient bundle from the test folder
 const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Age_between_21_and_29_and_have_had_recent_cytology_test.json'));
@@ -99,7 +103,11 @@ let fhirJsonArray = [
   CervicalCancerScreening,
   CervicalCancerScreeningActions,
   CervicalCancerScreeningAndManagementClinicalDecisionSupport,
-  ProvideMoreInformation,
+  PertinentConditionQuestionnaire,
+  PertinentObservationQuestionnaire,
+  PertinentProcedureQuestionnaire,
+  PertinentVaccinationQuestionnaire,
+  ScreeningAndManagementHistoryQuestionnaire,
   ...examplePatientResources
 ];
 
