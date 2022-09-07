@@ -1,0 +1,114 @@
+[
+  {
+    "resourceType": "RequestGroup",
+    "id": "2",
+    "subject": {
+      "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
+      "display": "Joanne Smith"
+    },
+    "instantiatesCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
+    "intent": "proposal",
+    "status": "draft",
+    "action": [
+      {
+        "id": "11",
+        "title": "Display pertinent medical history",
+        "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
+        "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+        "resource": {
+          "reference": "CommunicationRequest/14"
+        }
+      },
+      {
+        "id": "17",
+        "title": "Management Decision Aids",
+        "description": "Management Decision Aids",
+        "textEquivalent": "Management Decision Aids",
+        "resource": {
+          "reference": "CommunicationRequest/22"
+        }
+      },
+      {
+        "id": "20",
+        "title": "Surveillance",
+        "resource": {
+          "reference": "ServiceRequest/23"
+        },
+        "description": [
+          {
+            "type": "citation",
+            "label": "ASCCP Recommendation",
+            "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
+          }
+        ]
+      }
+    ]
+  },
+  [
+    {
+      "id": "14",
+      "subject": {
+        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "CommunicationRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory"
+      },
+      "payload": [
+        {
+          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1991,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Female\",\"age\":31,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/423c9744-47c1-4f03-9bbb-01ff0fd6189a\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/6c314bbe-a935-4e27-805f-e8a34098d3c3\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/61e785b3-b7d5-4c1b-9cf5-d71851ad6b38\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/918e152b-26eb-4e29-bebd-3ff6e5e184a7\",\"edited\":false},{\"name\":\"Cervical Histology\",\"longName\":\"Cervix Pathology biopsy report\",\"value\":\"<CIN1\",\"longValue\":[{\"value\":\"Biopsy result normal (finding)\"}],\"date\":\"2019-05-14\",\"reference\":\"DiagnosticReport/05394165-d021-4534-8946-599ee18ee456\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/bd4ab58b-1374-4705-8379-05c46e1006f2\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/c0dbc45b-216d-4229-a71a-e62af6c045c5\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "subject": {
+        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "CommunicationRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids"
+      },
+      "payload": [
+        {
+          "contentString": "{\"recommendation\":\"Surveillance\",\"recommendationGroup\":\"Post Colposcopy (Table 4)\",\"recommendationDetails\":[\"When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).\",\"After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).\"],\"recommendationDate\":\"2022-05-01\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[\"Surveillance\"],\"riskTable\":{\"title\":\"Risk Estimates\",\"subtitle\":\"Post Colposcopy (Table 4)\",\"headers\":[{\"key\":\"preColposcopyResult\",\"display\":\"Pre-Colposcopy History\"},{\"key\":\"postColposcopyPastHistory\",\"display\":\"Post-Colposcopy History\"},{\"key\":\"hpv\",\"display\":\"Current HPV Result\"},{\"key\":\"cyto\",\"display\":\"Current Cytology Result\"},{\"key\":\"riskNow\",\"display\":\"CIN 3+ Immediate Risk (%)\"},{\"key\":\"risk5yr\",\"display\":\"CIN 3+ 5 yr Risk (%)\"}],\"relevant\":{\"action\":\"1-year follow-up\",\"preColposcopyResult\":\"Low Grade\",\"postColposcopyPastHistory\":\" HPV-negative/ASCUS/LSIL\",\"history\":\"\",\"prev2\":\"\",\"prev1\":\"\",\"referral\":\"\",\"biopsy\":\"\",\"hpv\":\"HPV-negative\",\"cyto\":\"ASC-US/LSIL\",\"riskNow\":0.66,\"risk5yr\":1.18},\"adjacent\":[{\"action\":\"3-year follow-up\",\"preColposcopyResult\":\"Low Grade\",\"postColposcopyPastHistory\":\" HPV-negative/ASCUS/LSIL\",\"history\":\"\",\"prev2\":\"\",\"prev1\":\"\",\"referral\":\"\",\"biopsy\":\"\",\"hpv\":\"HPV-negative\",\"cyto\":\"NILM\",\"riskNow\":0,\"risk5yr\":0.31},{\"action\":\"1-year follow-up\",\"preColposcopyResult\":\"Low Grade\",\"postColposcopyPastHistory\":\" HPV-negative/ASCUS/LSIL\",\"history\":\"\",\"prev2\":\"\",\"prev1\":\"\",\"referral\":\"\",\"biopsy\":\"\",\"hpv\":\"HPV-negative\",\"cyto\":\"ASC-US/LSIL\",\"riskNow\":0.66,\"risk5yr\":1.18}]}}"
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "subject": {
+        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "ServiceRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity"
+      },
+      "orderDetail": [
+        {
+          "text": "When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII)."
+        },
+        {
+          "text": "After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII)."
+        }
+      ],
+      "occurrenceDateTime": "2022-05-01",
+      "code": {
+        "coding": [
+          {
+            "system": "http://OUR-PLACEHOLDER-URL.com",
+            "code": "surveillance",
+            "display": "Surveillance"
+          }
+        ],
+        "display": "Surveillance"
+      }
+    }
+  ]
+]

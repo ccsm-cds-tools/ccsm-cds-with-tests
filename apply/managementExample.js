@@ -26,7 +26,7 @@ const PertinentVaccinationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-
 const ScreeningAndManagementHistoryQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ScreeningAndManagementHistoryQuestionnaire.json'));
 
 // Bring in an example patient bundle from the test folder
-const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Age_between_21_and_29_and_have_had_recent_cytology_test.json'));
+const examplePatientBundle = JSON.parse(readFileSync('test/ManagementTable4/test_results/ManageCommonAbnormality_v1.1.0/bundles/ASCUS_or_LSIL_Then_Less_Than_CIN2_Then_HPV_Negative_ASCUS_or_LSIL_Then_HPV_Negative_ASCUS_or_LSIL_-_1_Year_Follow_Up.json'));
 const examplePatientResources = examplePatientBundle.entry.map(r => r.resource); // convert from bundle to flat array
 
 // Read in ELM JSON representation of CDS logic
@@ -70,7 +70,7 @@ const elmJsonDependencies = elmJsonDependencyArray.reduce((acc, elm) => {
 }, {});
 
 // Read in cached value set JSON
-let valueSetJson = JSON.parse(readFileSync('test/ScreeningAverageRisk/.vscache/valueset-db.json'));
+let valueSetJson = JSON.parse(readFileSync('test/ManagementTable4/.vscache/valueset-db.json'));
 
 // Reformat value sets to match format expected by code service built into the 
 // cql execution engine.
@@ -125,7 +125,7 @@ const aux = {
 };
 
 // Run the $apply operations
-const [RequestGroup, ...otherResources] = await applyAndMerge(CervicalCancerScreening, patientReference, resolver, aux);
+const [RequestGroup, ...otherResources] = await applyAndMerge(CervicalCancerScreeningAndManagementClinicalDecisionSupport, patientReference, resolver, aux);
 
 // Concatenate all the resources created by $apply operation
 let outputResources = [
@@ -134,4 +134,4 @@ let outputResources = [
 ];
 
 // Write them out to a file
-writeFileSync('apply/screeningExampleOutput.json', JSON.stringify(outputResources,null,2));
+writeFileSync('apply/managementExampleOutput.json', JSON.stringify(outputResources,null,2));
