@@ -3,7 +3,7 @@
     "resourceType": "RequestGroup",
     "id": "2",
     "subject": {
-      "reference": "Patient/b8933dd5-18ff-474d-b794-00cc712ba3c3",
+      "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
       "display": "Joanne Smith"
     },
     "instantiatesCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreening",
@@ -11,22 +11,82 @@
     "status": "draft",
     "action": [
       {
-        "id": "4",
-        "title": "Display pertinent medical history",
-        "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
+        "id": "3",
+        "title": "Cervical Cancer Screening Actions",
+        "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
         "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-        "resource": {
-          "reference": "CommunicationRequest/7"
-        }
-      },
-      {
-        "id": "10",
-        "title": "Screening Decision Aids",
-        "description": "Screening Decision Aids",
-        "textEquivalent": "Screening Decision Aids",
-        "resource": {
-          "reference": "CommunicationRequest/15"
-        }
+        "action": [
+          {
+            "id": "4",
+            "title": "Display pertinent medical history",
+            "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
+            "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+            "resource": {
+              "reference": "CommunicationRequest/7"
+            }
+          },
+          {
+            "id": "10",
+            "title": "Screening Decision Aids",
+            "description": "Screening Decision Aids",
+            "textEquivalent": "Screening Decision Aids",
+            "resource": {
+              "reference": "CommunicationRequest/15"
+            }
+          },
+          {
+            "id": "11",
+            "title": "Recommended Screening Activities",
+            "description": "Recommended Screening Activities",
+            "textEquivalent": "Recommended Screening Activities",
+            "groupingBehavior": "visual-group",
+            "selectionBehavior": "at-most-one",
+            "action": [
+              {
+                "id": "12",
+                "title": "Primary HPV",
+                "resource": {
+                  "reference": "ServiceRequest/16"
+                },
+                "description": [
+                  {
+                    "type": "citation",
+                    "label": "USPSTF Recommendation",
+                    "display": "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
+                  }
+                ]
+              },
+              {
+                "id": "13",
+                "title": "Cytology",
+                "resource": {
+                  "reference": "ServiceRequest/17"
+                },
+                "description": [
+                  {
+                    "type": "citation",
+                    "label": "USPSTF Recommendation",
+                    "display": "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
+                  }
+                ]
+              },
+              {
+                "id": "14",
+                "title": "Cotesting",
+                "resource": {
+                  "reference": "ServiceRequest/18"
+                },
+                "description": [
+                  {
+                    "type": "citation",
+                    "label": "USPSTF Recommendation",
+                    "display": "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -34,7 +94,7 @@
     {
       "id": "7",
       "subject": {
-        "reference": "Patient/b8933dd5-18ff-474d-b794-00cc712ba3c3",
+        "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
         "display": "Joanne Smith"
       },
       "resourceType": "CommunicationRequest",
@@ -44,14 +104,14 @@
       },
       "payload": [
         {
-          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1996,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Female\",\"age\":26,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"NILM\",\"longValue\":[{\"value\":\"Negative for intraepithelial lesion or malignancy (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/d9a34f15-633c-424f-b903-febdc266691c\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
+          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1986,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Female\",\"age\":36,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"NILM\",\"longValue\":[{\"value\":\"Negative for intraepithelial lesion or malignancy (finding)\"}],\"date\":\"2018-05-01\",\"reference\":\"DiagnosticReport/c27216f8-8016-4fbb-9597-5e287140c412\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
         }
       ]
     },
     {
       "id": "15",
       "subject": {
-        "reference": "Patient/b8933dd5-18ff-474d-b794-00cc712ba3c3",
+        "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
         "display": "Joanne Smith"
       },
       "resourceType": "CommunicationRequest",
@@ -61,9 +121,93 @@
       },
       "payload": [
         {
-          "contentString": "{\"recommendation\":\"Cervical Screening Up To Date\",\"recommendationGroup\":\"Screening: Average Risk\",\"recommendationDetails\":[\"Cervical Cytology is next due on 2024-05-01. Note: Cervical Cytology seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.\"],\"recommendationDate\":\"2024-05-01\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[]}"
+          "contentString": "{\"recommendation\":\"Cervical Screening Due Now\",\"recommendationGroup\":\"Screening: Average Risk\",\"recommendationDetails\":[\"Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.\"],\"recommendationDate\":\"2022-09-19\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[\"Primary HPV\",\"Cytology\",\"Cotest\"]}"
         }
       ]
+    },
+    {
+      "id": "16",
+      "subject": {
+        "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "ServiceRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity"
+      },
+      "orderDetail": [
+        {
+          "text": "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing."
+        }
+      ],
+      "occurrenceDateTime": "2022-09-19",
+      "code": {
+        "coding": [
+          {
+            "system": "http://OUR-PLACEHOLDER-URL.com",
+            "code": "hpv",
+            "display": "Primary HPV"
+          }
+        ],
+        "display": "Primary HPV"
+      }
+    },
+    {
+      "id": "17",
+      "subject": {
+        "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "ServiceRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity"
+      },
+      "orderDetail": [
+        {
+          "text": "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing."
+        }
+      ],
+      "occurrenceDateTime": "2022-09-19",
+      "code": {
+        "coding": [
+          {
+            "system": "http://OUR-PLACEHOLDER-URL.com",
+            "code": "cytology",
+            "display": "Cytology"
+          }
+        ],
+        "display": "Cytology"
+      }
+    },
+    {
+      "id": "18",
+      "subject": {
+        "reference": "Patient/0d92050e-119a-4f7b-b5f7-1649e363c132",
+        "display": "Joanne Smith"
+      },
+      "resourceType": "ServiceRequest",
+      "status": "option",
+      "basedOn": {
+        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity"
+      },
+      "orderDetail": [
+        {
+          "text": "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing."
+        }
+      ],
+      "occurrenceDateTime": "2022-09-19",
+      "code": {
+        "coding": [
+          {
+            "system": "http://OUR-PLACEHOLDER-URL.com",
+            "code": "cotest",
+            "display": "Cotest"
+          }
+        ],
+        "display": "Cotest"
+      }
     }
   ]
 ]
