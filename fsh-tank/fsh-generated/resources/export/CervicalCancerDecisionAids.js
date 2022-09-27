@@ -6,6 +6,7 @@ export const CervicalCancerDecisionAids = {
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableactivity"
     ]
   },
+  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -44,7 +45,6 @@ export const CervicalCancerDecisionAids = {
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids",
   "name": "CervicalCancerDecisionAids",
   "title": "CervicalCancerDecisionAids",
   "description": "Natural language description of the activity definition",
