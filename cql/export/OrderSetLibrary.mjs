@@ -31,59 +31,59 @@ export const OrderSetLibrary = {
       },
       "codeSystems" : {
          "def" : [ {
-            "name" : "LOCAL",
-            "id" : "http://OUR-PLACEHOLDER-URL.com",
+            "name" : "URN",
+            "id" : "urn:com.epic.cdshooks.action.code.system.preference-list-item",
             "accessLevel" : "Public"
          } ]
       },
       "codes" : {
          "def" : [ {
             "name" : "Primary HPV",
-            "id" : "hpv",
-            "display" : "Primary HPV",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          }, {
             "name" : "Cytology",
-            "id" : "cytology",
-            "display" : "Cytology",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          }, {
             "name" : "Cotest",
-            "id" : "cotest",
-            "display" : "Cotest",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          }, {
             "name" : "Colposcopy",
-            "id" : "colposcopy",
-            "display" : "Colposcopy",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          }, {
             "name" : "Surveillance",
-            "id" : "surveillance",
-            "display" : "Surveillance",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          }, {
             "name" : "Treatment",
-            "id" : "treatment",
-            "display" : "Treatment",
+            "id" : "82675-0",
+            "display" : "82675-0",
             "accessLevel" : "Public",
             "codeSystem" : {
-               "name" : "LOCAL"
+               "name" : "URN"
             }
          } ]
       },

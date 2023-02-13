@@ -4,15 +4,15 @@ using FHIR version '4.0.1'
 
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 
-codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
+codesystem "URN": 'urn:com.epic.cdshooks.action.code.system.preference-list-item'
 
-code "Primary HPV": 'hpv' from "LOCAL" display 'Primary HPV'
-code "Cytology": 'cytology' from "LOCAL" display 'Cytology'
-code "Cotest": 'cotest' from "LOCAL" display 'Cotest'
+code "Primary HPV": '82675-0' from "URN" display '82675-0'
+code "Cytology": '82675-0' from "URN" display '82675-0'
+code "Cotest": '82675-0' from "URN" display '82675-0'
 
-code "Colposcopy": 'colposcopy' from "LOCAL" display 'Colposcopy'
-code "Surveillance": 'surveillance' from "LOCAL" display 'Surveillance'
-code "Treatment": 'treatment' from "LOCAL" display 'Treatment'
+code "Colposcopy": '82675-0' from "URN" display '82675-0'
+code "Surveillance": '82675-0' from "URN" display '82675-0'
+code "Treatment": '82675-0' from "URN" display '82675-0'
 
 
 define function ToCodeableConcept(code System.Code):
