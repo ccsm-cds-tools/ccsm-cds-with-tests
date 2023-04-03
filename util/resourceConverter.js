@@ -170,6 +170,12 @@ export function resourceConverter(questionnaireResponse, patientReference, getIn
           system: "http://terminology.hl7.org/CodeSystem/condition-clinical"
         }]
       },
+      verificationStatus: {
+        coding: [{
+          code: "confirmed",
+          system: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+        }]
+      },
       subject: {
         reference: patientReference
       },
