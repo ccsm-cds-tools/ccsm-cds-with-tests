@@ -1,10 +1,10 @@
-import { ScreeningAndManagementTestType } from "./ValueSet/ScreeningAndManagementTestType";
-import { ScreeningAndManagementHistoryQuestionnaire } from "./Questionnaire/ScreeningAndManagementHistoryQuestionnaire";
-import { PertinentProcedureShortList } from "./ValueSet/PertinentProcedureShortList";
-import { PertinentConditionShortList } from "./ValueSet/PertinentConditionShortList";
-import { PertinentObservationShortList } from "./ValueSet/PertinentObservationShortList";
-import { QualifierValuesShortList } from "./ValueSet/QualifierValuesShortList";
-import { PertinentVaccinationShortList } from "./ValueSet/PertinentVaccinationShortList";
+import { ScreeningAndManagementTestType } from "./ValueSet/ScreeningAndManagementTestType.js";
+import { ScreeningAndManagementHistoryQuestionnaire } from "./Questionnaire/ScreeningAndManagementHistoryQuestionnaire.js";
+import { PertinentProcedureShortList } from "./ValueSet/PertinentProcedureShortList.js";
+import { PertinentConditionShortList } from "./ValueSet/PertinentConditionShortList.js";
+import { PertinentObservationShortList } from "./ValueSet/PertinentObservationShortList.js";
+import { QualifierValuesShortList } from "./ValueSet/QualifierValuesShortList.js";
+import { PertinentVaccinationShortList } from "./ValueSet/PertinentVaccinationShortList.js";
 
 export function resourceConverter(questionnaireResponse, patientReference, getIncrementalId) {
 
