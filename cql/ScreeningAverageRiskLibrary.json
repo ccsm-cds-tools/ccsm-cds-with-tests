@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -464,17 +465,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentNilmCytology",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentNilmCytology",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -510,13 +507,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "type",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -531,19 +528,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           }
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentNilmCytology",
+                           "type" : "ExpressionRef"
                         }
                      }
                   }
@@ -571,17 +564,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentNegativeHpv",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentNegativeHpv",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -617,13 +606,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "type",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -638,16 +627,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentNegativeHpvTest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentNegativeHpvTest",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -674,30 +659,26 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Not",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "MostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "MostRecentNilmCytology",
+                           "type" : "ExpressionRef"
                         }
-                     }, {
-                        "type" : "Not",
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "MostRecentNegativeHpvTest",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "MostRecentNegativeHpvTest",
+                           "type" : "ExpressionRef"
                         }
-                     } ]
-                  }
+                     }
+                  } ]
                },
                "then" : {
                   "type" : "Query",
@@ -774,13 +755,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "type",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -795,16 +776,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentNegativeCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentNegativeCotest",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -831,42 +808,34 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "DateOfMostRecentNilmCytology",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "DateOfMostRecentNilmCytology",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Greater",
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Add",
                         "operand" : [ {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "CytologyTestingCadence",
-                              "type" : "ParameterRef"
-                           } ]
+                           "name" : "DateOfMostRecentNilmCytology",
+                           "type" : "ExpressionRef"
                         }, {
-                           "type" : "ToDateTime",
-                           "operand" : {
-                              "type" : "Today"
-                           }
+                           "name" : "CytologyTestingCadence",
+                           "type" : "ParameterRef"
                         } ]
-                     }
+                     }, {
+                        "type" : "ToDateTime",
+                        "operand" : {
+                           "type" : "Today"
+                        }
+                     } ]
                   },
                   "then" : {
                      "type" : "Add",
@@ -893,42 +862,34 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "DateOfMostRecentNegativeHpv",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "DateOfMostRecentNegativeHpv",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Greater",
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Add",
                         "operand" : [ {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNegativeHpv",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "PrimaryHpvTestingCadence",
-                              "type" : "ParameterRef"
-                           } ]
+                           "name" : "DateOfMostRecentNegativeHpv",
+                           "type" : "ExpressionRef"
                         }, {
-                           "type" : "ToDateTime",
-                           "operand" : {
-                              "type" : "Today"
-                           }
+                           "name" : "PrimaryHpvTestingCadence",
+                           "type" : "ParameterRef"
                         } ]
-                     }
+                     }, {
+                        "type" : "ToDateTime",
+                        "operand" : {
+                           "type" : "Today"
+                        }
+                     } ]
                   },
                   "then" : {
                      "type" : "Add",
@@ -955,42 +916,34 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "DateOfMostRecentNegativeCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "DateOfMostRecentNegativeCotest",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Greater",
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Add",
                         "operand" : [ {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNegativeCotest",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "CotestingCadence",
-                              "type" : "ParameterRef"
-                           } ]
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
                         }, {
-                           "type" : "ToDateTime",
-                           "operand" : {
-                              "type" : "Today"
-                           }
+                           "name" : "CotestingCadence",
+                           "type" : "ParameterRef"
                         } ]
-                     }
+                     }, {
+                        "type" : "ToDateTime",
+                        "operand" : {
+                           "type" : "Today"
+                        }
+                     } ]
                   },
                   "then" : {
                      "type" : "Add",
@@ -1017,46 +970,38 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "DateOfMostRecentNegativeCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "DateOfMostRecentNegativeCotest",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "And",
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "SameOrAfter",
                         "operand" : [ {
-                           "type" : "SameOrAfter",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNegativeCotest",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "DateOfMostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
                         }, {
-                           "type" : "SameOrAfter",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNegativeCotest",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "DateOfMostRecentNegativeHpv",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "DateOfMostRecentNilmCytology",
+                           "type" : "ExpressionRef"
                         } ]
-                     }
+                     }, {
+                        "type" : "SameOrAfter",
+                        "operand" : [ {
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "DateOfMostRecentNegativeHpv",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1066,18 +1011,14 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "After",
-                           "operand" : [ {
-                              "name" : "DateOfMostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "DateOfMostRecentNegativeHpv",
-                              "type" : "ExpressionRef"
-                           } ]
-                        }
+                        "type" : "After",
+                        "operand" : [ {
+                           "name" : "DateOfMostRecentNilmCytology",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "DateOfMostRecentNegativeHpv",
+                           "type" : "ExpressionRef"
+                        } ]
                      },
                      "then" : {
                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1094,50 +1035,38 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "Not",
                      "operand" : {
-                        "type" : "Not",
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "DateOfMostRecentNilmCytology",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "DateOfMostRecentNilmCytology",
+                           "type" : "ExpressionRef"
                         }
                      }
                   },
                   "then" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
+                        "type" : "Not",
                         "operand" : {
-                           "type" : "Not",
+                           "type" : "IsNull",
                            "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "DateOfMostRecentNegativeHpv",
-                                 "type" : "ExpressionRef"
-                              }
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
                            }
                         }
                      },
                      "then" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "After",
-                              "operand" : [ {
-                                 "name" : "DateOfMostRecentNilmCytology",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "name" : "DateOfMostRecentNegativeHpv",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }
+                           "type" : "After",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNilmCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
+                           } ]
                         },
                         "then" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1159,16 +1088,12 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
+                        "type" : "Not",
                         "operand" : {
-                           "type" : "Not",
+                           "type" : "IsNull",
                            "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "DateOfMostRecentNegativeHpv",
-                                 "type" : "ExpressionRef"
-                              }
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
                            }
                         }
                      },
@@ -1192,19 +1117,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "LastScreeningType",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Cervical Cytology",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "LastScreeningType",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Cervical Cytology",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "name" : "ProposedDateOfNextCytology",
@@ -1213,19 +1134,15 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "LastScreeningType",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "hrHPV",
-                           "type" : "Literal"
-                        } ]
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "LastScreeningType",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "hrHPV",
+                        "type" : "Literal"
+                     } ]
                   },
                   "then" : {
                      "name" : "ProposedDateOfNextHpvTest",
@@ -1234,19 +1151,15 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "LastScreeningType",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cotesting with hrHPV and Cervical Cytology",
-                              "type" : "Literal"
-                           } ]
-                        }
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "LastScreeningType",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cotesting with hrHPV and Cervical Cytology",
+                           "type" : "Literal"
+                        } ]
                      },
                      "then" : {
                         "name" : "ProposedDateOfNextCotest",
@@ -1297,12 +1210,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "AllowGradeDRecommendation",
-                     "type" : "ParameterRef"
-                  }
+                  "name" : "AllowGradeDRecommendation",
+                  "type" : "ParameterRef"
                },
                "then" : {
                   "type" : "Query",
@@ -1393,13 +1302,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "type",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -1415,14 +1324,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "CervicalCytologyTestsForGradeD",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "CervicalCytologyTestsForGradeD",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -1506,12 +1411,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "AllowGradeDRecommendation",
-                     "type" : "ParameterRef"
-                  }
+                  "name" : "AllowGradeDRecommendation",
+                  "type" : "ParameterRef"
                },
                "then" : {
                   "type" : "Query",
@@ -1550,8 +1451,7 @@
                               },
                               "valueset" : {
                                  "name" : "HPV Negative Results",
-                                 "libraryName" : "Dash",
-                                 "type" : "ValueSetRef"
+                                 "libraryName" : "Dash"
                               }
                            }
                         }
@@ -1600,13 +1500,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "type",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -1622,14 +1522,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "HpvTestsForGradeD",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "HpvTestsForGradeD",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -2031,28 +1927,20 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "IsIncludedAndNotExcluded",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "And",
-                        "operand" : [ {
-                           "name" : "AllowGradeDExclusion",
-                           "type" : "ParameterRef"
-                        }, {
-                           "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "AllowGradeDExclusion",
+                        "type" : "ParameterRef"
+                     }, {
+                        "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
+                        "type" : "ExpressionRef"
+                     } ]
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2062,51 +1950,35 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "name" : "AgeOver65",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "AgeOver65",
+                        "type" : "ExpressionRef"
                      },
                      "then" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "name" : "AllowGradeDRecommendation",
-                              "type" : "ParameterRef"
-                           }
+                           "name" : "AllowGradeDRecommendation",
+                           "type" : "ParameterRef"
                         },
                         "then" : {
                            "type" : "If",
                            "condition" : {
-                              "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                              "type" : "As",
-                              "operand" : {
-                                 "name" : "RecommendImmediateScreening",
-                                 "type" : "ExpressionRef"
-                              }
+                              "name" : "RecommendImmediateScreening",
+                              "type" : "ExpressionRef"
                            },
                            "then" : {
                               "type" : "If",
                               "condition" : {
-                                 "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                 "type" : "As",
+                                 "type" : "Not",
                                  "operand" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "Equal",
-                                       "operand" : [ {
-                                          "name" : "LastScreeningType",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "n/a",
-                                          "type" : "Literal"
-                                       } ]
-                                    }
+                                    "type" : "Equal",
+                                    "operand" : [ {
+                                       "name" : "LastScreeningType",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "n/a",
+                                       "type" : "Literal"
+                                    } ]
                                  }
                               },
                               "then" : {
@@ -2205,12 +2077,8 @@
                            "else" : {
                               "type" : "If",
                               "condition" : {
-                                 "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                 "type" : "As",
-                                 "operand" : {
-                                    "name" : "NotAdequatelyScreened",
-                                    "type" : "ExpressionRef"
-                                 }
+                                 "name" : "NotAdequatelyScreened",
+                                 "type" : "ExpressionRef"
                               },
                               "then" : {
                                  "type" : "Concatenate",
@@ -2273,12 +2141,8 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "name" : "RecommendImmediateScreening",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "RecommendImmediateScreening",
+                           "type" : "ExpressionRef"
                         },
                         "then" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2346,12 +2210,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "RecommendImmediateScreening",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "RecommendImmediateScreening",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2371,12 +2231,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "IsIncludedAndNotExcluded",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "Tuple",
@@ -2422,19 +2278,19 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -2443,7 +2299,7 @@
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -2458,84 +2314,80 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "D",
-                           "expression" : {
-                              "name" : "CervicalCytologyReports",
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "D",
+                        "expression" : {
+                           "name" : "CervicalCytologyReports",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "let" : [ {
+                        "identifier" : "CCC",
+                        "expression" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "CytologyObservations",
                               "libraryName" : "Dash",
                               "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "CCC",
+                              "type" : "QueryLetRef"
                            }
-                        } ],
-                        "let" : [ {
-                           "identifier" : "CCC",
-                           "expression" : {
-                              "name" : "CollateConclusionCodes",
-                              "libraryName" : "Dash",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "D",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "name" : "CytologyObservations",
-                                 "libraryName" : "Dash",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "where" : {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "CCC",
-                                 "type" : "QueryLetRef"
-                              }
-                           }, {
-                              "type" : "AnyTrue",
-                              "source" : {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "cC",
-                                    "expression" : {
-                                       "name" : "CCC",
-                                       "type" : "QueryLetRef"
-                                    }
-                                 } ],
-                                 "relationship" : [ ],
-                                 "return" : {
-                                    "expression" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "Equivalent",
+                        }, {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "name" : "CCC",
+                                    "type" : "QueryLetRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "Equivalent",
+                                       "operand" : [ {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
                                           "operand" : [ {
-                                             "name" : "ToConcept",
-                                             "libraryName" : "FHIRHelpers",
-                                             "type" : "FunctionRef",
-                                             "operand" : [ {
-                                                "name" : "cC",
-                                                "type" : "AliasRef"
-                                             } ]
-                                          }, {
-                                             "type" : "ToConcept",
-                                             "operand" : {
-                                                "name" : "NILM",
-                                                "libraryName" : "Dash",
-                                                "type" : "CodeRef"
-                                             }
+                                             "name" : "cC",
+                                             "type" : "AliasRef"
                                           } ]
-                                       }
+                                       }, {
+                                          "type" : "ToConcept",
+                                          "operand" : {
+                                             "name" : "NILM",
+                                             "libraryName" : "Dash",
+                                             "type" : "CodeRef"
+                                          }
+                                       } ]
                                     }
                                  }
                               }
-                           } ]
-                        }
+                           }
+                        } ]
                      }
                   }
                },
@@ -2559,86 +2411,81 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "D",
-                           "expression" : {
-                              "name" : "HpvDiagnosticReports",
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "D",
+                        "expression" : {
+                           "name" : "HpvDiagnosticReports",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "let" : [ {
+                        "identifier" : "CCC",
+                        "expression" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
                               "libraryName" : "Dash",
                               "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "let" : [ {
-                           "identifier" : "CCC",
-                           "expression" : {
-                              "name" : "CollateConclusionCodes",
-                              "libraryName" : "Dash",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "D",
-                                 "type" : "AliasRef"
-                              }, {
-                                 "name" : "HpvObservations",
-                                 "libraryName" : "Dash",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "where" : {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "CCC",
-                                 "type" : "QueryLetRef"
-                              }
-                           }, {
-                              "type" : "AnyTrue",
-                              "source" : {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "cC",
-                                    "expression" : {
-                                       "name" : "CCC",
-                                       "type" : "QueryLetRef"
-                                    }
-                                 } ],
-                                 "relationship" : [ ],
-                                 "return" : {
-                                    "expression" : {
-                                       "type" : "Equal",
-                                       "operand" : [ {
-                                          "type" : "InValueSet",
-                                          "code" : {
-                                             "name" : "ToConcept",
-                                             "libraryName" : "FHIRHelpers",
-                                             "type" : "FunctionRef",
-                                             "operand" : [ {
-                                                "name" : "cC",
-                                                "type" : "AliasRef"
-                                             } ]
-                                          },
-                                          "valueset" : {
-                                             "name" : "HPV Negative Results",
-                                             "libraryName" : "Dash",
-                                             "type" : "ValueSetRef"
-                                          }
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                          "value" : "false",
-                                          "type" : "Literal"
-                                       } ]
-                                    }
-                                 }
-                              }
                            } ]
                         }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "CCC",
+                              "type" : "QueryLetRef"
+                           }
+                        }, {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "name" : "CCC",
+                                    "type" : "QueryLetRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Equal",
+                                    "operand" : [ {
+                                       "type" : "InValueSet",
+                                       "code" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "cC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       },
+                                       "valueset" : {
+                                          "name" : "HPV Negative Results",
+                                          "libraryName" : "Dash"
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                                       "value" : "false",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }
+                           }
+                        } ]
                      }
                   }
                },

@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -294,23 +295,19 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedCytologyReports",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -333,13 +330,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -348,7 +345,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -498,8 +495,7 @@
                         },
                         "valueset" : {
                            "name" : "AIS",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
+                           "libraryName" : "Dash"
                         }
                      }
                   }
@@ -821,23 +817,19 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedCytologyReports",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "1",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -860,13 +852,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -875,7 +867,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -1216,7 +1208,7 @@
                         },
                         "valueset" : {
                            "name" : "Normal Histology Finding",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }
                   }
@@ -1271,8 +1263,7 @@
                         },
                         "valueset" : {
                            "name" : "Histologic cancer",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
+                           "libraryName" : "Dash"
                         }
                      }
                   }
@@ -1476,7 +1467,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "All Results of High Risk HPV Test",
-                                    "type" : "ValueSetRef"
+                                    "preserve" : true
                                  }
                               }
                            } ]
@@ -1587,8 +1578,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "HPV Negative Results",
-                                    "libraryName" : "Dash",
-                                    "type" : "ValueSetRef"
+                                    "libraryName" : "Dash"
                                  }
                               }, {
                                  "type" : "Equivalent",
@@ -1623,7 +1613,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "All Results of High Risk HPV Test",
-                                    "type" : "ValueSetRef"
+                                    "preserve" : true
                                  }
                               }
                            } ]
@@ -1730,8 +1720,7 @@
                            },
                            "valueset" : {
                               "name" : "High Risk Positive HPV Results Without HPV16 or HPV18",
-                              "libraryName" : "Dash",
-                              "type" : "ValueSetRef"
+                              "libraryName" : "Dash"
                            }
                         }
                      }
@@ -2942,25 +2931,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -3286,25 +3275,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -3419,8 +3408,7 @@
                         },
                         "valueset" : {
                            "name" : "Histologic CIN3",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
+                           "libraryName" : "Dash"
                         }
                      }
                   }
@@ -3461,8 +3449,7 @@
                         },
                         "valueset" : {
                            "name" : "AIS",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
+                           "libraryName" : "Dash"
                         }
                      }
                   }
@@ -3606,7 +3593,7 @@
                         },
                         "valueset" : {
                            "name" : "HSIL",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }
                   }
@@ -3661,23 +3648,19 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedBiopsyReports",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "1",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -3700,13 +3683,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -3715,7 +3698,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -3815,7 +3798,7 @@
                         },
                         "valueset" : {
                            "name" : "HSIL",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }
                   }
@@ -3939,7 +3922,7 @@
                         },
                         "valueset" : {
                            "name" : "Normal Histology Finding",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }
                   }
@@ -4651,16 +4634,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -4896,16 +4875,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -5056,16 +5031,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -5142,7 +5113,7 @@
                                     },
                                     "valueset" : {
                                        "name" : "Normal Histology Finding",
-                                       "type" : "ValueSetRef"
+                                       "preserve" : true
                                     }
                                  } ]
                               }
@@ -5162,13 +5133,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -5177,7 +5148,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -5193,16 +5164,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -5322,13 +5289,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -5337,7 +5304,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -5434,7 +5401,7 @@
                         },
                         "valueset" : {
                            "name" : "HSIL",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }
                   }
@@ -5482,8 +5449,7 @@
                            },
                            "valueset" : {
                               "name" : "HPV Negative Results",
-                              "libraryName" : "Dash",
-                              "type" : "ValueSetRef"
+                              "libraryName" : "Dash"
                            }
                         }
                      }
@@ -5806,22 +5772,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -5843,7 +5805,7 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -5937,22 +5899,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeSurveillanceTestsAfterMostRecentBiopsy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NegativeSurveillanceTestsAfterMostRecentBiopsy",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -5974,7 +5932,7 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -8733,25 +8691,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -8876,8 +8834,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "Histologic CIN3",
-                                    "libraryName" : "Dash",
-                                    "type" : "ValueSetRef"
+                                    "libraryName" : "Dash"
                                  }
                               } ]
                            }, {
@@ -9001,8 +8958,7 @@
                         },
                         "valueset" : {
                            "name" : "Histologic CIN3",
-                           "libraryName" : "Dash",
-                           "type" : "ValueSetRef"
+                           "libraryName" : "Dash"
                         }
                      }
                   }
@@ -9238,8 +9194,7 @@
                            },
                            "valueset" : {
                               "name" : "High Risk HPV Positive Results",
-                              "libraryName" : "Dash",
-                              "type" : "ValueSetRef"
+                              "libraryName" : "Dash"
                            }
                         }
                      }
@@ -9312,8 +9267,7 @@
                                     },
                                     "valueset" : {
                                        "name" : "Histologic CIN3",
-                                       "libraryName" : "Dash",
-                                       "type" : "ValueSetRef"
+                                       "libraryName" : "Dash"
                                     }
                                  } ]
                               }, {
@@ -9348,8 +9302,7 @@
                               },
                               "valueset" : {
                                  "name" : "AIS",
-                                 "libraryName" : "Dash",
-                                 "type" : "ValueSetRef"
+                                 "libraryName" : "Dash"
                               }
                            } ]
                         }
@@ -9364,16 +9317,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentTreatment",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentTreatment",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -9438,13 +9387,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -9453,7 +9402,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -9506,7 +9455,7 @@
                               },
                               "valueset" : {
                                  "name" : "HSIL",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            }, {
                               "type" : "Equivalent",
@@ -9538,16 +9487,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentTreatment",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentTreatment",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -9612,13 +9557,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -9627,7 +9572,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -9643,16 +9588,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentTreatment",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentTreatment",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -9718,13 +9659,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -9733,7 +9674,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -9749,22 +9690,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "CytologyResultsBeforeTreatment",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "2",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "CytologyResultsBeforeTreatment",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "And",
@@ -9871,42 +9808,38 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Not",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "MostRecentTreatment",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "MostRecentTreatment",
+                           "type" : "ExpressionRef"
                         }
-                     }, {
+                     }
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "RareAbnormalityHighGradeHistologyBeforeTreatment",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "CytologicHsilOrAgcBeforeTreatment",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "RareAbnormalityHighGradeHistologyBeforeTreatment",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
-                           "name" : "HasPersistentAscHBeforeTreatment",
-                           "type" : "ExpressionRef"
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "CytologicHsilOrAgcBeforeTreatment",
+                              "type" : "ExpressionRef"
+                           }
                         } ]
+                     }, {
+                        "name" : "HasPersistentAscHBeforeTreatment",
+                        "type" : "ExpressionRef"
                      } ]
-                  }
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentTreatment",
@@ -9954,12 +9887,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "HasTreatmentForHighGradeHistologyOrCytology",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "HasTreatmentForHighGradeHistologyOrCytology",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "Query",
@@ -9994,7 +9923,7 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -10010,22 +9939,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "4",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "4",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Or",
@@ -10707,25 +10632,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",

@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -878,12 +879,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "IsIncludedAndNotExcluded",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "Case",
@@ -944,16 +941,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationText",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "RecommendationText",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -986,12 +979,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "IsIncludedAndNotExcluded",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "Tuple",
@@ -1033,19 +1022,19 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -1054,7 +1043,7 @@
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }

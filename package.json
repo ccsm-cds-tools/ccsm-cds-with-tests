@@ -1,15 +1,24 @@
 {
   "name": "ccsm-cds-with-tests",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "This repository contains clinical decision support (CDS) which provides recommendations for cervical cancer screening and management (CCSM).",
-  "main": "index.js",
+  "exports": {
+    "fhir/ActivityDefinition/*.js": "./dist/fhir/ActivityDefinition/*.js",
+    "fhir/Library/*.js": "./dist/fhir/Library/*.js",
+    "fhir/PlanDefinition/*.js": "./dist/fhir/PlanDefinition/*.js",
+    "fhir/Questionnaire/*.js": "./dist/fhir/Questionnaire/*.js",
+    "fhir/ValueSet/*.js": "./dist/fhir/ValueSet/*.js",
+    "fhir/resourceConverter.js": "./dist/fhir/resourceConverter.js",
+    "cql/*.mjs": "./dist/cql/*.mjs"
+  },
+  "files": ["dist"],
   "type": "module",
   "scripts": {
     "sushi": "node node_modules/.bin/sushi fsh-tank",
     "test-cql": "mocha --reporter spec --recursive --timeout 100000",
     "screening-example": "node --experimental-json-modules --no-warnings apply/screening-example.js",
     "packager": "node util/packager.js",
-    "update-logic": ""
+    "prepack": "npx cql-to-elm cql && npm run packager && cp ./util/resourceConverter.js ./dist/fhir/resourceConverter.js"
   },
   "license": "Apache-2.0",
   "dependencies": {

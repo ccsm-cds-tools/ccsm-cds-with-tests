@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -135,50 +136,38 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "d1",
-                           "type" : "OperandRef"
-                        }
+                        "name" : "d1",
+                        "type" : "OperandRef"
                      }
                   }
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "Not",
                      "operand" : {
-                        "type" : "Not",
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "d2",
-                              "type" : "OperandRef"
-                           }
+                           "name" : "d2",
+                           "type" : "OperandRef"
                         }
                      }
                   },
                   "then" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "SameOrBefore",
-                           "operand" : [ {
-                              "name" : "d1",
-                              "type" : "OperandRef"
-                           }, {
-                              "name" : "d2",
-                              "type" : "OperandRef"
-                           } ]
-                        }
+                        "type" : "SameOrBefore",
+                        "operand" : [ {
+                           "name" : "d1",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "d2",
+                           "type" : "OperandRef"
+                        } ]
                      },
                      "then" : {
                         "name" : "d1",
@@ -197,16 +186,12 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "Not",
                      "operand" : {
-                        "type" : "Not",
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "d2",
-                              "type" : "OperandRef"
-                           }
+                           "name" : "d2",
+                           "type" : "OperandRef"
                         }
                      }
                   },
@@ -462,55 +447,47 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedHpvReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedHpvReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "type" : "Indexer",
-                              "operand" : [ {
-                                 "name" : "SortedHpvReports",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "0",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        }, {
-                           "name" : "HPVTestingIntervalLookBack",
-                           "type" : "FunctionRef",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Indexer",
                            "operand" : [ {
-                              "type" : "ToDateTime",
-                              "operand" : {
-                                 "type" : "Today"
-                              }
+                              "name" : "SortedHpvReports",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
                            } ]
+                        }
+                     }, {
+                        "name" : "HPVTestingIntervalLookBack",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
                         } ]
-                     }
+                     } ]
                   },
                   "then" : {
                      "type" : "Indexer",
@@ -532,13 +509,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -547,7 +524,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -564,13 +541,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -579,7 +556,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -594,57 +571,49 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedHpvReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "1",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedHpvReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Indexer",
+                           "operand" : [ {
+                              "name" : "SortedHpvReports",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "1",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "name" : "HPVTestingIntervalLookBack",
+                        "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "type" : "Indexer",
-                              "operand" : [ {
-                                 "name" : "SortedHpvReports",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "1",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "MostRecentHpvReport",
+                              "type" : "ExpressionRef"
                            }
-                        }, {
-                           "name" : "HPVTestingIntervalLookBack",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentHpvReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
                         } ]
-                     }
+                     } ]
                   },
                   "then" : {
                      "type" : "Indexer",
@@ -666,13 +635,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -681,7 +650,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -698,13 +667,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -713,7 +682,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -728,57 +697,49 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedHpvReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "2",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedHpvReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Indexer",
+                           "operand" : [ {
+                              "name" : "SortedHpvReports",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "2",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "name" : "HPVTestingIntervalLookBack",
+                        "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "type" : "Indexer",
-                              "operand" : [ {
-                                 "name" : "SortedHpvReports",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "2",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "SecondMostRecentHpvReport",
+                              "type" : "ExpressionRef"
                            }
-                        }, {
-                           "name" : "HPVTestingIntervalLookBack",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondMostRecentHpvReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
                         } ]
-                     }
+                     } ]
                   },
                   "then" : {
                      "type" : "Indexer",
@@ -800,13 +761,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -815,7 +776,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -832,13 +793,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -847,7 +808,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -862,57 +823,49 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedHpvReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "3",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedHpvReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Indexer",
+                           "operand" : [ {
+                              "name" : "SortedHpvReports",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "3",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "name" : "HPVTestingIntervalLookBack",
+                        "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "type" : "Indexer",
-                              "operand" : [ {
-                                 "name" : "SortedHpvReports",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "3",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "ThirdMostRecentHpvReport",
+                              "type" : "ExpressionRef"
                            }
-                        }, {
-                           "name" : "HPVTestingIntervalLookBack",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "ThirdMostRecentHpvReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
                         } ]
-                     }
+                     } ]
                   },
                   "then" : {
                      "type" : "Indexer",
@@ -934,13 +887,13 @@
                         "type" : "TupleTypeSpecifier",
                         "element" : [ {
                            "name" : "riskTableInput",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
                         }, {
                            "name" : "allConclusions",
-                           "type" : {
+                           "elementType" : {
                               "type" : "ListTypeSpecifier",
                               "elementType" : {
                                  "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -949,7 +902,7 @@
                            }
                         }, {
                            "name" : "date",
-                           "type" : {
+                           "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                               "type" : "NamedTypeSpecifier"
                            }
@@ -966,13 +919,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -981,7 +934,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -1459,14 +1412,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "MostRecentHpvReport",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "MostRecentHpvReport",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -1479,14 +1428,10 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
                      }
                   },
                   "then" : {
@@ -1511,14 +1456,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "SecondMostRecentHpvReport",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "SecondMostRecentHpvReport",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -1531,14 +1472,10 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "SecondMostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "SecondMostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
                      }
                   },
                   "then" : {
@@ -1563,14 +1500,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "ThirdMostRecentHpvReport",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "ThirdMostRecentHpvReport",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -1583,14 +1516,10 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "ThirdMostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "ThirdMostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
                      }
                   },
                   "then" : {
@@ -1615,14 +1544,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "FourthMostRecentHpvReport",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "FourthMostRecentHpvReport",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -1635,14 +1560,10 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "FourthMostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "FourthMostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
                      }
                   },
                   "then" : {
@@ -1667,22 +1588,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedCytologyReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -1704,13 +1621,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -1719,7 +1636,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -1877,22 +1794,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedBiopsyReports",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Indexer",
@@ -1914,13 +1827,13 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "riskTableInput",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "allConclusions",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{http://hl7.org/fhir}CodeableConcept",
@@ -1929,7 +1842,7 @@
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -1987,22 +1900,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "MostRecentBiopsyReferralPeriod",
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentHpvReport",
                         "type" : "ExpressionRef"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "name" : "MostRecentBiopsyReferralPeriod",
+                     "type" : "ExpressionRef"
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentHpvResult",
@@ -2011,22 +1920,18 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "SecondMostRecentHpvReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "name" : "MostRecentBiopsyReferralPeriod",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentHpvReport",
                            "type" : "ExpressionRef"
-                        } ]
-                     }
+                        }
+                     }, {
+                        "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "ExpressionRef"
+                     } ]
                   },
                   "then" : {
                      "name" : "SecondMostRecentHpvResult",
@@ -2035,22 +1940,18 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "ThirdMostRecentHpvReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "ThirdMostRecentHpvReport",
                               "type" : "ExpressionRef"
-                           } ]
-                        }
+                           }
+                        }, {
+                           "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "ExpressionRef"
+                        } ]
                      },
                      "then" : {
                         "name" : "ThirdMostRecentHpvResult",
@@ -2059,22 +1960,18 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "FourthMostRecentHpvReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "FourthMostRecentHpvReport",
                                  "type" : "ExpressionRef"
-                              } ]
-                           }
+                              }
+                           }, {
+                              "name" : "MostRecentBiopsyReferralPeriod",
+                              "type" : "ExpressionRef"
+                           } ]
                         },
                         "then" : {
                            "name" : "FourthMostRecentHpvResult",
@@ -2137,22 +2034,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "MostRecentBiopsyReferralPeriod",
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCytologyCotest",
                         "type" : "ExpressionRef"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "name" : "MostRecentBiopsyReferralPeriod",
+                     "type" : "ExpressionRef"
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentCytologyCotestResult",
@@ -2161,22 +2054,18 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "SecondMostRecentCytologyCotest",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "name" : "MostRecentBiopsyReferralPeriod",
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "SecondMostRecentCytologyCotest",
                            "type" : "ExpressionRef"
-                        } ]
-                     }
+                        }
+                     }, {
+                        "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "ExpressionRef"
+                     } ]
                   },
                   "then" : {
                      "name" : "SecondMostRecentCytologyCotestResult",
@@ -2185,22 +2074,18 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "ThirdMostRecentCytologyCotest",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "name" : "MostRecentBiopsyReferralPeriod",
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "ThirdMostRecentCytologyCotest",
                               "type" : "ExpressionRef"
-                           } ]
-                        }
+                           }
+                        }, {
+                           "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "ExpressionRef"
+                        } ]
                      },
                      "then" : {
                         "name" : "ThirdMostRecentCytologyCotestResult",
@@ -2209,22 +2094,18 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "FourthMostRecentCytologyCotest",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "name" : "MostRecentBiopsyReferralPeriod",
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "FourthMostRecentCytologyCotest",
                                  "type" : "ExpressionRef"
-                              } ]
-                           }
+                              }
+                           }, {
+                              "name" : "MostRecentBiopsyReferralPeriod",
+                              "type" : "ExpressionRef"
+                           } ]
                         },
                         "then" : {
                            "name" : "FourthMostRecentCytologyCotestResult",
@@ -2233,16 +2114,12 @@
                         "else" : {
                            "type" : "If",
                            "condition" : {
-                              "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                              "type" : "As",
+                              "type" : "Not",
                               "operand" : {
-                                 "type" : "Not",
+                                 "type" : "IsNull",
                                  "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "MostRecentCytologyBeforeBiopsy",
-                                       "type" : "ExpressionRef"
-                                    }
+                                    "name" : "MostRecentCytologyBeforeBiopsy",
+                                    "type" : "ExpressionRef"
                                  }
                               }
                            },
@@ -2267,26 +2144,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentHpvReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentHpvResult",
@@ -2307,26 +2180,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentCytologyCotestResult",
@@ -2347,26 +2216,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "SecondMostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentHpvReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "SecondMostRecentHpvResult",
@@ -2387,26 +2252,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "SecondMostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "SecondMostRecentCytologyCotestResult",
@@ -2427,26 +2288,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "ThirdMostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "ThirdMostRecentHpvReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "ThirdMostRecentHpvResult",
@@ -2467,26 +2324,22 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "ThirdMostRecentCytologyCotest",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "ThirdMostRecentCytologyCotest",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
                },
                "then" : {
                   "name" : "ThirdMostRecentCytologyCotestResult",
@@ -2565,16 +2418,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentReport",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "MostRecentReport",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -2734,22 +2583,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentHpvReport",
                         "type" : "ExpressionRef"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  } ]
                },
                "then" : {
                   "name" : "MostRecentHpvResult",
@@ -2770,22 +2615,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "SecondMostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentHpvReport",
                         "type" : "ExpressionRef"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  } ]
                },
                "then" : {
                   "name" : "SecondMostRecentHpvResult",
@@ -2806,22 +2647,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "ThirdMostRecentHpvReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "ThirdMostRecentHpvReport",
                         "type" : "ExpressionRef"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  } ]
                },
                "then" : {
                   "name" : "ThirdMostRecentHpvResult",
@@ -2842,14 +2679,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "MostRecentHpvResultAfterTreatment",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "MostRecentHpvResultAfterTreatment",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -2871,14 +2704,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "SecondMostRecentHpvResultAfterTreatment",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "SecondMostRecentHpvResultAfterTreatment",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -2900,14 +2729,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "ThirdMostRecentHpvResultAfterTreatment",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {

@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -87,32 +88,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
+                  "type" : "Or",
+                  "operand" : [ {
                      "type" : "Or",
                      "operand" : [ {
-                        "type" : "Or",
+                        "type" : "Equal",
                         "operand" : [ {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "currPapVal",
-                              "type" : "OperandRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ASC-H",
-                              "type" : "Literal"
-                           } ]
+                           "name" : "currPapVal",
+                           "type" : "OperandRef"
                         }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "currPapVal",
-                              "type" : "OperandRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "AGC",
-                              "type" : "Literal"
-                           } ]
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ASC-H",
+                           "type" : "Literal"
                         } ]
                      }, {
                         "type" : "Equal",
@@ -121,11 +108,21 @@
                            "type" : "OperandRef"
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HSIL+",
+                           "value" : "AGC",
                            "type" : "Literal"
                         } ]
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HSIL+",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -153,47 +150,39 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
+                        "name" : "cytoResult",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ALL",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "cytoResult",
+                        "type" : "OperandRef"
+                     }
+                  } ]
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "Not",
+                     "operand" : {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "cytoResult",
+                           "name" : "hpvResult",
                            "type" : "OperandRef"
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "ALL",
                            "type" : "Literal"
                         } ]
-                     }, {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "cytoResult",
-                           "type" : "OperandRef"
-                        }
-                     } ]
-                  }
-               },
-               "then" : {
-                  "type" : "If",
-                  "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "hpvResult",
-                              "type" : "OperandRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "ALL",
-                              "type" : "Literal"
-                           } ]
-                        }
                      }
                   },
                   "then" : {
@@ -208,36 +197,28 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "cytoResult",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "NILM",
-                           "type" : "Literal"
-                        } ]
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "cytoResult",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "NILM",
+                        "type" : "Literal"
+                     } ]
                   },
                   "then" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "hpvResult",
-                              "type" : "OperandRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "HPV-negative",
-                              "type" : "Literal"
-                           } ]
-                        }
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "hpvResult",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-negative",
+                           "type" : "Literal"
+                        } ]
                      },
                      "then" : {
                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -247,19 +228,15 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "hpvResult",
-                                 "type" : "OperandRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV-positive",
-                                 "type" : "Literal"
-                              } ]
-                           }
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "hpvResult",
+                              "type" : "OperandRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-positive",
+                              "type" : "Literal"
+                           } ]
                         },
                         "then" : {
                            "type" : "Concatenate",
@@ -286,21 +263,17 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
+                        "type" : "Not",
                         "operand" : {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "hpvResult",
-                                 "type" : "OperandRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ALL",
-                                 "type" : "Literal"
-                              } ]
-                           }
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "hpvResult",
+                              "type" : "OperandRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ALL",
+                              "type" : "Literal"
+                           } ]
                         }
                      },
                      "then" : {
@@ -998,19 +971,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "ascus",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "ASC-US",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ascus",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "ASC-US",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1038,32 +1007,28 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "currPapVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ASC-US",
-                           "type" : "Literal"
-                        } ]
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "currPapVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LSIL",
-                           "type" : "Literal"
-                        } ]
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ASC-US",
+                        "type" : "Literal"
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "LSIL",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1073,32 +1038,18 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
+                     "type" : "Or",
+                     "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Or",
+                           "type" : "Equal",
                            "operand" : [ {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "currPapVal",
-                                 "type" : "OperandRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "ASC-H",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "currPapVal",
+                              "type" : "OperandRef"
                            }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "name" : "currPapVal",
-                                 "type" : "OperandRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "AGC",
-                                 "type" : "Literal"
-                              } ]
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "ASC-H",
+                              "type" : "Literal"
                            } ]
                         }, {
                            "type" : "Equal",
@@ -1107,11 +1058,21 @@
                               "type" : "OperandRef"
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "HSIL+",
+                              "value" : "AGC",
                               "type" : "Literal"
                            } ]
                         } ]
-                     }
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "currPapVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HSIL+",
+                           "type" : "Literal"
+                        } ]
+                     } ]
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1140,19 +1101,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "hpv18",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV16-, HPV18+",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "hpv18",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV16-, HPV18+",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1179,19 +1136,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "history",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Cotest-negative",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "history",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Cotest-negative",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2410,19 +2363,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "hpvVal",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV16+",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "hpvVal",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV16+",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2432,19 +2381,15 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "hpvVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "HPV16-, HPV18+",
-                           "type" : "Literal"
-                        } ]
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "hpvVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV16-, HPV18+",
+                        "type" : "Literal"
+                     } ]
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -3686,32 +3631,28 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "currPapVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "ASC-US",
-                           "type" : "Literal"
-                        } ]
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "currPapVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "LSIL",
-                           "type" : "Literal"
-                        } ]
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ASC-US",
+                        "type" : "Literal"
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "LSIL",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -3739,32 +3680,28 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "<CIN1",
-                           "type" : "Literal"
-                        } ]
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "CIN1",
-                           "type" : "Literal"
-                        } ]
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "<CIN1",
+                        "type" : "Literal"
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN1",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "type" : "Coalesce",
@@ -4515,73 +4452,73 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "action",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "history",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "prev2",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "prev1",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "referral",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "biopsy",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "preColposcopyResult",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "postColposcopyPastHistory",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "hpv",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "cyto",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "riskNow",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Decimal",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "risk5yr",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Decimal",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -5020,32 +4957,28 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "CIN2",
-                           "type" : "Literal"
-                        } ]
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "CIN3",
-                           "type" : "Literal"
-                        } ]
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN2",
+                        "type" : "Literal"
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN3",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -5440,32 +5373,28 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Or",
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "CIN2",
-                           "type" : "Literal"
-                        } ]
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
                      }, {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "biopsyVal",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "CIN3",
-                           "type" : "Literal"
-                        } ]
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN2",
+                        "type" : "Literal"
                      } ]
-                  }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "biopsyVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN3",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
                   "type" : "Coalesce",
@@ -6119,73 +6048,73 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "action",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "history",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "prev2",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "prev1",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "referral",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "biopsy",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "preColposcopyResult",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "postColposcopyPastHistory",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "hpv",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "cyto",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "riskNow",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Decimal",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "risk5yr",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Decimal",
                            "type" : "NamedTypeSpecifier"
                         }

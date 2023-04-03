@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -630,16 +631,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "conclusions",
-                           "type" : "OperandRef"
-                        }
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -827,7 +824,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "HSIL",
-                                    "type" : "ValueSetRef"
+                                    "preserve" : true
                                  }
                               }, {
                                  "type" : "Equivalent",
@@ -952,16 +949,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "conclusions",
-                           "type" : "OperandRef"
-                        }
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -1051,7 +1044,7 @@
                               },
                               "valueset" : {
                                  "name" : "High Risk HPV Positive Results",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -1081,7 +1074,7 @@
                               },
                               "valueset" : {
                                  "name" : "HPV Negative Results",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -1255,16 +1248,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "conclusions",
-                           "type" : "OperandRef"
-                        }
+                        "name" : "conclusions",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -1290,7 +1279,7 @@
                               },
                               "valueset" : {
                                  "name" : "Normal Histology Finding",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -1384,7 +1373,7 @@
                               },
                               "valueset" : {
                                  "name" : "Histologic CIN3",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -1414,7 +1403,7 @@
                               },
                               "valueset" : {
                                  "name" : "AIS",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -1444,7 +1433,7 @@
                               },
                               "valueset" : {
                                  "name" : "Histologic cancer",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            },
                            "then" : {
@@ -2695,925 +2684,211 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "BirthSexMissingOrUnknown",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "BirthSexMissingOrUnknown",
+                  "type" : "ExpressionRef"
                },
                "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "Unknown",
-                  "type" : "Literal"
+                  "type" : "As",
+                  "operand" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Unknown",
+                     "type" : "Literal"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ChoiceTypeSpecifier",
+                     "choice" : [ {
+                        "name" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}base64Binary",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}boolean",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}canonical",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}code",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}date",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}dateTime",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}decimal",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}id",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}instant",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}integer",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}markdown",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}oid",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}positiveInt",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}string",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}time",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}unsignedInt",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}uri",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}url",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}uuid",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Address",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Age",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Annotation",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Attachment",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}CodeableConcept",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Coding",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ContactPoint",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Count",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Distance",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Duration",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}HumanName",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Identifier",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Money",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Period",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Quantity",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Range",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Ratio",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Reference",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}SampledData",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Signature",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Timing",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ContactDetail",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Contributor",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}DataRequirement",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Expression",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ParameterDefinition",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}RelatedArtifact",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}TriggerDefinition",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}UsageContext",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Dosage",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Meta",
+                        "type" : "NamedTypeSpecifier"
+                     } ]
+                  }
                },
                "else" : {
-                  "type" : "Case",
-                  "caseItem" : [ {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}base64Binary",
-                        "type" : "Is",
+                  "type" : "Coalesce",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "$this",
+                        "expression" : {
+                           "name" : "BirthSex",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "where" : {
+                        "type" : "Not",
                         "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "$this",
+                                 "type" : "AliasRef"
                               }
-                           } ]
+                           }
                         }
                      },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}base64Binary",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "$this",
+                              "type" : "AliasRef"
                            }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
                         }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
                      }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "BirthSex",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "BirthSex",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  } ],
-                  "else" : {
-                     "resultTypeName" : "{urn:hl7-org:elm-types:r1}String",
-                     "type" : "Null"
-                  }
+                  } ]
                }
             }
          }, {
@@ -3623,19 +2898,19 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "asType" : "{urn:hl7-org:elm-types:r1}String",
+                     "type" : "As",
+                     "operand" : {
                         "name" : "BirthSexCode",
                         "type" : "ExpressionRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "F",
-                        "type" : "Literal"
-                     } ]
-                  }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "F",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -3645,19 +2920,19 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Equal",
-                        "operand" : [ {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
                            "name" : "BirthSexCode",
                            "type" : "ExpressionRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "M",
-                           "type" : "Literal"
-                        } ]
-                     }
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "M",
+                        "type" : "Literal"
+                     } ]
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -3970,928 +3245,214 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "GenderIdentityExtension",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "GenderIdentityExtension",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
-                  "type" : "Case",
-                  "caseItem" : [ {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}base64Binary",
-                        "type" : "Is",
+                  "type" : "Coalesce",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "$this",
+                        "expression" : {
+                           "name" : "GenderIdentityExtension",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "where" : {
+                        "type" : "Not",
                         "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "$this",
+                                 "type" : "AliasRef"
                               }
-                           } ]
+                           }
                         }
                      },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}base64Binary",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
+                     "return" : {
+                        "distinct" : false,
+                        "expression" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "$this",
+                              "type" : "AliasRef"
                            }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
                         }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
                      }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}string",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}string",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  }, {
-                     "when" : {
-                        "isType" : "{http://hl7.org/fhir}uri",
-                        "type" : "Is",
-                        "operand" : {
-                           "type" : "Coalesce",
-                           "operand" : [ {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "$this",
-                                 "expression" : {
-                                    "name" : "GenderIdentityExtension",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ],
-                              "where" : {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              },
-                              "return" : {
-                                 "distinct" : false,
-                                 "expression" : {
-                                    "path" : "value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "$this",
-                                       "type" : "AliasRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }
-                     },
-                     "then" : {
-                        "name" : "ToString",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "asType" : "{http://hl7.org/fhir}uri",
-                           "type" : "As",
-                           "operand" : {
-                              "type" : "Coalesce",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "$this",
-                                    "expression" : {
-                                       "name" : "GenderIdentityExtension",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "where" : {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 },
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "path" : "value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "$this",
-                                          "type" : "AliasRef"
-                                       }
-                                    }
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }
-                  } ],
-                  "else" : {
-                     "resultTypeName" : "{urn:hl7-org:elm-types:r1}String",
-                     "type" : "Null"
-                  }
+                  } ]
                },
                "else" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "Unknown",
-                  "type" : "Literal"
+                  "type" : "As",
+                  "operand" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Unknown",
+                     "type" : "Literal"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ChoiceTypeSpecifier",
+                     "choice" : [ {
+                        "name" : "{http://hl7.org/fhir}base64Binary",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}boolean",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}canonical",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}code",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}date",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}dateTime",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}decimal",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}id",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}instant",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}integer",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}markdown",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}oid",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}positiveInt",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}string",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}time",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}unsignedInt",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}uri",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}url",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}uuid",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Address",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Age",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Annotation",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Attachment",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}CodeableConcept",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Coding",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ContactPoint",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Count",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Distance",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Duration",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}HumanName",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Identifier",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Money",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Period",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Quantity",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Range",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Ratio",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Reference",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}SampledData",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Signature",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Timing",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ContactDetail",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Contributor",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}DataRequirement",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Expression",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}ParameterDefinition",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}RelatedArtifact",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}TriggerDefinition",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}UsageContext",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Dosage",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{http://hl7.org/fhir}Meta",
+                        "type" : "NamedTypeSpecifier"
+                     }, {
+                        "name" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "NamedTypeSpecifier"
+                     } ]
+                  }
                }
             }
          }, {
@@ -5203,6 +3764,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Diagnosis of Cervical cancer",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5223,6 +3785,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Cervical Precancer Disorders",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5243,6 +3806,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Observed Cervical and/or Vaginal Lesions",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5263,6 +3827,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Diethylstilbestrol (DES) exposure",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5283,6 +3848,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Diagnosis of Absence of cervix",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5313,6 +3879,7 @@
                            "type" : "Retrieve",
                            "codes" : {
                               "name" : "Pregnancy",
+                              "preserve" : true,
                               "type" : "ValueSetRef"
                            }
                         }, {
@@ -5323,6 +3890,7 @@
                            "type" : "Retrieve",
                            "codes" : {
                               "name" : "Pregnancy (New ICD10 codes published in 2018 and 2020)",
+                              "preserve" : true,
                               "type" : "ValueSetRef"
                            }
                         } ]
@@ -5350,6 +3918,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "HIV",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5370,6 +3939,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Solid Organ Transplant Diagnosis Codes",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5392,6 +3962,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Systemic Lupus Erythematosus",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -5431,6 +4002,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Hematopoietic stem cell transplant",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -5455,6 +4027,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "ICD10CM Value Set for Crohn's Disease",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      } ]
@@ -5470,6 +4043,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "SNOMED Value Set for Crohn's Disease",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      } ]
@@ -5488,6 +4062,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "ICD10CM Value Set for Ulcerative Colitis",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      } ]
@@ -5503,6 +4078,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "SNOMED Value Set for Ulcerative Colitis",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      } ]
@@ -5527,6 +4103,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "ICD10CM Value Set Adult Rheumatoid Arthritis",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -5542,6 +4119,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "SNOMED Value Set for Adult Rheumatoid Arthritis",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -5578,15 +4156,30 @@
                      "libraryName" : "C3F",
                      "type" : "FunctionRef",
                      "operand" : [ {
-                        "dataType" : "{http://hl7.org/fhir}MedicationRequest",
-                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-                        "codeProperty" : "medication",
-                        "codeComparator" : "in",
-                        "type" : "Retrieve",
-                        "codes" : {
-                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                           "type" : "ValueSetRef"
-                        }
+                        "type" : "Union",
+                        "operand" : [ {
+                           "dataType" : "{http://hl7.org/fhir}MedicationRequest",
+                           "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+                           "codeProperty" : "medication",
+                           "codeComparator" : "in",
+                           "type" : "Retrieve",
+                           "codes" : {
+                              "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                              "preserve" : true,
+                              "type" : "ValueSetRef"
+                           }
+                        }, {
+                           "dataType" : "{http://hl7.org/fhir}MedicationRequest",
+                           "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+                           "codeProperty" : "medication",
+                           "codeComparator" : "in",
+                           "type" : "Retrieve",
+                           "codes" : {
+                              "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                              "preserve" : true,
+                              "type" : "ValueSetRef"
+                           }
+                        } ]
                      }, {
                         "name" : "MedicationLookbackPeriod",
                         "type" : "ParameterRef"
@@ -5607,15 +4200,30 @@
                   "libraryName" : "C3F",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationDispense",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
+                     "type" : "Union",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}MedicationDispense",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "dataType" : "{http://hl7.org/fhir}MedicationDispense",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     } ]
                   }, {
                      "name" : "MedicationLookbackPeriod",
                      "type" : "ParameterRef"
@@ -5635,15 +4243,30 @@
                   "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationAdministration",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
+                     "type" : "Union",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}MedicationAdministration",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "dataType" : "{http://hl7.org/fhir}MedicationAdministration",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     } ]
                   }, {
                      "name" : "MedicationLookbackPeriod",
                      "type" : "ParameterRef"
@@ -5663,15 +4286,30 @@
                   "libraryName" : "C3F",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "dataType" : "{http://hl7.org/fhir}MedicationStatement",
-                     "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
-                     "codeProperty" : "medication",
-                     "codeComparator" : "in",
-                     "type" : "Retrieve",
-                     "codes" : {
-                        "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
-                        "type" : "ValueSetRef"
-                     }
+                     "type" : "Union",
+                     "operand" : [ {
+                        "dataType" : "{http://hl7.org/fhir}MedicationStatement",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     }, {
+                        "dataType" : "{http://hl7.org/fhir}MedicationStatement",
+                        "templateId" : "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+                        "codeProperty" : "medication",
+                        "codeComparator" : "in",
+                        "type" : "Retrieve",
+                        "codes" : {
+                           "name" : "Immunosuppressant medications for inflammatory bowel disease or rheumatoid arthritis",
+                           "preserve" : true,
+                           "type" : "ValueSetRef"
+                        }
+                     } ]
                   }, {
                      "name" : "MedicationLookbackPeriod",
                      "type" : "ParameterRef"
@@ -5723,12 +4361,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "OnImmunosuppressant",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "OnImmunosuppressant",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnoses",
@@ -5768,6 +4402,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "Chronic Graft versus Host Disease",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      } ]
@@ -5828,6 +4463,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Hematopoietic Stem Cell Transplant Procedures",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -5838,6 +4474,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "SNOMED Value Set for Hemopoietic Stem Cell Transplantation",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -6005,6 +4642,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Abnormal Uterine or Vaginal Bleeding Disorders",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -6033,6 +4671,7 @@
                            "type" : "Retrieve",
                            "codes" : {
                               "name" : "Premenopausal",
+                              "preserve" : true,
                               "type" : "ValueSetRef"
                            }
                         }, {
@@ -6159,17 +4798,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "identifier",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "C",
-                           "type" : "OperandRef"
-                        }
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "C",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -6376,6 +5011,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Abnormal Uterine or Vaginal Bleeding Findings",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -6405,6 +5041,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Cervical and/or Vaginal Lesion Findings",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -6515,6 +5152,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Absence of cervix observation",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -6539,6 +5177,7 @@
                         "type" : "Retrieve",
                         "codes" : {
                            "name" : "Premenopausal",
+                           "preserve" : true,
                            "type" : "ValueSetRef"
                         }
                      }, {
@@ -6769,17 +5408,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "identifier",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "Obs",
-                           "type" : "OperandRef"
-                        }
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Obs",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -7488,6 +6123,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Solid Organ Transplant Procedure Codes",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -7498,6 +6134,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Kidney Transplant",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -7535,6 +6172,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Colposcopy procedure",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -7545,6 +6183,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Surgery Female Genital System Cervix Uteri",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -7566,6 +6205,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Cervical Excision Procedures",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -7586,6 +6226,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "Cervical Ablation Procedures",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -7608,6 +6249,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "SNOMED Value Set for Removal of Cervix Procedures",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -7618,6 +6260,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "CPT Value Set for Removal of Cervix Procedures",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   } ]
@@ -7663,17 +6306,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "identifier",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "P",
-                           "type" : "OperandRef"
-                        }
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "P",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -8032,6 +6671,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "HPV Test",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -8052,6 +6692,7 @@
                "type" : "Retrieve",
                "codes" : {
                   "name" : "HPV Test",
+                  "preserve" : true,
                   "type" : "ValueSetRef"
                }
             }
@@ -8115,7 +6756,7 @@
                            },
                            "valueset" : {
                               "name" : "HPV Negative Results",
-                              "type" : "ValueSetRef"
+                              "preserve" : true
                            }
                         }
                      }
@@ -8142,6 +6783,7 @@
                      "type" : "Retrieve",
                      "codes" : {
                         "name" : "Pap Test",
+                        "preserve" : true,
                         "type" : "ValueSetRef"
                      }
                   }, {
@@ -8162,6 +6804,7 @@
                "type" : "Retrieve",
                "codes" : {
                   "name" : "Pap Test",
+                  "preserve" : true,
                   "type" : "ValueSetRef"
                }
             }
@@ -8283,19 +6926,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "ReportType",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV Test",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ReportType",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV Test",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "name" : "HpvInterpretation",
@@ -8326,19 +6965,15 @@
                "else" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "ReportType",
-                           "type" : "OperandRef"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cervical Cytology",
-                           "type" : "Literal"
-                        } ]
-                     }
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     } ]
                   },
                   "then" : {
                      "name" : "CytologyInterpretation",
@@ -8369,19 +7004,15 @@
                   "else" : {
                      "type" : "If",
                      "condition" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                        "type" : "As",
-                        "operand" : {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "name" : "ReportType",
-                              "type" : "OperandRef"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cervical Histology",
-                              "type" : "Literal"
-                           } ]
-                        }
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical Histology",
+                           "type" : "Literal"
+                        } ]
                      },
                      "then" : {
                         "name" : "BiopsyInterpretation",
@@ -8420,13 +7051,13 @@
                               "type" : "TupleTypeSpecifier",
                               "element" : [ {
                                  "name" : "text",
-                                 "type" : {
+                                 "elementType" : {
                                     "name" : "{urn:hl7-org:elm-types:r1}String",
                                     "type" : "NamedTypeSpecifier"
                                  }
                               }, {
                                  "name" : "rank",
-                                 "type" : {
+                                 "elementType" : {
                                     "name" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "type" : "NamedTypeSpecifier"
                                  }
@@ -8461,17 +7092,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "identifier",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "D",
-                           "type" : "OperandRef"
-                        }
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "D",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -8533,17 +7160,13 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "IsNull",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "identifier",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "Imm",
-                           "type" : "OperandRef"
-                        }
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Imm",
+                        "type" : "OperandRef"
                      }
                   }
                },
@@ -8953,7 +7576,7 @@
                               },
                               "valueset" : {
                                  "name" : "Histologic CIN3",
-                                 "type" : "ValueSetRef"
+                                 "preserve" : true
                               }
                            } ]
                         }, {
@@ -9013,7 +7636,7 @@
                         },
                         "valueset" : {
                            "name" : "AIS",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      } ]
                   }, {
@@ -9042,7 +7665,7 @@
                      },
                      "valueset" : {
                         "name" : "Histologic cancer",
-                        "type" : "ValueSetRef"
+                        "preserve" : true
                      }
                   } ]
                }
@@ -9095,7 +7718,7 @@
                         },
                         "valueset" : {
                            "name" : "Abnormal Uterine or Vaginal Bleeding Disorders",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      }, {
                         "type" : "AnyInValueSet",
@@ -9124,7 +7747,7 @@
                         },
                         "valueset" : {
                            "name" : "Abnormal Uterine or Vaginal Bleeding Findings",
-                           "type" : "ValueSetRef"
+                           "preserve" : true
                         }
                      } ]
                   }
@@ -9275,6 +7898,7 @@
                   "type" : "Retrieve",
                   "codes" : {
                      "name" : "HPV Immunization",
+                     "preserve" : true,
                      "type" : "ValueSetRef"
                   }
                } ]
@@ -9438,7 +8062,7 @@
                            },
                            "valueset" : {
                               "name" : "High Risk HPV Positive Results",
-                              "type" : "ValueSetRef"
+                              "preserve" : true
                            }
                         }
                      }
@@ -9509,7 +8133,7 @@
                            },
                            "valueset" : {
                               "name" : "Abnormal results of Cervical Cytology Test",
-                              "type" : "ValueSetRef"
+                              "preserve" : true
                            }
                         }
                      }
@@ -9709,7 +8333,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "AIS",
-                                    "type" : "ValueSetRef"
+                                    "preserve" : true
                                  }
                               } ]
                            }
@@ -10006,19 +8630,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "FirstDiagnosisOfSolidOrganTransplant",
-                              "type" : "ExpressionRef"
-                           }
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "FirstDiagnosisOfSolidOrganTransplant",
+                           "type" : "ExpressionRef"
                         }
                      }
                   }
@@ -10026,19 +8646,15 @@
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "Not",
                      "operand" : {
-                        "type" : "Not",
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "FirstProcedureForSolidOrganTransplant",
-                                 "type" : "ExpressionRef"
-                              }
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "FirstProcedureForSolidOrganTransplant",
+                              "type" : "ExpressionRef"
                            }
                         }
                      }
@@ -10160,19 +8776,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
-                              "type" : "ExpressionRef"
-                           }
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "FirstDiagnosisOfHematopoieticStemCellTransplant",
+                           "type" : "ExpressionRef"
                         }
                      }
                   }
@@ -10180,16 +8792,12 @@
                "then" : {
                   "type" : "If",
                   "condition" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                     "type" : "As",
+                     "type" : "Not",
                      "operand" : {
-                        "type" : "Not",
+                        "type" : "IsNull",
                         "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "FirstProcedureForHematopoieticStemCellTransplant",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "FirstProcedureForHematopoieticStemCellTransplant",
+                           "type" : "ExpressionRef"
                         }
                      }
                   },
@@ -10437,101 +9045,15 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
+                  "type" : "Or",
+                  "operand" : [ {
                      "type" : "Or",
                      "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "HpvDiagnosticReports",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "type" : "AnyTrue",
-                              "source" : {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "D",
-                                    "expression" : {
-                                       "name" : "HpvDiagnosticReports",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "relationship" : [ ],
-                                 "return" : {
-                                    "expression" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "Exists",
-                                          "operand" : {
-                                             "name" : "CollateConclusionCodes",
-                                             "type" : "FunctionRef",
-                                             "operand" : [ {
-                                                "name" : "D",
-                                                "type" : "AliasRef"
-                                             }, {
-                                                "name" : "HpvObservations",
-                                                "type" : "ExpressionRef"
-                                             } ]
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "Exists",
-                              "operand" : {
-                                 "name" : "CervicalCytologyReports",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "type" : "AnyTrue",
-                              "source" : {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "D",
-                                    "expression" : {
-                                       "name" : "CervicalCytologyReports",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ],
-                                 "relationship" : [ ],
-                                 "return" : {
-                                    "expression" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "Exists",
-                                          "operand" : {
-                                             "name" : "CollateConclusionCodes",
-                                             "type" : "FunctionRef",
-                                             "operand" : [ {
-                                                "name" : "D",
-                                                "type" : "AliasRef"
-                                             }, {
-                                                "name" : "CytologyObservations",
-                                                "type" : "ExpressionRef"
-                                             } ]
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }, {
                         "type" : "And",
                         "operand" : [ {
                            "type" : "Exists",
                            "operand" : {
-                              "name" : "HistologyDiagnosticReports",
+                              "name" : "HpvDiagnosticReports",
                               "type" : "ExpressionRef"
                            }
                         }, {
@@ -10541,7 +9063,7 @@
                               "source" : [ {
                                  "alias" : "D",
                                  "expression" : {
-                                    "name" : "HistologyDiagnosticReports",
+                                    "name" : "HpvDiagnosticReports",
                                     "type" : "ExpressionRef"
                                  }
                               } ],
@@ -10558,7 +9080,48 @@
                                              "name" : "D",
                                              "type" : "AliasRef"
                                           }, {
-                                             "name" : "HistologyObservations",
+                                             "name" : "HpvObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "CervicalCytologyReports",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "AnyTrue",
+                           "source" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "D",
+                                 "expression" : {
+                                    "name" : "CervicalCytologyReports",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "Exists",
+                                       "operand" : {
+                                          "name" : "CollateConclusionCodes",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "D",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "CytologyObservations",
                                              "type" : "ExpressionRef"
                                           } ]
                                        }
@@ -10568,7 +9131,48 @@
                            }
                         } ]
                      } ]
-                  }
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "HistologyDiagnosticReports",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "D",
+                              "expression" : {
+                                 "name" : "HistologyDiagnosticReports",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "Exists",
+                                    "operand" : {
+                                       "name" : "CollateConclusionCodes",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "D",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "HistologyObservations",
+                                          "type" : "ExpressionRef"
+                                       } ]
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -10590,45 +9194,41 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Exists",
-                        "operand" : {
-                           "name" : "DiagnosticReportsSummary",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "type" : "AnyTrue",
-                        "source" : {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "DRS",
-                              "expression" : {
-                                 "name" : "DiagnosticReportsSummary",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ],
-                           "relationship" : [ ],
-                           "return" : {
-                              "expression" : {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "path" : "value",
-                                    "scope" : "DRS",
-                                    "type" : "Property"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "UNK",
-                                    "type" : "Literal"
-                                 } ]
-                              }
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "DiagnosticReportsSummary",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "DRS",
+                           "expression" : {
+                              "name" : "DiagnosticReportsSummary",
+                              "type" : "ExpressionRef"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "path" : "value",
+                                 "scope" : "DRS",
+                                 "type" : "Property"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "UNK",
+                                 "type" : "Literal"
+                              } ]
                            }
                         }
-                     } ]
-                  }
+                     }
+                  } ]
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",

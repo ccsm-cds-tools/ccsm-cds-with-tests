@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -542,7 +543,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "Normal Histology Finding",
-                                    "type" : "ValueSetRef"
+                                    "preserve" : true
                                  }
                               } ]
                            }
@@ -1159,7 +1160,7 @@
                            },
                            "valueset" : {
                               "name" : "HSIL",
-                              "type" : "ValueSetRef"
+                              "preserve" : true
                            }
                         } ]
                      }
@@ -2729,25 +2730,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -2900,8 +2901,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "AIS",
-                                    "libraryName" : "Dash",
-                                    "type" : "ValueSetRef"
+                                    "libraryName" : "Dash"
                                  }
                               }
                            }
@@ -3098,25 +3098,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -3547,25 +3547,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
@@ -3649,8 +3649,7 @@
                                              },
                                              "valueset" : {
                                                 "name" : "Cervical Precancer Disorders",
-                                                "libraryName" : "Dash",
-                                                "type" : "ValueSetRef"
+                                                "libraryName" : "Dash"
                                              }
                                           }, {
                                              "type" : "InValueSet",
@@ -3665,8 +3664,7 @@
                                              },
                                              "valueset" : {
                                                 "name" : "Diagnosis of Cervical cancer",
-                                                "libraryName" : "Dash",
-                                                "type" : "ValueSetRef"
+                                                "libraryName" : "Dash"
                                              }
                                           } ]
                                        }, {
@@ -3701,8 +3699,7 @@
                                        },
                                        "valueset" : {
                                           "name" : "Histologic CIN3",
-                                          "libraryName" : "Dash",
-                                          "type" : "ValueSetRef"
+                                          "libraryName" : "Dash"
                                        }
                                     } ]
                                  }, {
@@ -3737,8 +3734,7 @@
                                  },
                                  "valueset" : {
                                     "name" : "AIS",
-                                    "libraryName" : "Dash",
-                                    "type" : "ValueSetRef"
+                                    "libraryName" : "Dash"
                                  }
                               } ]
                            }, {
@@ -3754,8 +3750,7 @@
                               },
                               "valueset" : {
                                  "name" : "Histologic cancer",
-                                 "libraryName" : "Dash",
-                                 "type" : "ValueSetRef"
+                                 "libraryName" : "Dash"
                               }
                            } ]
                         }
@@ -3829,15 +3824,11 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "CervicalPrecancerDisorders",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "CervicalPrecancerDisorders",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -3870,7 +3861,7 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -3885,15 +3876,11 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "CervicalCancerDiagnoses",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "CervicalCancerDiagnoses",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -3926,7 +3913,7 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -3941,15 +3928,11 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "Exists",
-                     "operand" : {
-                        "name" : "HighGradeOrCancerHistologyResults",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
+                     "name" : "HighGradeOrCancerHistologyResults",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
                   }
                },
                "then" : {
@@ -3982,7 +3965,7 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                            "type" : "NamedTypeSpecifier"
                         }
@@ -4031,7 +4014,7 @@
                            "type" : "TupleTypeSpecifier",
                            "element" : [ {
                               "name" : "date",
-                              "type" : {
+                              "elementType" : {
                                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
                                  "type" : "NamedTypeSpecifier"
                               }
@@ -4076,22 +4059,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Greater",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "SortedCauseForHysterectomyDates",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCauseForHysterectomyDates",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "path" : "date",
@@ -4201,22 +4180,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "3",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "In",
@@ -4268,22 +4243,18 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "type" : "Count",
-                        "source" : {
-                           "name" : "NegativeSurveillanceTestsAfterHysterectomy",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                        "value" : "0",
-                        "type" : "Literal"
-                     } ]
-                  }
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "NegativeSurveillanceTestsAfterHysterectomy",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
                },
                "then" : {
                   "type" : "Add",
@@ -4471,25 +4442,25 @@
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
                         "name" : "short",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "date",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Date",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
-                        "type" : {
+                        "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "details",
-                        "type" : {
+                        "elementType" : {
                            "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
