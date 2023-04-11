@@ -24,7 +24,7 @@ define function ToCodeableConcept(code System.Code):
         display: code.display
       }
     },
-    display: code.display
+    text: code.display
   }
 
 define PrimaryHpvCodeableConcept:
