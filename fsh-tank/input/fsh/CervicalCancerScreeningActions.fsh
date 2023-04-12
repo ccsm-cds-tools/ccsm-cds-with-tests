@@ -29,6 +29,7 @@ Usage: #definition
 * action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].dynamicValue[=].expression.expression = "DecisionAids"
 * action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
+* insert ScreeningCitationActionDocumentation
 // -----------------------------------------------------------------------------
 // Action #2: Recommended Screening Activities
 // -----------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "PrimaryHpvOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)
+* insert ScreeningCitationActionActionDocumentation
 // Cytology Alone --------------------------------------------------------------
 * action[=].action[+].title = "Cytology"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
@@ -59,6 +61,7 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "CytologyOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)
+* insert ScreeningCitationActionActionDocumentation
 // Cotesting -------------------------------------------------------------------
 * action[=].action[+].title = "Cotesting"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
@@ -70,3 +73,4 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "CotestingOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)
+* insert ScreeningCitationActionActionDocumentation

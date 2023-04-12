@@ -29,6 +29,7 @@ Usage: #definition
 * action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
 * action[=].dynamicValue[=].expression.expression = "DecisionAids"
 * action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
+* insert ManagementCitationActionDocumentation
 // -----------------------------------------------------------------------------
 // Action #2: Recommended Management Activities
 // -----------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "ColposcopyOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
+* insert ManagementCitationActionActionDocumentation
 // Surveillance ----------------------------------------------------------------
 * action[=].action[+].title = "Surveillance"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
@@ -59,6 +61,7 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "SurveillanceOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
+* insert ManagementCitationActionActionDocumentation
 // Treatment -------------------------------------------------------------------
 * action[=].action[+].title = "Treatment"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
@@ -70,3 +73,4 @@ Usage: #definition
 * action[=].action[=].dynamicValue[=].expression.expression = "TreatmentOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
+* insert ManagementCitationActionActionDocumentation
