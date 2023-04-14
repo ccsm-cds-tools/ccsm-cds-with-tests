@@ -2141,19 +2141,38 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "name" : "RecommendImmediateScreening",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "Age21Through29",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "RecommendImmediateScreening",
+                              "type" : "ExpressionRef"
+                           } ]
                         },
                         "then" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                           "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening using cervical cytology testing alone.",
                            "type" : "Literal"
                         },
                         "else" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
+                           "type" : "If",
+                           "condition" : {
+                              "name" : "RecommendImmediateScreening",
+                              "type" : "ExpressionRef"
+                           },
+                           "then" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                              "type" : "Literal"
+                           },
+                           "else" : {
+                              "type" : "If",
+                              "condition" : {
+                                 "name" : "Age21Through29",
+                                 "type" : "ExpressionRef"
+                              },
+                              "then" : {
                                  "type" : "Concatenate",
                                  "operand" : [ {
                                     "type" : "Concatenate",
@@ -2179,18 +2198,54 @@
                                     } ]
                                  }, {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : ". Note: ",
+                                    "value" : ".",
                                     "type" : "Literal"
                                  } ]
-                              }, {
-                                 "name" : "LastScreeningType",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : " seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
-                              "type" : "Literal"
-                           } ]
+                              },
+                              "else" : {
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "type" : "Concatenate",
+                                             "operand" : [ {
+                                                "name" : "LastScreeningType",
+                                                "type" : "ExpressionRef"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : " is next due on ",
+                                                "type" : "Literal"
+                                             } ]
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedScreeningDate",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ". Note: ",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "name" : "LastScreeningType",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : " seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.",
+                                    "type" : "Literal"
+                                 } ]
+                              }
+                           }
                         }
                      }
                   }

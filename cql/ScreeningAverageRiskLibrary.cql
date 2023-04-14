@@ -343,8 +343,12 @@ define RecommendationText:
         else
           null
       else // Age 65 or younger
-        if RecommendImmediateScreening then
+        if Age21Through29 and RecommendImmediateScreening then
+          'Per USPSTF guidelines, this patient is due for cervical cancer screening using cervical cytology testing alone.'
+        else if RecommendImmediateScreening then
           'Per USPSTF guidelines, this patient is due for cervical cancer screening. The screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
+        else if Age21Through29 then
+          LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.'
         else
           LastScreeningType + ' is next due on ' + ToString(ToDate(ProposedScreeningDate)) +
           '. Note: ' + LastScreeningType + ' seems to either 1) be the preferred screening approach, or 2) is most evident in the patient record. Per USPSTF guidelines, screening can be performed by using: 1) cervical cytology testing alone, 2) hrHPV testing alone, or 3) cotesting with cervical cytology testing and hrHPV testing.'
