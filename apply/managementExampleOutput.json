@@ -3,7 +3,7 @@
     "resourceType": "RequestGroup",
     "id": "2",
     "subject": {
-      "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
+      "reference": "Patient/bc624ad9-5273-4667-b30a-e1995d588e33",
       "display": "Joanne Smith"
     },
     "instantiatesCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
@@ -14,6 +14,13 @@
         "id": "10",
         "title": "Cervical Cancer Management Actions",
         "description": "Brief description of the action",
+        "documentation": [
+          {
+            "type": "citation",
+            "label": "ASCCP Recommendation",
+            "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
+          }
+        ],
         "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
         "action": [
           {
@@ -29,6 +36,15 @@
             "id": "17",
             "title": "Management Decision Aids",
             "description": "Management Decision Aids",
+            "documentation": [
+              {
+                "type": "citation",
+                "label": "Management",
+                "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                "url": "https://www.asccp.org/management-guidelines"
+              }
+            ],
             "textEquivalent": "Management Decision Aids",
             "resource": {
               "reference": "CommunicationRequest/22"
@@ -45,16 +61,19 @@
               {
                 "id": "20",
                 "title": "Surveillance",
+                "documentation": [
+                  {
+                    "type": "citation",
+                    "label": "Management",
+                    "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                    "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                    "url": "https://www.asccp.org/management-guidelines"
+                  }
+                ],
                 "resource": {
                   "reference": "ServiceRequest/23"
                 },
-                "description": [
-                  {
-                    "type": "citation",
-                    "label": "ASCCP Recommendation",
-                    "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-                  }
-                ]
+                "description": "Natural language description of the activity definition"
               }
             ]
           }
@@ -65,31 +84,35 @@
   [
     {
       "id": "14",
-      "subject": {
-        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
-        "display": "Joanne Smith"
-      },
       "resourceType": "CommunicationRequest",
       "status": "option",
-      "basedOn": {
-        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory"
+      "basedOn": [
+        {
+          "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/bc624ad9-5273-4667-b30a-e1995d588e33",
+        "display": "Joanne Smith"
       },
       "payload": [
         {
-          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1991,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Female\",\"age\":31,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/423c9744-47c1-4f03-9bbb-01ff0fd6189a\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/6c314bbe-a935-4e27-805f-e8a34098d3c3\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/61e785b3-b7d5-4c1b-9cf5-d71851ad6b38\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/918e152b-26eb-4e29-bebd-3ff6e5e184a7\",\"edited\":false},{\"name\":\"Cervical Histology\",\"longName\":\"Cervix Pathology biopsy report\",\"value\":\"<CIN1\",\"longValue\":[{\"value\":\"Biopsy result normal (finding)\"}],\"date\":\"2019-05-14\",\"reference\":\"DiagnosticReport/05394165-d021-4534-8946-599ee18ee456\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/bd4ab58b-1374-4705-8379-05c46e1006f2\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/c0dbc45b-216d-4229-a71a-e62af6c045c5\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
+          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1991,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Unknown\",\"age\":32,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/cdf04ace-0b42-4abc-a7e2-5a30d23bab48\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2021-05-01\",\"reference\":\"DiagnosticReport/f06d11a8-9bdc-4212-a027-142575e94f4e\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/3be57e37-ffff-4433-a718-73feb838e2c6\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2020-05-01\",\"reference\":\"DiagnosticReport/c3ade4dd-5397-442c-bc19-2a8d9eddf577\",\"edited\":false},{\"name\":\"Cervical Histology\",\"longName\":\"Cervix Pathology biopsy report\",\"value\":\"<CIN1\",\"longValue\":[{\"value\":\"Biopsy result normal (finding)\"}],\"date\":\"2019-05-14\",\"reference\":\"DiagnosticReport/71160165-829e-41b6-be12-23383237f210\",\"edited\":false},{\"name\":\"HPV Test\",\"longName\":\"Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe\",\"value\":\"HPV-negative\",\"longValue\":[{\"value\":\"Human papillomavirus deoxyribonucleic acid test negative (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/52705d4d-a87b-4c02-a97f-38535441fb84\",\"edited\":false},{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"ASC-US\",\"longValue\":[{\"value\":\"Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)\"}],\"date\":\"2019-05-01\",\"reference\":\"DiagnosticReport/e6766a3e-c1b1-455e-9a02-fa475100078f\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
         }
       ]
     },
     {
       "id": "22",
-      "subject": {
-        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
-        "display": "Joanne Smith"
-      },
       "resourceType": "CommunicationRequest",
       "status": "option",
-      "basedOn": {
-        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids"
+      "basedOn": [
+        {
+          "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/bc624ad9-5273-4667-b30a-e1995d588e33",
+        "display": "Joanne Smith"
       },
       "payload": [
         {
@@ -99,15 +122,18 @@
     },
     {
       "id": "23",
-      "subject": {
-        "reference": "Patient/33d38b1a-337d-41db-83b9-0f974fb1d3e0",
-        "display": "Joanne Smith"
-      },
       "resourceType": "ServiceRequest",
       "status": "option",
-      "basedOn": {
-        "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity"
+      "basedOn": [
+        {
+          "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/bc624ad9-5273-4667-b30a-e1995d588e33",
+        "display": "Joanne Smith"
       },
+      "intent": "proposal",
       "orderDetail": [
         {
           "text": "When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII)."
@@ -125,7 +151,7 @@
             "display": "Surveillance"
           }
         ],
-        "display": "Surveillance"
+        "text": "Surveillance"
       }
     }
   ]
