@@ -312,21 +312,33 @@ define RecommendationText:
   if ProposeImmediateTesting then
     case
       when Age21Through29 then 
-        'Per CDC guidelines, Cervical Cytology screening is indicated.'
+        { 'Cervical cytology screening is recommended.' }
       when Age30AndOlder then
-        'Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).'
+        {
+          'Cervical cancer screening is recommended.',
+          'The screening can be performed using one of the following screening approaches:',
+          '1. Primary HPV testing',
+          '2. Cotesting with cervical cytology and hrHPV testing',
+          '3. Cervical cytology testing alone'
+        }
       else // No recommendation for Age < 21
         null
     end
   else // Propose Future Testing
     case 
       when Age21Through29 then 
-        'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+        { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
       when Age30AndOlder then
         if LastCytologyWasCotest then
-          'Cotesting with a cervical cytology test and a hrHPV test is next due on ' + + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+          { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
         else
-          'Per CDC guidelines, cervical cancer screening using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+          {
+            'Cervical cancer screening is recommended and next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.',
+            'The screening can be performed using one of the following screening approaches:',
+            '1. Primary HPV testing',
+            '2. Cotesting with cervical cytology and hrHPV testing',
+            '3. Cervical cytology testing alone'
+          }
       else // No recommendation for Age < 21
         null
     end
@@ -349,7 +361,7 @@ define Recommendation:
   if IsIncludedAndNotExcluded then {
     short: ActionShort,
     date: ToDate(ProposedDateOfNextScreening),
-    details: { RecommendationText },
+    details: RecommendationText,
     group: 'Screening: Immunocompromised'
   }
   else null
@@ -382,7 +394,7 @@ define ErrorCotestWithNonNegativeHpvResult:
         return not (aC in Dash."HPV Negative Results")
     )
   ) then
-    'An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.'
+    'An hrHPV test found as part of a cotest contained a non-negative result. Review the hrHPV result and consider the appropriate next step according to guidelines.'
   else
     null
 

@@ -173,14 +173,17 @@ define VisibleLesionRecommendation:
 define ElseRecommendation:
   'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
 
+define DefaultSymptomaticRecommendation:
+  { 'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding. If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.' }
+
 define RecommendationText:
   if IsIncludedAndNotExcluded then
     case
-      when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
-      when HasNilmCytologyWithinLast12Months then NilmCytologyWithinLast12MonthsRecommendation
-      when HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years then NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation
-      when HasVisibleCervicalOrVaginalLesion then VisibleLesionRecommendation
-      else ElseRecommendation
+      when IsAge21YearsOrYounger then DefaultSymptomaticRecommendation
+      when HasNilmCytologyWithinLast12Months then DefaultSymptomaticRecommendation
+      when HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years then DefaultSymptomaticRecommendation
+      when HasVisibleCervicalOrVaginalLesion then DefaultSymptomaticRecommendation
+      else DefaultSymptomaticRecommendation
     end
   else null
 
@@ -197,7 +200,7 @@ define Recommendation:
   if IsIncludedAndNotExcluded then {
     short: ActionShort,
     date: Today(),
-    details: { RecommendationText },
+    details: RecommendationText,
     group: 'Screening: Symptomatic'
   }
   else null

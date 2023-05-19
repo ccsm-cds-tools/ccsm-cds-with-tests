@@ -873,6 +873,18 @@
                "type" : "Literal"
             }
          }, {
+            "name" : "DefaultSymptomaticRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding. If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
             "name" : "RecommendationText",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -890,7 +902,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "Age21YearsAndYoungerRecommendation",
+                        "name" : "DefaultSymptomaticRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -899,7 +911,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "NilmCytologyWithinLast12MonthsRecommendation",
+                        "name" : "DefaultSymptomaticRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -908,7 +920,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
+                        "name" : "DefaultSymptomaticRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -917,20 +929,26 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "VisibleLesionRecommendation",
+                        "name" : "DefaultSymptomaticRecommendation",
                         "type" : "ExpressionRef"
                      }
                   } ],
                   "else" : {
-                     "name" : "ElseRecommendation",
+                     "name" : "DefaultSymptomaticRecommendation",
                      "type" : "ExpressionRef"
                   }
                },
                "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "As",
                   "operand" : {
                      "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "name" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "NamedTypeSpecifier"
+                     }
                   }
                }
             }
@@ -998,11 +1016,8 @@
                   }, {
                      "name" : "details",
                      "value" : {
-                        "type" : "List",
-                        "element" : [ {
-                           "name" : "RecommendationText",
-                           "type" : "ExpressionRef"
-                        } ]
+                        "name" : "RecommendationText",
+                        "type" : "ExpressionRef"
                      }
                   }, {
                      "name" : "group",

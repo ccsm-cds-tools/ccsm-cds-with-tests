@@ -249,32 +249,43 @@ define CommonAbnormalityGroup:
   end
 
 define ReflexTestingRecommendationText:
-  'Per the ASCCP Risk Management Guidelines (Egemen et al.), reflex testing with cervical cytology is indicated as surveillance given the patient\'s history of abnormal results in order to provide an evidence-based care recommendation.'
+  'Reflex testing with cervical cytology is indicated.'
 
+// no longer used in this file
 define J1RecommendationText:
-  'After abnormal cervical cancer screening test results for patients 25 years or older, colposcopic biopsy results, or treatment of histologic HSIL, surveillance with either HPV testing alone or cotesting is preferred (AI). Surveillance with cervical cytology alone is acceptable only if testing with HPV or cotesting is not feasible (CIII). Cytology is recommended at 6-month intervals when 1-year intervals are recommended for HPV or cotesting, and annually when 3-year intervals are recommended for HPV or cotesting (AII).'
+  'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
 
+define Pap6MonthIntervalText:
+  'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
+  
+define Pap1YearIntervalText:
+  'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 1 year intervals.'
+ 
+define Pap3YearIntervalText:
+  'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 3-year intervals.'
+  
 define TreatmentWithPregnancyConcernsRecommendationText:
-  'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+  'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
 
 define OneYearSurveillanceRecommendationText:
-  'When patients have an estimated risk of CIN 3+ based on history and current results that is below the threshold for immediate colposcopy (4.0% immediate risk) and above the 3-year follow-up threshold (≥0.55% at 5 years), repeat testing in 1 year with HPV-based testing is recommended (AII).'
+  'Repeat testing in 1 year with primary HPV testing or co-testing is recommended.'
 
 define ThreeYearSurveillanceRecommendationText:
-  'When patients have an estimated 5-year CIN 3+ risk of 0.15% or greater but less than 0.55% based on history and current test results, repeat testing in 3 years with HPV-based testing is recommended (AII).'
-
+  'Repeat testing in 3 years with primary HPV testing or co-testing is recommended.'
+  
 define FiveYearSurveillanceRecommendationText:
-  'When patients have an estimated 5-year CIN 3+ risk of less than 0.15% based on past history and current test results, return to routine screening at 5-year intervals using HPV-based testing is recommended (AII).'
+  'Routine screening at 5 year intervals using primay HPV testing or co-testing is recommended.'
 
 define ColposcopyRecommendationText:
-  'For patients 25 years or older, when patients have an estimated immediate risk of diagnosis of CIN 3+ of 4.0% or greater based on history and current results, referral to colposcopy is recommended (AII). Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy (EIII). A diagnostic excisional procedure or repeat biopsy is recommended only if cancer is suspected based on cytology, colposcopy, or histology (BII).'
+  'Colposcopy is recommended.'
 
 define ColposcopyOrTreatmentRecommendationText:
-  'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ 25% or greater and less than 60% based on history and current results, treatment using an excisional procedure without previous biopsy confirmation or histologic evaluation with colposcopy and biopsy are both acceptable (AII).'
+  'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are acceptable.'
 
 define TreatmentRecommendationText:
-  'For nonpregnant patients 25 years or older with an estimated immediate risk of CIN 3+ of 60% or greater based on history and current results, treatment using an excisional procedure without previous biopsy confirmation is preferred but colposcopy with biopsy is acceptable (BII).'
+  'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'
 
+// no longer used in this file
 define Over65RecommendationText:
   'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
 
@@ -308,7 +319,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
-          J1RecommendationText
+          Pap6MonthIntervalText
         }
       }
     when (
@@ -320,8 +331,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
-          J1RecommendationText,
-          Over65RecommendationText
+          Pap6MonthIntervalText
         }
       }
     when (
@@ -333,7 +343,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
-          J1RecommendationText
+          Pap1YearIntervalText
         }
       }
     when (
@@ -345,8 +355,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
-          J1RecommendationText,
-          Over65RecommendationText
+          Pap1YearIntervalText
         }
       }
     when (
@@ -358,7 +367,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
-          J1RecommendationText
+          Pap3YearIntervalText
         }
       }
     when (
@@ -370,8 +379,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
-          J1RecommendationText,
-          Over65RecommendationText
+          Pap3YearIntervalText
         }
       }
     when (

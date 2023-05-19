@@ -1470,9 +1470,12 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Per CDC guidelines, Cervical Cytology screening is indicated.",
-                        "type" : "Literal"
+                        "type" : "List",
+                        "element" : [ {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical cytology screening is recommended.",
+                           "type" : "Literal"
+                        } ]
                      }
                   }, {
                      "when" : {
@@ -1480,16 +1483,41 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Per CDC guidelines, cervical cancer screening is indicated using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone. Note: individuals tested with cervical cytology alone should be tested every 12 months for 3 years if cytology results are normal (i.e., NILM).",
-                        "type" : "Literal"
+                        "type" : "List",
+                        "element" : [ {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Cervical cancer screening is recommended.",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "The screening can be performed using one of the following screening approaches:",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "1. Primary HPV testing",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "3. Cervical cytology testing alone",
+                           "type" : "Literal"
+                        } ]
                      }
                   } ],
                   "else" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}String",
                      "type" : "As",
                      "operand" : {
                         "type" : "Null"
+                     },
+                     "asTypeSpecifier" : {
+                        "type" : "ListTypeSpecifier",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
                      }
                   }
                },
@@ -1501,27 +1529,30 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "type" : "Concatenate",
-                        "operand" : [ {
+                        "type" : "List",
+                        "element" : [ {
                            "type" : "Concatenate",
                            "operand" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cervical cytology screening is next due on ",
-                              "type" : "Literal"
-                           }, {
-                              "type" : "ToString",
-                              "operand" : {
-                                 "type" : "ToDate",
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Cervical cancer screening is next due on ",
+                                 "type" : "Literal"
+                              }, {
+                                 "type" : "ToString",
                                  "operand" : {
-                                    "name" : "ProposedDateOfNextScreening",
-                                    "type" : "ExpressionRef"
+                                    "type" : "ToDate",
+                                    "operand" : {
+                                       "name" : "ProposedDateOfNextScreening",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : ".",
+                              "type" : "Literal"
                            } ]
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : ".",
-                           "type" : "Literal"
                         } ]
                      }
                   }, {
@@ -1536,60 +1567,88 @@
                            "type" : "ExpressionRef"
                         },
                         "then" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
+                           "type" : "List",
+                           "element" : [ {
                               "type" : "Concatenate",
                               "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Cotesting with a cervical cytology test and a hrHPV test is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cancer screening is next due on ",
+                                    "type" : "Literal"
+                                 }, {
+                                    "type" : "ToString",
                                     "operand" : {
-                                       "name" : "ProposedDateOfNextScreening",
-                                       "type" : "ExpressionRef"
+                                       "type" : "ToDate",
+                                       "operand" : {
+                                          "name" : "ProposedDateOfNextScreening",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : ".",
+                                 "type" : "Literal"
                               } ]
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
-                              "type" : "Literal"
                            } ]
                         },
                         "else" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
+                           "type" : "List",
+                           "element" : [ {
                               "type" : "Concatenate",
                               "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Per CDC guidelines, cervical cancer screening using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone is next due on ",
-                                 "type" : "Literal"
-                              }, {
-                                 "type" : "ToString",
-                                 "operand" : {
-                                    "type" : "ToDate",
+                                 "type" : "Concatenate",
+                                 "operand" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cancer screening is recommended and next due on ",
+                                    "type" : "Literal"
+                                 }, {
+                                    "type" : "ToString",
                                     "operand" : {
-                                       "name" : "ProposedDateOfNextScreening",
-                                       "type" : "ExpressionRef"
+                                       "type" : "ToDate",
+                                       "operand" : {
+                                          "name" : "ProposedDateOfNextScreening",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : ".",
+                                 "type" : "Literal"
                               } ]
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : ".",
+                              "value" : "The screening can be performed using one of the following screening approaches:",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "1. Primary HPV testing",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "3. Cervical cytology testing alone",
                               "type" : "Literal"
                            } ]
                         }
                      }
                   } ],
                   "else" : {
-                     "asType" : "{urn:hl7-org:elm-types:r1}String",
                      "type" : "As",
                      "operand" : {
                         "type" : "Null"
+                     },
+                     "asTypeSpecifier" : {
+                        "type" : "ListTypeSpecifier",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
                      }
                   }
                }
@@ -1691,11 +1750,8 @@
                   }, {
                      "name" : "details",
                      "value" : {
-                        "type" : "List",
-                        "element" : [ {
-                           "name" : "RecommendationText",
-                           "type" : "ExpressionRef"
-                        } ]
+                        "name" : "RecommendationText",
+                        "type" : "ExpressionRef"
                      }
                   }, {
                      "name" : "group",
@@ -1965,7 +2021,7 @@
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "An hrHPV test found as part of a cotest contained a non-negative result. Consider cervical cancer management.",
+                  "value" : "An hrHPV test found as part of a cotest contained a non-negative result. Review the hrHPV result and consider the appropriate next step according to guidelines.",
                   "type" : "Literal"
                },
                "else" : {
