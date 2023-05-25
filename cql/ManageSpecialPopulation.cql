@@ -383,7 +383,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is <25 and HPV testing or co-testing if patient is age 25 or older at the time of repeat testing.'
+          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is < 25 and HPV testing or co-testing if patient is age 25 or older at the time of repeat testing.'
         }
       }
     when ( // 5a
@@ -569,7 +569,7 @@ define RecommendationForImmunosuppressedPatients:
         date: Today(),
         group: 'Immunosuppressed (K.3)',
         details: {
-          'Colposcopy is recommended in this immunocompromised patient.'
+          'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
         }
       }   
     when ( // K3.2
@@ -708,7 +708,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: ToDate(DateK41),
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of CIN2 or CIN3.'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of CIN 2 or CIN 3.'
         }
       }
     when ( // K4.2

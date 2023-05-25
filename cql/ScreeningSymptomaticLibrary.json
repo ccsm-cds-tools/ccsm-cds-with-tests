@@ -828,51 +828,6 @@
                } ]
             }
          }, {
-            "name" : "Age21YearsAndYoungerRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "NilmCytologyWithinLast12MonthsRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "VisibleLesionRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam with appropriate tissue sampling is indicated (e.g., cervical cytology and/or biopsy).",
-               "type" : "Literal"
-            }
-         }, {
-            "name" : "ElseRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.",
-               "type" : "Literal"
-            }
-         }, {
             "name" : "DefaultSymptomaticRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -880,7 +835,67 @@
                "type" : "List",
                "element" : [ {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding. If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "Age21YearsAndYoungerRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "NilmCytologyWithinLast12MonthsRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "VisibleLesionRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "ElseRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
                   "type" : "Literal"
                } ]
             }
@@ -902,7 +917,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "DefaultSymptomaticRecommendation",
+                        "name" : "Age21YearsAndYoungerRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -911,7 +926,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "DefaultSymptomaticRecommendation",
+                        "name" : "NilmCytologyWithinLast12MonthsRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -920,7 +935,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "DefaultSymptomaticRecommendation",
+                        "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -929,12 +944,12 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "DefaultSymptomaticRecommendation",
+                        "name" : "VisibleLesionRecommendation",
                         "type" : "ExpressionRef"
                      }
                   } ],
                   "else" : {
-                     "name" : "DefaultSymptomaticRecommendation",
+                     "name" : "ElseRecommendation",
                      "type" : "ExpressionRef"
                   }
                },

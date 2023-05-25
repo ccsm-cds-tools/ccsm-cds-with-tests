@@ -280,7 +280,7 @@ define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
 
 define ColposcopyOrTreatmentRecommendationText:
-  'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are acceptable.'
+  'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.'
 
 define TreatmentRecommendationText:
   'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'

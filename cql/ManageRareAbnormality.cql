@@ -838,7 +838,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.1)',
         details: {
-          'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is <CIN2.',
+          'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
           'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
         }
       }
@@ -854,7 +854,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.2)',
         details: {
-          'Treatment of CIN3 is recommended.  Observation is unacceptable except during pregnancy.',
+          'Treatment of CIN3 is recommended. Observation is unacceptable except during pregnancy.',
           'When treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable.',
           'When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in circumstances defined by the WHO.'
         }
@@ -891,7 +891,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
-          'Treatment is recommended for CIN2 lasting 2 years.',
+          'Treatment is recommended for CIN 2 lasting 2 years.',
           'Excisional treatment is preferred, and treatment with ablation is acceptable.',
           'When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in circumstances defined by the WHO.'
         }
@@ -937,7 +937,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
-          'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is <CIN2.',
+          'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
           'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
         }
       }
@@ -952,7 +952,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
-          'Observation or treatment for CIN2 is acceptable, provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
+          'Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
           'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
         }
       }
@@ -1529,7 +1529,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
-          'Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
+          'Continued surveillance with HPV testing or co-testing at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
         }
       }
     else
