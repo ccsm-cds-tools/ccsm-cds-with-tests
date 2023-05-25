@@ -251,10 +251,6 @@ define CommonAbnormalityGroup:
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
 
-// no longer used in this file
-define J1RecommendationText:
-  'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
-
 define Pap6MonthIntervalText:
   'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
   
@@ -284,10 +280,6 @@ define ColposcopyOrTreatmentRecommendationText:
 
 define TreatmentRecommendationText:
   'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'
-
-// no longer used in this file
-define Over65RecommendationText:
-  'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
 
 define PositivePrimaryHpv:
   AnyTrue(
