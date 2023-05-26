@@ -11,19 +11,19 @@ include "FHIRHelpers" version '4.0.1' called FHIRHelpers
 
 // METADATA
 	// Downloaded from: https://cervixca.nlm.nih.gov/RiskTables/
-	// Date Generated: 31/05/2022 13:25:59
+	// Date Generated: 17/05/2023 10:18:22
 	// Number of Risk Tables: 5
 	// Risk Tables:
 		// 1 - Screening
-				// (last downloaded: Tue May 31 10:30:43 2022)
+				// (last downloaded: Wed May 17 10:09:38 2023)
 		// 2 - Surveillance
-				// (last downloaded: Tue May 31 10:30:43 2022)
+				// (last downloaded: Wed May 17 10:09:38 2023)
 		// 3 - Colposcopy Results
-				// (last downloaded: Tue May 31 10:30:43 2022)
+				// (last downloaded: Wed May 17 10:09:38 2023)
 		// 4 - Post Colpo Surveillance
-				// (last downloaded: Tue May 31 10:30:43 2022)
+				// (last downloaded: Wed May 17 10:09:38 2023)
 		// 5 - Post Treatment Surveillance
-				// (last downloaded: Tue May 31 10:30:43 2022)
+				// (last downloaded: Wed May 17 10:09:38 2023)
 
 // Export Risk Tables
 define ClinicalSituations:

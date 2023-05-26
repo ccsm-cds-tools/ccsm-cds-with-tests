@@ -158,20 +158,33 @@ define HasVisibleCervicalOrVaginalLesion:
   Exists(RecentVisibleLesionObservations) or
   Exists(RecentYesResponsesToVisibleLesionQuestion)
 
+define DefaultSymptomaticRecommendation:
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  }
+
 define Age21YearsAndYoungerRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  DefaultSymptomaticRecommendation
 
 define NilmCytologyWithinLast12MonthsRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  DefaultSymptomaticRecommendation
 
 define NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
-
+  DefaultSymptomaticRecommendation
+  
 define VisibleLesionRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam with appropriate tissue sampling is indicated (e.g., cervical cytology and/or biopsy).'
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+  }
 
 define ElseRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+  }
+
 
 define RecommendationText:
   if IsIncludedAndNotExcluded then
@@ -197,7 +210,7 @@ define Recommendation:
   if IsIncludedAndNotExcluded then {
     short: ActionShort,
     date: Today(),
-    details: { RecommendationText },
+    details: RecommendationText,
     group: 'Screening: Symptomatic'
   }
   else null

@@ -215,7 +215,8 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'If a high-grade cytologic abnormality (HSIL, ASC-H) without histologic HSIL persists for 2 years, a diagnostic excisional procedure is recommended (unless the patient is pregnant). A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
+          'A diagnostic excisional procedure is recommended for patients under 25 years, unless the patient is pregnant.',
+          'A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
         }
       }    
     when ( // Heading 3.2
@@ -234,8 +235,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Colposcopy is recommended for cytologic ASC-US or above on repeat testing following a CIN1 or < CIN1 result that is preceded by a cytologic ASC-H, AGC, AIS, or HSIL result.',
-          ShouldSwitchToRiskAt25Text
+          'Colposcopy is recommended.'
         }
       }    
     when ( // Heading 3.1b
@@ -249,8 +249,9 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Observation is recommended with colposcopy and cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a HSIL cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis.',
-          ShouldSwitchToRiskAt25Text
+          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
       }
     when ( // Heading 3.1c
@@ -264,8 +265,9 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Observation is recommended with cytology at 1 and 2 years following a cervical histology result of CIN1 or <CIN1 preceded by a ASC-H, AGC or AIS cytology. Diagnostic excisional procedures are not recommended for patients younger than 25 years with these results as long as the squamocolumnar junction and the upper limit of all lesions are fully visualized, the endocervical sampling is less than CIN 2, and review of histology/cytology does not change the diagnosis.',
-          ShouldSwitchToRiskAt25Text
+          'Observation is recommended with cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
       }
 
@@ -287,7 +289,8 @@ define RecommendationForPatientsYoungerThan25:
         group: 'Younger Than 25 (K.1.4)',
         date: Today(),
         details: {
-          'Treatment is recommended. Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.'
+          'Treatment is recommended.',
+          'Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.'
         }
       }  
     when ( // Heading4.4
@@ -301,7 +304,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.4)',
         details: {
-          'Surveillance with colposcopy and cervical cytology should be performed at 1 year after the most recent cervical histology and cytology tests following an earlier histology HSIL (CIN2) or histologic HSIL, unspecified result.'
+          'Colposcopy and cervical cytology should be performed in 1 year.'
         }
       }  
     when ( // Heading4.1
@@ -314,7 +317,8 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
-          'Treatment is recommended, and observation is unacceptable (EII).'
+          'Treatment is recommended for CIN3. Observation is unacceptable unless the patient is pregnant.',
+          'Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.'
         }
       }
     when ( // Heading4.2
@@ -327,7 +331,9 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
-          'Observation is preferred, and treatment is acceptable (BII). Observation includes colposcopy and cytology at 6-month intervals.'
+          'Observation is preferred, and treatment is acceptable.',
+          'Observation includes colposcopy and cytology at 6-month intervals.',
+          'Treatment should not be performed if the patient is pregnant.'
         }
       }
     when ( // Heading4.3
@@ -340,7 +346,9 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
-          'Observation or treatment is acceptable after an unspecified histologic HSIL result. Observation includes colposcopy and cytology at 6-month intervals.'
+          'Observation or treatment is acceptable.',
+          'Observation includes colposcopy and cytology at 6-month intervals.',
+          'Treatment should not be performed if the patient is pregnant.'
         }
       }
     // Heading 1 & Heading 2: Initial Management After an Abnormal Screening Test Result; Management of Cytology ASC-H and HSIL in Patients Younger than 25 Years
@@ -360,8 +368,8 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Colposcopy is recommended for individuals under 25 years old with cytologic HSIL, ASC-H, AGC or AIS (BII). Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.',
-          ShouldSwitchToRiskAt25Text
+          'Colposcopy is recommended.',
+          'Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.'
         }
       }
     when ( // 4
@@ -375,8 +383,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Cervical Cytology test (alone) is indicated 3 years after an ASC-US/HPV-Negative result.',
-          ShouldSwitchToRiskAt25Text
+          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is < 25 and HPV testing or co-testing if patient is age 25 or older at the time of repeat testing.'
         }
       }
     when ( // 5a
@@ -388,8 +395,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'For patients under 25 years old perform cervical cytology one year following cervical histologic LSIL(CIN1) or <CIN1 result (BIII).',
-          ShouldSwitchToRiskAt25Text
+          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or co-testing.'
         }
       }
     when ( // #5b
@@ -402,8 +408,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'This patient is due now for cervical cytology screening. For patients under 25 years old, cervical cytology should be performed one year after a cervical histologic LSIL(CIN1) or <CIN1 result. (BIII).',
-          ShouldSwitchToRiskAt25Text
+          'Cervical cytology is due now.'
         }
       }
     when ( // 1.c
@@ -415,8 +420,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Today(),
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Colposcopy is recommended if low-grade cytology persists at the 2-year follow up visit after low-grade cytology results (BII).',
-          ShouldSwitchToRiskAt25Text
+          'Colposcopy is recommended.'
         }
       }
     when ( // 1.a
@@ -427,8 +431,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Repeat cytology alone at one and two years is recommended after an initial low-grade cytology screening result of LSIL, ASC-US HPV-positive, or ASC-US result without HPV testing (BII).',
-          ShouldSwitchToRiskAt25Text
+          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or co-testing.'
         }
       }
     else
@@ -485,7 +488,9 @@ define RecommendationForPregnantPatients:
         date: Today(),
         group: 'Pregnant (K.2)',
         details: {
-          'Surveillance colposcopy and testing (with diagnostic cytology or HPV depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable (BII). In postpartum period, colposcopy is recommended no earlier than 4 weeks after delivery (BII). In patients diagnosed with histologic HSIL (CIN2 or CIN3) during pregnancy, if a lesion is detected at postpartum colposcopy, an excisional treatment procedure or full diagnostic evaluation (cervical cytology, HPV, and biopsy) is acceptable (BII). In the absence of a lesion on colposcopy, a full diagnostic evaluation is recommended/ expedited treatment is not recommended (BII). For patients with a diagnosis of histologic HSIL (CIN 2) whose concerns about the effects of treatment on a future pregnancy outweigh their concerns about cancer, either observation or treatment is acceptable provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling (CII). If the histologic HSIL cannot be specified as CIN 2, treatment is preferred, but observation is acceptable if there are concerns related to future pregnancies (CIII). For patients 25 years or older, observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Surveillance colposcopy and testing (with cytology or HPV testing or co-testing depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.',
+          'Repeat biopsy is recommended if invasion is suspected or the appearance of the lesion worsens.',
+          'Treatment of histologic HSIL (CIN 2 or CIN 3) during pregnancy is not recommended.'
         }
       }
     when ( // K2.2 - Recommendation #2
@@ -498,7 +503,8 @@ define RecommendationForPregnantPatients:
         date: Today(),
         group: 'Pregnant (K.2)',
         details: {
-          'Referral to a gynecologic oncologist is preferred if AIS is diagnosed during pregnancy, but management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable (CIII).'
+          'Referral to a gynecologic oncologist is preferred.',
+          'Management by a gynecologist skilled in the colposcopic diagnosis and treatment of AIS is acceptable.'
         }
       }
     else
@@ -534,7 +540,7 @@ define RecommendationForImmunosuppressedPatients:
         date: Today(),
         group: 'Immunosuppressed (K.3)',
         details: {
-          'Colposcopy is recommended when the patient is immunocompromised and is found to have cytologic ASC-US or higher or HPV positive after a cytologic ASC-US result.'
+          'Colposcopy is recommended in this immunocompromised patient.'
         }
       }
     when ( // K3.1
@@ -576,7 +582,7 @@ define RecommendationForImmunosuppressedPatients:
         date: Collate.DateOfMostRecentReport + 6 months,
         group: 'Immunosuppressed (K.3)',
         details: {
-          'Repeat cytology in 6 to 12 months when the patient is immunocompromised and is found to have cytologic ASC-US.'
+          'Cervical cytology is recommended in 6 to 12 months in this immunocompromised patient.'
         }
       }   
     else
@@ -702,7 +708,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: ToDate(DateK41),
         group: 'Hysterectomy (K.4)',
         details: {
-          'Three annual hrHPV-based tests with cotest or primary hrHPV test are recommended after a hysterectomy is performed for treatment of a high-grade precancer or cancer.'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of CIN 2 or CIN 3.'
         }
       }
     when ( // K4.2
@@ -715,21 +721,12 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing with cotest or primary hrHPV test is recommended every 3 years after a histologic HSIL (CIN2 or CIN3) or AIS results for 25 years, regardless of whether the patient has had a hysterectomy either for treatment or at any point during the surveillance period (CIII).'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years.'
         }
       }
     else
       null
   end
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-// Special Populations Section K.5 Managing Patients Older Than 65 Years With a History of Prior Abnormalities
-
-define Over65RecommendationText:
-  'If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). If surveillance testing is recommended for either a history of abnormal screening results or treatment for precancer, discontinuing surveillance is unacceptable if the patient is in reasonably good health and testing is feasible (DII). Discontinuation of surveillance is recommended for patients with a limited life expectancy (EIII). This population will be managed based on logic defined for rare abnormalities and common abnormalities.'
-
-// If patients over age 65 years undergo HPV testing, cotesting, or cytology, management according to guidelines for patients aged 25 to 65 years is recommended (CII). Care recommendations for these individuals are covered within the Common Abnormality logic paths.
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 define Recommendation:
   Coalesce(
