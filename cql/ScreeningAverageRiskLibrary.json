@@ -852,7 +852,113 @@
                   }
                },
                "else" : {
-                  "type" : "Now"
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "name" : "Age21Through29",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfMostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "If",
+                     "condition" : {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeCotest",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyTestingCadence",
+                              "type" : "ParameterRef"
+                           } ]
+                        }, {
+                           "type" : "ToDateTime",
+                           "operand" : {
+                              "type" : "Today"
+                           }
+                        } ]
+                     },
+                     "then" : {
+                        "type" : "Add",
+                        "operand" : [ {
+                           "name" : "DateOfMostRecentNegativeCotest",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "CytologyTestingCadence",
+                           "type" : "ParameterRef"
+                        } ]
+                     },
+                     "else" : {
+                        "type" : "Now"
+                     }
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "name" : "Age21Through29",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfMostRecentNegativeHpv",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     },
+                     "then" : {
+                        "type" : "If",
+                        "condition" : {
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "name" : "DateOfMostRecentNegativeHpv",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "CytologyTestingCadence",
+                                 "type" : "ParameterRef"
+                              } ]
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "type" : "Today"
+                              }
+                           } ]
+                        },
+                        "then" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentNegativeHpv",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "CytologyTestingCadence",
+                              "type" : "ParameterRef"
+                           } ]
+                        },
+                        "else" : {
+                           "type" : "Now"
+                        }
+                     },
+                     "else" : {
+                        "type" : "Now"
+                     }
+                  }
                }
             }
          }, {
@@ -1117,14 +1223,20 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Equal",
+                  "type" : "Or",
                   "operand" : [ {
-                     "name" : "LastScreeningType",
-                     "type" : "ExpressionRef"
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "LastScreeningType",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Cervical Cytology",
+                        "type" : "Literal"
+                     } ]
                   }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Cervical Cytology",
-                     "type" : "Literal"
+                     "name" : "Age21Through29",
+                     "type" : "ExpressionRef"
                   } ]
                },
                "then" : {
@@ -1605,21 +1717,27 @@
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "name" : "IsIncludedAndNotExcluded",
-                  "type" : "ExpressionRef"
-               }, {
                   "type" : "And",
                   "operand" : [ {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "ProposedDateOfNextCytology",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "type" : "Now"
+                     } ]
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "name" : "Age21Through29",
+                     "type" : "ExpressionRef"
+                  }, {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "Equal",
-                        "operand" : [ {
-                           "name" : "ProposedDateOfNextCytology",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "type" : "Now"
-                        } ]
-                     }, {
                         "type" : "Or",
                         "operand" : [ {
                            "type" : "Equal",
@@ -1642,32 +1760,26 @@
                               "type" : "Literal"
                            } ]
                         } ]
-                     } ]
-                  }, {
-                     "type" : "Or",
-                     "operand" : [ {
+                     }, {
                         "type" : "Or",
                         "operand" : [ {
-                           "name" : "Age21Through29",
-                           "type" : "ExpressionRef"
-                        }, {
                            "name" : "Age30Through65",
                            "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
+                        }, {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "AllowGradeDRecommendation",
-                              "type" : "ParameterRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "AllowGradeDRecommendation",
+                                 "type" : "ParameterRef"
+                              }, {
+                                 "name" : "AgeOver65",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
-                              "name" : "AgeOver65",
+                              "name" : "NotAdequatelyScreened",
                               "type" : "ExpressionRef"
                            } ]
-                        }, {
-                           "name" : "NotAdequatelyScreened",
-                           "type" : "ExpressionRef"
                         } ]
                      } ]
                   } ]

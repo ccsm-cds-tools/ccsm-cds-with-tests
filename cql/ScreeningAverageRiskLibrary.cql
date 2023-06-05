@@ -182,6 +182,16 @@ define ProposedDateOfNextCytology:
       DateOfMostRecentNilmCytology + CytologyTestingCadence
     else
       Now()
+  else if (Age21Through29 and DateOfMostRecentNegativeCotest is not null) then
+    if DateOfMostRecentNegativeCotest + CytologyTestingCadence > Today() then
+      DateOfMostRecentNegativeCotest + CytologyTestingCadence
+    else
+      Now()
+  else if (Age21Through29 and DateOfMostRecentNegativeHpv is not null) then
+    if DateOfMostRecentNegativeHpv + CytologyTestingCadence > Today() then
+      DateOfMostRecentNegativeHpv + CytologyTestingCadence
+    else
+      Now()
   else
     Now()
 
@@ -242,7 +252,7 @@ define LastScreeningType:
     'n/a' // Indicates that no recent screening was found
 
 define ProposedScreeningDate:
-  if LastScreeningType = 'Cervical Cytology' then
+  if (LastScreeningType = 'Cervical Cytology' or Age21Through29) then
     ProposedDateOfNextCytology
   else if LastScreeningType = 'hrHPV' then
     ProposedDateOfNextHpvTest
@@ -253,22 +263,25 @@ define ProposedScreeningDate:
 
 define RecommendImmediateCervicalCytology:
   IsIncludedAndNotExcluded and
+  ProposedDateOfNextCytology = Now() and
   (
-    ProposedDateOfNextCytology = Now() and
+    Age21Through29 or
     (
-      LastScreeningType = 'Cervical Cytology' or
-      LastScreeningType = 'n/a'
-    ) and
-    (
-      Age21Through29 or
-      Age30Through65 or
       (
-        AllowGradeDRecommendation and
-        AgeOver65 and
-        NotAdequatelyScreened
+        LastScreeningType = 'Cervical Cytology' or
+        LastScreeningType = 'n/a'
+      ) and
+      (
+        Age30Through65 or
+        (
+          AllowGradeDRecommendation and
+          AgeOver65 and
+          NotAdequatelyScreened
+        )
       )
     )
   )
+
 
 define RecommendImmediatePrimaryHpv:
   IsIncludedAndNotExcluded and
