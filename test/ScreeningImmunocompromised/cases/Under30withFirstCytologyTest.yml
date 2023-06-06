@@ -1,0 +1,41 @@
+---
+name: Under 30 and need cytology test number 2 after cytology test
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: Condition
+  clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+  verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+  code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
+  onsetDateTime: 2017-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  DateOfFirstNilmCytologyAfterImmunosuppressionOnset: '2021-05-01T00:00:00.000+00:00'
+  DateOfSecondNilmCytologyAfterImmunosuppressionOnset: null
+  DateOfThirdNilmCytologyAfterImmunosuppressionOnset: null
+  NeedFirstOfThreeAnnualCytologyTests: false
+  NeedSecondOfThreeAnnualCytologyTests: true
+  NeedThirdOfThreeAnnualCytologyTests: false
+  TestingCadence:
+    value: 12
+    unit: months
+  ProposedDateOfNextScreening: '2022-05-01T00:00:00.000+00:00'
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediateCotesting: false

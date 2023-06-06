@@ -1,0 +1,41 @@
+---
+name: Under 30 and need immediate cytology test number 1 after previous HPV test
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: Condition
+  clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+  verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+  code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
+  onsetDateTime: 2017-05-01
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2020-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  DateOfFirstNilmCytologyAfterImmunosuppressionOnset: null
+  DateOfSecondNilmCytologyAfterImmunosuppressionOnset: null
+  DateOfThirdNilmCytologyAfterImmunosuppressionOnset: null
+  NeedFirstOfThreeAnnualCytologyTests: true
+  NeedSecondOfThreeAnnualCytologyTests: false
+  NeedThirdOfThreeAnnualCytologyTests: false
+  TestingCadence:
+    value: 12
+    unit: months
+  ProposedDateOfNextScreening: '2021-06-23T00:00:00.000+00:00'
+  RecommendImmediateCervicalCytology: true
+  RecommendImmediateCotesting: false
