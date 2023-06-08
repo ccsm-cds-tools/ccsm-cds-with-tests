@@ -182,22 +182,42 @@
                         "name" : "AllowGradeDRecommendation",
                         "type" : "ParameterRef"
                      }, {
-                        "type" : "Greater",
+                        "type" : "Or",
                         "operand" : [ {
-                           "precision" : "Year",
-                           "type" : "CalculateAge",
-                           "operand" : {
-                              "path" : "birthDate.value",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "Patient",
-                                 "type" : "ExpressionRef"
+                           "type" : "Greater",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
-                           }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "65",
+                              "type" : "Literal"
+                           } ]
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "value" : "65",
-                           "type" : "Literal"
+                           "type" : "Less",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "name" : "MinimumScreeningAge",
+                              "type" : "ParameterRef"
+                           } ]
                         } ]
                      } ]
                   } ]
@@ -345,6 +365,29 @@
                      "name" : "Excluded",
                      "type" : "ExpressionRef"
                   }
+               } ]
+            }
+         }, {
+            "name" : "AgeUnder21",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Less",
+               "operand" : [ {
+                  "precision" : "Year",
+                  "type" : "CalculateAge",
+                  "operand" : {
+                     "path" : "birthDate.value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "value" : "21",
+                  "type" : "Literal"
                } ]
             }
          }, {
@@ -2253,111 +2296,69 @@
                      "else" : {
                         "type" : "If",
                         "condition" : {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "Age21Through29",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "RecommendImmediateScreening",
-                              "type" : "ExpressionRef"
-                           } ]
+                           "name" : "AgeUnder21",
+                           "type" : "ExpressionRef"
                         },
                         "then" : {
-                           "type" : "List",
-                           "element" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Screening is recommended using cervical cytology testing alone.",
-                              "type" : "Literal"
-                           } ]
-                        },
-                        "else" : {
                            "type" : "If",
                            "condition" : {
-                              "name" : "RecommendImmediateScreening",
-                              "type" : "ExpressionRef"
+                              "name" : "AllowGradeDRecommendation",
+                              "type" : "ParameterRef"
                            },
                            "then" : {
                               "type" : "List",
                               "element" : [ {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Cervical cancer screening is recommended.",
+                                 "value" : "Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for average-risk, asymptomatic individuals < 21 years of age.",
                                  "type" : "Literal"
+                              } ]
+                           },
+                           "else" : {
+                              "type" : "As",
+                              "operand" : {
+                                 "type" : "Null"
+                              },
+                              "asTypeSpecifier" : {
+                                 "type" : "ListTypeSpecifier",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }
+                           }
+                        },
+                        "else" : {
+                           "type" : "If",
+                           "condition" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "Age21Through29",
+                                 "type" : "ExpressionRef"
                               }, {
+                                 "name" : "RecommendImmediateScreening",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "List",
+                              "element" : [ {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "The screening can be performed using one of the following screening approaches:",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "1. hrHPV testing alone",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "3. Cervical cytology testing alone",
+                                 "value" : "Screening is recommended using cervical cytology testing alone.",
                                  "type" : "Literal"
                               } ]
                            },
                            "else" : {
                               "type" : "If",
                               "condition" : {
-                                 "name" : "Age21Through29",
+                                 "name" : "RecommendImmediateScreening",
                                  "type" : "ExpressionRef"
                               },
                               "then" : {
                                  "type" : "List",
                                  "element" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "Cervical cancer screening is next due on ",
-                                          "type" : "Literal"
-                                       }, {
-                                          "type" : "ToString",
-                                          "operand" : {
-                                             "type" : "ToDate",
-                                             "operand" : {
-                                                "name" : "ProposedScreeningDate",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : ".",
-                                       "type" : "Literal"
-                                    } ]
-                                 } ]
-                              },
-                              "else" : {
-                                 "type" : "List",
-                                 "element" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "Cervical cancer screening is next due on ",
-                                          "type" : "Literal"
-                                       }, {
-                                          "type" : "ToString",
-                                          "operand" : {
-                                             "type" : "ToDate",
-                                             "operand" : {
-                                                "name" : "ProposedScreeningDate",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : ".",
-                                       "type" : "Literal"
-                                    } ]
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cancer screening is recommended.",
+                                    "type" : "Literal"
                                  }, {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "The screening can be performed using one of the following screening approaches:",
@@ -2375,6 +2376,83 @@
                                     "value" : "3. Cervical cytology testing alone",
                                     "type" : "Literal"
                                  } ]
+                              },
+                              "else" : {
+                                 "type" : "If",
+                                 "condition" : {
+                                    "name" : "Age21Through29",
+                                    "type" : "ExpressionRef"
+                                 },
+                                 "then" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedScreeningDate",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
+                                    } ]
+                                 },
+                                 "else" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedScreeningDate",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "The screening can be performed using one of the following screening approaches:",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "1. hrHPV testing alone",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "3. Cervical cytology testing alone",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
                               }
                            }
                         }

@@ -38,7 +38,6 @@ parameter PrimaryHpvTestingCadence default 5 years
 parameter CotestingCadence default 5 years
 parameter AllowGradeDExclusion default true
 parameter AllowGradeDRecommendation default true
-// TODO: Add parameter for Grade D recommendation for patients < 21
 parameter GradeDAdequatePriorScreeningLookback default 10 years // TODO: We may want to change to 11 years to allow for wiggle room - Pending discussion with L2
 
 /***** BEGIN CDS LOGIC ********************************************************/
@@ -48,8 +47,6 @@ context Patient
 //------------------------------------------------------------------------------
 // INCLUSIONS
 //------------------------------------------------------------------------------
-// Age >=21 years old
-// AND
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
 
@@ -61,12 +58,13 @@ define IsIncluded:
     ) or
     (
       AllowGradeDRecommendation and
-      AgeInYears() > 65
+      (
+        AgeInYears() > 65 or
+        AgeInYears() < MinimumScreeningAge
+      )
     )
   ) and
   Dash.FemaleorTransgenderMale
-
-// TODO: Add Grade D Inclusions (negative recommendations) for patients < 21
 
 //------------------------------------------------------------------------------
 // EXCLUSIONS
@@ -117,6 +115,9 @@ define Excluded:
 
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
+
+define AgeUnder21:
+  AgeInYears() < 21
 
 define Age21Through29:
   AgeInYears() between 21 and 29
@@ -361,7 +362,14 @@ define RecommendationText:
             }
         else
           null
-      else // Age 65 or younger
+      else if AgeUnder21 then
+        if AllowGradeDRecommendation then
+          {
+            'Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for average-risk, asymptomatic individuals < 21 years of age.'
+          }
+        else
+          null
+      else // Age 21-65
         if Age21Through29 and RecommendImmediateScreening then
           { 'Screening is recommended using cervical cytology testing alone.' }
         else if RecommendImmediateScreening then
