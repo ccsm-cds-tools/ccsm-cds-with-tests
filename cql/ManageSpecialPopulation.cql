@@ -22,6 +22,7 @@ include DashboardLibrary version '1.0.0' called Dash
 include CollateManagementData version '1.1.0' called Collate
 include ManageRareAbnormality version '1.1.0' called Rare
 include CCSMCommonFunctions version '1.0.0' called CCF
+include ScreeningAverageRiskLibrary version '1.0.0' called SAR
 
 //------------------------------------------------------------------------------
 // CODE SYSTEMS, VALUE SETS, AND CODES
@@ -722,6 +723,18 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         group: 'Hysterectomy (K.4)',
         details: {
           'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years.'
+        }
+      }
+    when ( // no hysterectomy date
+      SAR.AbsenceOrRemovalOfCervix
+    ) then 
+      {
+        short: 'Primary HPV or Cotest',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        group: 'Hysterectomy (K.4)',
+        details: {
+          'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment, patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
+          'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.'
         }
       }
     else
