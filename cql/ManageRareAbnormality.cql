@@ -828,7 +828,7 @@ define RecommendationForHistologyResults:
   case
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified
     when (
-      AgeInYears() >= 25 and
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsUnspecifiedHsil
@@ -840,6 +840,21 @@ define RecommendationForHistologyResults:
         details: {
           'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
           'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+        }
+      }
+    // I.1 Management of Histologic HSIL, not Further Specified or Qualified over age 50
+    when (
+      AgeInYears() > 50 and
+      not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsUnspecifiedHsil
+    ) then
+      {
+        short: 'Surveillance or Treatment',
+        date: Today(),
+        group: 'Managing Histology (I.1)',
+        details: {
+          'Treatment is recommended for histologic HSIL.'
         }
       }
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
@@ -860,7 +875,7 @@ define RecommendationForHistologyResults:
         }
       }
     when ( // I2.2
-      AgeInYears() >= 25 and
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
       not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin2
@@ -876,6 +891,22 @@ define RecommendationForHistologyResults:
           'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
         }
       }
+    when ( // I2.2 over age 50
+      AgeInYears() > 50 and
+      not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsCin2
+    ) then
+      {
+        short: 'Surveillance or Treatment',
+        date: Today(),
+        group: 'Managing Histology (I.2)',
+        details: {
+          'Treatment of CIN2 is recommended.',
+          'Excisional treatment is preferred, and treatment with ablation is acceptable.'
+        }
+      }
+            
     // I.3 Management of CIN2 in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes
     when ( // I3.5
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -1188,9 +1219,24 @@ define RecommendationForHistologyResults:
           'If treatment is selected and the entire squamocolumnar junction and all lesions were fully visualized during colposcopic examination, either excision or ablation treatments are acceptable.'
         }
       }
+    // I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations 
+    when (
+      AgeInYears() > 50 and
+      MostRecentBiopsyReportWasWithinPastYear and
+      HistologyInterpretedAsAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
+          'After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS.'
+        }
+      }
     // I.6 Management of AIS: Adoption of Society of Gynecologic Oncology Recommendations
     when (
-      AgeInYears() >= 25 and
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
       MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsAis
     ) then

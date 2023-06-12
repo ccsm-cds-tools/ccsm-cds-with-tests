@@ -6008,22 +6008,43 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "GreaterOrEqual",
+                              "type" : "And",
                               "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
                               }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
+                                 "type" : "LessOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
                               } ]
                            }, {
                               "type" : "Not",
@@ -6073,6 +6094,80 @@
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Greater",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "50",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance or Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Managing Histology (I.1)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Treatment is recommended for histologic HSIL.",
                               "type" : "Literal"
                            } ]
                         }
@@ -6171,22 +6266,43 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "GreaterOrEqual",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
+                                    "type" : "GreaterOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
-                                    }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
+                                    } ]
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
+                                    "type" : "LessOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "50",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
                               }, {
                                  "type" : "Not",
@@ -6252,6 +6368,94 @@
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Greater",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "name" : "Pregnant",
+                                    "libraryName" : "Dash",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HistologyInterpretedAsCin2",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance or Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Managing Histology (I.2)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Treatment of CIN2 is recommended.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Excisional treatment is preferred, and treatment with ablation is acceptable.",
                               "type" : "Literal"
                            } ]
                         }
@@ -8714,7 +8918,7 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "GreaterOrEqual",
+                           "type" : "Greater",
                            "operand" : [ {
                               "precision" : "Year",
                               "type" : "CalculateAge",
@@ -8728,8 +8932,98 @@
                               }
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
+                              "value" : "50",
                               "type" : "Literal"
+                           } ]
+                        }, {
+                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HistologyInterpretedAsAis",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "See Details",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Managing Histology (I.6)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "type" : "LessOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "50",
+                                 "type" : "Literal"
+                              } ]
                            } ]
                         }, {
                            "name" : "MostRecentBiopsyReportWasWithinPastYear",
