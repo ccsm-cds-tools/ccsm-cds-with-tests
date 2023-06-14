@@ -709,7 +709,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: ToDate(DateK41),
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of CIN 2 or CIN 3.'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of histologic HSIL (CIN 2 or CIN 3).'
         }
       }
     when ( // K4.2
@@ -722,7 +722,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years.'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL (CIN 2 or CIN 3).'
         }
       }
     when ( // no hysterectomy date
@@ -733,8 +733,9 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment, patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
-          'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.'
+          'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL (CIN 2 or CIN 3), patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
+          'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.',
+          'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL (CIN 2 or CIN 3), or completed the 25 year long term surveillance.'
         }
       }
     else
