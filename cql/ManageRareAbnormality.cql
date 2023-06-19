@@ -952,7 +952,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.3)',
         details: {
-          'Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is visible and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
+          'Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is fully visualized and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
           'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
         }
       }
