@@ -22,7 +22,6 @@ include DashboardLibrary version '1.0.0' called Dash
 include CollateManagementData version '1.1.0' called Collate
 include ManageRareAbnormality version '1.1.0' called Rare
 include CCSMCommonFunctions version '1.0.0' called CCF
-include ScreeningAverageRiskLibrary version '1.0.0' called SAR
 
 //------------------------------------------------------------------------------
 // CODE SYSTEMS, VALUE SETS, AND CODES
@@ -726,10 +725,10 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         }
       }
     when ( // no hysterectomy date
-      SAR.AbsenceOrRemovalOfCervix
+      Rare.AbsenceOrRemovalOfCervix
     ) then 
       {
-        short: 'Primary HPV or Cotest',
+        short: 'See Details',
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
