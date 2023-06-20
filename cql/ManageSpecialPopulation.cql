@@ -729,7 +729,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
     ) then 
       {
         short: 'See Details',
-        date: Collate.DateOfMostRecentReport + 3 years,
+        date: Today(),
         group: 'Hysterectomy (K.4)',
         details: {
           'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL (CIN 2 or CIN 3), patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
