@@ -850,7 +850,7 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsUnspecifiedHsil
     ) then
       {
-        short: 'Surveillance or Treatment',
+        short: 'Treatment',
         date: Today(),
         group: 'Managing Histology (I.1)',
         details: {
@@ -898,7 +898,7 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsCin2
     ) then
       {
-        short: 'Surveillance or Treatment',
+        short: 'Treatment',
         date: Today(),
         group: 'Managing Histology (I.2)',
         details: {
