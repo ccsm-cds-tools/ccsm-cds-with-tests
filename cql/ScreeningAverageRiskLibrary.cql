@@ -381,7 +381,7 @@ define RecommendationText:
               '3. Cervical cytology testing alone'
             }
         else if Age21Through29 then
-          { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.' }
+          { 'Cervical cancer screening using cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.' }
         else
             {
               'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.',
