@@ -282,7 +282,8 @@ define RecommendationForPatientsYoungerThan25:
         Rare.SecondMostRecentHistologyInterpretedAsCin2 or
         Rare.SecondMostRecentHistologyInterpretedAsUnspecifiedHsil
       ) and
-      Rare.SecondMostRecentBiopsyReport.date within 2 years of Collate.MostRecentBiopsyReport.date
+      Rare.SecondMostRecentBiopsyReport.date 2 years or more before Collate.MostRecentBiopsyReport.date and
+      Rare.SecondMostRecentBiopsyReport.date less than 3 years before Collate.MostRecentBiopsyReport.date
     ) then
       {
         short: 'Treatment',
