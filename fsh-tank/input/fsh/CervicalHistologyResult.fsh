@@ -26,6 +26,10 @@ Usage: #definition
 * compose.include[=].concept[=].display = "CIN 2"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Cervical intraepithelial neoplasia grade 2 (disorder)"
+* compose.include[=].concept[+].code = #22725004
+* compose.include[=].concept[=].display = "HSIL, Unspecified"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "High-grade squamous intraepithelial lesion (morphologic abnormality)"
 * compose.include[=].concept[+].code = #20365006
 * compose.include[=].concept[=].display = "CIN 3"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
