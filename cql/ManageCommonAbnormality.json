@@ -836,6 +836,388 @@
                }
             }
          }, {
+            "name" : "MostRecentHpvCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedHpvReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "lowClosed" : true,
+                           "highClosed" : true,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "MostRecentCytologyAlone",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "MostRecentHpvCotest",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "name" : "MostRecentCytologyReport",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "CytologyAloneInterpretedAsAscus",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "ASC-US",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "CytologyAloneInterpretedAsLsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "LSIL",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "CytologyAloneInterpretedAsHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "HSIL+",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "ErrataRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "CytologyAloneInterpretedAsAscus",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Reflex HPV",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "CytologyAloneInterpretedAsLsil",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "CytologyAloneInterpretedAsHsil",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               } ],
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "CommonAbnormalityGroup",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -919,6 +1301,22 @@
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                      "value" : "General Screening (Table 1)",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "ErrataRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "2023 JLGTD Addendum to the 2019 ASCCP Guidelines",
                      "type" : "Literal"
                   }
                } ],
@@ -1981,6 +2379,21 @@
                            } ]
                         }
                      } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "ErrataRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "name" : "ErrataRecommendation",
+                     "type" : "ExpressionRef"
                   }
                } ],
                "else" : {

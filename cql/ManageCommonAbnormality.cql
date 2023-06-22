@@ -245,7 +245,80 @@ define CommonAbnormalityGroup:
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
+    when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     else 'N/A'
+  end
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+// ERRATA: 2023 Journal of Lower Genital Track Disease (JLGTD) Addendum to the 2019 ASCCP Guidelines
+
+// Per the JLGTD article, “for individuals aged 25 years or older screened with cytology alone, the 2012 guidelines should be followed.”
+// As such, the following logic is derived from the 2012 ASCCP guidelines when there is no care recommendation mentioned for the same
+// clinical scenario in the 2019 ASCCP guidelines (e.g., the 2019 guidelines expressed in this CDS already covers ‘cervical cytology alone’
+// where the result is ASC-H, and AGC or AIS not including endometrial cells, therefore it is not expressed in this section).
+
+define MostRecentHpvCotest:
+  Coalesce(
+    (Collate.SortedHpvReports) S
+      where S.date within 1 day of Collate.MostRecentCytologyReport.date
+  )
+
+define MostRecentCytologyAlone:
+  if MostRecentHpvCotest is null then
+    Collate.MostRecentCytologyReport
+  else
+    null
+
+define CytologyAloneInterpretedAsAscus:
+  MostRecentCytologyAlone.riskTableInput = 'ASC-US'
+
+define CytologyAloneInterpretedAsLsil:
+  MostRecentCytologyAlone.riskTableInput = 'LSIL'
+
+define CytologyAloneInterpretedAsHsil:
+  MostRecentCytologyAlone.riskTableInput = 'HSIL+'
+
+
+define ErrataRecommendation:
+  case
+    // Managing abnormal cervical cytology alone
+    when ( // ASC-US Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsAscus
+    ) then
+      {
+        short: 'Reflex HPV',
+        date: Today(),
+        details: {
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
+        }
+      }
+    when ( // LSIL Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+    when ( // HSIL or SCC Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsHsil
+    ) then
+      {
+        short: 'Colposcopy or Treatment',
+        date: Today(),
+        details: {
+          'Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.'
+        }
+      }
+    // The following logic phrases come directly from the JLGTD article:
+    // TODO: Implement rest of the 2023 Errata section
+    else
+      null
   end
 
 define ReflexTestingRecommendationText:
@@ -431,6 +504,10 @@ define Action:
           TreatmentRecommendationText
         }
       }
+     when (
+      ErrataRecommendation is not null
+    ) then
+      ErrataRecommendation
     else
       null
   end
