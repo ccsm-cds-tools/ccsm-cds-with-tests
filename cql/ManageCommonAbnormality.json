@@ -985,6 +985,44 @@
                } ]
             }
          }, {
+            "name" : "CytologyAloneInterpretedAsLsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "LSIL",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "CytologyAloneInterpretedAsHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "HSIL+",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
             "name" : "ErrataRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1037,6 +1075,110 @@
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "CytologyAloneInterpretedAsLsil",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "CytologyAloneInterpretedAsHsil",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.",
                               "type" : "Literal"
                            } ]
                         }
@@ -1215,44 +1357,6 @@
                   "value" : "N/A",
                   "type" : "Literal"
                }
-            }
-         }, {
-            "name" : "CytologyAloneInterpretedAsLsil",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Equal",
-               "operand" : [ {
-                  "path" : "riskTableInput",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentCytologyAlone",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "LSIL",
-                  "type" : "Literal"
-               } ]
-            }
-         }, {
-            "name" : "CytologyAloneInterpretedAsHsil",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Equal",
-               "operand" : [ {
-                  "path" : "riskTableInput",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentCytologyAlone",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "HSIL+",
-                  "type" : "Literal"
-               } ]
             }
          }, {
             "name" : "ReflexTestingRecommendationText",

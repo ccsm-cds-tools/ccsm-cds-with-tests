@@ -293,8 +293,28 @@ define ErrataRecommendation:
           'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
         }
       }
-
-
+    when ( // LSIL Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+    when ( // HSIL or SCC Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsHsil
+    ) then
+      {
+        short: 'Colposcopy or Treatment',
+        date: Today(),
+        details: {
+          'Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.'
+        }
+      }
 
     when ( // 
       false
