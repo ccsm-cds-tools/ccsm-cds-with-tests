@@ -166,9 +166,9 @@ define SortedCytologyReports:
   sort by date desc
 
 // Edge Cases:
-// DONE: 1. HPV but no cytology (solution: just use HPV)
-// TODO: 2. Cytology but no HPV (no solution: display error)
-// NOTE: This is being updated based on "gaps" document
+// DONE: 1. HPV but no cytology (solution: just use HPV, unless most recent result is primary HPV in which case reflex cytology testing is recommended)
+// DONE: 2. Cytology but no HPV (2023 ASCCP Guidelines Errata)
+// NOTE: This has been updated based on 2023 ASCCP Guidelines Errata
 
 define MostRecentCytologyCotest:
   Coalesce(
