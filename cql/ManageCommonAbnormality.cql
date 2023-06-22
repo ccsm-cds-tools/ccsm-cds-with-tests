@@ -315,17 +315,8 @@ define ErrataRecommendation:
           'Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.'
         }
       }
-
-    when ( // 
-      false
-    ) then
-      {
-        short: '',
-        date: Today(),
-        details: {
-          ''
-        }
-      }
+    // The following logic phrases come directly from the JLGTD article:
+    // TODO: Implement rest of the 2023 Errata section
     else
       null
   end
