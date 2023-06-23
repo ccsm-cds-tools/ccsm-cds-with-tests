@@ -29,7 +29,7 @@ include CCSMCommonFunctions version '1.0.0' called Common
 //------------------------------------------------------------------------------
 
 parameter BiopsyLookbackPeriod default 25 years
-parameter BiopsyReferralPeriod default 1 month
+parameter BiopsyReferralPeriod default 1 years  // NOTE: Changing from 1 month to 1 year to account for real-world scenarios
 parameter HpvTestingGracePeriod default 6 months
 
 /***** BEGIN CDS LOGIC ********************************************************/

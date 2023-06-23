@@ -71,7 +71,7 @@ code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cell
 //------------------------------------------------------------------------------
 
 parameter BiopsyLookbackPeriod default 25 years
-parameter BiopsyReferralPeriod default 1 month
+parameter BiopsyReferralPeriod default 1 year // NOTE: Changing from 1 month to 1 year to account for real-world scenarios
 parameter ExcludeSymptomatic default true
 parameter HpvTestingGracePeriod default 6 months
 
