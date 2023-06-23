@@ -2800,39 +2800,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Except",
-               "operand" : [ {
-                  "type" : "List",
-                  "element" : [ {
-                     "name" : "ErrorNonNilmCytologyResult",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "ErrorNonNegativeHpvResult",
-                     "type" : "ExpressionRef"
-                  } ]
-               }, {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "X",
-                     "expression" : {
-                        "type" : "List",
-                        "element" : [ {
-                           "type" : "Null"
-                        } ]
-                     }
-                  } ],
-                  "return" : {
-                     "distinct" : false,
-                     "expression" : {
-                        "asType" : "{urn:hl7-org:elm-types:r1}String",
-                        "type" : "As",
-                        "operand" : {
-                           "name" : "X",
-                           "type" : "AliasRef"
-                        }
-                     }
-                  }
-               } ]
+               "type" : "List"
             }
          }, {
             "name" : "ErrorsHaveOccurred",
