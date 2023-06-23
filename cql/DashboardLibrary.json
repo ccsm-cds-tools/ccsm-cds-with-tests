@@ -549,6 +549,14 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "Endocervical Curettage",
+            "id" : "52889002",
+            "display" : "Endocervical curettage (procedure)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Diagnosis of Genital GvHD",
             "id" : "GenitalGvHD",
             "display" : "Diagnosis of Genital GvHD",
@@ -6267,6 +6275,29 @@
                } ]
             }
          }, {
+            "name" : "EndocervicalCurettageProcedures",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Completed",
+               "libraryName" : "C3F",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "dataType" : "{http://hl7.org/fhir}Procedure",
+                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                  "codeProperty" : "code",
+                  "codeComparator" : "~",
+                  "type" : "Retrieve",
+                  "codes" : {
+                     "type" : "ToList",
+                     "operand" : {
+                        "name" : "Endocervical Curettage",
+                        "type" : "CodeRef"
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "PertinentProcedures",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -6294,8 +6325,14 @@
                      } ]
                   } ]
                }, {
-                  "name" : "RemovalOfCervixProcedures",
-                  "type" : "ExpressionRef"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "RemovalOfCervixProcedures",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "EndocervicalCurettageProcedures",
+                     "type" : "ExpressionRef"
+                  } ]
                } ]
             }
          }, {

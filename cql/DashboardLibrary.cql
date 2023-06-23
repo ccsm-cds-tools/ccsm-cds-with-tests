@@ -120,6 +120,7 @@ code "Postmenopausal": '76498008' from "SNOMED-CT" display 'Postmenopausal state
 code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macrophage (cell)'
 code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
+code "Endocervical Curettage": '52889002' from "SNOMED-CT" display 'Endocervical curettage (procedure)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -712,12 +713,18 @@ define RemovalOfCervixProcedures:
     [Procedure: "CPT Value Set for Removal of Cervix Procedures"]
   )
 
+define EndocervicalCurettageProcedures:
+  C3F.Completed(
+    [Procedure: "Endocervical Curettage"]
+  )
+
 define PertinentProcedures:
   ImmunocompromisedProcedures union
   ColposcopyProcedures union
   CervicalExcisionProcedures union
   CervicalAblationProcedures union
-  RemovalOfCervixProcedures
+  RemovalOfCervixProcedures union
+  EndocervicalCurettageProcedures
 
 define function HasBeenLocallyEdited(P Procedure):
   if IsNull(P.identifier) then false
