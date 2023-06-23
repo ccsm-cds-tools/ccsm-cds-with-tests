@@ -441,11 +441,14 @@ define AbnormalResultInRecord:
   ErrorNonNegativeHpvResult is not null
 
 define Errors:
-  {
-    ErrorNonNilmCytologyResult,
-    ErrorNonNegativeHpvResult
-  }
-  except { null }
+  {}
+
+// define Errors: // NOTE: Removing Errors caused by an unknown cytology or HPV result, as this is causing issues when additional conclusion codes are included
+//   {
+//     ErrorNonNilmCytologyResult,
+//     ErrorNonNegativeHpvResult
+//   }
+//   except { null }
 
 define ErrorsHaveOccurred:
   Exists(Errors)

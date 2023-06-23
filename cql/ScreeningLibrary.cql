@@ -84,8 +84,28 @@ define FemaleorTransgenderMale:
 define IsIncluded:
   Dash.FemaleorTransgenderMale
 
+// Screening Library Exclusions
+define HasHighGradePreCancerCervicalLesion:
+  Exists(Dash.CervicalPrecancerDisorders)
+
+define HasCervicalCancerDiagnoses:
+  Exists(Dash.CervicalCancerDiagnoses)
+
+define HasRecentAbnormalScreening:
+  Dash.HasRecentAbnormalScreening
+
+define HasRecentAbnormalHistology:
+  Dash.HasRecentAbnormalHistology
+
 define Excluded:
-  Average.AbnormalResultInRecord and not Sympto.IsSymptomatic
+  (
+    HasHighGradePreCancerCervicalLesion or
+    HasCervicalCancerDiagnoses or
+    Exists(Dash.HighGradeOrCancerHistologyResults) or
+    HasRecentAbnormalScreening or
+    HasRecentAbnormalHistology
+  ) and
+  not Sympto.IsSymptomatic
 
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
