@@ -281,6 +281,9 @@ define ColposcopyOrTreatmentRecommendationText:
 define TreatmentRecommendationText:
   'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'
 
+define RarelyScreenedRecommendationText:
+  'For patients who have not been screened within the past 5 years or more, risks are higher and treatment is preferred to colposcopy to minimize loss to follow-up.'
+  
 define PositivePrimaryHpv:
   AnyTrue(
     (Collate.MostRecentHpvReport.allConclusions) aC 
@@ -288,8 +291,65 @@ define PositivePrimaryHpv:
   ) and 
   Collate.MostRecentCytologyCotest is null
 
+define IsRarelyScreenedPatient:  
+  IsHsilAndHpvPositive and
+  (
+    Collate.MostRecentBiopsyReport is null or
+    Collate.MostRecentBiopsyReport.date occurs before Collate.MostRecentCytologyCotest.date
+  ) and
+  PreviousCytologyOrSurveillanceIsOldOrAbsent
+
+define IsHsilAndHpvPositive:
+  Collate.MostRecentCytologyCotest is not null and
+  Collate.MostRecentCytologyCotestResult = 'HSIL+' and
+  Collate.MostRecentHpvResult = 'HPV-positive'
+  
+define PreviousCytologyOrSurveillanceIsOldOrAbsent:
+  (
+    Collate.SecondMostRecentCytologyReport is null and
+    Collate.SecondMostRecentCytologyCotest is null and
+    Collate.SecondMostRecentHpvReport is null
+  ) or 
+  (
+    Collate.SecondMostRecentCytologyReport is not null and
+    Collate.SecondMostRecentCytologyCotest.date < Now() - Collate.RarelyScreenedInterval
+  ) or
+  (
+    Collate.SecondMostRecentCytologyCotest is not null and 
+    Collate.SecondMostRecentCytologyCotest.date < Now() - Collate.RarelyScreenedInterval
+  ) or
+  ( 
+    Collate.SecondMostRecentHpvReport is not null and
+    Collate.SecondMostRecentHpvReport.date < Now() - Collate.RarelyScreenedInterval
+  )
+
 define Action:
   case
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      IsRarelyScreenedPatient
+    ) then
+      {
+        short: 'Colposcopy or Treatment',
+        date: Today(),
+        details: {
+          TreatmentRecommendationText,
+          RarelyScreenedRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        }
+      }
+    when (
+      AgeInYears() > 50 and
+      IsRarelyScreenedPatient
+    ) then
+      {
+        short: 'Colposcopy or Treatment',
+        date: Today(),
+        details: {
+          TreatmentRecommendationText,
+          RarelyScreenedRecommendationText
+        }
+      }
     when (
       PositivePrimaryHpv and
       not (Collate.MostRecentCytologyReport.date after Collate.MostRecentHpvReport.date) and

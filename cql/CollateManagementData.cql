@@ -31,6 +31,7 @@ include CCSMCommonFunctions version '1.0.0' called Common
 parameter BiopsyLookbackPeriod default 25 years
 parameter BiopsyReferralPeriod default 1 month
 parameter HpvTestingGracePeriod default 6 months
+parameter RarelyScreenedGracePeriod default 6 months
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -43,6 +44,9 @@ context Patient
 define HpvTestingInterval:
   5 years + HpvTestingGracePeriod
 
+define RarelyScreenedInterval:
+  5 years + RarelyScreenedGracePeriod
+    
 define function HPVTestingIntervalLookBack(LookBackDate System.DateTime):
   Interval[LookBackDate - HpvTestingInterval, LookBackDate)
 
@@ -237,6 +241,12 @@ define MostRecentCytologyReport:
   else
     null
 
+define SecondMostRecentCytologyReport:
+  if Count(SortedCytologyReports) > 0 then
+    SortedCytologyReports[1]
+  else
+    null
+    
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
 
@@ -364,6 +374,12 @@ define MostRecentReport:
 define DateOfMostRecentReport:
   if MostRecentReport is not null then ToDate(MostRecentReport)
   else null
+  
+define DateOfSecondMostRecentReport:
+  if Count(MostRecentReports) > 1 then
+    ToDate(MostRecentReports[1])
+  else
+    null  
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // TREATMENTS
