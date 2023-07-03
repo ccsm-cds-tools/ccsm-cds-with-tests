@@ -361,6 +361,10 @@ define PositivePrimaryHpv:
   ) and 
   Collate.MostRecentCytologyCotest is null
 
+define MostRecentCytologyCotestWasAfterAge21:
+  Collate.MostRecentCytologyCotest.date >= Dash.CervicalCancerScreeningAndMedicalHistory.patientInfo.dateOfBirth + 21 years
+
+
 define Action:
   case
     when (
@@ -504,10 +508,23 @@ define Action:
           TreatmentRecommendationText
         }
       }
-     when (
+    when (
       ErrataRecommendation is not null
     ) then
       ErrataRecommendation
+    when ( // Handle Special Case < 25
+      AgeInYears() < 25 and
+      MostRecentCytologyCotestWasAfterAge21 and
+      Dash.MostRecentNilmCytology is not null and
+      Dash.HasRecentPositiveHpv
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        details: {
+          'There is no specific recommendation for a NILM cytology and HPV + in a patient < 25 years of age. Use clinical judgement.'
+        }
+      }
     else
       null
   end
