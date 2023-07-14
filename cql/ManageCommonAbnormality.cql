@@ -512,7 +512,7 @@ define Action:
       ErrataRecommendation is not null
     ) then
       ErrataRecommendation
-    when ( // Handle Special Case < 25
+    when ( // Handle Special Case < 25 NILM & hrHPV positive
       AgeInYears() < 25 and
       MostRecentCytologyCotestWasAfterAge21 and
       Dash.MostRecentNilmCytology is not null and

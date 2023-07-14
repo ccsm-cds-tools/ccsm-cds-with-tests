@@ -543,7 +543,8 @@ define RecommendationForExceptionsToColposcopyThreshold:
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       PositiveHpv16or18Cotest and
-      CytologyInterpretedAsNilm
+      CytologyInterpretedAsNilm and
+      AgeInYears() >= 25
     ) then
       {
         short: 'Colposcopy',
