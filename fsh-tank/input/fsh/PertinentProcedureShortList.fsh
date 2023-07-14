@@ -18,6 +18,10 @@ Usage: #definition
 * compose.include[=].concept[=].display = "Colposcopy"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Colposcopy (procedure)"
+* compose.include[=].concept[+].code = #52889002
+* compose.include[=].concept[=].display = "Endocervical Curettage"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Endocervical curettage (procedure)"
 * compose.include[=].concept[+].code = #120038005
 * compose.include[=].concept[=].display = "Cervix Excision"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"

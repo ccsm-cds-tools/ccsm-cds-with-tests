@@ -213,15 +213,84 @@
                "type" : "ExpressionRef"
             }
          }, {
+            "name" : "HasHighGradePreCancerCervicalLesion",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "CervicalPrecancerDisorders",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasCervicalCancerDiagnoses",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "CervicalCancerDiagnoses",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasRecentAbnormalScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalScreening",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "HasRecentAbnormalHistology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalHistology",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "Excluded",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "name" : "AbnormalResultInRecord",
-                  "libraryName" : "Average",
-                  "type" : "ExpressionRef"
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "name" : "HasHighGradePreCancerCervicalLesion",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "HasCervicalCancerDiagnoses",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "HighGradeOrCancerHistologyResults",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "name" : "HasRecentAbnormalScreening",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "name" : "HasRecentAbnormalHistology",
+                     "type" : "ExpressionRef"
+                  } ]
                }, {
                   "type" : "Not",
                   "operand" : {
