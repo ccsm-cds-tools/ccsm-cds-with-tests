@@ -6,6 +6,7 @@
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableactivity"
     ]
   },
+  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -44,7 +45,6 @@
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory",
   "name": "DisplayCervicalCancerMedicalHistory",
   "title": "Display Cervical Cancer Medical History",
   "description": "Natural language description of the activity definition",
@@ -55,26 +55,19 @@
       "text": "Insert mesh terms here"
     }
   ],
-  "relatedArtifact": [
-    {
-      "type": "citation",
-      "label": "USPSTF Recommendation",
-      "display": "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
-    }
-  ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/DisplayCervicalCancerMedicalHistory|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/DashboardLibrary|1.0.0"
   ],
   "kind": "CommunicationRequest",
   "intent": "proposal",
   "priority": "routine",
   "dynamicValue": [
     {
-      "path": "payload[0].contentString",
+      "path": "payload[0].content.ofType(string)",
       "expression": {
         "language": "text/cql",
         "expression": "CervicalCancerScreeningAndMedicalHistory",
-        "reference": "Library/DisplayCervicalCancerMedicalHistory|1.0"
+        "reference": "Library/DashboardLibrary|1.0"
       }
     }
   ]

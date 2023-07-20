@@ -1,0 +1,52 @@
+---
+name: Grade D Propose Cotest Now (obs)
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1950-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  id: c1ea3ca9-bb14-a6e7-055c-be10173272fr
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  basedOn: 
+  - reference: ServiceRequest/c1ea3ca9-bb14-a6e7-055c-be10173272fc  
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2015-01-01
+-
+  resourceType: DiagnosticReport
+  id: c1ea3ca9-bb14-a6e7-055c-be10173272fk
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: amended
+  basedOn: 
+  - reference: ServiceRequest/c1ea3ca9-bb14-a6e7-055c-be10173272fc  
+  effectiveDateTime: 2015-01-01
+-  
+  resourceType: Observation
+  id: c1ea3ca9-bb14-a6e7-055c-be10173272fe
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: amended
+  basedOn: 
+  - reference: ServiceRequest/c1ea3ca9-bb14-a6e7-055c-be10173272fc
+  valueCodeableConcept: SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2015-01-01
+
+results:
+  IsIncluded: true
+  Excluded: false
+  IsIncludedAndNotExcluded: true
+  AgeOver65: true
+  HasThreeNegativeCytologyTestsForGradeD: false
+  HasTwoNegativeHpvTestsForGradeD: false
+  NotAdequatelyScreened: true
+  RecommendationText:
+  - 'Cervical cancer screening is recommended.'
+  - 'It appears this patient is on a screening regimen that includes Cotesting with hrHPV and Cervical Cytology. To meet adequate testing criteria to exit cervical cancer screening, Cotesting with hrHPV and Cervical Cytology is recommended.'

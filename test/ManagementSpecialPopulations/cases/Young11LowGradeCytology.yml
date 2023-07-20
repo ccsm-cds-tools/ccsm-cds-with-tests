@@ -1,0 +1,27 @@
+---
+name: Younger Than 25 Initial Low Grade Cytology 1.1
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2000-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *ASCUSOrLSILThisYear
+
+results:
+  Recommendation: 
+    short: 'Cytology'
+    date: '2022-05-01'
+    group: 'Younger Than 25 (K.1.1)'
+    details:
+    - 'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or co-testing.'
+  WhichPopulationMadeTheRecommendation: 5

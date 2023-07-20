@@ -1,0 +1,41 @@
+---
+name: G3.2 Absent Transformation Zone on Screening Cytology with Unknown HPV in Patient Older than 30
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1985-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#412716005 Cervical smear transformation zone cells absent (situation)
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - NULL FLAVOR#UNK Unknown
+  effectiveDateTime: 2021-05-01
+
+results:
+  Recommendation: 
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Rare Cytology (G.3.2)'
+    details:
+    - 'HPV testing is preferred.'
+    - 'Repeat cytology in 3 years is acceptable if HPV testing is not performed.'
+  WhichRarityMadeTheRecommendation: 1

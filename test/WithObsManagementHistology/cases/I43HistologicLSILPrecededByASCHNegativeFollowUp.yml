@@ -1,0 +1,53 @@
+---
+name: I4.3 Management of LSIL (CIN1) or Less Preceded by ASC-H Cytology 1 Year Negative Follow Up - Recommendation 1 (obs)
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
+  effectiveDateTime: 2020-01-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: amended
+  result:
+  - reference: Observation/1234
+  effectiveDateTime: 2020-05-01
+- 
+  resourceType: Observation
+  id: 1234
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  valueCodeableConcept: SNOMEDCT#165324008 Biopsy result normal (finding) 
+  effectiveDateTime: 2020-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  Recommendation:
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Managing Histology (I.4.3.1)'
+    details: 
+      - 'HPV-based testing (cotesting or primary hrHPV testing) is recommended in 1 year.'
+  WhichRarityMadeTheRecommendation: 3

@@ -1,0 +1,30 @@
+---
+name: G2.1 Unsatisfactory Cytology with Unknown Or Negative HPV
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *CytoUnsatisfactoryThisYear
+-
+  $iterate: *NegOrUnknownHPVThisYear
+
+results:
+  Recommendation: 
+    short: 'Repeat Screening'
+    date: '2021-08-02'
+    group: 'Rare Cytology (G.2.1)'
+    details:
+    - 'Repeat age-based screening with cytology, cotesting or primary HPV testing in 2 to 4 months is recommended.'
+    - 'Treatment to resolve atrophy or obscuring inflammation when a specific infection is present is acceptable.'
+  WhichRarityMadeTheRecommendation: 1

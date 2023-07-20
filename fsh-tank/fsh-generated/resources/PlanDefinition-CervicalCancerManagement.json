@@ -6,6 +6,7 @@
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -44,7 +45,6 @@
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement",
   "name": "CervicalCancerManagement",
   "title": "ASCCP Recommendations for Cervical Cancer Management",
   "type": {
@@ -107,60 +107,23 @@
           "title": "Display pertinent medical history",
           "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
           "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-          "documentation": [
-            {
-              "type": "citation",
-              "label": "ASCCP Recommendation",
-              "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-            }
-          ],
           "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory|1.0.0"
         },
         {
-          "title": "Rare Abnormalities",
+          "title": "Management Recommendations",
           "description": "Brief description of the action",
           "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-          "documentation": [
-            {
-              "type": "citation",
-              "label": "ASCCP Recommendation",
-              "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-            }
-          ],
           "condition": [
             {
               "kind": "applicability",
               "expression": {
                 "language": "text/cql",
-                "expression": "RareAbnormalityPresent",
+                "expression": "HasRecommendation",
                 "reference": "Library/ManagementLibrary|1.0"
               }
             }
           ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/ManageCervicalRareAbnormalities|1.0.0"
-        },
-        {
-          "title": "Common Abnormalities",
-          "description": "Brief description of the action",
-          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-          "documentation": [
-            {
-              "type": "citation",
-              "label": "ASCCP Recommendation",
-              "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
-            }
-          ],
-          "condition": [
-            {
-              "kind": "applicability",
-              "expression": {
-                "language": "text/cql",
-                "expression": "CommonAbnormalityPresent",
-                "reference": "Library/ManagementLibrary|1.0"
-              }
-            }
-          ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/ManageCervicalCommonAbnormalities|1.0.0"
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagementActions|1.0.0"
         },
         {
           "title": "Handle Errors",
@@ -176,7 +139,48 @@
               }
             }
           ],
-          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/HandleErrors|1.0.0"
+          "action": [
+            {
+              "title": "Communicate Errors",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors|1.0.0",
+              "dynamicValue": [
+                {
+                  "path": "payload[0].content.ofType(string)",
+                  "expression": {
+                    "language": "text/cql",
+                    "expression": "Errors",
+                    "reference": "Library/ManagementLibrary|1.0"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Prompt for More Information",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "groupingBehavior": "visual-group",
+              "selectionBehavior": "at-most-one",
+              "action": [
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentConditionQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentObservationQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentProcedureQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ScreeningAndManagementHistoryQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentVaccinationQuestionnaire|1.0.0"
+                }
+              ]
+            }
+          ]
         }
       ]
     }

@@ -19,6 +19,14 @@ using FHIR version '4.0.1'
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
 
+codesystem "CONDVERSTATUS": 'http://terminology.hl7.org/CodeSystem/condition-ver-status'
+
+code "Condition Refuted code": 'refuted' from "CONDVERSTATUS" display 'Refuted'
+code "Condition Entered in Error code": 'entered-in-error' from "CONDVERSTATUS" display 'Entered in Error'
+
+concept "Condition Refuted": { "Condition Refuted code" } display 'Refuted'
+concept "Condition Entered in Error": { "Condition Entered in Error code" } display 'Entered in Error'
+
 /*******************************************************************************
  * NOTICE: This following code has been adapted from "Factors to Consider in 
  * Managing Chronic Pain: A Pain Management Summary," available at:
@@ -43,7 +51,7 @@ define function DateText(d FHIR.date):
 // @param d - a FHIR dateTime to get text for
 // @returns {System.String} the text representation of the dateTime
 define function DateTimeText(d FHIR.dateTime):
-  ToString(d.value)
+  First(SplitOnMatches(ToString(d.value), 'T'))
 
 // Returns a text representation of an instant using the CQL `ToString` function.
 // @param i - a FHIR instant to get text for
@@ -148,7 +156,7 @@ define function Abatement(c FHIR.Condition):
 *******************************************************************************/
 
 /*******************************************************************************
-* DiagnosticReport Functions
+* Condition Functions
 *******************************************************************************/
 
 define function ConditionDate(C Condition):
@@ -188,6 +196,16 @@ define function DateOfFirstCondition(CondList List<Condition>):
       CondList
     )
   )
+
+/**
+ * Conditions that are valid. This is reflected by a Condition that does not have a verificationStatus of 'refuted' or `entered-in-error`.
+ * @see http://hl7.org/fhir/R4/valueset-condition-ver-status.html
+ * @param CondList - a list of Conditions
+ * @returns {List<Condition>} a list of valid Conditions, or null if null was passed in
+ */
+define function ValidCondition(CondList List<Condition>):
+  CondList C where C.verificationStatus !~ "Condition Refuted"
+    and C.verificationStatus !~ "Condition Entered in Error"
 
 /*******************************************************************************
 * DiagnosticReport Functions
@@ -303,7 +321,7 @@ define function MedicationAdministrationDate(a FHIR.MedicationAdministration):
 * Medication administrations that are completed, according to a prescription.
 * @see https://www.hl7.org/fhir/valueset-medication-admin-status.html
 * @param MedList - a list of MedicationAdministrations
-* @returns {List<MedicationRequest>} a list of completed medication administrations, or null if null was passed in
+* @returns {List<MedicationAdministration>} a list of completed medication administrations, or null if null was passed in
 */
 define function CompletedMedicationAdministration(MedList List<MedicationAdministration>):
   MedList M
@@ -328,7 +346,7 @@ define function CompletedDiagnosticReport(DiagnosticReportList List<DiagnosticRe
 * TODO: Rename to LookBack once the execution engine supports overloaded functions.
 * @param MedList - a list of MedicationAdministrations
 * @param LookBack - the lookback period for when the medication was prescribed
-* @returns {List<MedicationStatement>} a list of MedicationAdministrations prescribed in the look back period, or null if null
+* @returns {List<MedicationAdministration>} a list of MedicationAdministrations prescribed in the look back period, or null if null
 * was passed in
 */
 define function LookBack(MedList List<MedicationAdministration>, LookBack System.Quantity):
@@ -347,12 +365,23 @@ define function CompletedMedicationRequest(MedList List<MedicationRequest>):
   MedList M
     where M.status.value = 'completed'
 
+/**
+* Medication requests with an intent of 'order', or one of the sub-categories of 'order'.
+* @see http://hl7.org/fhir/R4/valueset-medicationrequest-intent.html
+* @param MedList - a list of MedicationRequests
+* @returns {List<MedicationRequest>} a list of medication requests with an intent of 'order', or null if null was passed in
+*/
+define function MedicationRequestsWithOrderIntent(MedList List<MedicationRequest>):
+  MedList M
+    where M.intent.value = 'order'
+      or M.intent.value = 'original-order'
+      or M.intent.value = 'reflex-order'
+      or M.intent.value = 'filler-order'
+      or M.intent.value = 'instance-order'
 
 /*******************************************************************************
 * Observation Functions
 *******************************************************************************/
-
-
 
 
 /*******************************************************************************
@@ -406,3 +435,17 @@ define function DateOfFirstProcedure(ProcList List<Procedure>):
       ProcList
     )
   )
+
+/*******************************************************************************
+* Immunization Functions
+*******************************************************************************/
+
+/**
+* Immunizations that are completed.
+* @see http://hl7.org/fhir/R4/valueset-immunization-status.html
+* @param ImmunizationList - a list of Immunizations
+* @returns {List<Immunization>} a list of completed immunizations, or null if null was passed in
+*/
+define function CompletedImmunization(ImmunizationList List<Immunization>):
+  ImmunizationList I
+    where I.status.value = 'completed'

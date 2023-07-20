@@ -1,6 +1,7 @@
 {
    "library" : {
       "annotation" : [ {
+         "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
       } ],
@@ -33,15 +34,11 @@
             "version" : "4.0.1"
          }, {
             "localIdentifier" : "Dash",
-            "path" : "DisplayCervicalCancerMedicalHistory",
+            "path" : "DashboardLibrary",
             "version" : "1.0.0"
          }, {
             "localIdentifier" : "Common",
             "path" : "CCSMCommonFunctions",
-            "version" : "1.0.0"
-         }, {
-            "localIdentifier" : "Entry",
-            "path" : "TopLevelScreeningLibrary",
             "version" : "1.0.0"
          } ]
       },
@@ -161,9 +158,9 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
+               "type" : "Not",
                "operand" : {
-                  "type" : "ToList",
+                  "type" : "IsNull",
                   "operand" : {
                      "name" : "MostRecent",
                      "libraryName" : "C3F",
@@ -216,6 +213,32 @@
                }
             }
          }, {
+            "name" : "IsSymptomatic",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "name" : "HasRecentAbnormalBleedingCondition",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "HasRecentAbnormalBleedingEncounter",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }, {
+                     "name" : "HasRecentAbnormalBleedingObservation",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "RecentlyRespondedYesToAbnormalBleedingQuestion",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "IsIncluded",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -223,29 +246,11 @@
                "type" : "And",
                "operand" : [ {
                   "name" : "FemaleorTransgenderMale",
-                  "libraryName" : "Entry",
+                  "libraryName" : "Dash",
                   "type" : "ExpressionRef"
                }, {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "Or",
-                     "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "name" : "HasRecentAbnormalBleedingCondition",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "HasRecentAbnormalBleedingEncounter",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "name" : "HasRecentAbnormalBleedingObservation",
-                        "type" : "ExpressionRef"
-                     } ]
-                  }, {
-                     "name" : "RecentlyRespondedYesToAbnormalBleedingQuestion",
-                     "type" : "ExpressionRef"
-                  } ]
+                  "name" : "IsSymptomatic",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -288,24 +293,28 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "LookBack",
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "name" : "DiagnosticReportDate",
                   "libraryName" : "Common",
                   "type" : "FunctionRef",
                   "operand" : [ {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "MostRecentNilmCytology",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "value" : 12,
-                     "unit" : "months",
-                     "type" : "Quantity"
+                     "name" : "MostRecentNilmCytology",
+                     "type" : "ExpressionRef"
                   } ]
-               }
+               }, {
+                  "type" : "ToDateTime",
+                  "operand" : {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "type" : "Today"
+                     }, {
+                        "value" : 12,
+                        "unit" : "months",
+                        "type" : "Quantity"
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "MostRecentNegativeHpv",
@@ -671,12 +680,39 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "type" : "ToList",
-                  "operand" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "M",
+                  "expression" : {
                      "name" : "MostRecentCoincidentNilmCytologyAndNegativeHpvReport",
                      "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "C",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "H",
+                              "scope" : "M",
+                              "type" : "Property"
+                           }
+                        }
+                     } ]
                   }
                }
             }
@@ -792,49 +828,76 @@
                } ]
             }
          }, {
+            "name" : "DefaultSymptomaticRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
             "name" : "Age21YearsAndYoungerRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
             }
          }, {
             "name" : "NilmCytologyWithinLast12MonthsRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
             }
          }, {
             "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
-               "type" : "Literal"
+               "name" : "DefaultSymptomaticRecommendation",
+               "type" : "ExpressionRef"
             }
          }, {
             "name" : "VisibleLesionRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam with appropriate tissue sampling is indicated (e.g., cervical cytology and/or biopsy).",
-               "type" : "Literal"
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "ElseRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Per the ASCCP Clinical Practice Statement titled \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding\" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.",
-               "type" : "Literal"
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "RecommendationText",
@@ -843,12 +906,8 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "IsIncludedAndNotExcluded",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
                },
                "then" : {
                   "type" : "Case",
@@ -895,10 +954,16 @@
                   }
                },
                "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "As",
                   "operand" : {
                      "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "name" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "NamedTypeSpecifier"
+                     }
                   }
                }
             }
@@ -909,16 +974,12 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Boolean",
-                  "type" : "As",
+                  "type" : "Not",
                   "operand" : {
-                     "type" : "Not",
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationText",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "RecommendationText",
+                        "type" : "ExpressionRef"
                      }
                   }
                },
@@ -936,18 +997,96 @@
                }
             }
          }, {
+            "name" : "ActionShort",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "See Details",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "Recommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "name" : "IsIncludedAndNotExcluded",
+                  "type" : "ExpressionRef"
+               },
+               "then" : {
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "short",
+                     "value" : {
+                        "name" : "ActionShort",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "date",
+                     "value" : {
+                        "type" : "Today"
+                     }
+                  }, {
+                     "name" : "details",
+                     "value" : {
+                        "name" : "RecommendationText",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "group",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "Screening: Symptomatic",
+                        "type" : "Literal"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "group",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "Errors",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "type" : "List"
-               }, {
-                  "name" : "Errors",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               } ]
+               "type" : "List"
             }
          }, {
             "name" : "ErrorsHaveOccurred",

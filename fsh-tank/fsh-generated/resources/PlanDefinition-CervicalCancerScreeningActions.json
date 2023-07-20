@@ -1,0 +1,352 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "CervicalCancerScreeningActions",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
+    ]
+  },
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningActions",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
+      "valueCode": "executable"
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeRepresentationLevel",
+      "valueCode": "structured"
+    }
+  ],
+  "version": "1.0.0",
+  "date": "2021-09-14",
+  "status": "draft",
+  "experimental": true,
+  "publisher": "The Health FFRDC, operated by The MITRE Corporation, in support of the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention.",
+  "copyright": "(C) 2021 The MITRE Corporation. All Rights Reserved. Approved for Public Release: 21-1556. Distribution Unlimited. Unless otherwise noted, this work is available under an Apache 2.0 license. It was produced by the MITRE Corporation for the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention in accordance with the Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.",
+  "approvalDate": "2021-09-14",
+  "lastReviewDate": "2021-09-14",
+  "author": [
+    {
+      "name": "The Health FFRDC, operated by The MITRE Corporation, in support of the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention."
+    }
+  ],
+  "editor": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "reviewer": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "endorser": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "name": "CervicalCancerScreeningActions",
+  "title": "CervicalCancerScreeningActions",
+  "type": {
+    "coding": [
+      {
+        "code": "eca-rule",
+        "system": "http://terminology.hl7.org/CodeSystem/plan-definition-type",
+        "display": "ECA Rule"
+      }
+    ]
+  },
+  "description": "Natural language description of the plan definition",
+  "purpose": "Why this plan definition is defined",
+  "usage": "Describes the clinical usage of the plan",
+  "topic": [
+    {
+      "text": "Insert mesh terms here"
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "citation",
+      "label": "USPSTF Recommendation",
+      "display": "U.S. Preventive Services Task Force's final recommendation statement on cervical cancer screening (August 21, 2018)"
+    }
+  ],
+  "library": [
+    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
+  ],
+  "action": [
+    {
+      "title": "Screening Decision Aids",
+      "description": "Screening Decision Aids",
+      "textEquivalent": "Screening Decision Aids",
+      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids|1.0.0",
+      "dynamicValue": [
+        {
+          "path": "payload[0].content.ofType(string)",
+          "expression": {
+            "language": "text/cql",
+            "expression": "DecisionAids",
+            "reference": "Library/ScreeningLibrary|1.0"
+          }
+        }
+      ],
+      "documentation": [
+        {
+          "type": "citation",
+          "label": "Screening: Average Risk",
+          "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+          "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+          "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+        },
+        {
+          "type": "citation",
+          "label": "Screening: Symptomatic",
+          "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+          "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+          "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+        },
+        {
+          "type": "citation",
+          "label": "Screening: DES Exposure",
+          "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+          "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+        },
+        {
+          "type": "citation",
+          "label": "Screening: DES Exposure",
+          "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+          "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+        },
+        {
+          "type": "citation",
+          "label": "Screening: Immunocompromised",
+          "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+          "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+          "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+        },
+        {
+          "type": "citation",
+          "label": "Screening: Immunocompromised",
+          "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+          "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+        }
+      ]
+    },
+    {
+      "title": "Recommended Screening Activities",
+      "description": "Recommended Screening Activities",
+      "textEquivalent": "Recommended Screening Activities",
+      "groupingBehavior": "visual-group",
+      "selectionBehavior": "at-most-one",
+      "action": [
+        {
+          "title": "Primary HPV",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql",
+                "expression": "RecommendPrimaryHpv",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "dynamicValue": [
+            {
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "PrimaryHpvOrderCode",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+          "documentation": [
+            {
+              "type": "citation",
+              "label": "Screening: Average Risk",
+              "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+              "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+              "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Symptomatic",
+              "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+              "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+              "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+              "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+              "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+              "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+              "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+              "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+            }
+          ]
+        },
+        {
+          "title": "Cytology",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql",
+                "expression": "RecommendCytology",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "dynamicValue": [
+            {
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "CytologyOrderCode",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+          "documentation": [
+            {
+              "type": "citation",
+              "label": "Screening: Average Risk",
+              "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+              "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+              "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Symptomatic",
+              "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+              "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+              "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+              "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+              "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+              "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+              "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+              "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+            }
+          ]
+        },
+        {
+          "title": "Cotesting",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql",
+                "expression": "RecommendCotesting",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "dynamicValue": [
+            {
+              "path": "code",
+              "expression": {
+                "language": "text/cql",
+                "expression": "CotestingOrderCode",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+          "documentation": [
+            {
+              "type": "citation",
+              "label": "Screening: Average Risk",
+              "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+              "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+              "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Symptomatic",
+              "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+              "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+              "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+              "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: DES Exposure",
+              "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+              "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+              "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+              "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+            },
+            {
+              "type": "citation",
+              "label": "Screening: Immunocompromised",
+              "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+              "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

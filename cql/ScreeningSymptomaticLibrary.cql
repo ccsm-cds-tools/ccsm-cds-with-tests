@@ -1,14 +1,14 @@
-/*  
+/*
   Library: Cervical Cancer Screening for Symptomatic Individuals
   Author: CMS Alliance to Modernize Healthcare, operated by THE MITRE Corporation.
 
-  (C) 2021 The MITRE Corporation. All Rights Reserved. 
-  Approved for Public Release: 21-1556. 
+  (C) 2021 The MITRE Corporation. All Rights Reserved.
+  Approved for Public Release: 21-1556.
   Distribution Unlimited.
 
-  Unless otherwise noted, this work is available under an Apache 2.0 license. 
-  It was produced by the MITRE Corporation for the Division of Cancer Prevention 
-  and Control, Centers for Disease Control and Prevention in accordance with the 
+  Unless otherwise noted, this work is available under an Apache 2.0 license.
+  It was produced by the MITRE Corporation for the Division of Cancer Prevention
+  and Control, Centers for Disease Control and Prevention in accordance with the
   Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.
 */
 
@@ -18,9 +18,8 @@ using FHIR version '4.0.1'
 
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
-include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
+include DashboardLibrary version '1.0.0' called Dash
 include CCSMCommonFunctions version '1.0.0' called Common
-include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
 // CODE SYSTEMS, VALUE SETS, AND CODES
@@ -48,12 +47,12 @@ define IsAge21YearsOrYounger:
 //------------------------------------------------------------------------------
 // Sex at birth = Female
 //   OR Gender identity = Transgender Male
-// AND     
-// Diagnosis of Abnormal uterine/vaginal bleeding (active, recurrence, relapse) 
-//   OR Abnormal uterine/vaginal bleeding listed as the reason for an encounter (triaged, in-progress, completed) 
-//   OR Abnormal uterine/vaginal bleeding observation (final, amended, corrected) 
-//   OR response to "Is the patient experiencing abnormal uterine or vaginal bleeding today?" = "Yes" 
-// AND 
+// AND
+// Diagnosis of Abnormal uterine/vaginal bleeding (active, recurrence, relapse)
+//   OR Abnormal uterine/vaginal bleeding listed as the reason for an encounter (triaged, in-progress, completed)
+//   OR Abnormal uterine/vaginal bleeding observation (final, amended, corrected)
+//   OR response to "Is the patient experiencing abnormal uterine or vaginal bleeding today?" = "Yes"
+// AND
 // Date recorded is <= 24 hours ago
 
 define HasRecentAbnormalBleedingCondition:
@@ -81,24 +80,23 @@ define HasRecentAbnormalBleedingObservation:
   )
 
 define RecentlyRespondedYesToAbnormalBleedingQuestion:
-  Exists(
-    C3F.MostRecent(
-      C3F.ObservationLookBack(
-        Dash.ResponsesToAbnormalBleedingQuestion R
-          where R.value ~ Dash."Yes",
-        SymptomaticLookBack
-      )
+  C3F.MostRecent(
+    C3F.ObservationLookBack(
+      Dash.ResponsesToAbnormalBleedingQuestion R
+        where R.value ~ Dash."Yes",
+      SymptomaticLookBack
     )
-  )
+  ) is not null
+
+define IsSymptomatic:
+  HasRecentAbnormalBleedingCondition or
+  HasRecentAbnormalBleedingEncounter or
+  HasRecentAbnormalBleedingObservation or
+  RecentlyRespondedYesToAbnormalBleedingQuestion
 
 define IsIncluded:
-  Entry.FemaleorTransgenderMale and
-  (
-    HasRecentAbnormalBleedingCondition or
-    HasRecentAbnormalBleedingEncounter or
-    HasRecentAbnormalBleedingObservation or
-    RecentlyRespondedYesToAbnormalBleedingQuestion
-  )
+  Dash.FemaleorTransgenderMale and
+  IsSymptomatic
 
 //------------------------------------------------------------------------------
 // EXCLUSIONS
@@ -118,12 +116,12 @@ define MostRecentNilmCytology:
   Dash.MostRecentNilmCytology
 
 define HasNilmCytologyWithinLast12Months:
-  Exists(Common.LookBack(Dash.MostRecentNilmCytology, 12 months))
+  Common.DiagnosticReportDate(MostRecentNilmCytology) >= Today() - 12 months
 
 define MostRecentNegativeHpv:
   Dash.MostRecentNegativeHpv
 
-define MostRecentCoincidentNilmCytologyAndNegativeHpvReport: 
+define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
   from "MostRecentNilmCytology" C, "MostRecentNegativeHpv" H
   where
     Common.DiagnosticReportDate(C) within 3 years of Today() and
@@ -131,7 +129,10 @@ define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
     Common.CoincidentDiagnosticReports(C, H)
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
-  Exists(MostRecentCoincidentNilmCytologyAndNegativeHpvReport)
+  MostRecentCoincidentNilmCytologyAndNegativeHpvReport M
+  return
+      M.C is not null and M.H is not null
+
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(
@@ -157,20 +158,33 @@ define HasVisibleCervicalOrVaginalLesion:
   Exists(RecentVisibleLesionObservations) or
   Exists(RecentYesResponsesToVisibleLesionQuestion)
 
+define DefaultSymptomaticRecommendation:
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  }
+
 define Age21YearsAndYoungerRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  DefaultSymptomaticRecommendation
 
 define NilmCytologyWithinLast12MonthsRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  DefaultSymptomaticRecommendation
 
 define NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam is indicated. Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
-
+  DefaultSymptomaticRecommendation
+  
 define VisibleLesionRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam with appropriate tissue sampling is indicated (e.g., cervical cytology and/or biopsy).'
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+  }
 
 define ElseRecommendation:
-  'Per the ASCCP Clinical Practice Statement titled "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding" a diagnostic exam and is indicated. Consider cervical cytology testing as a component of the diagnostic work up.'
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+  }
+
 
 define RecommendationText:
   if IsIncludedAndNotExcluded then
@@ -189,13 +203,24 @@ define Citation:
   else
     null
 
+define ActionShort:
+  'See Details'
+
+define Recommendation:
+  if IsIncludedAndNotExcluded then {
+    short: ActionShort,
+    date: Today(),
+    details: RecommendationText,
+    group: 'Screening: Symptomatic'
+  }
+  else null
+
 //------------------------------------------------------------------------------
 // ERRORS
 //------------------------------------------------------------------------------
 
 define Errors:
-  {} union
-  Dash.Errors
+  {}
 
 define ErrorsHaveOccurred:
   Exists(Errors)

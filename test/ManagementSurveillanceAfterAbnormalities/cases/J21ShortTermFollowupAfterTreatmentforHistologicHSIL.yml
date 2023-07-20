@@ -1,0 +1,31 @@
+---
+name: J2.1 Short-Term Follow-up After Treatment for Histologic HSIL 
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *HistologicHSILThisYear
+- 
+  $iterate: *HasTreatmentThisYear
+
+results:
+  Recommendation: 
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Management Surveillance (J.2.1)'
+    details:
+    - 'Primary HPV testing or co-testing is preferred at 6 months regardless of the margin status of the excisional specimen.'
+    - 'Follow-up at 6 months with colposcopy and ECC is acceptable*.'
+    - '*Refer to ASCCP Consensus Guideline 2019 Section J.2'
+  WhichRarityMadeTheRecommendation: 4

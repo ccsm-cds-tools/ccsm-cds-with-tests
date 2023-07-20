@@ -18,9 +18,8 @@ using FHIR version '4.0.1'
 
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include FHIRHelpers version '4.0.1' called FHIRHelpers
-include DisplayCervicalCancerMedicalHistory version '1.0.0' called Dash
+include DashboardLibrary version '1.0.0' called Dash
 include CCSMCommonFunctions version '1.0.0' called Common
-include TopLevelScreeningLibrary version '1.0.0' called Entry
 
 //------------------------------------------------------------------------------
 // CODE SYSTEMS, VALUE SETS, AND CODES
@@ -45,7 +44,7 @@ context Patient
 // Sex at birth = Female
 //    OR Gender identity = Transgender Male 
 // AND 
-// Date of Birth AFTER 01/01/1980
+// Date of Birth BEFORE 01/01/1980
 // AND
 // Diagnosis of DES Exposure In Utero (accept all clinicalStatus values)
 //    OR DES Exposure In Utero observation (final, amended, corrected)
@@ -73,7 +72,7 @@ define WasExposedToDesInUtero:
 
 // Top Level Inclusion
 define IsIncluded:
-  Entry.FemaleorTransgenderMale and
+  Dash.FemaleorTransgenderMale and
   BornOnOrBeforeBirthdayThreshold and
   WasExposedToDesInUtero
 
@@ -114,7 +113,10 @@ define IsIncludedAndNotExcluded:
 
 define RecommendationText:
   if IsIncludedAndNotExcluded then
-    'Consider individualized care for this patient due to a gap in evidence-based care recommendations for individuals with DES exposure in utero. Previous guidelines (i.e., "Antenatal Exposure to DES: Lessons Learned...Future Concerns" CME Review Article and the ACOG Practice Bulletin #168 "Cervical Cancer Screening and Prevention”) recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
+    { 
+      'Consider individualized care for this patient.',
+      'ACOG guidelines recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
+    }
   else
     null
 
@@ -124,13 +126,24 @@ define Citation:
   else
     null
 
+define ActionShort:
+  'See Details'
+
+define Recommendation:
+  if IsIncludedAndNotExcluded then {
+    short: ActionShort,
+    date: Today(),
+    details: RecommendationText,
+    group: 'Screening: DES Exposure'
+  }
+  else null
+
 //------------------------------------------------------------------------------
 // ERRORS
 //------------------------------------------------------------------------------
 
 define Errors:
-  {} union
-  Dash.Errors
+  {}
 
 define ErrorsHaveOccurred:
   Exists(Errors)

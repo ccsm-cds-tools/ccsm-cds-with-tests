@@ -1,0 +1,47 @@
+---
+name: G3.1 Absent Transformation Zone on Screening Cytology in Patient Age 21-30 (obs)
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  result:
+  - reference: Observation/1
+  - reference: Observation/2
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: Observation
+  id: 1
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  valueCodeableConcept: SNOMEDCT#412716005 Cervical smear transformation zone cells absent (situation)
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: Observation
+  id: 2
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  valueCodeableConcept: SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+
+results:
+  Recommendation: 
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Rare Cytology (G.3.1)'
+    details:
+    - 'Absent transformation zone does not affect the interpretation of results. Routine screening is recommended.'
+  WhichRarityMadeTheRecommendation: 1

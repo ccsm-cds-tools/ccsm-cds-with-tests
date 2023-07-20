@@ -1,0 +1,36 @@
+---
+name: Younger Than 25 Histology Less than CIN2 Preceded by Cytology Asc-H 1c
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2000-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
+  effectiveDateTime: 2021-01-01
+- 
+  $iterate: *HistologyCin1OrNormalThisYear
+
+results:
+  Recommendation: 
+    short: 'Cytology'
+    date: '2022-05-01'
+    group: 'Younger Than 25 (K.1.3)'
+    details:
+    - 'Observation is recommended with cytology in 1 year.'
+    - 'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*'
+    - '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
+  WhichPopulationMadeTheRecommendation: 5

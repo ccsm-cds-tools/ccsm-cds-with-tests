@@ -1,0 +1,68 @@
+---
+name: Completed 3 annual cytology tests (obs)
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: Condition
+  clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+  verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+  code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
+  onsetDateTime: 2017-05-01
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectivePeriod:
+    start: 2021-05-01
+    end: 2021-05-01
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  result:
+  - reference: Observation/c1ea3ca9-bb14-a6e7-055c-be10173272fb
+  effectiveDateTime: 2020-05-01
+-
+  resourceType: Observation
+  id: c1ea3ca9-bb14-a6e7-055c-be10173272fb
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  valueCodeableConcept: SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2020-05-01
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2019-05-01
+
+results:
+  IsIncludedAndNotExcluded: true
+  DateOfFirstNilmCytologyAfterImmunosuppressionOnset: '2019-05-01T00:00:00.000+00:00'
+  DateOfSecondNilmCytologyAfterImmunosuppressionOnset: '2020-05-01T00:00:00.000+00:00' 
+  DateOfThirdNilmCytologyAfterImmunosuppressionOnset: '2021-05-01T00:00:00.000+00:00'
+  NeedFirstOfThreeAnnualCytologyTests: false
+  NeedSecondOfThreeAnnualCytologyTests: false
+  NeedThirdOfThreeAnnualCytologyTests: false
+  CompletedAnnualCytologyTestSequence: true
+  TestingCadence:
+    value: 3
+    unit: years
+  ProposedDateOfNextScreening: '2024-05-01T00:00:00.000+00:00'
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediateCotesting: false

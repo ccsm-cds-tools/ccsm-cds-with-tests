@@ -1,0 +1,31 @@
+---
+name: Younger Than 25 Cytologic ASCUS or Above After CIN1 or Less than CIN1 Preceded by Cytologic ASCH AGC AIS or HSIL
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2000-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *ASCHOrHSILLastYear
+- 
+  $iterate: *HistologyCin1OrNormalLastYear
+- 
+  $iterate: *ASCUSOrAboveOrAISThisYear
+
+results:
+  Recommendation: 
+    short: 'Colposcopy'
+    date: '2021-06-02'
+    group: 'Younger Than 25 (K.1.3)'
+    details:
+    - 'Colposcopy is recommended.'
+  WhichPopulationMadeTheRecommendation: 5
