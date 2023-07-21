@@ -277,14 +277,30 @@ define MostRecentBiopsyResult:
 define MostRecentBiopsyReferralPeriod:
   Interval[MostRecentBiopsyReport.date - BiopsyReferralPeriod, MostRecentBiopsyReport.date)
 
-define ReferringHpvResult:
+define ReferringHpvReport:
   if MostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
-    MostRecentHpvResult
+    MostRecentHpvReport
   else if SecondMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
-    SecondMostRecentHpvResult
+    SecondMostRecentHpvReport
   else if ThirdMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
-    ThirdMostRecentHpvResult
+    ThirdMostRecentHpvReport
   else if FourthMostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
+    FourthMostRecentHpvReport
+  else
+    null
+
+define ReferringHpvResult:
+  if ReferringHpvReport is not null then
+    ReferringHpvReport.riskTableInput
+  else
+    'ALL'
+
+define SecondReferringHpvReport:
+  if SecondMostRecentHpvReport.date before ReferringHpvReport.date then
+    SecondMostRecentHpvResult
+  else if ThirdMostRecentHpvReport.date before ReferringHpvReport.date then
+    ThirdMostRecentHpvResult
+  else if FourthMostRecentHpvReport.date before ReferringHpvReport.date then
     FourthMostRecentHpvResult
   else
     'ALL'
@@ -298,17 +314,23 @@ define MostRecentCytologyBeforeBiopsy:
 define MostRecentCytologyResultBeforeBiopsy:
   MostRecentCytologyBeforeBiopsy.riskTableInput
 
-define ReferringCytologyResult:
+define ReferringCytologyReport:
   if MostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
-    MostRecentCytologyCotestResult
+    MostRecentCytologyCotest
   else if SecondMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
-    SecondMostRecentCytologyCotestResult
+    SecondMostRecentCytologyCotest
   else if ThirdMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
-    ThirdMostRecentCytologyCotestResult
+    ThirdMostRecentCytologyCotest
   else if FourthMostRecentCytologyCotest.date included in MostRecentBiopsyReferralPeriod then
-    FourthMostRecentCytologyCotestResult
+    FourthMostRecentCytologyCotest
   else if MostRecentCytologyBeforeBiopsy is not null then
-    MostRecentCytologyResultBeforeBiopsy
+    MostRecentCytologyBeforeBiopsy
+  else
+    'ALL'
+
+define ReferringCytologyResult:
+  if ReferringCytologyReport is not null then
+    ReferringHpvReport.riskTableInput
   else
     'ALL'
 

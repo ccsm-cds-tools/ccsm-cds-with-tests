@@ -279,7 +279,7 @@ define function AnyHpv(hpvVal String):
   else if hpvVal = 'HPV16-, HPV18+' then 'HPV-positive'
   else hpvVal
 
-define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
+define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, preBiopsy2HpvVal String, preBiopsy2PapVal String, biopsyVal String):
   ( GetRowTable3(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal) ) R
     return {
       action: R.action,
