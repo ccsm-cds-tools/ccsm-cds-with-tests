@@ -246,6 +246,27 @@ define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal 
           riskNow: convert T.value.immediate to Decimal,
           risk5yr: convert T.value.five_year to Decimal
         }
+    ),
+      Coalesce( // Case 4: Current cytology is fully specified, no leading space
+      SurveillanceTable T
+      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
+        and T.history = ScreeningText(prevHpvVal, prevPapVal, '/', 'none')
+        and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
+        and T.pap = currPapVal
+        return {
+          action: T.management,
+          history: '',
+          prev2: T.history_prev_2,
+          prev1: T.history,
+          referral: '',
+          biopsy: '',
+          preColposcopyResult: '',
+          postColposcopyPastHistory: '',
+          hpv: T.hpv,
+          cyto: T.pap,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
     )
   )
 
