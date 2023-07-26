@@ -964,42 +964,6 @@
                }
             } ]
          }, {
-            "name" : "AscusAlternativeSpelling",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "type" : "FunctionDef",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "type" : "Equal",
-                  "operand" : [ {
-                     "name" : "ascus",
-                     "type" : "OperandRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "ASC-US",
-                     "type" : "Literal"
-                  } ]
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "ASC_US",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "NULL",
-                  "type" : "Literal"
-               }
-            },
-            "operand" : [ {
-               "name" : "ascus",
-               "operandTypeSpecifier" : {
-                  "name" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "NamedTypeSpecifier"
-               }
-            } ]
-         }, {
             "name" : "HighGradeOrAscusLsilPap",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1032,7 +996,7 @@
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "ASC-US, LSIL",
+                  "value" : "ASC-US/LSIL",
                   "type" : "Literal"
                },
                "else" : {
@@ -1464,209 +1428,6 @@
                               "scope" : "T",
                               "type" : "Property"
                            }, {
-                              "name" : "AscusAlternativeSpelling",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "currPapVal",
-                                 "type" : "OperandRef"
-                              } ]
-                           } ]
-                        } ]
-                     },
-                     "return" : {
-                        "expression" : {
-                           "type" : "Tuple",
-                           "element" : [ {
-                              "name" : "action",
-                              "value" : {
-                                 "path" : "management",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }
-                           }, {
-                              "name" : "history",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "prev2",
-                              "value" : {
-                                 "path" : "history_prev_2",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }
-                           }, {
-                              "name" : "prev1",
-                              "value" : {
-                                 "path" : "history",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }
-                           }, {
-                              "name" : "referral",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "biopsy",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "preColposcopyResult",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "postColposcopyPastHistory",
-                              "value" : {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "",
-                                 "type" : "Literal"
-                              }
-                           }, {
-                              "name" : "hpv",
-                              "value" : {
-                                 "path" : "hpv",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }
-                           }, {
-                              "name" : "cyto",
-                              "value" : {
-                                 "path" : "pap",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }
-                           }, {
-                              "name" : "riskNow",
-                              "value" : {
-                                 "path" : "immediate",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "path" : "value",
-                                    "scope" : "T",
-                                    "type" : "Property"
-                                 }
-                              }
-                           }, {
-                              "name" : "risk5yr",
-                              "value" : {
-                                 "path" : "five_year",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "path" : "value",
-                                    "scope" : "T",
-                                    "type" : "Property"
-                                 }
-                              }
-                           } ]
-                        }
-                     }
-                  } ]
-               }, {
-                  "type" : "Coalesce",
-                  "operand" : [ {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "T",
-                        "expression" : {
-                           "name" : "SurveillanceTable",
-                           "type" : "ExpressionRef"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "where" : {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "path" : "history_prev_2",
-                                    "scope" : "T",
-                                    "type" : "Property"
-                                 }, {
-                                    "name" : "ScreeningText",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "prev2HpvVal",
-                                       "type" : "OperandRef"
-                                    }, {
-                                       "name" : "prev2PapVal",
-                                       "type" : "OperandRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "/",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "none",
-                                       "type" : "Literal"
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "Equal",
-                                 "operand" : [ {
-                                    "path" : "history",
-                                    "scope" : "T",
-                                    "type" : "Property"
-                                 }, {
-                                    "name" : "historyLeadingSpace",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "ScreeningText",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "prevHpvVal",
-                                          "type" : "OperandRef"
-                                       }, {
-                                          "name" : "prevPapVal",
-                                          "type" : "OperandRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "/",
-                                          "type" : "Literal"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "none",
-                                          "type" : "Literal"
-                                       } ]
-                                    } ]
-                                 } ]
-                              } ]
-                           }, {
-                              "type" : "Equal",
-                              "operand" : [ {
-                                 "path" : "hpv",
-                                 "scope" : "T",
-                                 "type" : "Property"
-                              }, {
-                                 "name" : "hpv18PlusAlternativeSpelling",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "currHpvVal",
-                                    "type" : "OperandRef"
-                                 } ]
-                              } ]
-                           } ]
-                        }, {
-                           "type" : "Equal",
-                           "operand" : [ {
-                              "path" : "pap",
-                              "scope" : "T",
-                              "type" : "Property"
-                           }, {
                               "name" : "HighGradeOrAscusLsilPap",
                               "type" : "FunctionRef",
                               "operand" : [ {
@@ -1873,6 +1634,201 @@
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "ALL",
                               "type" : "Literal"
+                           } ]
+                        } ]
+                     },
+                     "return" : {
+                        "expression" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "action",
+                              "value" : {
+                                 "path" : "management",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "history",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "prev2",
+                              "value" : {
+                                 "path" : "history_prev_2",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "prev1",
+                              "value" : {
+                                 "path" : "history",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "referral",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "biopsy",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "preColposcopyResult",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "postColposcopyPastHistory",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "hpv",
+                              "value" : {
+                                 "path" : "hpv",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "cyto",
+                              "value" : {
+                                 "path" : "pap",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "riskNow",
+                              "value" : {
+                                 "path" : "immediate",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "value",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              }
+                           }, {
+                              "name" : "risk5yr",
+                              "value" : {
+                                 "path" : "five_year",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "value",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }
+                              }
+                           } ]
+                        }
+                     }
+                  } ]
+               }, {
+                  "type" : "Coalesce",
+                  "operand" : [ {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "T",
+                        "expression" : {
+                           "name" : "SurveillanceTable",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "path" : "history_prev_2",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }, {
+                                    "name" : "ScreeningText",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "prev2HpvVal",
+                                       "type" : "OperandRef"
+                                    }, {
+                                       "name" : "prev2PapVal",
+                                       "type" : "OperandRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "/",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "none",
+                                       "type" : "Literal"
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "path" : "history",
+                                    "scope" : "T",
+                                    "type" : "Property"
+                                 }, {
+                                    "name" : "ScreeningText",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "prevHpvVal",
+                                       "type" : "OperandRef"
+                                    }, {
+                                       "name" : "prevPapVal",
+                                       "type" : "OperandRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "/",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "none",
+                                       "type" : "Literal"
+                                    } ]
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "path" : "hpv",
+                                 "scope" : "T",
+                                 "type" : "Property"
+                              }, {
+                                 "name" : "hpv18PlusAlternativeSpelling",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "currHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "path" : "pap",
+                              "scope" : "T",
+                              "type" : "Property"
+                           }, {
+                              "name" : "currPapVal",
+                              "type" : "OperandRef"
                            } ]
                         } ]
                      },
@@ -3438,7 +3394,7 @@
                   },
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : " HPV-negative/ASCUS/LSIL",
+                     "value" : " HPV-negative/ASC-US/LSIL",
                      "type" : "Literal"
                   }
                }, {
@@ -4982,7 +4938,7 @@
                },
                "then" : {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "CIN3",
+                  "value" : "CIN 2 or 3",
                   "type" : "Literal"
                },
                "else" : {

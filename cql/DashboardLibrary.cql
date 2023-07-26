@@ -215,9 +215,10 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         when c in "Normal Histology Finding" then {text: '<CIN1', rank: 2}
         when c ~ "CIN1" then {text: 'CIN1', rank: 3}
         when c ~ "CIN2" then {text: 'CIN2', rank: 4}
-        when c in "Histologic CIN3" then {text: 'CIN3', rank: 5}
-        when c in "AIS" then {text: 'AIS', rank: 6}
-        when c in "Histologic cancer" then {text: 'Cancer', rank: 7}
+        when c ~ "HSIL, Unspecified" then {text: 'HSIL, Unspecified', rank: 5}
+        when c in "Histologic CIN3" then {text: 'CIN3', rank: 6}
+        when c in "AIS" then {text: 'AIS', rank: 7}
+        when c in "Histologic cancer" then {text: 'Cancer', rank: 8}
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end
