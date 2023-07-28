@@ -305,7 +305,7 @@ define FemaleorTransgenderMale:
   Female or TransgenderMale
 
 define GenderText:
-  if Exists(GenderIdentityExtension) then Coalesce(GenderIdentityExtension.value)
+  if Exists(GenderIdentityExtension) then GenderIdentityExtension[0].value.coding[0].code.value
   else Patient.gender.value
 
 define RaceExtensionValues:
