@@ -263,7 +263,7 @@ define BirthSexMissingOrUnknown:
 
 define BirthSexCode:
   if BirthSexMissingOrUnknown then 'Unknown'
-  else Coalesce(BirthSex.value)
+  else Coalesce(BirthSex.value.value)
 
 define BirthSexText:
   if BirthSexCode = 'F' then 'Female'
@@ -306,7 +306,7 @@ define FemaleorTransgenderMale:
 
 define GenderText:
   if Exists(GenderIdentityExtension) then Coalesce(GenderIdentityExtension.value)
-  else 'Unknown'
+  else Patient.gender.value
 
 define RaceExtensionValues:
   (Patient.extension) E
@@ -324,11 +324,23 @@ define EthnicityExtensionValues:
 define EthnicityText:
   Coalesce(Coalesce(EthnicityExtensionValues))
 
+define CommunicationLanguageCode:
+  Patient.communication.language.coding.code.value[0]
+
+define CommunicationLanguageText:
+  Patient.communication.language.text.value[0]
+
+define LanguageCode:
+  Patient.language.value
+
+define LanguageTextAbbreviated:
+  Coalesce( {CommunicationLanguageCode, CommunicationLanguageText, LanguageCode} )
+
 define LanguageText:
   case
-    when Patient.language = 'el' then 'English'
-    when Patient.language = 'es' then 'Spanish'
-    when Patient.language = 'fr' then 'French'
+    when LanguageTextAbbreviated = 'el' then 'English'
+    when LanguageTextAbbreviated = 'es' then 'Spanish'
+    when LanguageTextAbbreviated = 'fr' then 'French'
     else 'Unknown'
   end
 
@@ -1187,7 +1199,7 @@ define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
     name: First(Patient.name.given) + ' ' +First(Patient.name.family),
-    id: Patient.identifier.value,
+    id: Patient.identifier,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,
     sexAtBirth: BirthSexText,
