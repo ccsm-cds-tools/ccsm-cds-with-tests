@@ -10342,16 +10342,54 @@
                      }
                   }, {
                      "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "4",
+                     "value" : "3",
                      "type" : "Literal"
                   } ]
                },
                "then" : {
-                  "type" : "Or",
+                  "type" : "And",
                   "operand" : [ {
+                     "type" : "SameOrBefore",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Indexer",
+                           "operand" : [ {
+                              "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "0",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "2",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        }, {
+                           "value" : 2,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     } ]
+                  }, {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "SameOrBefore",
+                        "type" : "In",
                         "operand" : [ {
                            "path" : "date",
                            "type" : "Property",
@@ -10367,8 +10405,32 @@
                               } ]
                            }
                         }, {
-                           "type" : "Subtract",
-                           "operand" : [ {
+                           "lowClosed" : true,
+                           "highClosed" : false,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "type" : "Indexer",
+                                    "operand" : [ {
+                                       "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "2",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }, {
+                                 "value" : 3,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -10382,115 +10444,13 @@
                                     "type" : "Literal"
                                  } ]
                               }
-                           }, {
-                              "value" : 2,
-                              "unit" : "years",
-                              "type" : "Quantity"
-                           } ]
+                           }
                         } ]
                      }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "0",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : false,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "type" : "Indexer",
-                                       "operand" : [ {
-                                          "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                          "value" : "2",
-                                          "type" : "Literal"
-                                       } ]
-                                    }
-                                 }, {
-                                    "value" : 3,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "type" : "Indexer",
-                                    "operand" : [ {
-                                       "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "2",
-                                       "type" : "Literal"
-                                    } ]
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Not",
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
                            "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "type" : "Indexer",
-                                    "operand" : [ {
-                                       "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "2",
-                                       "type" : "Literal"
-                                    } ]
-                                 }
-                              }
-                           }
-                        } ]
-                     } ]
-                  }, {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "SameOrBefore",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "type" : "Indexer",
-                              "operand" : [ {
-                                 "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "1",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        }, {
-                           "type" : "Subtract",
-                           "operand" : [ {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -10500,97 +10460,12 @@
                                     "type" : "ExpressionRef"
                                  }, {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "3",
+                                    "value" : "2",
                                     "type" : "Literal"
                                  } ]
-                              }
-                           }, {
-                              "value" : 2,
-                              "unit" : "years",
-                              "type" : "Quantity"
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "type" : "Indexer",
-                                 "operand" : [ {
-                                    "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "1",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : false,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "type" : "Indexer",
-                                       "operand" : [ {
-                                          "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                          "value" : "3",
-                                          "type" : "Literal"
-                                       } ]
-                                    }
-                                 }, {
-                                    "value" : 3,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "type" : "Indexer",
-                                    "operand" : [ {
-                                       "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "3",
-                                       "type" : "Literal"
-                                    } ]
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "type" : "Indexer",
-                                    "operand" : [ {
-                                       "name" : "NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "3",
-                                       "type" : "Literal"
-                                    } ]
-                                 }
                               }
                            }
-                        } ]
+                        }
                      } ]
                   } ]
                },
