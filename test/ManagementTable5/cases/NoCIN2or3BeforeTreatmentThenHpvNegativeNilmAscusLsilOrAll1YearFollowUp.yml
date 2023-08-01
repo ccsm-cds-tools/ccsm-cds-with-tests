@@ -1,0 +1,37 @@
+---
+name: No CIN2 or CIN3 Before Treatment Then HPV Negative NILM ASCUS LSIL or ALL - 1 Year Follow Up
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $import: *CervicalPrecancerTreatmentLastYear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-05-01
+- 
+  $iterate: *CurrentPapNilmAscusLsilOrAll
+
+results:
+  Recommendation:
+    short: 'Surveillance'
+    date: '2022-05-01'
+    group: 'Post Treatment (Table 5)'
+    details:
+    - 'Repeat testing in 1 year with primary HPV testing or co-testing is recommended.'
+    - 'If HPV testing or co-testing is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
+  WhichTableMadeTheRecommendation: 5

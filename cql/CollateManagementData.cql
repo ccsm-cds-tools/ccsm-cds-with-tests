@@ -389,9 +389,16 @@ define CervicalPrecancerTreatmentsAfterBiopsy:
     }
     sort by date
 
+define CervicalPrecancerTreatmentsSorted:
+  CervicalPrecancerTreatments T
+    return {
+      date: ToDate(Common.ProcedureDate(T))
+    }
+    sort by date
+
 define DateOfLastCervicalPrecancerTreatment:
   Last(
-    CervicalPrecancerTreatmentsAfterBiopsy
+    CervicalPrecancerTreatmentsSorted
   ).date
 
 // Look for HPV/pap tests after treatment

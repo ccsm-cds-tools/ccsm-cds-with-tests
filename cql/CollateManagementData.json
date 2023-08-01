@@ -2562,6 +2562,48 @@
                }
             }
          }, {
+            "name" : "CervicalPrecancerTreatmentsSorted",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "T",
+                  "expression" : {
+                     "name" : "CervicalPrecancerTreatments",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "ToDate",
+                           "operand" : {
+                              "name" : "ProcedureDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "T",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
             "name" : "DateOfLastCervicalPrecancerTreatment",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2571,7 +2613,7 @@
                "source" : {
                   "type" : "Last",
                   "source" : {
-                     "name" : "CervicalPrecancerTreatmentsAfterBiopsy",
+                     "name" : "CervicalPrecancerTreatmentsSorted",
                      "type" : "ExpressionRef"
                   }
                }
@@ -2592,8 +2634,11 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "type" : "ExpressionRef"
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "type" : "ExpressionRef"
+                     }
                   } ]
                },
                "then" : {
@@ -2624,8 +2669,11 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "type" : "ExpressionRef"
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "type" : "ExpressionRef"
+                     }
                   } ]
                },
                "then" : {
@@ -2656,8 +2704,11 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "type" : "ExpressionRef"
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "type" : "ExpressionRef"
+                     }
                   } ]
                },
                "then" : {
