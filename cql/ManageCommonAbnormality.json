@@ -1218,6 +1218,133 @@
                }
             }
          }, {
+            "name" : "TreatmentFollowUpRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "MostRecentHpvResultAfterTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyResultAfterTreatment",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 6,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-based testing is recommended in 6 months.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               } ],
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "CommonAbnormalityGroup",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1317,6 +1444,22 @@
                   "then" : {
                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                      "value" : "2023 JLGTD Addendum to the 2019 ASCCP Guidelines",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "TreatmentFollowUpRecommendation",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Treatment Follow-Up Recommendation",
                      "type" : "Literal"
                   }
                } ],

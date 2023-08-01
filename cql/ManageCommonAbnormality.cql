@@ -246,6 +246,7 @@ define CommonAbnormalityGroup:
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
     when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
+    // when TreatmentFollowUpRecommendation is not null then 'Treatment Follow-Up Recommendation'
     else 'N/A'
   end
 
@@ -320,6 +321,25 @@ define ErrataRecommendation:
     else
       null
   end
+
+// define TreatmentFollowUpRecommendation:
+//   case
+//     when ( // ASC-US Alone
+//       AgeInYears() >= 25 and
+//       Collate.DateOfLastCervicalPrecancerTreatment is not null and
+//       Collate.MostRecentHpvResultAfterTreatment is null and
+//       Collate.MostRecentCytologyResultAfterTreatment is null
+//     ) then
+//       {
+//         short: 'HPV',
+//         date: Collate.DateOfLastCervicalPrecancerTreatment + 6 months,
+//         details: {
+//           'HPV-based testing is recommended in 6 months.'
+//         }
+//       }
+//     else
+//       null
+//   end
 
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
@@ -504,10 +524,14 @@ define Action:
           TreatmentRecommendationText
         }
       }
-     when (
+    when (
       ErrataRecommendation is not null
     ) then
       ErrataRecommendation
+    // when (
+    //   TreatmentFollowUpRecommendation is not null
+    // ) then
+    //   TreatmentFollowUpRecommendation
     else
       null
   end
