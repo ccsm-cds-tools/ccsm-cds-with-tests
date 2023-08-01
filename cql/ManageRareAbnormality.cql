@@ -1389,12 +1389,16 @@ define HasPersistentAscHBeforeTreatment:
     false
 
 define TreatmentForHighGradeHistologyOrCytology:
-  if (MostRecentTreatment is not null) and
-    (
-      Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
-      Exists(CytologicHsilOrAgcBeforeTreatment) or
-      HasPersistentAscHBeforeTreatment
-    ) then
+  // if (MostRecentTreatment is not null) and
+  //   (
+  //     Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
+  //     Exists(CytologicHsilOrAgcBeforeTreatment) or
+  //     HasPersistentAscHBeforeTreatment
+  //   ) then
+  //   MostRecentTreatment
+  // else
+  //   null
+  if (MostRecentTreatment is not null) then
     MostRecentTreatment
   else
     null

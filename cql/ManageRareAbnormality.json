@@ -10202,38 +10202,14 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "Not",
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
                      "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "MostRecentTreatment",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }, {
-                     "type" : "Or",
-                     "operand" : [ {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "RareAbnormalityHighGradeHistologyBeforeTreatment",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "CytologicHsilOrAgcBeforeTreatment",
-                              "type" : "ExpressionRef"
-                           }
-                        } ]
-                     }, {
-                        "name" : "HasPersistentAscHBeforeTreatment",
+                        "name" : "MostRecentTreatment",
                         "type" : "ExpressionRef"
-                     } ]
-                  } ]
+                     }
+                  }
                },
                "then" : {
                   "name" : "MostRecentTreatment",
