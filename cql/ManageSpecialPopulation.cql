@@ -593,13 +593,6 @@ define RecommendationForImmunosuppressedPatients:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.4 Managing Patients After Hysterectomy
 
-define MostRecentCervixRemovalProcedureDate:
-  CCF.ProcedureDate(
-    C3F.MostRecentProcedure(
-      Dash.RemovalOfCervixProcedures
-    )
-  )
-
 define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
   Dash.RemovalOfCervixProcedures P
     where AnyTrue(
@@ -613,27 +606,6 @@ define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
           rC in Dash."AIS" or
           rC in Dash."Histologic cancer"
     )
-
-define MostRecentCervixRemovalObservationDate:
-  CCF.ObservationDate(
-    C3F.MostRecent(
-      Dash.AbsenceOfCervixObservations
-    )
-  )
-
-define MostRecentCervixRemovalDiagnosisDate:
-  CCF.Onset(
-    C3F.MostRecentCondition(
-      Dash.AbsenceOfCervixDiagnoses
-    )
-  )
-
-define CervixRemovalDate:
-  Coalesce(
-    MostRecentCervixRemovalProcedureDate,
-    MostRecentCervixRemovalObservationDate,
-    MostRecentCervixRemovalDiagnosisDate
-  )
 
 define HighGradePreCancerCervicalLesionDate:
   if Exists(Dash.CervicalPrecancerDisorders) then
@@ -678,29 +650,29 @@ define MostRecentCauseForHysterectomyDate:
     null
 
 define HysterectomyPerformedForTreatment:
-    CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate or
+    Rare.CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate or
     Exists(CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
 
 define NegativeSurveillanceTestsAfterHysterectomy: // NOTE: We should be able to refactor the LP4 Grade D Exclusions in a similar way
   Rare.SortedNegativeSurveillanceTests T
-  where T.date >= CervixRemovalDate
+  where T.date >= Rare.CervixRemovalDate
 
 define InitialIntensiveSurveillancePeriodPostHysterectomy:
   if Count(NegativeSurveillanceTestsAfterHysterectomy) >= 3 then
-    NegativeSurveillanceTestsAfterHysterectomy[2].date less than 5 years after CervixRemovalDate
+    NegativeSurveillanceTestsAfterHysterectomy[2].date less than 5 years after Rare.CervixRemovalDate
   else
     false
 
 define DateK41:
   if Count(NegativeSurveillanceTestsAfterHysterectomy) = 0 then 
-    CervixRemovalDate + 1 year
+    Rare.CervixRemovalDate + 1 year
   else
     Last(NegativeSurveillanceTestsAfterHysterectomy).date + 1 year
 
 define RecommendationForManagingPatientsAfterHysterectomy:
   case
     when ( // K4.1
-      CervixRemovalDate >= Now() - 25 years and
+      Rare.CervixRemovalDate >= Now() - 25 years and
       HysterectomyPerformedForTreatment and
       not InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then
@@ -713,7 +685,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         }
       }
     when ( // K4.2
-      CervixRemovalDate >= Now() - 25 years and
+      Rare.CervixRemovalDate >= Now() - 25 years and
       HysterectomyPerformedForTreatment and
       InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then

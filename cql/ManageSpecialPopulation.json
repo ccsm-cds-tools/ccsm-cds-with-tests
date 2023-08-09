@@ -3615,25 +3615,6 @@
                }
             }
          }, {
-            "name" : "MostRecentCervixRemovalProcedureDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ProcedureDate",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentProcedure",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "RemovalOfCervixProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3795,65 +3776,6 @@
                      }
                   }
                }
-            }
-         }, {
-            "name" : "MostRecentCervixRemovalObservationDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ObservationDate",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecent",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "AbsenceOfCervixObservations",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "MostRecentCervixRemovalDiagnosisDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Onset",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentCondition",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "AbsenceOfCervixDiagnoses",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "CervixRemovalDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "name" : "MostRecentCervixRemovalProcedureDate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCervixRemovalObservationDate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "MostRecentCervixRemovalDiagnosisDate",
-                     "type" : "ExpressionRef"
-                  }
-               } ]
             }
          }, {
             "name" : "HighGradePreCancerCervicalLesionDate",
@@ -4145,6 +4067,7 @@
                      "type" : "In",
                      "operand" : [ {
                         "name" : "CervixRemovalDate",
+                        "libraryName" : "Rare",
                         "type" : "ExpressionRef"
                      }, {
                         "lowClosed" : false,
@@ -4207,6 +4130,7 @@
                      "type" : "Property"
                   }, {
                      "name" : "CervixRemovalDate",
+                     "libraryName" : "Rare",
                      "type" : "ExpressionRef"
                   } ]
                }
@@ -4253,12 +4177,14 @@
                      "type" : "Interval",
                      "low" : {
                         "name" : "CervixRemovalDate",
+                        "libraryName" : "Rare",
                         "type" : "ExpressionRef"
                      },
                      "high" : {
                         "type" : "Add",
                         "operand" : [ {
                            "name" : "CervixRemovalDate",
+                           "libraryName" : "Rare",
                            "type" : "ExpressionRef"
                         }, {
                            "value" : 5,
@@ -4298,6 +4224,7 @@
                   "type" : "Add",
                   "operand" : [ {
                      "name" : "CervixRemovalDate",
+                     "libraryName" : "Rare",
                      "type" : "ExpressionRef"
                   }, {
                      "value" : 1,
@@ -4339,6 +4266,7 @@
                            "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "name" : "CervixRemovalDate",
+                              "libraryName" : "Rare",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "Subtract",
@@ -4408,6 +4336,7 @@
                            "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "name" : "CervixRemovalDate",
+                              "libraryName" : "Rare",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "Subtract",

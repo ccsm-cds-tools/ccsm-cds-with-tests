@@ -20,7 +20,7 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include DashboardLibrary version '1.0.0' called Dash
 include CollateManagementData version '1.1.0' called Collate
-include CCSMCommonFunctions version '1.0.0' called Common
+include CCSMCommonFunctions version '1.0.0' called CCF
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
 
 //------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ define HistologyInterpretedAsCancer:
 define CancerDiagnosisAfterMostRecentCytology:
   Exists(
     Dash.CervicalCancerDiagnoses C
-      where Common.ConditionDate(C) > MostRecentCytologyReport.date
+      where CCF.ConditionDate(C) > MostRecentCytologyReport.date
   )
 
 define AnyHpvSinceMostRecentCytology:
@@ -275,6 +275,34 @@ define AbsenceOrRemovalOfCervix:
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or
   HasAbsenceOfCervixObservations
+
+define MostRecentCervixRemovalProcedureDate:
+  CCF.ProcedureDate(
+    C3F.MostRecentProcedure(
+      Dash.RemovalOfCervixProcedures
+    )
+  )
+
+define MostRecentCervixRemovalObservationDate:
+  CCF.ObservationDate(
+    C3F.MostRecent(
+      Dash.AbsenceOfCervixObservations
+    )
+  )
+
+define MostRecentCervixRemovalDiagnosisDate:
+  CCF.Onset(
+    C3F.MostRecentCondition(
+      Dash.AbsenceOfCervixDiagnoses
+    )
+  )
+
+define CervixRemovalDate:
+  Coalesce(
+    MostRecentCervixRemovalProcedureDate,
+    MostRecentCervixRemovalObservationDate,
+    MostRecentCervixRemovalDiagnosisDate
+  )
 
 define RecommendationForRareCytology:
   case
@@ -824,6 +852,96 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )  
 
+define CervixRemovalDateIsAfterMostRecentAisBiopsy:
+  (CervixRemovalDate is not null) and 
+  CervixRemovalDate after Collate.MostRecentAisBiopsy.date
+    
+define MostRecentAisBiopsy:
+  Collate.MostRecentAisBiopsy
+
+define MostRecentTreatmentAfterAis:
+  MostRecentTreatment P
+  where CCF.ProcedureDate(P) occurs after Collate.MostRecentAisBiopsy.date
+
+define HasTreatmentAfterAis:
+  MostRecentTreatmentAfterAis is not null  
+
+// I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations
+// Severity of AIS should recommend treatment until hysterectomy is performed.
+define RecommendationForAisHistologyResults:
+  case
+    when (
+      AgeInYears() > 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      not HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
+          'If negative margins on the excisional specimen, a hysterectomy is preferred.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
+        }
+      }
+    when ( 
+      AgeInYears() > 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      HasTreatmentAfterAis and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'If negative margins on the excisional specimen, a hysterectomy is preferred.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
+          'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
+        }
+      }      
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      not HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
+          'If negative margins on the excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.',
+          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.',
+          'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
+        }
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
+          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.',
+          'If cotesting and endocervical sampling consistently negative in first 5 years, extending surveillance interval to every 3 years is acceptable.',
+          'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
+        }
+      }
+    else
+      null
+    end
+
+    
 define RecommendationForHistologyResults:
   case
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified
@@ -1219,37 +1337,6 @@ define RecommendationForHistologyResults:
           'If treatment is selected and the entire squamocolumnar junction and all lesions were fully visualized during colposcopic examination, either excision or ablation treatments are acceptable.'
         }
       }
-    // I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations 
-    when (
-      AgeInYears() > 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsAis
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.6)',
-        details: {
-          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
-          'After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS.'
-        }
-      }
-    // I.6 Management of AIS: Adoption of Society of Gynecologic Oncology Recommendations
-    when (
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsAis
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.6)',
-        details: {
-          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
-          'After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS, although fertility-sparing management for appropriately selected patients is acceptable.',
-          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.'
-        }
-      }
     else
       null
   end
@@ -1264,11 +1351,11 @@ define MostRecentTreatment:
   )
 
 define MostRecentTreatmentDate:
-  Common.ProcedureDate(MostRecentTreatment)
+  CCF.ProcedureDate(MostRecentTreatment)
 
 define TreatmentInLastYear:
   MostRecentTreatment P
-  where Common.ProcedureDate(P) >= Now() - 12 months
+  where CCF.ProcedureDate(P) >= Now() - 12 months
 
 define HasTreatmentInLastYear:
   TreatmentInLastYear is not null
@@ -1338,8 +1425,7 @@ define RareAbnormalityHighGradeHistology:
         return
           aC ~ Dash."CIN2" or
           aC in Dash."Histologic CIN3" or
-          aC ~ Dash."HSIL, Unspecified" or
-          aC in Dash."AIS"
+          aC ~ Dash."HSIL, Unspecified"
     )
 
 define RareAbnormalityHighGradeHistologyBeforeTreatment:
@@ -1403,7 +1489,7 @@ define HasTreatmentForHighGradeHistologyOrCytology:
   TreatmentForHighGradeHistologyOrCytology is not null
 
 define TreatmentForHighGradeHistologyOrCytologyDate:
-  Common.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
+  CCF.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
 
 define NegativeHrHpvTests:
   Collate.SortedHpvReports R
@@ -1584,6 +1670,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
 
 define Recommendation:
   Coalesce(
+    RecommendationForAisHistologyResults,
     RecommendationForSurveillanceAfterAbnormalities,
     RecommendationForHistologyResults,
     RecommendationForExceptionsToColposcopyThreshold,
@@ -1593,6 +1680,7 @@ define Recommendation:
 // TODO: Replace integers with textual symbol
 define WhichRarityMadeTheRecommendation:
   case
+    when RecommendationForAisHistologyResults is not null then 3
     when RecommendationForSurveillanceAfterAbnormalities is not null then 4
     when RecommendationForHistologyResults is not null then 3
     when RecommendationForExceptionsToColposcopyThreshold is not null then 2
