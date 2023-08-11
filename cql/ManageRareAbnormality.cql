@@ -1320,7 +1320,12 @@ define HistologicHsilWithin12MonthsBeforeTreatment:
     B.date 12 months or less before MostRecentTreatmentDate
 
 define HasHistologicHsilWithin12MonthsBeforeTreatment:
-  Exists(HistologicHsilWithin12MonthsBeforeTreatment)
+  Exists(HistologicHsilWithin12MonthsBeforeTreatment) or
+  (
+    MostRecentTreatment is not null and
+    Collate.ManageTreatmentWithoutPreviousBiopsy
+  )
+
 
 define PositiveHrHpvTestAfterTreatment:
   Collate.MostRecentHpvReport.date >= Now() - 12 months and
@@ -1389,16 +1394,13 @@ define HasPersistentAscHBeforeTreatment:
     false
 
 define TreatmentForHighGradeHistologyOrCytology:
-  // if (MostRecentTreatment is not null) and
-  //   (
-  //     Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
-  //     Exists(CytologicHsilOrAgcBeforeTreatment) or
-  //     HasPersistentAscHBeforeTreatment
-  //   ) then
-  //   MostRecentTreatment
-  // else
-  //   null
-  if (MostRecentTreatment is not null) then
+  if (MostRecentTreatment is not null) and
+    (
+      Exists(RareAbnormalityHighGradeHistologyBeforeTreatment) or
+      Exists(CytologicHsilOrAgcBeforeTreatment) or
+      HasPersistentAscHBeforeTreatment or
+      Collate.ManageTreatmentWithoutPreviousBiopsy
+    ) then
     MostRecentTreatment
   else
     null
@@ -1504,8 +1506,13 @@ define RecommendationForSurveillanceAfterAbnormalities:
     when ( // J2.3
       HistologyInterpretedAsHistologicHsil and
       Collate.MostRecentBiopsyReport.date 5 years or less after MostRecentTreatmentDate and
-      SecondMostRecentHistologyInterpretedAsHistologicHsil and
-      SecondMostRecentBiopsyReport.date 5 years or less before MostRecentTreatmentDate
+      (
+        (
+          SecondMostRecentHistologyInterpretedAsHistologicHsil and
+          SecondMostRecentBiopsyReport.date 5 years or less before MostRecentTreatmentDate
+        ) or 
+        Collate.ManageTreatmentWithoutPreviousBiopsy
+      )
     ) then
       {
         short: 'See Details',
