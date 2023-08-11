@@ -22,7 +22,7 @@ import os.path, time
 
 ## CONFIG ----------------------------------------------------------------------------
 # Output Excel file with individual sheets that contain each of the tables' relevant data columns
-MASTERTABLE = False
+COMBINEDTABLE = False
 # Generate CQL version of the relevant columns in each risk table
 GENERATECQLFILE = True
 # Output CQL file contents to the console for debugging
@@ -30,13 +30,13 @@ DEBUG = False
 
 INPUT_DIRECTORY = '/risk-tables/risk-tables-current/risk-tables-excel-2-22/'
 OUTPUT_DIRECTORY_CQL_TABLES = '/cql/'
-OUTPUT_DIRECTORY_MASTER_TABLES = '/risk-tables/output/'
+OUTPUT_DIRECTORY_COMBINED_TABLES = '/risk-tables/output/'
 
 # READ INPUT FILES ----------------------------------------------------------------------------
 # Define paths for reading and writing
 cwd = os.path.abspath(os.getcwd())
 input_path = cwd + INPUT_DIRECTORY
-output_path_master_tables = cwd + OUTPUT_DIRECTORY_MASTER_TABLES
+output_path_combined_tables = cwd + OUTPUT_DIRECTORY_COMBINED_TABLES
 output_path_cql_tables = cwd + OUTPUT_DIRECTORY_CQL_TABLES
 
 # Import raw risk table files
@@ -88,9 +88,9 @@ def stripRiskTables():
           '5 - Post Treatment Surveillance': risk_table5_stripped
          }
 
-# GENERATE MASTER TABLE ----------------------------------------------------------------------------
-def createMasterTable(tableDictionary):
-  writer = pd.ExcelWriter(output_path_master_tables + 'Master_NCI_Risk_Table.xlsx', engine='xlsxwriter')
+# GENERATE COMBINED TABLE ----------------------------------------------------------------------------
+def createCombinedTable(tableDictionary):
+  writer = pd.ExcelWriter(output_path_combined_tables + 'Combined_NCI_Risk_Table.xlsx', engine='xlsxwriter')
   for sheetname, df in tableDictionary.items():  # loop through `dict` of dataframes
     df.to_excel(writer, sheet_name=sheetname, index=False)  # send df to writer
     worksheet = writer.sheets[sheetname]  # pull worksheet object
@@ -102,8 +102,8 @@ def createMasterTable(tableDictionary):
           )) + 1  # adding a little extra space
       worksheet.set_column(idx, idx, max_len)  # set column width
 
-  writer.save()
-  print('Master Table written to: ' + output_path_master_tables)
+  writer.close()
+  print('Combined Table written to: ' + output_path_combined_tables)
 
 
 # GENRATE CQL LIBRARY ----------------------------------------------------------------------------
@@ -334,8 +334,8 @@ def writeCqlFile(cqlString):
 ## MAIN ----------------------------------------------------------------------------
 def main():
   tables = stripRiskTables()
-  if (MASTERTABLE == True):
-    createMasterTable(tables)
+  if (COMBINEDTABLE == True):
+    createCombinedTable(tables)
   if (GENERATECQLFILE == True):
     cql_output = createCQLFile(tables)
     writeCqlFile(cql_output)
