@@ -839,7 +839,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.1)',
         details: {
           'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
-          'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation, if elected includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified over age 50
@@ -888,7 +888,7 @@ define RecommendationForHistologyResults:
           'Treatment of CIN2 is recommended unless the patient\'s concerns about the effect of treatment on future pregnancy outweigh concerns about cancer.',
           'Excisional treatment is preferred, and treatment with ablation is acceptable.',
           'Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded.',
-          'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     when ( // I2.2 over age 50
@@ -939,7 +939,7 @@ define RecommendationForHistologyResults:
         date: Today() + 3 years,
         group: 'Managing Histology (I.3)',
         details: {
-          'Surveillance with primary HPV testing or co-testing is recommended every 3 years for at least 25 years, even if beyond the age of 65. Surveillance can continue for as long as the patient remains in good health.'
+          'Surveillance with primary HPV testing or cotesting is recommended every 3 years for at least 25 years, even if beyond the age of 65. Surveillance can continue for as long as the patient remains in good health.'
         }
       }    
     when ( // I3.3
@@ -954,7 +954,7 @@ define RecommendationForHistologyResults:
         date: Today() + 1 year,
         group: 'Managing Histology (I.3)',
         details: {
-          'Primary HPV testing or co-testing in 1 year is recommended.'
+          'Primary HPV testing or cotesting in 1 year is recommended.'
         }
       }
     when ( // I3.2
@@ -969,7 +969,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.3)',
         details: {
           'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
-          'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation, if elected includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     when ( // I3.1
@@ -984,7 +984,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.3)',
         details: {
           'Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is fully visualized and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
-          'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
@@ -999,7 +999,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.1)',
         details: {
-          'Immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year, or review the cytologic, histologic, and colposcopic findings are acceptable.',
+          'Immediate diagnostic excisional procedure or observation with primary HPV testing or cotesting and colposcopy at 1 year, or review the cytologic, histologic, and colposcopic findings are acceptable.',
           'Observation is only acceptable when the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2.'
         }
       }
@@ -1014,7 +1014,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.2)',
         details: {
-          'Observation with HPV-based testing at 1 year, or review of the cytologic, histologic, and colposcopic findings are acceptable.',
+          'Observation with primary HPV testing or cotesting at 1 year, or review of the cytologic, histologic, and colposcopic findings are acceptable.',
           'A diagnostic excisional procedure is not recommended.'
         }
       }
@@ -1069,7 +1069,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.3.2)',
         details: {
-          'HPV-based testing (cotesting or primary hrHPV testing) every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveilance may continue for as long as the patient remains in good health.'
+          'Primary hrHPV testing or cotesting every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveilance may continue for as long as the patient remains in good health.'
         }
       }    
     when ( // I4.3 - Recommendation #1
@@ -1121,7 +1121,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.3.1)',
         details: {
-          'HPV-based testing (cotesting or primary hrHPV testing) is recommended in 1 year.'
+          'Primary hrHPV testing or cotesting is recommended in 1 year.'
         }
       }
     when ( // I4.5
@@ -1528,7 +1528,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.2.1)',
         details: {
-          'Primary HPV testing or co-testing is preferred at 6 months regardless of the margin status of the excisional specimen.',
+          'Primary HPV testing or cotesting is preferred at 6 months regardless of the margin status of the excisional specimen.',
           'Follow-up at 6 months with colposcopy and ECC is acceptable*.',
           '*Refer to ASCCP Consensus Guideline 2019 Section J.2'
         }
@@ -1544,7 +1544,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.1)',
         details: {
-          'Primary HPV testing or co-testing is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
+          'Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
         }
       }
     when ( // J3.2, Part 1
@@ -1557,7 +1557,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
-          'Primary HPV testing or co-testing at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology.',
+          'Primary HPV testing or cotesting at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology.',
           'Discontinuation of screening is recommended if a patient has a limited life expectancy.'
         }
       }
@@ -1571,7 +1571,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
-          'Continued surveillance with HPV testing or co-testing at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
+          'Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
         }
       }
     else

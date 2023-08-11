@@ -828,7 +828,39 @@
                } ]
             }
          }, {
-            "name" : "DefaultSymptomaticRecommendation",
+            "name" : "Age21YearsAndYoungerRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "NilmCytologyWithinLast12MonthsRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "List",
+               "element" : [ {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.",
+                  "type" : "Literal"
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
+            "name" : "NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -844,30 +876,6 @@
                } ]
             }
          }, {
-            "name" : "Age21YearsAndYoungerRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "DefaultSymptomaticRecommendation",
-               "type" : "ExpressionRef"
-            }
-         }, {
-            "name" : "NilmCytologyWithinLast12MonthsRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "DefaultSymptomaticRecommendation",
-               "type" : "ExpressionRef"
-            }
-         }, {
-            "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "DefaultSymptomaticRecommendation",
-               "type" : "ExpressionRef"
-            }
-         }, {
             "name" : "VisibleLesionRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -879,12 +887,12 @@
                   "type" : "Literal"
                }, {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "value" : "If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.",
                   "type" : "Literal"
                } ]
             }
          }, {
-            "name" : "ElseRecommendation",
+            "name" : "DefaultRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -895,7 +903,7 @@
                   "type" : "Literal"
                }, {
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.",
+                  "value" : "If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.",
                   "type" : "Literal"
                } ]
             }
@@ -935,7 +943,7 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "name" : "NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation",
+                        "name" : "NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -949,7 +957,7 @@
                      }
                   } ],
                   "else" : {
-                     "name" : "ElseRecommendation",
+                     "name" : "DefaultRecommendation",
                      "type" : "ExpressionRef"
                   }
                },

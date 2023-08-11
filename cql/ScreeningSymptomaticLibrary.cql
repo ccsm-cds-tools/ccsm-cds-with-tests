@@ -158,31 +158,34 @@ define HasVisibleCervicalOrVaginalLesion:
   Exists(RecentVisibleLesionObservations) or
   Exists(RecentYesResponsesToVisibleLesionQuestion)
 
-define DefaultSymptomaticRecommendation:
+define Age21YearsAndYoungerRecommendation:
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  }
+
+define NilmCytologyWithinLast12MonthsRecommendation:
+  {
+    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+    'Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  }
+
+define NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
     'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
   }
-
-define Age21YearsAndYoungerRecommendation:
-  DefaultSymptomaticRecommendation
-
-define NilmCytologyWithinLast12MonthsRecommendation:
-  DefaultSymptomaticRecommendation
-
-define NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation:
-  DefaultSymptomaticRecommendation
   
 define VisibleLesionRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+    'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
   }
 
-define ElseRecommendation:
+define DefaultRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'If a cervical lesion is seen a cytology, co-testing and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, and endometrial biopsy should be considered.'
+    'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
   }
 
 
@@ -191,9 +194,9 @@ define RecommendationText:
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
       when HasNilmCytologyWithinLast12Months then NilmCytologyWithinLast12MonthsRecommendation
-      when HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years then NilmCytologyAndNegativeHpvWitinLast3YearsRecommendation
+      when HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years then NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation
       when HasVisibleCervicalOrVaginalLesion then VisibleLesionRecommendation
-      else ElseRecommendation
+      else DefaultRecommendation
     end
   else null
 
