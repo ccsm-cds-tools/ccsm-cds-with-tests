@@ -1257,11 +1257,11 @@ define RecommendationForHistologyResults:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #4: Surveillance After Abnormalities
 
+define CervicalPrecancerTreatments:
+  Collate.CervicalPrecancerTreatments
+
 define MostRecentTreatment:
-  C3F.MostRecentProcedure(
-    Dash.CervicalAblationProcedures union
-    Dash.CervicalExcisionProcedures 
-  )
+  C3F.MostRecentProcedure(CervicalPrecancerTreatments)
 
 define MostRecentTreatmentDate:
   Common.ProcedureDate(MostRecentTreatment)

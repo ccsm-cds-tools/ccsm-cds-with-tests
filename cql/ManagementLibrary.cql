@@ -111,7 +111,8 @@ define IsIncluded:
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
     Exists(Dash.HighGradeOrCancerHistologyResults) or
-    Exists(ManageSpecialPopulation.CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
+    Exists(ManageSpecialPopulation.CervixRemovalWithHighGradePrecancerOrCancerReasonCode) or 
+    Exists(ManageRareAbnormality.CervicalPrecancerTreatments)
   )
 
 //------------------------------------------------------------------------------

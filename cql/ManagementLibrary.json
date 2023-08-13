@@ -367,29 +367,39 @@
                         "operand" : [ {
                            "type" : "Or",
                            "operand" : [ {
-                              "name" : "HasRecentAbnormalScreening",
-                              "type" : "ExpressionRef"
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "HasRecentAbnormalScreening",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "HasHighGradePreCancerCervicalLesion",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
-                              "name" : "HasHighGradePreCancerCervicalLesion",
+                              "name" : "HasCervicalCancerDiagnoses",
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "HasCervicalCancerDiagnoses",
-                           "type" : "ExpressionRef"
+                           "type" : "Exists",
+                           "operand" : {
+                              "name" : "HighGradeOrCancerHistologyResults",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           }
                         } ]
                      }, {
                         "type" : "Exists",
                         "operand" : {
-                           "name" : "HighGradeOrCancerHistologyResults",
-                           "libraryName" : "Dash",
+                           "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
+                           "libraryName" : "ManageSpecialPopulation",
                            "type" : "ExpressionRef"
                         }
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
-                        "libraryName" : "ManageSpecialPopulation",
+                        "name" : "CervicalPrecancerTreatments",
+                        "libraryName" : "ManageRareAbnormality",
                         "type" : "ExpressionRef"
                      }
                   } ]
