@@ -1,0 +1,48 @@
+---
+name: Histologic Cancer in Prior Results
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1990-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $iterate: *CervicalCancer
+
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  effectiveDateTime: 2019-07-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#165324008 Biopsy result normal (finding) 
+  effectiveDateTime: 2021-05-21
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#165324008 Biopsy result normal (finding) 
+  effectiveDateTime: 2021-05-31
+  
+results:
+  Recommendation: 
+    short: 'Histologic Cancer'
+    date: '2021-06-02'
+    group: 'Histologic Cancer'
+    details:
+    - 'Refer to Gynecologic Oncology.'

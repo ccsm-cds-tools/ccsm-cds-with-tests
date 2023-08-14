@@ -56,6 +56,26 @@ context Patient
 //------------------------------------------------------------------------------
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+// Special Populations Management of Patients With Histologic Cancer
+
+define RecommendationForPatientsWithHistologicCancer:
+  case
+    when (
+      Rare.AnyHistologyInterpretedAsCancer
+    ) then
+      {
+        short: 'Histologic Cancer',
+        date: Today(),
+        group: 'Histologic Cancer',
+        details: {
+          'Refer to Gynecologic Oncology.'
+        }
+      } 
+    else
+      null
+  end
+  
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
 define AssociatedHpvCotest:
@@ -716,6 +736,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 
 define Recommendation:
   Coalesce(
+    RecommendationForPatientsWithHistologicCancer,
     RecommendationForPatientsYoungerThan25,
     RecommendationForPregnantPatients,
     RecommendationForImmunosuppressedPatients,
@@ -724,6 +745,7 @@ define Recommendation:
 
 define WhichPopulationMadeTheRecommendation:
   case
+    when RecommendationForPatientsWithHistologicCancer is not null then 6
     when RecommendationForPatientsYoungerThan25 is not null then 5
     when RecommendationForPregnantPatients is not null then 4
     when RecommendationForImmunosuppressedPatients is not null then 3

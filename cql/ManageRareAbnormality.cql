@@ -214,6 +214,13 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
+define AnyHistologyInterpretedAsCancer:
+  AnyTrue(
+    (Collate.SortedBiopsyReports.allConclusions) aC
+      return
+        aC in Dash."Histologic cancer"
+  )
+    
 define CancerDiagnosisAfterMostRecentCytology:
   Exists(
     Dash.CervicalCancerDiagnoses C
