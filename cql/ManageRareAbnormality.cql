@@ -897,7 +897,7 @@ define RecommendationForAisHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.6)',
         details: {
-          'If negative margins on the excisional specimen, a hysterectomy is preferred.',
+          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred.',
           'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
           'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
         }
