@@ -49,7 +49,7 @@ define function DateText(d FHIR.date):
 
 // Returns a text representation of a dateTime using the CQL `ToString` function.
 // @param d - a FHIR dateTime to get text for
-// @returns {System.String} the text representation of the dateTime
+// @returns {System.String} the text representation of the date portion of the dateTime
 define function DateTimeText(d FHIR.dateTime):
   First(SplitOnMatches(ToString(d.value), 'T'))
 
