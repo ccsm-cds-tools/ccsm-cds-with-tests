@@ -161,19 +161,19 @@ define HasVisibleCervicalOrVaginalLesion:
 define Age21YearsAndYoungerRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women under the age of 21, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    'Cervical cancer is unlikely in women under the age of 21, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
   }
 
 define NilmCytologyWithinLast12MonthsRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    'Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
   }
 
 define NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation:
   {
     'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
   }
   
 define VisibleLesionRecommendation:
