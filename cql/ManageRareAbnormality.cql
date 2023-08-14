@@ -855,9 +855,6 @@ define CytologyInterpretedAsHsil:
 define CervixRemovalDateIsAfterMostRecentAisBiopsy:
   (CervixRemovalDate is not null) and 
   CervixRemovalDate after Collate.MostRecentAisBiopsy.date
-    
-define MostRecentAisBiopsy:
-  Collate.MostRecentAisBiopsy
 
 define MostRecentTreatmentAfterAis:
   MostRecentTreatment P
