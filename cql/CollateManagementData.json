@@ -63,6 +63,14 @@
                "unit" : "months",
                "type" : "Quantity"
             }
+         }, {
+            "name" : "ManageTreatmentWithoutPreviousBiopsy",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+               "value" : "true",
+               "type" : "Literal"
+            }
          } ]
       },
       "contexts" : {
@@ -2545,7 +2553,7 @@
                } ]
             }
          }, {
-            "name" : "CervicalPrecancerTreatmentsAfterBiopsy",
+            "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2603,17 +2611,80 @@
                }
             }
          }, {
+            "name" : "CervicalPrecancerTreatmentsSorted",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "T",
+                  "expression" : {
+                     "name" : "CervicalPrecancerTreatments",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "ToDate",
+                           "operand" : {
+                              "name" : "ProcedureDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "T",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
             "name" : "DateOfLastCervicalPrecancerTreatment",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "path" : "date",
-               "type" : "Property",
-               "source" : {
-                  "type" : "Last",
+               "type" : "If",
+               "condition" : {
+                  "name" : "ManageTreatmentWithoutPreviousBiopsy",
+                  "type" : "ParameterRef"
+               },
+               "then" : {
+                  "type" : "ToDateTime",
+                  "operand" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "type" : "Last",
+                        "source" : {
+                           "name" : "CervicalPrecancerTreatmentsSorted",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "path" : "date",
+                  "type" : "Property",
                   "source" : {
-                     "name" : "CervicalPrecancerTreatmentsAfterBiopsy",
-                     "type" : "ExpressionRef"
+                     "type" : "Last",
+                     "source" : {
+                        "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }
             }

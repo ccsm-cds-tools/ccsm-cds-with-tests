@@ -31,6 +31,7 @@ include CCSMCommonFunctions version '1.0.0' called Common
 parameter BiopsyLookbackPeriod default 25 years
 parameter BiopsyReferralPeriod default 1 years  // NOTE: Changing from 1 month to 1 year to account for real-world scenarios
 parameter HpvTestingGracePeriod default 6 months
+parameter ManageTreatmentWithoutPreviousBiopsy default true // A value of true will remove the requirement for a histologic HSIL biopsy or high grade result to be present before treatment in order to manage using Rare Abnormality #4 (section J) or Risk Table 5
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -389,7 +390,7 @@ define CervicalPrecancerTreatments:
   Dash.CervicalExcisionProcedures union
     Dash.CervicalAblationProcedures
 
-define CervicalPrecancerTreatmentsAfterBiopsy:
+define CervicalPrecancerTreatmentsAfterBiopsySorted:
   CervicalPrecancerTreatments T
     where Common.ProcedureDate(T) occurs after MostRecentCin2orCin3Biopsy.date
     return {
@@ -397,10 +398,22 @@ define CervicalPrecancerTreatmentsAfterBiopsy:
     }
     sort by date
 
+define CervicalPrecancerTreatmentsSorted:
+  CervicalPrecancerTreatments T
+    return {
+      date: ToDate(Common.ProcedureDate(T))
+    }
+    sort by date
+
 define DateOfLastCervicalPrecancerTreatment:
-  Last(
-    CervicalPrecancerTreatmentsAfterBiopsy
-  ).date
+  if ManageTreatmentWithoutPreviousBiopsy then
+    Last(
+      CervicalPrecancerTreatmentsSorted
+    ).date
+  else
+    Last(
+      CervicalPrecancerTreatmentsAfterBiopsySorted
+    ).date
 
 // Look for HPV/pap tests after treatment
 define MostRecentHpvResultAfterTreatment:

@@ -5649,6 +5649,15 @@
                } ]
             }
          }, {
+            "name" : "CervicalPrecancerTreatments",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "CervicalPrecancerTreatments",
+               "libraryName" : "Collate",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "MostRecentTreatment",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5657,16 +5666,8 @@
                "libraryName" : "C3F",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "type" : "Union",
-                  "operand" : [ {
-                     "name" : "CervicalAblationProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "name" : "CervicalExcisionProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
+                  "name" : "CervicalPrecancerTreatments",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -10028,11 +10029,30 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "name" : "HistologicHsilWithin12MonthsBeforeTreatment",
-                  "type" : "ExpressionRef"
-               }
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "HistologicHsilWithin12MonthsBeforeTreatment",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentTreatment",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "ManageTreatmentWithoutPreviousBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ParameterRef"
+                  } ]
+               } ]
             }
          }, {
             "name" : "PositiveHrHpvTestAfterTreatment",
@@ -10747,21 +10767,28 @@
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "RareAbnormalityHighGradeHistologyBeforeTreatment",
-                              "type" : "ExpressionRef"
-                           }
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "RareAbnormalityHighGradeHistologyBeforeTreatment",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "name" : "CytologicHsilOrAgcBeforeTreatment",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         }, {
-                           "type" : "Exists",
-                           "operand" : {
-                              "name" : "CytologicHsilOrAgcBeforeTreatment",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "HasPersistentAscHBeforeTreatment",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HasPersistentAscHBeforeTreatment",
-                        "type" : "ExpressionRef"
+                        "name" : "ManageTreatmentWithoutPreviousBiopsy",
+                        "libraryName" : "Collate",
+                        "type" : "ParameterRef"
                      } ]
                   } ]
                },
@@ -11017,9 +11044,57 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
+                           "name" : "HistologyInterpretedAsHistologicHsil",
+                           "type" : "ExpressionRef"
+                        }, {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "HistologyInterpretedAsHistologicHsil",
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : false,
+                                 "highClosed" : true,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "name" : "MostRecentTreatmentDate",
+                                    "type" : "ExpressionRef"
+                                 },
+                                 "high" : {
+                                    "type" : "Add",
+                                    "operand" : [ {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "value" : 5,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "MostRecentTreatmentDate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "SecondMostRecentHistologyInterpretedAsHistologicHsil",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "And",
@@ -11029,20 +11104,15 @@
                                     "path" : "date",
                                     "type" : "Property",
                                     "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "libraryName" : "Collate",
+                                       "name" : "SecondMostRecentBiopsyReport",
                                        "type" : "ExpressionRef"
                                     }
                                  }, {
-                                    "lowClosed" : false,
-                                    "highClosed" : true,
+                                    "lowClosed" : true,
+                                    "highClosed" : false,
                                     "type" : "Interval",
                                     "low" : {
-                                       "name" : "MostRecentTreatmentDate",
-                                       "type" : "ExpressionRef"
-                                    },
-                                    "high" : {
-                                       "type" : "Add",
+                                       "type" : "Subtract",
                                        "operand" : [ {
                                           "name" : "MostRecentTreatmentDate",
                                           "type" : "ExpressionRef"
@@ -11051,6 +11121,10 @@
                                           "unit" : "years",
                                           "type" : "Quantity"
                                        } ]
+                                    },
+                                    "high" : {
+                                       "name" : "MostRecentTreatmentDate",
+                                       "type" : "ExpressionRef"
                                     }
                                  } ]
                               }, {
@@ -11065,49 +11139,9 @@
                               } ]
                            } ]
                         }, {
-                           "name" : "SecondMostRecentHistologyInterpretedAsHistologicHsil",
-                           "type" : "ExpressionRef"
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "In",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "SecondMostRecentBiopsyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "lowClosed" : true,
-                              "highClosed" : false,
-                              "type" : "Interval",
-                              "low" : {
-                                 "type" : "Subtract",
-                                 "operand" : [ {
-                                    "name" : "MostRecentTreatmentDate",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "value" : 5,
-                                    "unit" : "years",
-                                    "type" : "Quantity"
-                                 } ]
-                              },
-                              "high" : {
-                                 "name" : "MostRecentTreatmentDate",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "MostRecentTreatmentDate",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
+                           "name" : "ManageTreatmentWithoutPreviousBiopsy",
+                           "libraryName" : "Collate",
+                           "type" : "ParameterRef"
                         } ]
                      } ]
                   },
