@@ -61,12 +61,12 @@ context Patient
 define RecommendationForPatientsWithHistologicCancer:
   case
     when (
-      Rare.HistologyInterpretedAsCancer
+      Rare.AnyHistologyInterpretedAsCancer
     ) then
       {
         short: 'Histologic Cancer',
         date: Today(),
-        group: 'Special Population',
+        group: 'Histologic Cancer',
         details: {
           'Refer to Gynecologic Oncology.'
         }
@@ -773,6 +773,7 @@ define Recommendation:
 
 define WhichPopulationMadeTheRecommendation:
   case
+    when RecommendationForPatientsWithHistologicCancer is not null then 6
     when RecommendationForPatientsYoungerThan25 is not null then 5
     when RecommendationForPregnantPatients is not null then 4
     when RecommendationForImmunosuppressedPatients is not null then 3

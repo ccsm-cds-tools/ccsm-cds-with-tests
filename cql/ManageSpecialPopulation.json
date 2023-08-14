@@ -152,7 +152,7 @@
                "type" : "Case",
                "caseItem" : [ {
                   "when" : {
-                     "name" : "HistologyInterpretedAsCancer",
+                     "name" : "AnyHistologyInterpretedAsCancer",
                      "libraryName" : "Rare",
                      "type" : "ExpressionRef"
                   },
@@ -174,7 +174,7 @@
                         "name" : "group",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Special Population",
+                           "value" : "Histologic Cancer",
                            "type" : "Literal"
                         }
                      }, {
@@ -4670,6 +4670,22 @@
             "expression" : {
                "type" : "Case",
                "caseItem" : [ {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPatientsWithHistologicCancer",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "6",
+                     "type" : "Literal"
+                  }
+               }, {
                   "when" : {
                      "type" : "Not",
                      "operand" : {
