@@ -2488,6 +2488,47 @@
                }
             }
          }, {
+            "name" : "AisBiopsies",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "S",
+                  "expression" : {
+                     "name" : "SortedBiopsyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "riskTableInput",
+                     "scope" : "S",
+                     "type" : "Property"
+                  }, {
+                     "type" : "List",
+                     "element" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "AIS",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentAisBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "First",
+               "source" : {
+                  "name" : "AisBiopsies",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
             "name" : "CervicalPrecancerTreatments",
             "context" : "Patient",
             "accessLevel" : "Public",
