@@ -790,6 +790,12 @@ define MostRecentNegativeHpv:
       (CollateConclusionCodes(R,HpvObservations)) CCC return CCC in "HPV Negative Results"
     )
 
+define MostRecentPositiveHpv:
+  MostRecentHpvReport R
+    where AnyTrue(
+      (CollateConclusionCodes(R,HpvObservations)) CCC return CCC in "High Risk HPV Positive Results"
+    )
+
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(

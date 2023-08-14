@@ -6810,6 +6810,60 @@
                }
             }
          }, {
+            "name" : "MostRecentPositiveHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "MostRecentHpvReport",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "CCC",
+                        "expression" : {
+                           "name" : "CollateConclusionCodes",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "CCC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "preserve" : true
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
             "name" : "CervicalCytologyReports",
             "context" : "Patient",
             "accessLevel" : "Public",

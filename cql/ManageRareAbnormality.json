@@ -3354,15 +3354,36 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "PositiveHpv16or18Cotest",
+                              "type" : "ExpressionRef"
+                           } ]
                         }, {
-                           "name" : "PositiveHpv16or18Cotest",
+                           "name" : "CytologyInterpretedAsNilm",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "CytologyInterpretedAsNilm",
-                        "type" : "ExpressionRef"
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
                      } ]
                   },
                   "then" : {
