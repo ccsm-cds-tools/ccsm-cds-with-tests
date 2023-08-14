@@ -148,19 +148,13 @@ define function GetAdjacentRowsTable1(prevHpvVal String, prevPapVal String, curr
 // Table 2: Surveillance ********************************************
 // ************************************************************
 
-// Some of the entries in the risk tables refer to 'ASC_US' instead of 'ASC-US'.
-// This function converts from the latter to former.
-define function AscusAlternativeSpelling(ascus String):
-  if ascus = 'ASC-US' then 'ASC_US'
-  else 'NULL'
-
 // Some of the entries in the risk tables group different cytology results together.
 // This function takes a fully specified cytology result and returns the grouped 
 // string.
 define function HighGradeOrAscusLsilPap(currPapVal String):
   if currPapVal = 'ASC-US' or
     currPapVal = 'LSIL' then
-      'ASC-US, LSIL'
+      'ASC-US/LSIL'
   else if currPapVal = 'ASC-H' or
     currPapVal = 'AGC' or
     currPapVal = 'HSIL+' then
@@ -211,28 +205,7 @@ define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal 
           risk5yr: convert T.value.five_year to Decimal
         }
     ),
-    Coalesce( // Case 2: 'ASC_US' instead of 'ASC-US'
-      SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
-        and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
-        and T.pap = AscusAlternativeSpelling(currPapVal)
-        return {
-          action: T.management,
-          history: '',
-          prev2: T.history_prev_2,
-          prev1: T.history,
-          referral: '',
-          biopsy: '',
-          preColposcopyResult: '',
-          postColposcopyPastHistory: '',
-          hpv: T.hpv,
-          cyto: T.pap,
-          riskNow: convert T.value.immediate to Decimal,
-          risk5yr: convert T.value.five_year to Decimal
-        }
-    ),
-    Coalesce( // Case 3: 'ASC-US, LSIL' or 'High Grade'
+    Coalesce( // Case 2: 'ASC-US, LSIL' or 'High Grade'
       SurveillanceTable T
       where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
@@ -253,12 +226,33 @@ define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal 
           risk5yr: convert T.value.five_year to Decimal
         }
     ),
-    Coalesce( // Case 4: No recent cytology result
+    Coalesce( // Case 3: No recent cytology result
       SurveillanceTable T
       where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
         and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = 'ALL'
+        return {
+          action: T.management,
+          history: '',
+          prev2: T.history_prev_2,
+          prev1: T.history,
+          referral: '',
+          biopsy: '',
+          preColposcopyResult: '',
+          postColposcopyPastHistory: '',
+          hpv: T.hpv,
+          cyto: T.pap,
+          riskNow: convert T.value.immediate to Decimal,
+          risk5yr: convert T.value.five_year to Decimal
+        }
+    ),
+      Coalesce( // Case 4: Current cytology is fully specified, no leading space
+      SurveillanceTable T
+      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
+        and T.history = ScreeningText(prevHpvVal, prevPapVal, '/', 'none')
+        and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
+        and T.pap = currPapVal
         return {
           action: T.management,
           history: '',
@@ -439,7 +433,7 @@ define function PostColposcopyPastHistory(prev2HpvVal String, prev2PapVal String
         prevPapVal = 'ASC-US' or
         prevPapVal = 'LSIL'
       )
-    ) then ' HPV-negative/ASCUS/LSIL'
+    ) then ' HPV-negative/ASC-US/LSIL'
     when (
       prev2HpvVal is null and
       prev2PapVal is null and
@@ -596,7 +590,7 @@ define function GetAdjacentRowsTable4(preBiopsyHpvVal String, preBiopsyPapVal St
 
 define function TreatCin2AndCin3TheSame(biopsyVal String):
   if biopsyVal = 'CIN2' or biopsyVal = 'CIN3' then
-    'CIN3'
+    'CIN 2 or 3'
   else
     null
 

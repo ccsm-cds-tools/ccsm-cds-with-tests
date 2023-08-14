@@ -145,6 +145,90 @@
                }
             }
          }, {
+            "name" : "RecommendationForPatientsWithHistologicCancer",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "name" : "AnyHistologyInterpretedAsCancer",
+                     "libraryName" : "Rare",
+                     "type" : "ExpressionRef"
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Histologic Cancer",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Histologic Cancer",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Refer to Gynecologic Oncology.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               } ],
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "Under25And2YearsAgoCytologyResults",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3615,25 +3699,6 @@
                }
             }
          }, {
-            "name" : "MostRecentCervixRemovalProcedureDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ProcedureDate",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentProcedure",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "RemovalOfCervixProcedures",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "CervixRemovalWithHighGradePrecancerOrCancerReasonCode",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3795,65 +3860,6 @@
                      }
                   }
                }
-            }
-         }, {
-            "name" : "MostRecentCervixRemovalObservationDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "ObservationDate",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecent",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "AbsenceOfCervixObservations",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "MostRecentCervixRemovalDiagnosisDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Onset",
-               "libraryName" : "CCF",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentCondition",
-                  "libraryName" : "C3F",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "AbsenceOfCervixDiagnoses",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "CervixRemovalDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "name" : "MostRecentCervixRemovalProcedureDate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCervixRemovalObservationDate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "MostRecentCervixRemovalDiagnosisDate",
-                     "type" : "ExpressionRef"
-                  }
-               } ]
             }
          }, {
             "name" : "HighGradePreCancerCervicalLesionDate",
@@ -4145,6 +4151,7 @@
                      "type" : "In",
                      "operand" : [ {
                         "name" : "CervixRemovalDate",
+                        "libraryName" : "Rare",
                         "type" : "ExpressionRef"
                      }, {
                         "lowClosed" : false,
@@ -4207,6 +4214,7 @@
                      "type" : "Property"
                   }, {
                      "name" : "CervixRemovalDate",
+                     "libraryName" : "Rare",
                      "type" : "ExpressionRef"
                   } ]
                }
@@ -4253,12 +4261,14 @@
                      "type" : "Interval",
                      "low" : {
                         "name" : "CervixRemovalDate",
+                        "libraryName" : "Rare",
                         "type" : "ExpressionRef"
                      },
                      "high" : {
                         "type" : "Add",
                         "operand" : [ {
                            "name" : "CervixRemovalDate",
+                           "libraryName" : "Rare",
                            "type" : "ExpressionRef"
                         }, {
                            "value" : 5,
@@ -4298,6 +4308,7 @@
                   "type" : "Add",
                   "operand" : [ {
                      "name" : "CervixRemovalDate",
+                     "libraryName" : "Rare",
                      "type" : "ExpressionRef"
                   }, {
                      "value" : 1,
@@ -4339,6 +4350,7 @@
                            "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "name" : "CervixRemovalDate",
+                              "libraryName" : "Rare",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "Subtract",
@@ -4408,6 +4420,7 @@
                            "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "name" : "CervixRemovalDate",
+                              "libraryName" : "Rare",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "Subtract",
@@ -4563,6 +4576,9 @@
             "expression" : {
                "type" : "Coalesce",
                "operand" : [ {
+                  "name" : "RecommendationForPatientsWithHistologicCancer",
+                  "type" : "ExpressionRef"
+               }, {
                   "name" : "RecommendationForPatientsYoungerThan25",
                   "type" : "ExpressionRef"
                }, {
@@ -4583,6 +4599,22 @@
             "expression" : {
                "type" : "Case",
                "caseItem" : [ {
+                  "when" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "RecommendationForPatientsWithHistologicCancer",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "6",
+                     "type" : "Literal"
+                  }
+               }, {
                   "when" : {
                      "type" : "Not",
                      "operand" : {

@@ -344,7 +344,7 @@ define ThreeYearSurveillanceRecommendationText:
   'Repeat testing in 3 years with primary HPV testing or co-testing is recommended.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Routine screening at 5 year intervals using primay HPV testing or co-testing is recommended.'
+  'Routine screening at 5 year intervals using primary HPV testing or co-testing is recommended.'
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'

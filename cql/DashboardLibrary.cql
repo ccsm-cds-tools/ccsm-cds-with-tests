@@ -76,7 +76,7 @@ valueset "CPT Value Set for Removal of Cervix Procedures": 'https://cts.nlm.nih.
 
 // Diagnostic reports
 valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059'
-valueset "Pap Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017'
+valueset "Pap Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.298'
 valueset "Abnormal results of Cervical Cytology Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.235'
 valueset "HPV Immunization": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.191'
 valueset "AIS": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.259' // AKA: AIS
@@ -215,9 +215,10 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         when c in "Normal Histology Finding" then {text: '<CIN1', rank: 2}
         when c ~ "CIN1" then {text: 'CIN1', rank: 3}
         when c ~ "CIN2" then {text: 'CIN2', rank: 4}
-        when c in "Histologic CIN3" then {text: 'CIN3', rank: 5}
-        when c in "AIS" then {text: 'AIS', rank: 6}
-        when c in "Histologic cancer" then {text: 'Cancer', rank: 7}
+        when c ~ "HSIL, Unspecified" then {text: 'HSIL, Unspecified', rank: 5}
+        when c in "Histologic CIN3" then {text: 'CIN3', rank: 6}
+        when c in "AIS" then {text: 'AIS', rank: 7}
+        when c in "Histologic cancer" then {text: 'Cancer', rank: 8}
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end
@@ -262,7 +263,7 @@ define BirthSexMissingOrUnknown:
 
 define BirthSexCode:
   if BirthSexMissingOrUnknown then 'Unknown'
-  else Coalesce(BirthSex.value)
+  else Coalesce(BirthSex.value.value)
 
 define BirthSexText:
   if BirthSexCode = 'F' then 'Female'
@@ -304,8 +305,8 @@ define FemaleorTransgenderMale:
   Female or TransgenderMale
 
 define GenderText:
-  if Exists(GenderIdentityExtension) then Coalesce(GenderIdentityExtension.value)
-  else 'Unknown'
+  if Exists(GenderIdentityExtension) then GenderIdentityExtension[0].value.coding[0].code.value
+  else Patient.gender.value
 
 define RaceExtensionValues:
   (Patient.extension) E
@@ -323,11 +324,23 @@ define EthnicityExtensionValues:
 define EthnicityText:
   Coalesce(Coalesce(EthnicityExtensionValues))
 
+define CommunicationLanguageCode:
+  Patient.communication.language.coding.code.value[0]
+
+define CommunicationLanguageText:
+  Patient.communication.language.text.value[0]
+
+define LanguageCode:
+  Patient.language.value
+
+define LanguageTextAbbreviated:
+  Coalesce( {CommunicationLanguageCode, CommunicationLanguageText, LanguageCode} )
+
 define LanguageText:
   case
-    when Patient.language = 'el' then 'English'
-    when Patient.language = 'es' then 'Spanish'
-    when Patient.language = 'fr' then 'French'
+    when LanguageTextAbbreviated = 'el' then 'English'
+    when LanguageTextAbbreviated = 'es' then 'Spanish'
+    when LanguageTextAbbreviated = 'fr' then 'French'
     else 'Unknown'
   end
 
@@ -1192,7 +1205,7 @@ define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
     name: First(Patient.name.given) + ' ' +First(Patient.name.family),
-    id: Patient.identifier.value,
+    id: Patient.identifier,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,
     sexAtBirth: BirthSexText,
