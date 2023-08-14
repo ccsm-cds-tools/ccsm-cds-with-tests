@@ -648,14 +648,26 @@ define PertinentMedicationDispensesSummary:
   }
   sort by date desc
 
+define function displayStartDate(startDate String):
+  if startDate is not null then
+    startDate
+  else 
+    'no start date available'
+
+define function displayEndDate(endDate String):
+  if endDate is not null then
+    endDate
+  else
+    'no end date available'
+
 define PertinentMedicationAdministrationsSummary:
   (PertinentMedicationAdministrations) M
   return {
     name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
     value: M.status.value,
-    date: Common.DateTimeText((M.effective as FHIR.Period)."start") +
+    date: displayStartDate(Common.DateTimeText((M.effective as FHIR.Period)."start")) +
       ' to ' +
-      Common.DateTimeText((M.effective as FHIR.Period)."end"),
+      displayEndDate(Common.DateTimeText((M.effective as FHIR.Period)."end")),
     reference: 'MedicationAdministration/' + M.id
   }
   sort by date desc
@@ -665,9 +677,9 @@ define PertinentMedicationStatementsSummary:
   return {
     name:  Common.ConceptText(M.medication as FHIR.CodeableConcept),
     value: M.status.value,
-    date: Common.DateTimeText((M.effective as FHIR.Period)."start") +
+    date: displayStartDate(Common.DateTimeText((M.effective as FHIR.Period)."start")) +
       ' to ' +
-      Common.DateTimeText((M.effective as FHIR.Period)."end"),
+      displayEndDate(Common.DateTimeText((M.effective as FHIR.Period)."end")),
     reference: 'MedicationStatement/' + M.id
   }
   sort by date desc
