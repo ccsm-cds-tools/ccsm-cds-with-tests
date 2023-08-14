@@ -1,0 +1,40 @@
+---
+name: Under 25 NILM HPV Unknown
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1998-05-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-01-02
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - NULL FLAVOR#UNK Unknown
+  effectiveDateTime: 2021-01-02
+
+# This is meant to fail CDS recommendation
+results:
+  HasRecentAbnormalScreening: false
+  HasRecommendation: false
+  RareAbnormalityRecommendation: null
+  SpecialPopulationRecommendation: null
+  CommonAbnormalityRecommendation:
+    short: null
+    date: null
+    details: null
+    group: "N/A"  

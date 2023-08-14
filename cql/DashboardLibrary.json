@@ -255,7 +255,7 @@
             "accessLevel" : "Public"
          }, {
             "name" : "Pap Test",
-            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.298",
             "accessLevel" : "Public"
          }, {
             "name" : "Abnormal results of Cervical Cytology Test",
@@ -6802,6 +6802,60 @@
                            },
                            "valueset" : {
                               "name" : "HPV Negative Results",
+                              "preserve" : true
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "MostRecentPositiveHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "MostRecentHpvReport",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "CCC",
+                        "expression" : {
+                           "name" : "CollateConclusionCodes",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "R",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HpvObservations",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "CCC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
                               "preserve" : true
                            }
                         }

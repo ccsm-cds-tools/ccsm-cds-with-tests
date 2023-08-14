@@ -56,6 +56,26 @@ context Patient
 //------------------------------------------------------------------------------
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+// Special Populations Management of Patients With Histologic Cancer
+
+define RecommendationForPatientsWithHistologicCancer:
+  case
+    when (
+      Rare.AnyHistologyInterpretedAsCancer
+    ) then
+      {
+        short: 'Histologic Cancer',
+        date: Today(),
+        group: 'Histologic Cancer',
+        details: {
+          'Refer to Gynecologic Oncology.'
+        }
+      } 
+    else
+      null
+  end
+  
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
 define AssociatedHpvCotest:
@@ -384,7 +404,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is < 25 and HPV testing or co-testing if patient is age 25 or older at the time of repeat testing.'
+          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is < 25 and HPV testing or cotesting if patient is age 25 or older at the time of repeat testing.'
         }
       }
     when ( // 5a
@@ -396,7 +416,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or co-testing.'
+          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
         }
       }
     when ( // #5b
@@ -432,7 +452,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or co-testing.'
+          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
         }
       }
     else
@@ -489,7 +509,7 @@ define RecommendationForPregnantPatients:
         date: Today(),
         group: 'Pregnant (K.2)',
         details: {
-          'Surveillance colposcopy and testing (with cytology or HPV testing or co-testing depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.',
+          'Surveillance colposcopy and testing (with cytology or HPV testing or cotesting depending on age) is preferred every 12 to 24 weeks but deferring colposcopy to the postpartum period is acceptable.',
           'Repeat biopsy is recommended if invasion is suspected or the appearance of the lesion worsens.',
           'Treatment of histologic HSIL (CIN 2 or CIN 3) during pregnancy is not recommended.'
         }
@@ -593,13 +613,6 @@ define RecommendationForImmunosuppressedPatients:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.4 Managing Patients After Hysterectomy
 
-define MostRecentCervixRemovalProcedureDate:
-  CCF.ProcedureDate(
-    C3F.MostRecentProcedure(
-      Dash.RemovalOfCervixProcedures
-    )
-  )
-
 define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
   Dash.RemovalOfCervixProcedures P
     where AnyTrue(
@@ -613,27 +626,6 @@ define CervixRemovalWithHighGradePrecancerOrCancerReasonCode:
           rC in Dash."AIS" or
           rC in Dash."Histologic cancer"
     )
-
-define MostRecentCervixRemovalObservationDate:
-  CCF.ObservationDate(
-    C3F.MostRecent(
-      Dash.AbsenceOfCervixObservations
-    )
-  )
-
-define MostRecentCervixRemovalDiagnosisDate:
-  CCF.Onset(
-    C3F.MostRecentCondition(
-      Dash.AbsenceOfCervixDiagnoses
-    )
-  )
-
-define CervixRemovalDate:
-  Coalesce(
-    MostRecentCervixRemovalProcedureDate,
-    MostRecentCervixRemovalObservationDate,
-    MostRecentCervixRemovalDiagnosisDate
-  )
 
 define HighGradePreCancerCervicalLesionDate:
   if Exists(Dash.CervicalPrecancerDisorders) then
@@ -678,29 +670,29 @@ define MostRecentCauseForHysterectomyDate:
     null
 
 define HysterectomyPerformedForTreatment:
-    CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate or
+    Rare.CervixRemovalDate 1 year or less after MostRecentCauseForHysterectomyDate or
     Exists(CervixRemovalWithHighGradePrecancerOrCancerReasonCode)
 
 define NegativeSurveillanceTestsAfterHysterectomy: // NOTE: We should be able to refactor the LP4 Grade D Exclusions in a similar way
   Rare.SortedNegativeSurveillanceTests T
-  where T.date >= CervixRemovalDate
+  where T.date >= Rare.CervixRemovalDate
 
 define InitialIntensiveSurveillancePeriodPostHysterectomy:
   if Count(NegativeSurveillanceTestsAfterHysterectomy) >= 3 then
-    NegativeSurveillanceTestsAfterHysterectomy[2].date less than 5 years after CervixRemovalDate
+    NegativeSurveillanceTestsAfterHysterectomy[2].date less than 5 years after Rare.CervixRemovalDate
   else
     false
 
 define DateK41:
   if Count(NegativeSurveillanceTestsAfterHysterectomy) = 0 then 
-    CervixRemovalDate + 1 year
+    Rare.CervixRemovalDate + 1 year
   else
     Last(NegativeSurveillanceTestsAfterHysterectomy).date + 1 year
 
 define RecommendationForManagingPatientsAfterHysterectomy:
   case
     when ( // K4.1
-      CervixRemovalDate >= Now() - 25 years and
+      Rare.CervixRemovalDate >= Now() - 25 years and
       HysterectomyPerformedForTreatment and
       not InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then
@@ -709,11 +701,11 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: ToDate(DateK41),
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended annually for 3 years after hysterectomy performed for treatment of histologic HSIL (CIN 2 or CIN 3).'
+          'Primary hrHPV testing or cotesting is recommended annually for 3 years after hysterectomy performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
         }
       }
     when ( // K4.2
-      CervixRemovalDate >= Now() - 25 years and
+      Rare.CervixRemovalDate >= Now() - 25 years and
       HysterectomyPerformedForTreatment and
       InitialIntensiveSurveillancePeriodPostHysterectomy
     ) then
@@ -722,7 +714,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL (CIN 2 or CIN 3).'
+          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
         }
       }
     when ( // no hysterectomy date
@@ -733,9 +725,9 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Today(),
         group: 'Hysterectomy (K.4)',
         details: {
-          'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL (CIN 2 or CIN 3), patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
+          'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS, patients should have 3 consecutive annual primary HPV tests or cotests before entering long term surveillance. Long term surveillance involves primary HPV testing or cotesting at 3-year intervals for 25 years.',
           'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.',
-          'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL (CIN 2 or CIN 3), or completed the 25 year long term surveillance.'
+          'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL, CIN 2, CIN 3 or AIS, or completed the 25 year long term surveillance.'
         }
       }
     else
@@ -744,6 +736,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 
 define Recommendation:
   Coalesce(
+    RecommendationForPatientsWithHistologicCancer,
     RecommendationForPatientsYoungerThan25,
     RecommendationForPregnantPatients,
     RecommendationForImmunosuppressedPatients,
@@ -752,6 +745,7 @@ define Recommendation:
 
 define WhichPopulationMadeTheRecommendation:
   case
+    when RecommendationForPatientsWithHistologicCancer is not null then 6
     when RecommendationForPatientsYoungerThan25 is not null then 5
     when RecommendationForPregnantPatients is not null then 4
     when RecommendationForImmunosuppressedPatients is not null then 3

@@ -20,7 +20,7 @@ include FHIRHelpers version '4.0.1' called FHIRHelpers
 include CDSConnectCommonsforFHIRv401 version '1.0.0' called C3F
 include DashboardLibrary version '1.0.0' called Dash
 include CollateManagementData version '1.1.0' called Collate
-include CCSMCommonFunctions version '1.0.0' called Common
+include CCSMCommonFunctions version '1.0.0' called CCF
 include ScreeningSymptomaticLibrary version '1.0.0' called Symptomatic
 
 //------------------------------------------------------------------------------
@@ -214,10 +214,17 @@ define HistologyInterpretedAsCancer:
         aC in Dash."Histologic cancer"
   )
 
+define AnyHistologyInterpretedAsCancer:
+  AnyTrue(
+    (Collate.SortedBiopsyReports.allConclusions) aC
+      return
+        aC in Dash."Histologic cancer"
+  )
+    
 define CancerDiagnosisAfterMostRecentCytology:
   Exists(
     Dash.CervicalCancerDiagnoses C
-      where Common.ConditionDate(C) > MostRecentCytologyReport.date
+      where CCF.ConditionDate(C) > MostRecentCytologyReport.date
   )
 
 define AnyHpvSinceMostRecentCytology:
@@ -275,6 +282,34 @@ define AbsenceOrRemovalOfCervix:
   HasRemovalOfCervixProcedures or
   HasAbsenceOfCervixDiagnoses or
   HasAbsenceOfCervixObservations
+
+define MostRecentCervixRemovalProcedureDate:
+  CCF.ProcedureDate(
+    C3F.MostRecentProcedure(
+      Dash.RemovalOfCervixProcedures
+    )
+  )
+
+define MostRecentCervixRemovalObservationDate:
+  CCF.ObservationDate(
+    C3F.MostRecent(
+      Dash.AbsenceOfCervixObservations
+    )
+  )
+
+define MostRecentCervixRemovalDiagnosisDate:
+  CCF.Onset(
+    C3F.MostRecentCondition(
+      Dash.AbsenceOfCervixDiagnoses
+    )
+  )
+
+define CervixRemovalDate:
+  Coalesce(
+    MostRecentCervixRemovalProcedureDate,
+    MostRecentCervixRemovalObservationDate,
+    MostRecentCervixRemovalDiagnosisDate
+  )
 
 define RecommendationForRareCytology:
   case
@@ -543,7 +578,8 @@ define RecommendationForExceptionsToColposcopyThreshold:
     when (
       MostRecentCytologyReportWasWithinPastFiveYears and
       PositiveHpv16or18Cotest and
-      CytologyInterpretedAsNilm
+      CytologyInterpretedAsNilm and
+      AgeInYears() >= 25
     ) then
       {
         short: 'Colposcopy',
@@ -824,6 +860,93 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )  
 
+define CervixRemovalDateIsAfterMostRecentAisBiopsy:
+  (CervixRemovalDate is not null) and 
+  CervixRemovalDate after Collate.MostRecentAisBiopsy.date
+
+define MostRecentTreatmentAfterAis:
+  MostRecentTreatment P
+  where CCF.ProcedureDate(P) occurs after Collate.MostRecentAisBiopsy.date
+
+define HasTreatmentAfterAis:
+  MostRecentTreatmentAfterAis is not null  
+
+// I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations
+// Severity of AIS should recommend treatment until hysterectomy is performed.
+define RecommendationForAisHistologyResults:
+  case
+    when (
+      AgeInYears() > 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      not HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
+          'If negative margins on the excisional specimen, a hysterectomy is preferred.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
+        }
+      }
+    when ( 
+      AgeInYears() > 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      HasTreatmentAfterAis and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
+          'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
+        }
+      }      
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      not HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
+          'If negative margins on the excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.',
+          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.',
+          'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
+        }
+      }
+    when (
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      HasTreatmentAfterAis
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
+          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.',
+          'If cotesting and endocervical sampling consistently negative in first 5 years, extending surveillance interval to every 3 years is acceptable.',
+          'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
+        }
+      }
+    else
+      null
+    end
+
+    
 define RecommendationForHistologyResults:
   case
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified
@@ -839,7 +962,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.1)',
         details: {
           'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
-          'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation, if elected includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified over age 50
@@ -888,7 +1011,7 @@ define RecommendationForHistologyResults:
           'Treatment of CIN2 is recommended unless the patient\'s concerns about the effect of treatment on future pregnancy outweigh concerns about cancer.',
           'Excisional treatment is preferred, and treatment with ablation is acceptable.',
           'Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded.',
-          'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     when ( // I2.2 over age 50
@@ -939,7 +1062,7 @@ define RecommendationForHistologyResults:
         date: Today() + 3 years,
         group: 'Managing Histology (I.3)',
         details: {
-          'Surveillance with primary HPV testing or co-testing is recommended every 3 years for at least 25 years, even if beyond the age of 65. Surveillance can continue for as long as the patient remains in good health.'
+          'Surveillance with primary HPV testing or cotesting is recommended every 3 years for at least 25 years, even if beyond the age of 65. Surveillance can continue for as long as the patient remains in good health.'
         }
       }    
     when ( // I3.3
@@ -954,7 +1077,7 @@ define RecommendationForHistologyResults:
         date: Today() + 1 year,
         group: 'Managing Histology (I.3)',
         details: {
-          'Primary HPV testing or co-testing in 1 year is recommended.'
+          'Primary HPV testing or cotesting in 1 year is recommended.'
         }
       }
     when ( // I3.2
@@ -969,7 +1092,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.3)',
         details: {
           'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
-          'Observation, if elected includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation, if elected includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     when ( // I3.1
@@ -984,7 +1107,7 @@ define RecommendationForHistologyResults:
         group: 'Managing Histology (I.3)',
         details: {
           'Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is fully visualized and CIN 2+ or ungraded CIN is not identified on endocervical sampling.',
-          'Observation includes colposcopy and HPV-based testing with cotest or primary hrHPV testing at 6-month intervals for up to 2 years.'
+          'Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
@@ -999,7 +1122,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.1)',
         details: {
-          'Immediate diagnostic excisional procedure or observation with HPV-based testing and colposcopy at 1 year, or review the cytologic, histologic, and colposcopic findings are acceptable.',
+          'Immediate diagnostic excisional procedure or observation with primary HPV testing or cotesting and colposcopy at 1 year, or review the cytologic, histologic, and colposcopic findings are acceptable.',
           'Observation is only acceptable when the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2.'
         }
       }
@@ -1014,7 +1137,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.2)',
         details: {
-          'Observation with HPV-based testing at 1 year, or review of the cytologic, histologic, and colposcopic findings are acceptable.',
+          'Observation with primary HPV testing or cotesting at 1 year, or review of the cytologic, histologic, and colposcopic findings are acceptable.',
           'A diagnostic excisional procedure is not recommended.'
         }
       }
@@ -1069,7 +1192,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.3.2)',
         details: {
-          'HPV-based testing (cotesting or primary hrHPV testing) every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveilance may continue for as long as the patient remains in good health.'
+          'Primary hrHPV testing or cotesting every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveilance may continue for as long as the patient remains in good health.'
         }
       }    
     when ( // I4.3 - Recommendation #1
@@ -1121,7 +1244,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.3.1)',
         details: {
-          'HPV-based testing (cotesting or primary hrHPV testing) is recommended in 1 year.'
+          'Primary hrHPV testing or cotesting is recommended in 1 year.'
         }
       }
     when ( // I4.5
@@ -1219,37 +1342,6 @@ define RecommendationForHistologyResults:
           'If treatment is selected and the entire squamocolumnar junction and all lesions were fully visualized during colposcopic examination, either excision or ablation treatments are acceptable.'
         }
       }
-    // I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations 
-    when (
-      AgeInYears() > 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsAis
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.6)',
-        details: {
-          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
-          'After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS.'
-        }
-      }
-    // I.6 Management of AIS: Adoption of Society of Gynecologic Oncology Recommendations
-    when (
-      AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsAis
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.6)',
-        details: {
-          'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
-          'After the initial diagnostic procedure, hysterectomy is the preferred management for all patients who have a histologic diagnosis of AIS, although fertility-sparing management for appropriately selected patients is acceptable.',
-          'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.'
-        }
-      }
     else
       null
   end
@@ -1264,11 +1356,11 @@ define MostRecentTreatment:
   C3F.MostRecentProcedure(CervicalPrecancerTreatments)
 
 define MostRecentTreatmentDate:
-  Common.ProcedureDate(MostRecentTreatment)
+  CCF.ProcedureDate(MostRecentTreatment)
 
 define TreatmentInLastYear:
   MostRecentTreatment P
-  where Common.ProcedureDate(P) >= Now() - 12 months
+  where CCF.ProcedureDate(P) >= Now() - 12 months
 
 define HasTreatmentInLastYear:
   TreatmentInLastYear is not null
@@ -1343,8 +1435,7 @@ define RareAbnormalityHighGradeHistology:
         return
           aC ~ Dash."CIN2" or
           aC in Dash."Histologic CIN3" or
-          aC ~ Dash."HSIL, Unspecified" or
-          aC in Dash."AIS"
+          aC ~ Dash."HSIL, Unspecified"
     )
 
 define RareAbnormalityHighGradeHistologyBeforeTreatment:
@@ -1409,7 +1500,7 @@ define HasTreatmentForHighGradeHistologyOrCytology:
   TreatmentForHighGradeHistologyOrCytology is not null
 
 define TreatmentForHighGradeHistologyOrCytologyDate:
-  Common.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
+  CCF.ProcedureDate(TreatmentForHighGradeHistologyOrCytology)
 
 define NegativeHrHpvTests:
   Collate.SortedHpvReports R
@@ -1488,14 +1579,10 @@ define NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology:
     null
 
 define InitialIntensiveSurveillancePeriod:
-  if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 4 then
+  if Count(NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology) >= 3 then
     (
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date and
       NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[0].date 3 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[2].date
-    ) or
-    (
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 2 years or more before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date and
-      NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[1].date 3 years or less before NegativeSurveillanceTestsAfterTreatmentForHighGradeHistologyOrCytology[3].date
     )
   else
     false
@@ -1543,7 +1630,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.2.1)',
         details: {
-          'Primary HPV testing or co-testing is preferred at 6 months regardless of the margin status of the excisional specimen.',
+          'Primary HPV testing or cotesting is preferred at 6 months regardless of the margin status of the excisional specimen.',
           'Follow-up at 6 months with colposcopy and ECC is acceptable*.',
           '*Refer to ASCCP Consensus Guideline 2019 Section J.2'
         }
@@ -1559,7 +1646,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.1)',
         details: {
-          'Primary HPV testing or co-testing is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
+          'Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
         }
       }
     when ( // J3.2, Part 1
@@ -1572,7 +1659,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
-          'Primary HPV testing or co-testing at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology.',
+          'Primary HPV testing or cotesting at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology.',
           'Discontinuation of screening is recommended if a patient has a limited life expectancy.'
         }
       }
@@ -1586,7 +1673,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
-          'Continued surveillance with HPV testing or co-testing at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
+          'Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
         }
       }
     else
@@ -1595,6 +1682,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
 
 define Recommendation:
   Coalesce(
+    RecommendationForAisHistologyResults,
     RecommendationForSurveillanceAfterAbnormalities,
     RecommendationForHistologyResults,
     RecommendationForExceptionsToColposcopyThreshold,
@@ -1604,6 +1692,7 @@ define Recommendation:
 // TODO: Replace integers with textual symbol
 define WhichRarityMadeTheRecommendation:
   case
+    when RecommendationForAisHistologyResults is not null then 3
     when RecommendationForSurveillanceAfterAbnormalities is not null then 4
     when RecommendationForHistologyResults is not null then 3
     when RecommendationForExceptionsToColposcopyThreshold is not null then 2

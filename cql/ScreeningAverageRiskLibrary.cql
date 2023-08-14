@@ -332,9 +332,9 @@ define RecommendationText:
       AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer
     ) then
       {
-        'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL (CIN 2 or CIN 3), patients should have 3 consecutive annual HPV-based tests before entering long term surveillance. Long term surveillance involves HPV based testing at 3-year intervals for 25 years.',
+        'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS, patients should have 3 consecutive annual primary HPV tests or cotests before entering long term surveillance. Long term surveillance involves primary HPV testing or cotesting at 3-year intervals for 25 years.',
         'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.',
-        'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL (CIN 2 or CIN 3), or completed the 25 year long term surveillance.'
+        'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL, CIN 2, CIN 3 or AIS, or completed the 25 year long term surveillance.'
       }
     else
       if AgeOver65 then
@@ -343,7 +343,8 @@ define RecommendationText:
             if LastScreeningType != 'n/a' then
             { 
               'Cervical cancer screening is recommended.',
-              'It appears this patient is on a screening regimen that includes ' + LastScreeningType +'. To meet adequate testing criteria to exit cervical cancer screening, ' + LastScreeningType + ' is recommended.'
+              'It appears this patient is on a screening regimen that includes ' + LastScreeningType +'. To meet adequate testing criteria to exit cervical cancer screening, ' + LastScreeningType + ' is recommended.',
+              'Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
             }
             else
             {
@@ -351,18 +352,22 @@ define RecommendationText:
               'The screening can be performed using one of the following screening approaches:',
               '1. hrHPV testing alone',
               '2. Cotesting with cervical cytology and hrHPV testing',
-              '3. Cervical cytology testing alone'
+              '3. Cervical cytology testing alone',
+              'Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
+
             }
           else
             if NotAdequatelyScreened then
             { 
               'Cervical cancer screening is recommended.',
-              'It appears this patient is on a screening regimen that includes ' + LastScreeningType +'. To meet adequate testing criteria to exit cervical cancer screening, ' + LastScreeningType + ' is recommended on ' + ToString(ToDate(ProposedScreeningDate)) + '.' 
+              'It appears this patient is on a screening regimen that includes ' + LastScreeningType +'. To meet adequate testing criteria to exit cervical cancer screening, ' + LastScreeningType + ' is recommended on ' + ToString(ToDate(ProposedScreeningDate)) + '.',
+              'Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
             }
             else
             {
               'No cervical cancer screening is recommended.',
-              'Per USPSTF guidelines, this patient is over 65 years of age and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.'
+              'Per USPSTF guidelines, this patient is over 65 years of age and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.',
+              'Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
             }
         else
           null

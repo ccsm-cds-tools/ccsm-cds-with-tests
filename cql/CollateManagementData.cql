@@ -377,6 +377,14 @@ define Cin2orCin3Biopsies:
 define MostRecentCin2orCin3Biopsy:
   First(Cin2orCin3Biopsies)
 
+// Find AIS biopsy
+define AisBiopsies:
+  SortedBiopsyReports S
+    where S.riskTableInput in {'AIS'}
+
+define MostRecentAisBiopsy:
+  First(AisBiopsies)
+  
 // Look for treatments after this CIN2/CIN3 biopsy
 define CervicalPrecancerTreatments:
   Dash.CervicalExcisionProcedures union

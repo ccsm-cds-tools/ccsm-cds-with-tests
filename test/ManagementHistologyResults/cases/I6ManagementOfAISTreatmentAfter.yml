@@ -1,0 +1,38 @@
+---
+name: I6 Management of AIS With Treatment After AIS
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#447760009 Endocervical adenocarcinoma in situ (disorder)
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: Procedure
+  code: SNOMED#120038005 Cervix excision (procedure)
+  performedDateTime: 2021-06-01
+  status: completed
+
+results:
+  Recommendation:
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Managing Histology (I.6)'
+    details:
+      - 'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.'
+      - 'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
+      - 'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.'
+      - 'If cotesting and endocervical sampling consistently negative in first 5 years, extending surveillance interval to every 3 years is acceptable.'
+      - 'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
+  WhichRarityMadeTheRecommendation: 3
