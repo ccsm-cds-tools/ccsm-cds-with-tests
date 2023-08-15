@@ -992,12 +992,8 @@ define HasRecentAbnormalScreening:
   HasRecentAbnormalCytologyResults or
   HasRecentRareCytologyResults
 
-define RecentAbnormalHistology:
-  Common.LookBack(
-    HistologyDiagnosticReports D
-      where not (CollateConclusionCodes(D,HistologyObservations) includes ToConcept("Negative")),
-    AbnormalTestLookbackPeriod
-  )
+define RecentAbnormalHistology: // This should be modified
+  HighGradeOrCancerHistologyResults 
 
 define HasRecentAbnormalHistology:
   Exists(RecentAbnormalHistology)

@@ -102,8 +102,8 @@ define Excluded:
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
     Exists(Dash.HighGradeOrCancerHistologyResults) or
-    HasRecentAbnormalScreening or
-    HasRecentAbnormalHistology
+    HasRecentAbnormalScreening // or
+    // HasRecentAbnormalHistology
   ) and
   not Sympto.IsSymptomatic
 
