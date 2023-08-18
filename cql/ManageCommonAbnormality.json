@@ -722,6 +722,367 @@
                }
             }
          }, {
+            "name" : "HighRiskHPVPositiveResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentHpvReport",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "High Risk HPV Positive Results",
+                           "libraryName" : "Dash"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "IsHsilAndHpvPositive",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "MostRecentCytologyCotestResult",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HSIL+",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }, {
+                  "name" : "HighRiskHPVPositiveResults",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "RarelyScreenedLookbackInterval",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "lowClosed" : true,
+               "highClosed" : false,
+               "type" : "Interval",
+               "low" : {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "name" : "RarelyScreenedInterval",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "high" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyCotest",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "PreviousCytologyOrSurveillanceIsOldOrAbsent",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyCotest",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentCytologyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "name" : "RarelyScreenedLookbackInterval",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "SecondMostRecentCytologyCotest",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentCytologyCotest",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "name" : "RarelyScreenedLookbackInterval",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "SecondMostRecentHpvReport",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "name" : "RarelyScreenedLookbackInterval",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "IsRarelyScreenedPatient",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "27",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "name" : "IsHsilAndHpvPositive",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "name" : "RarelyScreenedLookbackInterval",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "DateOfLastCervicalPrecancerTreatment",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "In",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "RarelyScreenedLookbackInterval",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  } ]
+               }, {
+                  "name" : "PreviousCytologyOrSurveillanceIsOldOrAbsent",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "RarelyScreenedTreatmentRecommendation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "IsRarelyScreenedPatient",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "27",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "TableRecommendation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1229,6 +1590,16 @@
                "type" : "Case",
                "caseItem" : [ {
                   "when" : {
+                     "name" : "RarelyScreenedTreatmentRecommendation",
+                     "type" : "ExpressionRef"
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Guidance for Expedited Treatment",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
                      "type" : "Not",
                      "operand" : {
                         "type" : "IsNull",
@@ -1430,6 +1801,15 @@
                "type" : "Literal"
             }
          }, {
+            "name" : "RarelyScreenedRecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "For patients who have not been screened within the past 5 years or more, risks are higher and treatment is preferred to colposcopy to minimize loss to follow-up.",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "PositivePrimaryHpv",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1525,6 +1905,138 @@
             "expression" : {
                "type" : "Case",
                "caseItem" : [ {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "27",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "LessOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "50",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "IsRarelyScreenedPatient",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "TreatmentRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "RarelyScreenedRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "TreatmentWithPregnancyConcernsRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Greater",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "50",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "name" : "IsRarelyScreenedPatient",
+                        "type" : "ExpressionRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "name" : "TreatmentRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "RarelyScreenedRecommendationText",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
                   "when" : {
                      "type" : "And",
                      "operand" : [ {

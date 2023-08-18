@@ -32,6 +32,7 @@ parameter BiopsyLookbackPeriod default 25 years
 parameter BiopsyReferralPeriod default 1 years  // NOTE: Changing from 1 month to 1 year to account for real-world scenarios
 parameter HpvTestingGracePeriod default 6 months
 parameter ManageTreatmentWithoutPreviousBiopsy default true // A value of true will remove the requirement for a histologic HSIL biopsy or high grade result to be present before treatment in order to manage using Rare Abnormality #4 (section J) or Risk Table 5
+parameter RarelyScreenedGracePeriod default 6 months
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -44,6 +45,9 @@ context Patient
 define HpvTestingInterval:
   5 years + HpvTestingGracePeriod
 
+define RarelyScreenedInterval:
+  5 years + RarelyScreenedGracePeriod
+    
 define function HPVTestingIntervalLookBack(LookBackDate System.DateTime):
   Interval[LookBackDate - HpvTestingInterval, LookBackDate)
 
@@ -238,6 +242,12 @@ define MostRecentCytologyReport:
   else
     null
 
+define SecondMostRecentCytologyReport:
+  if Count(SortedCytologyReports) > 0 then
+    SortedCytologyReports[1]
+  else
+    null
+    
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
 
