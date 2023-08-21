@@ -5817,6 +5817,74 @@
                }
             }
          }, {
+            "name" : "displayStartDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "startDate",
+                        "type" : "OperandRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "startDate",
+                  "type" : "OperandRef"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "no start date available",
+                  "type" : "Literal"
+               }
+            },
+            "operand" : [ {
+               "name" : "startDate",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "displayEndDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "endDate",
+                        "type" : "OperandRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "endDate",
+                  "type" : "OperandRef"
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "no end date available",
+                  "type" : "Literal"
+               }
+            },
+            "operand" : [ {
+               "name" : "endDate",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "PertinentMedicationAdministrationsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5871,11 +5939,44 @@
                            "operand" : [ {
                               "type" : "Concatenate",
                               "operand" : [ {
+                                 "name" : "displayStartDate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "DateTimeText",
+                                    "libraryName" : "Common",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "start",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "strict" : false,
+                                          "type" : "As",
+                                          "operand" : {
+                                             "path" : "effective",
+                                             "scope" : "M",
+                                             "type" : "Property"
+                                          },
+                                          "asTypeSpecifier" : {
+                                             "name" : "{http://hl7.org/fhir}Period",
+                                             "type" : "NamedTypeSpecifier"
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "displayEndDate",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
                                  "name" : "DateTimeText",
                                  "libraryName" : "Common",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "path" : "start",
+                                    "path" : "end",
                                     "type" : "Property",
                                     "source" : {
                                        "strict" : false,
@@ -5891,31 +5992,6 @@
                                        }
                                     }
                                  } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : " to ",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "DateTimeText",
-                              "libraryName" : "Common",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "path" : "end",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "strict" : false,
-                                    "type" : "As",
-                                    "operand" : {
-                                       "path" : "effective",
-                                       "scope" : "M",
-                                       "type" : "Property"
-                                    },
-                                    "asTypeSpecifier" : {
-                                       "name" : "{http://hl7.org/fhir}Period",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }
                               } ]
                            } ]
                         }
@@ -6004,11 +6080,44 @@
                            "operand" : [ {
                               "type" : "Concatenate",
                               "operand" : [ {
+                                 "name" : "displayStartDate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "DateTimeText",
+                                    "libraryName" : "Common",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "start",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "strict" : false,
+                                          "type" : "As",
+                                          "operand" : {
+                                             "path" : "effective",
+                                             "scope" : "M",
+                                             "type" : "Property"
+                                          },
+                                          "asTypeSpecifier" : {
+                                             "name" : "{http://hl7.org/fhir}Period",
+                                             "type" : "NamedTypeSpecifier"
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "displayEndDate",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
                                  "name" : "DateTimeText",
                                  "libraryName" : "Common",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "path" : "start",
+                                    "path" : "end",
                                     "type" : "Property",
                                     "source" : {
                                        "strict" : false,
@@ -6024,31 +6133,6 @@
                                        }
                                     }
                                  } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : " to ",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "DateTimeText",
-                              "libraryName" : "Common",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "path" : "end",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "strict" : false,
-                                    "type" : "As",
-                                    "operand" : {
-                                       "path" : "effective",
-                                       "scope" : "M",
-                                       "type" : "Property"
-                                    },
-                                    "asTypeSpecifier" : {
-                                       "name" : "{http://hl7.org/fhir}Period",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }
                               } ]
                            } ]
                         }
