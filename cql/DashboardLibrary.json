@@ -8461,64 +8461,8 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "LookBack",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "D",
-                     "expression" : {
-                        "name" : "HistologyDiagnosticReports",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "Contains",
-                        "operand" : [ {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "X",
-                              "expression" : {
-                                 "name" : "CollateConclusionCodes",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "D",
-                                    "type" : "AliasRef"
-                                 }, {
-                                    "name" : "HistologyObservations",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }
-                           } ],
-                           "return" : {
-                              "distinct" : false,
-                              "expression" : {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "X",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }
-                           }
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Negative",
-                              "type" : "CodeRef"
-                           }
-                        } ]
-                     }
-                  }
-               }, {
-                  "name" : "AbnormalTestLookbackPeriod",
-                  "type" : "ParameterRef"
-               } ]
+               "name" : "HighGradeOrCancerHistologyResults",
+               "type" : "ExpressionRef"
             }
          }, {
             "name" : "HasRecentAbnormalHistology",
