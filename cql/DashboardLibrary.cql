@@ -338,9 +338,12 @@ define LanguageTextAbbreviated:
 
 define LanguageText:
   case
-    when LanguageTextAbbreviated = 'el' then 'English'
+    when LanguageTextAbbreviated = 'en' then 'English'
     when LanguageTextAbbreviated = 'es' then 'Spanish'
+    when LanguageTextAbbreviated = 'zh' then 'Chinese'
     when LanguageTextAbbreviated = 'fr' then 'French'
+    when LanguageTextAbbreviated = 'tl' then 'Tagalog'
+    when LanguageTextAbbreviated = 'vi' then 'Vietnamese'
     else 'Unknown'
   end
 
