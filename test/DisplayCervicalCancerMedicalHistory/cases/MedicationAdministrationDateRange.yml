@@ -1,0 +1,35 @@
+---
+name: Medication Administration Date Range
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  identifier:
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  language: es
+-
+  resourceType: MedicationAdministration
+  id: 1234
+  status: completed
+  medicationCodeableConcept: RXNORM#1119399 everolimus 7.5 MG
+  effectiveDateTime: 2021-05-01
+  
+
+results:
+  PertinentMedicationAdministrationsSummary:
+    -
+      name: "everolimus 7.5 MG"
+      value: "completed"
+      date: "no start date available to no end date available"
+      reference: "MedicationAdministration/1234"
+
+
+
+
+
