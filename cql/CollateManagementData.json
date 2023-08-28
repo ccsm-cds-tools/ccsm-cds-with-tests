@@ -1694,6 +1694,23 @@
                } ]
             }
          }, {
+            "name" : "LookbackReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "LookBack",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "AllCompletedDiagnosticReport",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "BiopsyLookbackPeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
             "name" : "HistologyObservations",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1711,7 +1728,7 @@
                "source" : [ {
                   "alias" : "B",
                   "expression" : {
-                     "name" : "BiopsyReports",
+                     "name" : "LookbackReports",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -1741,6 +1758,10 @@
                                        }, {
                                           "name" : "HistologyObservations",
                                           "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "Biopsy Report",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
                                        } ]
                                     }
                                  } ],
@@ -1771,6 +1792,10 @@
                            }, {
                               "name" : "HistologyObservations",
                               "type" : "ExpressionRef"
+                           }, {
+                              "name" : "Biopsy Report",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
                            } ]
                         }
                      }, {
