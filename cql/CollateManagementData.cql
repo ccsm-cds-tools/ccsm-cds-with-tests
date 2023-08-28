@@ -249,18 +249,24 @@ define BiopsyReports:
     BiopsyLookbackPeriod
   )
 
+define LookbackReports:
+  Common.LookBack(
+    Dash.AllCompletedDiagnosticReport,
+    BiopsyLookbackPeriod
+  )
+
 define HistologyObservations:
   Dash.HistologyObservations
 
 define SortedBiopsyReports:
-  (BiopsyReports) B
+  (LookbackReports) B
   return {
     riskTableInput: HighestRankedInterpretation(
       BiopsyInterpretation(
-        Dash.CollateConclusionCodes(B,HistologyObservations)
+        Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report")
       )
     ),
-    allConclusions: Dash.CollateConclusionCodes(B,HistologyObservations),
+    allConclusions: Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report"),
     date: Common.DiagnosticReportDate(B)
   }
   sort by date desc
