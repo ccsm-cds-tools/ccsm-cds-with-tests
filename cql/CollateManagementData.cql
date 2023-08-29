@@ -243,7 +243,7 @@ define MostRecentCytologyReport:
     null
 
 define SecondMostRecentCytologyReport:
-  if Count(SortedCytologyReports) > 0 then
+  if Count(SortedCytologyReports) > 1 then
     SortedCytologyReports[1]
   else
     null
