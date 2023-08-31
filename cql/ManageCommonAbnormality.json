@@ -836,84 +836,54 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Or",
+               "type" : "And",
                "operand" : [ {
-                  "type" : "Or",
+                  "type" : "And",
                   "operand" : [ {
-                     "type" : "Or",
-                     "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
                               "type" : "IsNull",
                               "operand" : {
                                  "name" : "SecondMostRecentCytologyReport",
                                  "libraryName" : "Collate",
                                  "type" : "ExpressionRef"
                               }
+                           }
+                        }, {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
                            }, {
+                              "name" : "RarelyScreenedLookbackInterval",
+                              "type" : "ExpressionRef"
+                           } ]
+                        } ]
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
                               "type" : "IsNull",
                               "operand" : {
                                  "name" : "SecondMostRecentCytologyCotest",
                                  "libraryName" : "Collate",
                                  "type" : "ExpressionRef"
                               }
-                           } ]
-                        }, {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "SecondMostRecentHpvReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
-                              "operand" : {
-                                 "name" : "SecondMostRecentCytologyReport",
-                                 "libraryName" : "Collate",
-                                 "type" : "ExpressionRef"
-                              }
                            }
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "SecondMostRecentCytologyReport",
-                                    "libraryName" : "Collate",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "name" : "RarelyScreenedLookbackInterval",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           }
-                        } ]
-                     } ]
-                  }, {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "name" : "SecondMostRecentCytologyCotest",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
                            "type" : "In",
                            "operand" : [ {
                               "path" : "date",
@@ -927,24 +897,24 @@
                               "name" : "RarelyScreenedLookbackInterval",
                               "type" : "ExpressionRef"
                            } ]
-                        }
-                     } ]
+                        } ]
+                     }
                   } ]
                }, {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
                         "operand" : {
-                           "name" : "SecondMostRecentHpvReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
                         }
-                     }
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
+                     }, {
                         "type" : "In",
                         "operand" : [ {
                            "path" : "date",
@@ -958,8 +928,8 @@
                            "name" : "RarelyScreenedLookbackInterval",
                            "type" : "ExpressionRef"
                         } ]
-                     }
-                  } ]
+                     } ]
+                  }
                } ]
             }
          }, {
@@ -1896,6 +1866,137 @@
                         "type" : "Quantity"
                      } ]
                   }
+               } ]
+            }
+         }, {
+            "name" : "xPreviousCytologyOrSurveillanceIsOldOrAbsent",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyCotest",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentCytologyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "name" : "RarelyScreenedLookbackInterval",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           }
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "SecondMostRecentCytologyCotest",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentCytologyCotest",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "name" : "RarelyScreenedLookbackInterval",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }
+                     } ]
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "SecondMostRecentHpvReport",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "name" : "RarelyScreenedLookbackInterval",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  } ]
                } ]
             }
          }, {

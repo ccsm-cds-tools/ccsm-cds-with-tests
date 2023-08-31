@@ -389,24 +389,19 @@ define HighRiskHPVPositiveResults:
     (Collate.MostRecentHpvReport.allConclusions) aC 
       return aC in Dash."High Risk HPV Positive Results"
   )
-  
+
 define PreviousCytologyOrSurveillanceIsOldOrAbsent:
-  (
-    Collate.SecondMostRecentCytologyReport is null and
-    Collate.SecondMostRecentCytologyCotest is null and
-    Collate.SecondMostRecentHpvReport is null
-  ) or
-  (
+  not (
     Collate.SecondMostRecentCytologyReport is not null and
-    not (Collate.SecondMostRecentCytologyReport.date included in RarelyScreenedLookbackInterval)
-  ) or
-  (
+    Collate.SecondMostRecentCytologyReport.date included in RarelyScreenedLookbackInterval
+  ) and
+  not (
     Collate.SecondMostRecentCytologyCotest is not null and 
-    not (Collate.SecondMostRecentCytologyCotest.date included in RarelyScreenedLookbackInterval)
-  ) or
-  ( 
+    Collate.SecondMostRecentCytologyCotest.date included in RarelyScreenedLookbackInterval
+  ) and
+  not ( 
     Collate.SecondMostRecentHpvReport is not null and
-    not (Collate.SecondMostRecentHpvReport.date included in RarelyScreenedLookbackInterval)
+    Collate.SecondMostRecentHpvReport.date included in RarelyScreenedLookbackInterval
   )
 
 define IsRarelyScreenedPatient: 
