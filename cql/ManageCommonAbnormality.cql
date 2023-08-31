@@ -378,7 +378,6 @@ define MostRecentCytologyCotestWasAfterAge21:
 
 define RarelyScreenedLookbackInterval:
   Interval[Collate.MostRecentCytologyCotest.date - Collate.RarelyScreenedInterval, Collate.MostRecentCytologyCotest.date)  
-  
 
 define IsHsilAndHpvPositive:
   Collate.MostRecentCytologyCotest is not null and
