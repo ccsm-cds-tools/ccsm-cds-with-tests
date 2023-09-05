@@ -779,13 +779,12 @@ define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observat
   ValuesFromObservation(D, ObsList)
 
 // if a DiagnosticReport.code has target code, then call orignial CollateConclusionCodes
-// if a DiagnosticReport.code does not have target code, then retunrs values from matched Observations
+// if a DiagnosticReport.code does not have target code, then return values from matched Observations
 define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>, code System.Code):
   if FHIRHelpers.ToConcept(D.code) ~ code then
     CollateConclusionCodes(D, ObsList)
   else
     ValuesFromObservation(D, ObsList)
-
 
 define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
   (ObsList) O
