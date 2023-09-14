@@ -1694,6 +1694,23 @@
                } ]
             }
          }, {
+            "name" : "LookbackReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "LookBack",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "AllCompletedDiagnosticReport",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "BiopsyLookbackPeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
             "name" : "HistologyObservations",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1703,7 +1720,7 @@
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "SortedBiopsyReports",
+            "name" : "SortedReports",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1711,7 +1728,7 @@
                "source" : [ {
                   "alias" : "B",
                   "expression" : {
-                     "name" : "BiopsyReports",
+                     "name" : "LookbackReports",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -1741,6 +1758,10 @@
                                        }, {
                                           "name" : "HistologyObservations",
                                           "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "Biopsy Report",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
                                        } ]
                                     }
                                  } ],
@@ -1771,6 +1792,10 @@
                            }, {
                               "name" : "HistologyObservations",
                               "type" : "ExpressionRef"
+                           }, {
+                              "name" : "Biopsy Report",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
                            } ]
                         }
                      }, {
@@ -1793,6 +1818,32 @@
                      "path" : "date",
                      "type" : "ByColumn"
                   } ]
+               }
+            }
+         }, {
+            "name" : "SortedBiopsyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "SortedReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "riskTableInput",
+                        "scope" : "B",
+                        "type" : "Property"
+                     }
+                  }
                }
             }
          }, {

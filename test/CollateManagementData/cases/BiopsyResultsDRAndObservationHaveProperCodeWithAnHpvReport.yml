@@ -1,0 +1,35 @@
+---
+name: Biopsy Results Diagnostic Report and Observation Have Proper Code With an HPV Report
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2020-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  effectiveDateTime: 2021-05-14
+- 
+  resourceType: Observation
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  valueCodeableConcept: SNOMEDCT#447760009 Endocervical adenocarcinoma in situ (disorder)
+  effectiveDateTime: 2021-05-14
+
+results:
+  SortedReports: $should have length 2
+  SortedBiopsyReports: $should have length 1

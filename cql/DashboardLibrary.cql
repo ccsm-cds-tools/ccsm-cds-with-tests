@@ -166,11 +166,11 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     {{text: 'ALL', rank: 0}}
 
 /**
- * Takes a list of HPV conclusion codes and maps each to a text value and a numerical 
- * ranking. The text value can be used as input to the risk tables and the numerical 
- * ranking is meant to convey precendence so that the most specific conclusion can 
- * be selected from amongst a group of codes. For instance, an HPV test may come back 
- * both as positive and positive for HPV16. We want to be able to select the latter 
+ * Takes a list of HPV conclusion codes and maps each to a text value and a numerical
+ * ranking. The text value can be used as input to the risk tables and the numerical
+ * ranking is meant to convey precendence so that the most specific conclusion can
+ * be selected from amongst a group of codes. For instance, an HPV test may come back
+ * both as positive and positive for HPV16. We want to be able to select the latter
  * in this case as input to the risk tables.
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { text System.String, rank System.Integer }>
@@ -258,7 +258,7 @@ define UnknownBirthSex:
   )
 
 define BirthSexMissingOrUnknown:
-  not BirthSexPresent or 
+  not BirthSexPresent or
   UnknownBirthSex
 
 define BirthSexCode:
@@ -280,14 +280,14 @@ define Female:
 
 define GenderIdentityExtension:
   (Patient.extension) E
-    where 
-      E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or 
+    where
+      E.url = 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity' or
       E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'
 
 define TransgenderMaleExtension:
   (GenderIdentityExtension) E
-    where 
-      E.value as FHIR.CodeableConcept ~ "Transgender Male Code" or 
+    where
+      E.value as FHIR.CodeableConcept ~ "Transgender Male Code" or
       E.value as FHIR.CodeableConcept ~ "Female-to-male Transsexual"
 
 define GenderIdentityObservation:
@@ -776,14 +776,23 @@ define PertinentProceduresSummary:
 
 define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>):
   D.conclusionCode union
+  ValuesFromObservation(D, ObsList)
+
+// if a DiagnosticReport.code has target code, then call orignial CollateConclusionCodes
+// if a DiagnosticReport.code does not have target code, then return values from matched Observations
+define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>, code System.Code):
+  if FHIRHelpers.ToConcept(D.code) ~ code then
+    CollateConclusionCodes(D, ObsList)
+  else
+    ValuesFromObservation(D, ObsList)
+
+define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
   (ObsList) O
-    where
-      O.code = D.code and (
-        Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
-        Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
-        C3F.FindDate(O) = Common.DiagnosticReportDate(D)
-      )
-    return O.value as FHIR.CodeableConcept
+  where
+    Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+    Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+    C3F.FindDate(O) = Common.DiagnosticReportDate(D)
+  return O.value as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
@@ -836,7 +845,10 @@ define HistologyDiagnosticReports:
 
 define HistologyObservations:
   [Observation: "Biopsy Report"]
-  
+
+define AllCompletedDiagnosticReport:
+  Common.CompletedDiagnosticReport([DiagnosticReport])
+
 define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
   (DrList) D
   let CollatedCodes: CollateConclusionCodes(D,ObsList)
@@ -845,8 +857,8 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     longName: Common.ConceptText(D.code),
     value: HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType)),
     longValue: flatten(
-      (CollatedCodes) cC 
-        return (cC.coding) cCC 
+      (CollatedCodes) cC
+        return (cC.coding) cCC
           return cCC.display
     ),
     date: Common.DiagnosticReportDateString(D),
@@ -911,7 +923,7 @@ define PertinentEncountersSummary:
   return {
     name: Common.ConceptText(E.reasonCode[0]),
     value: E.status,
-    date: Common.DateTimeText((E.period as FHIR.Period)."start") + 
+    date: Common.DateTimeText((E.period as FHIR.Period)."start") +
       ' to ' +
       Common.DateTimeText((E.period as FHIR.Period)."end"),
     reference: 'Encounter/' + E.id
@@ -978,7 +990,7 @@ define RecentPositiveHpv:
   Common.LookBack(
     (HpvDiagnosticReports) D
       where Exists(
-        (CollateConclusionCodes(D,HpvObservations)) cC 
+        (CollateConclusionCodes(D,HpvObservations)) cC
           where cC in "High Risk HPV Positive Results"
       ),
     AbnormalTestLookbackPeriod
@@ -992,7 +1004,7 @@ define RecentAbnormalCytologyResults:
     (CervicalCytologyReports) D
       where Exists(
         (CollateConclusionCodes(D,CytologyObservations)) cC
-          where cC in "Abnormal results of Cervical Cytology Test" 
+          where cC in "Abnormal results of Cervical Cytology Test"
       ),
     AbnormalTestLookbackPeriod
   )
@@ -1001,10 +1013,10 @@ define RecentRareCytologyResults:
   Common.LookBack(
     (CervicalCytologyReports) D
       where AnyTrue(
-        (CollateConclusionCodes(D,CytologyObservations)) cC return 
+        (CollateConclusionCodes(D,CytologyObservations)) cC return
           cC ~ "Benign Glandular Cells" or
           cC ~ "Benign Endometrial Cells" or
-          cC ~ "Endometrial Stromal Cells" or 
+          cC ~ "Endometrial Stromal Cells" or
           cC ~ "Histiocytes" or
           cC ~ "AGC Favor Neoplasia" or
           cC ~ "Endocervical Cells Favor Neoplasia" or
@@ -1012,7 +1024,7 @@ define RecentRareCytologyResults:
           cC in "AIS"
       ),
     AbnormalTestLookbackPeriod
-  )  
+  )
 
 define HasRecentAbnormalCytologyResults:
   Exists(RecentAbnormalCytologyResults)
@@ -1166,7 +1178,7 @@ define Flags:
 //------------------------------------------------------------------------------
 
 define ErrorDiagnosticReportWithNoConclusonCodes:
-  if 
+  if
     (
       Exists(HpvDiagnosticReports) and
       AnyTrue(
@@ -1191,7 +1203,7 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
 
 define ErrorDiagnosticReportWithUnsupportedConclusonCode:
   if (
-    Exists(DiagnosticReportsSummary) and 
+    Exists(DiagnosticReportsSummary) and
     AnyTrue(
       (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
     )
