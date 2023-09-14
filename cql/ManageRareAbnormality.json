@@ -1420,385 +1420,6 @@
                }
             }
          }, {
-            "name" : "UnknownHpvCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     }
-                  } ]
-               }, {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Equivalent",
-                              "operand" : [ {
-                                 "name" : "ToConcept",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "aC",
-                                    "type" : "AliasRef"
-                                 } ]
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Unknown",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "InValueSet",
-                                 "code" : {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 },
-                                 "valueset" : {
-                                    "name" : "All Results of High Risk HPV Test",
-                                    "preserve" : true
-                                 }
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
-            "name" : "NegativeOrUnknownHpvCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     }
-                  } ]
-               }, {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Or",
-                           "operand" : [ {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "InValueSet",
-                                 "code" : {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 },
-                                 "valueset" : {
-                                    "name" : "HPV Negative Results",
-                                    "libraryName" : "Dash"
-                                 }
-                              }, {
-                                 "type" : "Equivalent",
-                                 "operand" : [ {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 }, {
-                                    "type" : "ToConcept",
-                                    "operand" : {
-                                       "name" : "Unknown",
-                                       "type" : "CodeRef"
-                                    }
-                                 } ]
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "InValueSet",
-                                 "code" : {
-                                    "name" : "ToConcept",
-                                    "libraryName" : "FHIRHelpers",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "name" : "aC",
-                                       "type" : "AliasRef"
-                                    } ]
-                                 },
-                                 "valueset" : {
-                                    "name" : "All Results of High Risk HPV Test",
-                                    "preserve" : true
-                                 }
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
-            "name" : "PositiveUntypedHpvCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentHpvReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyReport",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     }
-                  } ]
-               }, {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "aC",
-                                 "type" : "AliasRef"
-                              } ]
-                           },
-                           "valueset" : {
-                              "name" : "High Risk Positive HPV Results Without HPV16 or HPV18",
-                              "libraryName" : "Dash"
-                           }
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
             "name" : "PositiveHpv16or18Cotest",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1922,6 +1543,430 @@
                            } ]
                         }
                      }
+                  }
+               } ]
+            }
+         }, {
+            "name" : "PositiveUntypedHpvCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "lowClosed" : true,
+                           "highClosed" : true,
+                           "type" : "Interval",
+                           "low" : {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           },
+                           "high" : {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 1,
+                                 "unit" : "day",
+                                 "type" : "Quantity"
+                              } ]
+                           }
+                        } ]
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "aC",
+                           "expression" : {
+                              "path" : "allConclusions",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              },
+                              "valueset" : {
+                                 "name" : "High Risk Positive HPV Results Without HPV16 or HPV18",
+                                 "libraryName" : "Dash"
+                              }
+                           }
+                        }
+                     }
+                  } ]
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "PositiveHpv16or18Cotest",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "UnknownHpvCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "lowClosed" : true,
+                              "highClosed" : true,
+                              "type" : "Interval",
+                              "low" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 1,
+                                    "unit" : "day",
+                                    "type" : "Quantity"
+                                 } ]
+                              },
+                              "high" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 1,
+                                    "unit" : "day",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Unknown",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "InValueSet",
+                                       "code" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "aC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       },
+                                       "valueset" : {
+                                          "name" : "All Results of High Risk HPV Test",
+                                          "preserve" : true
+                                       }
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "name" : "PositiveHpv16or18Cotest",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "PositiveUntypedHpvCotest",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "NegativeOrUnknownHpvCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "lowClosed" : true,
+                              "highClosed" : true,
+                              "type" : "Interval",
+                              "low" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 1,
+                                    "unit" : "day",
+                                    "type" : "Quantity"
+                                 } ]
+                              },
+                              "high" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 1,
+                                    "unit" : "day",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Or",
+                                    "operand" : [ {
+                                       "type" : "InValueSet",
+                                       "code" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "aC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       },
+                                       "valueset" : {
+                                          "name" : "HPV Negative Results",
+                                          "libraryName" : "Dash"
+                                       }
+                                    }, {
+                                       "type" : "Equivalent",
+                                       "operand" : [ {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "aC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }, {
+                                          "type" : "ToConcept",
+                                          "operand" : {
+                                             "name" : "Unknown",
+                                             "type" : "CodeRef"
+                                          }
+                                       } ]
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "InValueSet",
+                                       "code" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "aC",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       },
+                                       "valueset" : {
+                                          "name" : "All Results of High Risk HPV Test",
+                                          "preserve" : true
+                                       }
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "name" : "PositiveHpv16or18Cotest",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "name" : "PositiveUntypedHpvCotest",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }
