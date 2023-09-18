@@ -788,22 +788,11 @@ define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observat
   else
     ValuesFromObservation(D, ObsList)
 
-define function ToFhirCodeableConcept(c System.Code):
-    FHIR.CodeableConcept {
-      coding: {
-        FHIR.Coding {
-          system: FHIR.uri {value: c.system},
-          code: FHIR.code {value: c.code},
-          display: FHIR.string {value: c.display}
-        }
-      }
-    }
-
 define Hpv16CodeToFhirCodeableConcept:
-  ToFhirCodeableConcept("HPV16+")
+  FHIRHelpers.ToFhirCodeableConcept("HPV16+")
 
 define Hpv18CodeToFHIRCodeableConcept:
-  ToFhirCodeableConcept("HPV18+")
+  FHIRHelpers.ToFhirCodeableConcept("HPV18+")
 
 // If an HPV test has a code for a genotyped high-risk HPV test, and a generic value representing a positive test,
 // this function returns the valueCodeableConcept that would represent the positive genotyped high-risk test,
@@ -811,16 +800,16 @@ define Hpv18CodeToFHIRCodeableConcept:
 // @param O - a FHIR Observation
 // @returns {FHIR.CodeableConcept} the valueCodeableConcept of the Observation,
 // or the CodeableConcept of HPV16+ or HPV18+ if the test was positive for code of HPV16 or HPV18
-define function ConvertHpvTestTypeToValue(O Observation):
+define function ConvertHpvTestTypeToCodeableConcept(O Observation):
   if O.value as FHIR.CodeableConcept in "High Risk HPV Positive Results" then
     if O.code in "HPV 16 Tests" then 
       Hpv16CodeToFhirCodeableConcept
     else if O.code in "HPV 18 Tests" then 
       Hpv18CodeToFHIRCodeableConcept
     else
-      O.value 
+      O.value as FHIR.CodeableConcept
   else 
-    O.value
+    O.value as FHIR.CodeableConcept
 
 define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
   (ObsList) O
@@ -828,7 +817,7 @@ define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observati
     Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
     Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
     C3F.FindDate(O) = Common.DiagnosticReportDate(D)
-  return ConvertHpvTestTypeToValue(O) as FHIR.CodeableConcept
+  return ConvertHpvTestTypeToCodeableConcept(O) as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(

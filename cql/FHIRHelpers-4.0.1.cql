@@ -115,6 +115,17 @@ define function ToConcept(concept FHIR.CodeableConcept):
             display: concept.text.value
         }
 
+define function ToFhirCodeableConcept(c System.Code):
+    FHIR.CodeableConcept {
+      coding: {
+        FHIR.Coding {
+          system: FHIR.uri {value: c.system},
+          code: FHIR.code {value: c.code},
+          display: FHIR.string {value: c.display}
+        }
+      }
+    }
+
 define function reference(reference String):
     if reference is null then
         null
