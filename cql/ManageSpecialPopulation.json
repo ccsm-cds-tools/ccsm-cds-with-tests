@@ -2188,14 +2188,38 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "AnyHistologyInterpretedAsCin3",
                            "libraryName" : "Rare",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin3",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin3Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -2259,14 +2283,44 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentCin2BiopsyInPast2Years",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin2",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin2Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -2334,14 +2388,44 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentHsilBiopsyInPast2Years",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsUnspecifiedHsil",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "After",
+                              "operand" : [ {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHsilBiopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {

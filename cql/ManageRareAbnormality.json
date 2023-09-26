@@ -3540,6 +3540,31 @@
                } ]
             }
          }, {
+            "name" : "MostRecentBiopsyReportWasWithinPastThreeYears",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentBiopsyReport",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Subtract",
+                  "operand" : [ {
+                     "type" : "Now"
+                  }, {
+                     "value" : 3,
+                     "unit" : "year",
+                     "type" : "Quantity"
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "HistologyInterpretedAsCin2",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3623,6 +3648,521 @@
                      }
                   }
                }
+            }
+         }, {
+            "name" : "AnyHistologyInterpretedAsCin3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "type" : "Flatten",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "$this",
+                              "expression" : {
+                                 "name" : "SortedBiopsyReports",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "where" : {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "path" : "allConclusions",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "$this",
+                                       "type" : "AliasRef"
+                                    }
+                                 }
+                              }
+                           },
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "$this",
+                                    "type" : "AliasRef"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "Histologic CIN3",
+                           "libraryName" : "Dash"
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "AnyHistologyInterpretedAsCin2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "type" : "Flatten",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "$this",
+                              "expression" : {
+                                 "name" : "SortedBiopsyReports",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "where" : {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "path" : "allConclusions",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "$this",
+                                       "type" : "AliasRef"
+                                    }
+                                 }
+                              }
+                           },
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "$this",
+                                    "type" : "AliasRef"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "CIN2",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "MostSevereHistologyInterpretedAsCin2InPast3Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "type" : "Flatten",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "$this",
+                              "expression" : {
+                                 "name" : "SortedBiopsyReports",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "where" : {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "path" : "allConclusions",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "$this",
+                                       "type" : "AliasRef"
+                                    }
+                                 }
+                              }
+                           },
+                           "return" : {
+                              "distinct" : false,
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "$this",
+                                    "type" : "AliasRef"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "CIN2",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "MostRecentCin2BiopsyInPast3Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "CIN2",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "MostRecentCin2BiopsyInPast2Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 2,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "CIN2",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "MostRecentHsilBiopsyInPast3Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "HSIL, Unspecified",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "MostRecentHsilBiopsyInPast2Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 2,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "HSIL, Unspecified",
+                                       "libraryName" : "Dash",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "HistologyInterpretedAsAis",
@@ -4589,6 +5129,125 @@
                }
             }
          }, {
+            "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "First",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "B",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "B",
+                              "type" : "Property"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "type" : "Now"
+                              }, {
+                                 "value" : 31,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "B",
+                              "type" : "Property"
+                           }, {
+                              "type" : "ToDateTime",
+                              "operand" : {
+                                 "path" : "value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "birthDate",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "B",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "HSIL, Unspecified",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "CIN2",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "HistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4652,7 +5311,7 @@
                                        "type" : "ExpressionRef"
                                     }
                                  }, {
-                                    "value" : 2.5,
+                                    "value" : 3,
                                     "unit" : "years",
                                     "type" : "Quantity"
                                  } ]
@@ -4838,7 +5497,7 @@
                }
             }
          }, {
-            "name" : "MostRecentNegativeHsilSurveillanceResult",
+            "name" : "MostRecentNegativeHsilSurveillanceResultWithin18Months",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -4858,65 +5517,8 @@
                   "operand" : [ {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentBiopsyReport",
-                                    "libraryName" : "Collate",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : false,
-                                 "highClosed" : true,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 },
-                                 "high" : {
-                                    "type" : "Add",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 18,
-                                       "unit" : "months",
-                                       "type" : "Quantity"
-                                    } ]
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "name" : "HistologyInterpretedAsCin1OrNormal",
-                           "type" : "ExpressionRef"
-                        } ]
+                        "name" : "HistologyInterpretedAsCin1OrNormal",
+                        "type" : "ExpressionRef"
                      }, {
                         "type" : "And",
                         "operand" : [ {
@@ -4925,7 +5527,8 @@
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "MostRecentCytologyReport",
+                                 "name" : "MostRecentBiopsyReport",
+                                 "libraryName" : "Collate",
                                  "type" : "ExpressionRef"
                               }
                            }, {
@@ -4974,17 +5577,248 @@
                   }, {
                      "type" : "Or",
                      "operand" : [ {
-                        "type" : "Or",
+                        "type" : "And",
                         "operand" : [ {
-                           "name" : "CytologyInterpretedAsLsil",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
                         }, {
-                           "name" : "CytologyInterpretedAsAscus",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentCytologyReport",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 18,
+                                             "unit" : "months",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Or",
+                                    "operand" : [ {
+                                       "name" : "CytologyInterpretedAsLsil",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "name" : "CytologyInterpretedAsAscus",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "name" : "CytologyInterpretedAsNilm",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "SameAs",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           } ]
                         } ]
                      }, {
-                        "name" : "CytologyInterpretedAsNilm",
-                        "type" : "ExpressionRef"
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "name" : "MostRecentHpvReport",
+                                          "libraryName" : "Collate",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "In",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "MostRecentHpvReport",
+                                             "libraryName" : "Collate",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "lowClosed" : false,
+                                          "highClosed" : true,
+                                          "type" : "Interval",
+                                          "low" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          },
+                                          "high" : {
+                                             "type" : "Add",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "value" : 18,
+                                                "unit" : "months",
+                                                "type" : "Quantity"
+                                             } ]
+                                          }
+                                       } ]
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "name" : "MostRecentHpvResult",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV-negative",
+                                    "type" : "Literal"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "SameAs",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "type" : "SameAs",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentHpvReport",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              } ]
+                           }
+                        } ]
                      } ]
                   } ]
                },
@@ -5079,7 +5913,7 @@
                }
             }
          }, {
-            "name" : "SecondMostRecentNegativeHsilSurveillanceResult",
+            "name" : "SecondMostRecentNegativeHsilSurveillanceResultWithin18Months",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -5099,64 +5933,8 @@
                   "operand" : [ {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "SecondMostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : false,
-                                 "highClosed" : true,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 },
-                                 "high" : {
-                                    "type" : "Add",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 18,
-                                       "unit" : "months",
-                                       "type" : "Quantity"
-                                    } ]
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              }
-                           } ]
-                        }, {
-                           "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
-                           "type" : "ExpressionRef"
-                        } ]
+                        "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                        "type" : "ExpressionRef"
                      }, {
                         "type" : "And",
                         "operand" : [ {
@@ -5165,7 +5943,7 @@
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "SecondMostRecentCytologyReport",
+                                 "name" : "SecondMostRecentBiopsyReport",
                                  "type" : "ExpressionRef"
                               }
                            }, {
@@ -5214,17 +5992,234 @@
                   }, {
                      "type" : "Or",
                      "operand" : [ {
-                        "type" : "Or",
+                        "type" : "And",
                         "operand" : [ {
-                           "name" : "SecondMostRecentCytologyInterpretedAsLsil",
-                           "type" : "ExpressionRef"
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "In",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "SecondMostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "lowClosed" : false,
+                                    "highClosed" : true,
+                                    "type" : "Interval",
+                                    "low" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    },
+                                    "high" : {
+                                       "type" : "Add",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "value" : 18,
+                                          "unit" : "months",
+                                          "type" : "Quantity"
+                                       } ]
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "SecondMostRecentCytologyInterpretedAsLsil",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "SecondMostRecentCytologyInterpretedAsAscus",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "name" : "SecondMostRecentCytologyInterpretedAsNilm",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
                         }, {
-                           "name" : "SecondMostRecentCytologyInterpretedAsAscus",
-                           "type" : "ExpressionRef"
+                           "type" : "SameAs",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentBiopsyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "SecondMostRecentCytologyReport",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         } ]
                      }, {
-                        "name" : "SecondMostRecentCytologyInterpretedAsNilm",
-                        "type" : "ExpressionRef"
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "name" : "SecondMostRecentHpvReport",
+                                          "libraryName" : "Collate",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "In",
+                                       "operand" : [ {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentHpvReport",
+                                             "libraryName" : "Collate",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "lowClosed" : false,
+                                          "highClosed" : true,
+                                          "type" : "Interval",
+                                          "low" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          },
+                                          "high" : {
+                                             "type" : "Add",
+                                             "operand" : [ {
+                                                "path" : "date",
+                                                "type" : "Property",
+                                                "source" : {
+                                                   "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }, {
+                                                "value" : 18,
+                                                "unit" : "months",
+                                                "type" : "Quantity"
+                                             } ]
+                                          }
+                                       } ]
+                                    }, {
+                                       "type" : "Not",
+                                       "operand" : {
+                                          "type" : "IsNull",
+                                          "operand" : {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       }
+                                    } ]
+                                 } ]
+                              }, {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "name" : "SecondMostRecentHpvResult",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV-negative",
+                                    "type" : "Literal"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "SameAs",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentHpvReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "SecondMostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "type" : "SameAs",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "SecondMostRecentCytologyReport",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "SecondMostRecentHpvReport",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              } ]
+                           }
+                        } ]
                      } ]
                   } ]
                },
@@ -5235,7 +6230,7 @@
                }
             }
          }, {
-            "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years",
+            "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -5245,7 +6240,7 @@
                   "operand" : {
                      "type" : "IsNull",
                      "operand" : {
-                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
                         "type" : "ExpressionRef"
                      }
                   }
@@ -5273,7 +6268,7 @@
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                              "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
                               "type" : "ExpressionRef"
                            }
                         } ]
@@ -5368,7 +6363,7 @@
                }
             }
          }, {
-            "name" : "SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years",
+            "name" : "SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -5378,7 +6373,7 @@
                   "operand" : {
                      "type" : "IsNull",
                      "operand" : {
-                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                        "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
                         "type" : "ExpressionRef"
                      }
                   }
@@ -5406,7 +6401,7 @@
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                              "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
                               "type" : "ExpressionRef"
                            }
                         } ]
@@ -5513,6 +6508,627 @@
                               }
                            }
                         }, {
+                           "name" : "date",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeHrHpvTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "SortedHpvReports",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "HPV Negative Results",
+                              "libraryName" : "Dash"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecentNegativeHSILSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "type" : "Union",
+                        "operand" : [ {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "H",
+                              "expression" : {
+                                 "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "relationship" : [ {
+                              "alias" : "C",
+                              "type" : "With",
+                              "expression" : {
+                                 "name" : "SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
+                                 "type" : "ExpressionRef"
+                              },
+                              "suchThat" : {
+                                 "type" : "SameAs",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "scope" : "C",
+                                    "type" : "Property"
+                                 }, {
+                                    "path" : "date",
+                                    "scope" : "H",
+                                    "type" : "Property"
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "H",
+                              "expression" : {
+                                 "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "relationship" : [ {
+                              "alias" : "N",
+                              "type" : "With",
+                              "expression" : {
+                                 "name" : "NegativeHrHpvTests",
+                                 "type" : "ExpressionRef"
+                              },
+                              "suchThat" : {
+                                 "type" : "SameAs",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "scope" : "N",
+                                    "type" : "Property"
+                                 }, {
+                                    "path" : "date",
+                                    "scope" : "H",
+                                    "type" : "Property"
+                                 } ]
+                              }
+                           } ]
+                        } ]
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "sort" : {
+                     "by" : [ {
+                        "direction" : "asc",
+                        "path" : "date",
+                        "type" : "ByColumn"
+                     } ]
+                  }
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "riskTableInput",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "allConclusions",
+                           "elementType" : {
+                              "type" : "ListTypeSpecifier",
+                              "elementType" : {
+                                 "name" : "{http://hl7.org/fhir}CodeableConcept",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           }
+                        }, {
+                           "name" : "date",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "FirstTwoNegativeHSILSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "RecentNegativeHSILSurveillanceTests",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "type" : "Union",
+                  "operand" : [ {
+                     "type" : "ToList",
+                     "operand" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentNegativeHSILSurveillanceTests",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "0",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  }, {
+                     "type" : "ToList",
+                     "operand" : {
+                        "type" : "Indexer",
+                        "operand" : [ {
+                           "name" : "RecentNegativeHSILSurveillanceTests",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "riskTableInput",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "allConclusions",
+                           "elementType" : {
+                              "type" : "ListTypeSpecifier",
+                              "elementType" : {
+                                 "name" : "{http://hl7.org/fhir}CodeableConcept",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           }
+                        }, {
+                           "name" : "date",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeHrHpvTestsAsPartOfCotest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeHrHpvTests",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "H",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativePrimaryHrHpvTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Except",
+               "operand" : [ {
+                  "name" : "NegativeHrHpvTests",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "NegativeHrHpvTestsAsPartOfCotest",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "NegativeCytologyTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "R",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "NILM",
+                                 "libraryName" : "Dash",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeCotests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeHrHpvTests",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "NegativeCytologyTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }, {
+                              "value" : 1,
+                              "unit" : "day",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "H",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "NegativeSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "NegativePrimaryHrHpvTests",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "NegativeCotests",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "SortedNegativeSurveillanceTests",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "NegativeSurveillanceTests",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }
+                  }
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "path" : "date",
+                           "scope" : "H",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "NegativeSurveillanceTestDatesAfterHSILSurveillance",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "FirstTwoNegativeHSILSurveillanceTests",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "T",
+                     "expression" : {
+                        "name" : "SortedNegativeSurveillanceTests",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "T",
+                        "type" : "Property"
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "type" : "Last",
+                           "source" : {
+                              "name" : "FirstTwoNegativeHSILSurveillanceTests",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
                            "name" : "date",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}DateTime",
@@ -6181,334 +7797,6 @@
                }
             }
          }, {
-            "name" : "NegativeHrHpvTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "SortedHpvReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "aC",
-                                 "type" : "AliasRef"
-                              } ]
-                           },
-                           "valueset" : {
-                              "name" : "HPV Negative Results",
-                              "libraryName" : "Dash"
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeHrHpvTestsAsPartOfCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeHrHpvTests",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "alias" : "C",
-                  "expression" : {
-                     "name" : "SortedCytologyReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "scope" : "C",
-                           "type" : "Property"
-                        }
-                     }
-                  } ]
-               },
-               "return" : {
-                  "expression" : {
-                     "name" : "H",
-                     "type" : "AliasRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativePrimaryHrHpvTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Except",
-               "operand" : [ {
-                  "name" : "NegativeHrHpvTests",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "NegativeHrHpvTestsAsPartOfCotest",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "NegativeCytologyTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "SortedCytologyReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "Equivalent",
-                           "operand" : [ {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "aC",
-                                 "type" : "AliasRef"
-                              } ]
-                           }, {
-                              "type" : "ToConcept",
-                              "operand" : {
-                                 "name" : "NILM",
-                                 "libraryName" : "Dash",
-                                 "type" : "CodeRef"
-                              }
-                           } ]
-                        }
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeCotests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeHrHpvTests",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "alias" : "C",
-                  "expression" : {
-                     "name" : "NegativeCytologyTests",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "In",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }, {
-                        "lowClosed" : true,
-                        "highClosed" : true,
-                        "type" : "Interval",
-                        "low" : {
-                           "type" : "Subtract",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        },
-                        "high" : {
-                           "type" : "Add",
-                           "operand" : [ {
-                              "path" : "date",
-                              "scope" : "C",
-                              "type" : "Property"
-                           }, {
-                              "value" : 1,
-                              "unit" : "day",
-                              "type" : "Quantity"
-                           } ]
-                        }
-                     } ]
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "path" : "date",
-                           "scope" : "C",
-                           "type" : "Property"
-                        }
-                     }
-                  } ]
-               },
-               "return" : {
-                  "expression" : {
-                     "name" : "H",
-                     "type" : "AliasRef"
-                  }
-               }
-            }
-         }, {
-            "name" : "NegativeSurveillanceTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "name" : "NegativePrimaryHrHpvTests",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "NegativeCotests",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "SortedNegativeSurveillanceTests",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "NegativeSurveillanceTests",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "scope" : "H",
-                        "type" : "Property"
-                     }
-                  }
-               },
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "date",
-                        "value" : {
-                           "path" : "date",
-                           "scope" : "H",
-                           "type" : "Property"
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
             "name" : "NegativeSurveillanceTestsAfterSecondMostRecentBiopsy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -6919,12 +8207,62 @@
                               }
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "AnyHistologyInterpretedAsCin3",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin3",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCin3Biopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin3Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7032,12 +8370,62 @@
                               }
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "HistologyInterpretedAsCin2",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin2",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCin2Biopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin2Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7128,12 +8516,62 @@
                               }
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "AnyHistologyInterpretedAsCin2",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin2",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCin2Biopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin2Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7183,59 +8621,115 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "GreaterOrEqual",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
+                                    "type" : "GreaterOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
-                                    }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
+                                    } ]
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
+                                    "type" : "LessOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "50",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
                               }, {
-                                 "type" : "LessOrEqual",
+                                 "type" : "Or",
                                  "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
+                                    "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                                    "type" : "ExpressionRef"
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "50",
-                                    "type" : "Literal"
+                                    "name" : "HistologyInterpretedAsCin2",
+                                    "type" : "ExpressionRef"
                                  } ]
                               } ]
                            }, {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "name" : "HistologyInterpretedAsUnspecifiedHsil",
-                                 "type" : "ExpressionRef"
-                              }, {
-                                 "name" : "HistologyInterpretedAsCin2",
-                                 "type" : "ExpressionRef"
-                              } ]
+                              "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                           "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCin2Biopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin2Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7265,15 +8759,7 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Treatment is recommended for CIN 2 lasting 2 years.",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Excisional treatment is preferred, and treatment with ablation is acceptable.",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in circumstances defined by the WHO.",
+                              "value" : "Treatment is recommended for histologic HSIL (CIN 2) or histologic HSIL (unspecified) lasting 2 years.",
                               "type" : "Literal"
                            } ]
                         }
@@ -7332,22 +8818,22 @@
                                  "operand" : {
                                     "type" : "IsNull",
                                     "operand" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years",
+                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
                                        "type" : "ExpressionRef"
                                     }
                                  }
                               } ]
                            }, {
-                              "type" : "Equal",
+                              "type" : "GreaterOrEqual",
                               "operand" : [ {
                                  "type" : "Count",
                                  "source" : {
-                                    "name" : "SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years",
+                                    "name" : "FirstTwoNegativeHSILSurveillanceTests",
                                     "type" : "ExpressionRef"
                                  }
                               }, {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "5",
+                                 "value" : "2",
                                  "type" : "Literal"
                               } ]
                            } ]
@@ -7356,12 +8842,12 @@
                            "operand" : [ {
                               "type" : "Count",
                               "source" : {
-                                 "name" : "SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast6Years",
+                                 "name" : "NegativeSurveillanceTestDatesAfterHSILSurveillance",
                                  "type" : "ExpressionRef"
                               }
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "5",
+                              "value" : "3",
                               "type" : "Literal"
                            } ]
                         } ]
@@ -7420,62 +8906,90 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "GreaterOrEqual",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
+                                    "type" : "GreaterOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
-                                    }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
+                                    } ]
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
+                                    "type" : "LessOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "50",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
                               }, {
-                                 "type" : "LessOrEqual",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
                                     "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
+                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                                       "type" : "ExpressionRef"
                                     }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "50",
-                                    "type" : "Literal"
-                                 } ]
+                                 }
                               } ]
                            }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "SecondMostRecentNegativeHsilSurveillanceResultWithin18Months",
+                                 "expression" : {
+                                    "name" : "MostRecentNegativeHsilSurveillanceResultWithin18Months",
                                     "type" : "ExpressionRef"
                                  }
-                              }
+                              } ],
+                              "relationship" : [ ]
                            } ]
                         }, {
-                           "type" : "Query",
-                           "source" : [ {
-                              "alias" : "SecondMostRecentNegativeHsilSurveillanceResult",
-                              "expression" : {
-                                 "name" : "MostRecentNegativeHsilSurveillanceResult",
+                           "type" : "SameOrAfter",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentBiopsyReport",
+                                 "libraryName" : "Collate",
                                  "type" : "ExpressionRef"
                               }
-                           } ],
-                           "relationship" : [ ]
+                           }, {
+                              "type" : "Add",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "SecondMostRecentBiopsyReport",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 6,
+                                 "unit" : "months",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
                         } ]
                      }, {
                         "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
@@ -7530,56 +9044,111 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "GreaterOrEqual",
+                              "type" : "And",
                               "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
                               }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
+                                 "type" : "LessOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
                               } ]
                            }, {
-                              "type" : "LessOrEqual",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
                                  "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
+                                    "name" : "MostRecentHsilBiopsyInPast3Years",
+                                    "type" : "ExpressionRef"
                                  }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "50",
-                                 "type" : "Literal"
-                              } ]
+                              }
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                           "expression" : {
-                              "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentHsilBiopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
                               "type" : "ExpressionRef"
-                           }
-                        } ],
-                        "relationship" : [ ]
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHsilBiopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7666,16 +9235,72 @@
                                  } ]
                               } ]
                            }, {
-                              "name" : "MostRecentBiopsyReportWasWithinPastYear",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "MostRecentCin2BiopsyInPast3Years",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         }, {
-                           "name" : "HistologyInterpretedAsCin2",
+                           "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                        "type" : "ExpressionRef"
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "DateOfLastCervicalPrecancerTreatment",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "DateOfLastCervicalPrecancerTreatment",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCin2Biopsy",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }
+                           } ]
+                        }, {
+                           "type" : "SameOrBefore",
+                           "operand" : [ {
+                              "name" : "DateOfLastCervicalPrecancerTreatment",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Subtract",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCin2Biopsy",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "value" : 7,
+                                 "unit" : "years",
+                                 "type" : "Quantity"
+                              } ]
+                           } ]
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -7705,7 +9330,11 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Observation or treatment for CIN 2 is acceptable, provided the squamocolumnar junction is fully visualized and CIN 2+ or ungraded CIN is not identified on endocervical sampling.",
+                              "value" : "Either observation or treatment of CIN 2 is acceptable when the patient's concerns about the effect of treatment on future pregnancy outweigh concerns about cancer.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded.",
                               "type" : "Literal"
                            }, {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -9662,6 +11291,39 @@
                      } ]
                   }
                }
+            }
+         }, {
+            "name" : "bothTreatmentBiopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCin3Biopsy",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "TreatmentInLastYear",
