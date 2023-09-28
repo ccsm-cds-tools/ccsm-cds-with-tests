@@ -1,0 +1,41 @@
+---
+name: HPV Diagnostic Report And Multiple Observations Different Codes From HPV Value Set
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#82675-0 Human papilloma virus 16+18+31+33+35+39+45+51+52+56+58+59+66+68 DNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  result:
+  - reference: Observation/1234
+  conclusionCode:
+  - SNOMEDCT#260373001 Detected (qualifier value)
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: Observation
+  id: 1234
+  code: LOINC#77399-4 Human papilloma virus 16 DNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  valueCodeableConcept: SNOMEDCT#260373001 Detected (qualifier value)
+  effectiveDateTime: 2021-05-01
+-
+  resourceType: Observation
+  id: 1234
+  code: LOINC#71431-1 Human papilloma virus 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  valueCodeableConcept: SNOMEDCT#260373001 Detected (qualifier value)
+  effectiveDateTime: 2021-05-01
+
+results:
+  SortedReports: $should have length 1
+  SortedBiopsyReports: $should have length 0
+  SortedHpvReports: $should have length 1

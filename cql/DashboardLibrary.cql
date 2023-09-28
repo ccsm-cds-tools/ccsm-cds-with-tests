@@ -76,6 +76,8 @@ valueset "CPT Value Set for Removal of Cervix Procedures": 'https://cts.nlm.nih.
 
 // Diagnostic reports
 valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059'
+valueset "HPV 16 Tests": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.299'
+valueset "HPV 18 Tests": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.300'
 valueset "Pap Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.298'
 valueset "Abnormal results of Cervical Cytology Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.235'
 valueset "HPV Immunization": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.191'
@@ -786,13 +788,36 @@ define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observat
   else
     ValuesFromObservation(D, ObsList)
 
+define Hpv16CodeToFhirCodeableConcept:
+  FHIRHelpers.ToFhirCodeableConcept("HPV16+")
+
+define Hpv18CodeToFHIRCodeableConcept:
+  FHIRHelpers.ToFhirCodeableConcept("HPV18+")
+
+// If an HPV test has a code for a genotyped high-risk HPV test, and a generic value representing a positive test,
+// this function returns the valueCodeableConcept that would represent the positive genotyped high-risk test,
+// as opposed to the generic positive value
+// @param O - a FHIR Observation
+// @returns {FHIR.CodeableConcept} the valueCodeableConcept of the Observation,
+// or the CodeableConcept of HPV16+ or HPV18+ if the test was positive for code of HPV16 or HPV18
+define function ConvertHpvTestTypeToCodeableConcept(O Observation):
+  if O.value as FHIR.CodeableConcept in "High Risk HPV Positive Results" then
+    if O.code in "HPV 16 Tests" then 
+      Hpv16CodeToFhirCodeableConcept
+    else if O.code in "HPV 18 Tests" then 
+      Hpv18CodeToFHIRCodeableConcept
+    else
+      O.value as FHIR.CodeableConcept
+  else 
+    O.value as FHIR.CodeableConcept
+
 define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
   (ObsList) O
   where
     Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
     Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
     C3F.FindDate(O) = Common.DiagnosticReportDate(D)
-  return O.value as FHIR.CodeableConcept
+  return ConvertHpvTestTypeToCodeableConcept(O) as FHIR.CodeableConcept
 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(

@@ -254,6 +254,14 @@
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059",
             "accessLevel" : "Public"
          }, {
+            "name" : "HPV 16 Tests",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.299",
+            "accessLevel" : "Public"
+         }, {
+            "name" : "HPV 18 Tests",
+            "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.300",
+            "accessLevel" : "Public"
+         }, {
             "name" : "Pap Test",
             "id" : "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.298",
             "accessLevel" : "Public"
@@ -6639,6 +6647,161 @@
                }
             }
          }, {
+            "name" : "Hpv16CodeToFhirCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ToFhirCodeableConcept",
+               "libraryName" : "FHIRHelpers",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HPV16+",
+                  "type" : "CodeRef"
+               } ]
+            }
+         }, {
+            "name" : "Hpv18CodeToFHIRCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "ToFhirCodeableConcept",
+               "libraryName" : "FHIRHelpers",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "HPV18+",
+                  "type" : "CodeRef"
+               } ]
+            }
+         }, {
+            "name" : "ConvertHpvTestTypeToCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "InValueSet",
+                  "code" : {
+                     "name" : "ToConcept",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "O",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}CodeableConcept",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  },
+                  "valueset" : {
+                     "name" : "High Risk HPV Positive Results",
+                     "preserve" : true
+                  }
+               },
+               "then" : {
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "InValueSet",
+                     "code" : {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "code",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "O",
+                              "type" : "OperandRef"
+                           }
+                        } ]
+                     },
+                     "valueset" : {
+                        "name" : "HPV 16 Tests",
+                        "preserve" : true
+                     }
+                  },
+                  "then" : {
+                     "name" : "Hpv16CodeToFhirCodeableConcept",
+                     "type" : "ExpressionRef"
+                  },
+                  "else" : {
+                     "type" : "If",
+                     "condition" : {
+                        "type" : "InValueSet",
+                        "code" : {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "code",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "O",
+                                 "type" : "OperandRef"
+                              }
+                           } ]
+                        },
+                        "valueset" : {
+                           "name" : "HPV 18 Tests",
+                           "preserve" : true
+                        }
+                     },
+                     "then" : {
+                        "name" : "Hpv18CodeToFHIRCodeableConcept",
+                        "type" : "ExpressionRef"
+                     },
+                     "else" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "O",
+                              "type" : "OperandRef"
+                           }
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{http://hl7.org/fhir}CodeableConcept",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "strict" : false,
+                  "type" : "As",
+                  "operand" : {
+                     "path" : "value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "O",
+                        "type" : "OperandRef"
+                     }
+                  },
+                  "asTypeSpecifier" : {
+                     "name" : "{http://hl7.org/fhir}CodeableConcept",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "O",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}Observation",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "ValuesFromObservation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -6778,9 +6941,12 @@
                      "strict" : false,
                      "type" : "As",
                      "operand" : {
-                        "path" : "value",
-                        "scope" : "O",
-                        "type" : "Property"
+                        "name" : "ConvertHpvTestTypeToCodeableConcept",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "O",
+                           "type" : "AliasRef"
+                        } ]
                      },
                      "asTypeSpecifier" : {
                         "name" : "{http://hl7.org/fhir}CodeableConcept",
