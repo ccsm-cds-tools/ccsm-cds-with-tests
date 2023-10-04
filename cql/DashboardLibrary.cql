@@ -1332,6 +1332,6 @@ define CervicalCancerScreeningAndMedicalHistory:
     diagnosticReports: DiagnosticReportsSummary,
     encounters: PertinentEncountersSummary,
     immunizations: PertinentImmunizationsSummary,
-    episodesOfCares: PertinentEpisodesOfCareSummary
+    episodeOfCares: PertinentEpisodesOfCareSummary
   }
 }
