@@ -1303,7 +1303,7 @@ define Pregnant:
   // Use existing logic with conditions and observations
   if (HasActivePregnancyEpisodesOfCare) then
     true
-  else if (HasFinishedPregnancyEpisodesOfCare and not HasActivePregnancyEpisodesOfCare) then
+  else if (HasFinishedPregnancyEpisodesOfCare) then
     false
   else
     Exists(PregnancyDiagnoses) or Exists(PregnancyObservations)
