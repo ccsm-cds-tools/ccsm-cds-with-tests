@@ -31,8 +31,6 @@ codesystem "ICD-9": 'http://hl7.org/fhir/sid/icd-9-cm'
 codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
 codesystem "GENDER-IDENTITY": 'http://hl7.org/fhir/gender-identity'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
-codesystem "PregnancyEpisodeSystemTest": 'urn:oid:1.2.840.114350.1.13.88.3.7.2.726668'
-codesystem "PregnancyEpisodeSystemProd": 'urn:oid:1.2.840.114350.1.13.88.2.7.2.726668'
 
 // Symptomatic value sets
 valueset "Abnormal Uterine or Vaginal Bleeding Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.189'
@@ -99,6 +97,7 @@ code "Female-to-male Transsexual": '407377005' from "SNOMED-CT" display 'Female-
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
+code "Pregnancy Episode Of Care": '424525001' from "SNOMED-CT" display 'Antenatal care (regime/therapy)'
 code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History of exposure to diethystilbestrol in utero (situation)'
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
@@ -134,8 +133,6 @@ code "DES Exposure Question": 'DESEQ' from "LOCAL" display 'Did the patient expe
 code "Future Pregnancy Concerns Question": 'FPCQ' from "LOCAL" display 'Does the patient have future pregnancy concerns related to treatment options?'
 code "Benign Glandular Cells": 'BGC' from "LOCAL" display 'Benign Glandular Cells'
 code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stromal cells'
-code "PregnantEpisodeTest": '6' from "PregnancyEpisodeSystemTest" display 'PREGNANCY'
-code "PregnantEpisodeProd": '6' from "PregnancyEpisodeSystemProd" display 'PREGNANCY'
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
@@ -997,8 +994,7 @@ define function HasBeenLocallyEdited(E EpisodeOfCare):
   else AnyTrue( (E.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
 
 define PregnancyEpisodesOfCare:
-  [EpisodeOfCare: "PregnantEpisodeTest"] union
-  [EpisodeOfCare: "PregnantEpisodeProd"]
+  [EpisodeOfCare: "Pregnancy Episode Of Care"]
 
 define ActivePregnancyEpisodesOfCare:
   PregnancyEpisodesOfCare P

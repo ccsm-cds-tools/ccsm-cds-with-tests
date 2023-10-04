@@ -9,11 +9,6 @@
          "errorType" : "semantic",
          "errorSeverity" : "warning",
          "type" : "CqlToElmError"
-      }, {
-         "message" : "List-valued expression was demoted to a singleton.",
-         "errorType" : "semantic",
-         "errorSeverity" : "warning",
-         "type" : "CqlToElmError"
       } ],
       "identifier" : {
          "id" : "DashboardLibrary",
@@ -119,14 +114,6 @@
          }, {
             "name" : "LOCAL",
             "id" : "http://OUR-PLACEHOLDER-URL.com",
-            "accessLevel" : "Public"
-         }, {
-            "name" : "PregnancyEpisodeSystemTest",
-            "id" : "urn:oid:1.2.840.114350.1.13.88.3.7.2.726668",
-            "accessLevel" : "Public"
-         }, {
-            "name" : "PregnancyEpisodeSystemProd",
-            "id" : "urn:oid:1.2.840.114350.1.13.88.2.7.2.726668",
             "accessLevel" : "Public"
          } ]
       },
@@ -370,6 +357,14 @@
             "name" : "Patient currently pregnant",
             "id" : "77386006",
             "display" : "Patient currently pregnant (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Pregnancy Episode Of Care",
+            "id" : "424525001",
+            "display" : "Antenatal care (regime/therapy)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -637,22 +632,6 @@
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "LOCAL"
-            }
-         }, {
-            "name" : "PregnantEpisodeTest",
-            "id" : "6",
-            "display" : "PREGNANCY",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "PregnancyEpisodeSystemTest"
-            }
-         }, {
-            "name" : "PregnantEpisodeProd",
-            "id" : "6",
-            "display" : "PREGNANCY",
-            "accessLevel" : "Public",
-            "codeSystem" : {
-               "name" : "PregnancyEpisodeSystemProd"
             }
          } ]
       },
@@ -8623,34 +8602,18 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
-                  "codeProperty" : "type",
-                  "codeComparator" : "~",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "PregnantEpisodeTest",
-                        "type" : "CodeRef"
-                     }
+               "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
+               "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
+               "codeProperty" : "type",
+               "codeComparator" : "~",
+               "type" : "Retrieve",
+               "codes" : {
+                  "type" : "ToList",
+                  "operand" : {
+                     "name" : "Pregnancy Episode Of Care",
+                     "type" : "CodeRef"
                   }
-               }, {
-                  "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
-                  "codeProperty" : "type",
-                  "codeComparator" : "~",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "PregnantEpisodeProd",
-                        "type" : "CodeRef"
-                     }
-                  }
-               } ]
+               }
             }
          }, {
             "name" : "ActivePregnancyEpisodesOfCare",
