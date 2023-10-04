@@ -660,7 +660,7 @@ define PertinentMedicationDispensesSummary:
 define function displayStartDate(startDate String):
   if startDate is not null then
     startDate
-  else 
+  else
     'no start date available'
 
 define function displayEndDate(endDate String):
@@ -806,13 +806,13 @@ define Hpv18CodeToFHIRCodeableConcept:
 // or the CodeableConcept of HPV16+ or HPV18+ if the test was positive for code of HPV16 or HPV18
 define function ConvertHpvTestTypeToCodeableConcept(O Observation):
   if O.value as FHIR.CodeableConcept in "High Risk HPV Positive Results" then
-    if O.code in "HPV 16 Tests" then 
+    if O.code in "HPV 16 Tests" then
       Hpv16CodeToFhirCodeableConcept
-    else if O.code in "HPV 18 Tests" then 
+    else if O.code in "HPV 18 Tests" then
       Hpv18CodeToFHIRCodeableConcept
     else
       O.value as FHIR.CodeableConcept
-  else 
+  else
     O.value as FHIR.CodeableConcept
 
 define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
@@ -1022,7 +1022,7 @@ define PertinentEpisodesOfCareSummary:
   return {
     name: Common.ConceptText(E.type[0]),
     value: E.status.value,
-    date: 
+    date:
       displayStartDate(Common.PeriodObject(E.period)."Start") +
       ' to ' +
       displayEndDate(Common.PeriodObject(E.period)."End"),
@@ -1306,7 +1306,7 @@ define Pregnant:
   else if (HasFinishedPregnancyEpisodesOfCare and not HasActivePregnancyEpisodesOfCare) then
     false
   else
-    Exists(PregnancyDiagnoses) or Exists(PregnancyObservations) 
+    Exists(PregnancyDiagnoses) or Exists(PregnancyObservations)
 
 // The Summary object represents the full Cervical Cancer Screening and Management Medical History to be displayed to the clinician. A robust UI
 // should be created in order to display this information in a Cervical Cancer Screening and Management Dashboard
@@ -1332,6 +1332,6 @@ define CervicalCancerScreeningAndMedicalHistory:
     diagnosticReports: DiagnosticReportsSummary,
     encounters: PertinentEncountersSummary,
     immunizations: PertinentImmunizationsSummary,
-    episodesOfCare: PertinentEpisodesOfCareSummary
+    episodesOfCares: PertinentEpisodesOfCareSummary
   }
 }
