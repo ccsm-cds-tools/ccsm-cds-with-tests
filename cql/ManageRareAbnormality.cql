@@ -651,6 +651,17 @@ define MostSevereHistologyInterpretedAsCin2InPast3Years:
         aC ~ Dash."CIN2"
   )
 
+define MostRecentCin2BiopsyInPast6Years:
+  Coalesce(
+    (Collate.SortedBiopsyReports) S
+    where (S.date >= Now() - 6 years) and
+    AnyTrue(
+    (S.allConclusions) aC
+      return 
+        aC ~ Dash."CIN2"
+    )
+  )
+
 define MostRecentCin2BiopsyInPast3Years:
   Coalesce(
     (Collate.SortedBiopsyReports) S
@@ -670,6 +681,17 @@ define MostRecentCin2BiopsyInPast2Years:
     (S.allConclusions) aC
       return 
         aC ~ Dash."CIN2"
+    )
+  )
+
+define MostRecentHsilBiopsyInPast6Years:
+    Coalesce(
+    (Collate.SortedBiopsyReports) S
+    where (S.date >= Now() - 6 years) and
+    AnyTrue(
+    (S.allConclusions) aC
+      return 
+        aC ~ Dash."HSIL, Unspecified"
     )
   )
 
@@ -708,11 +730,18 @@ define HistologyInterpretedAsUnspecifiedHsil:
         aC ~ Dash."HSIL, Unspecified"
   )
 
+define AnyHistologyInterpretedAsUnspecifiedHsil:
+  AnyTrue(
+    (Collate.SortedBiopsyReports.allConclusions) aC
+      return
+        aC ~ Dash."HSIL, Unspecified"
+  )
+
 define PrecedingCytologyResults:
   Coalesce(
     (Collate.SortedCytologyReports) S
       where S.date <= Collate.MostRecentBiopsyReport.date and
-        S.date >= Collate.MostRecentBiopsyReport.date - 6 months
+        S.date >= Collate.MostRecentBiopsyReport.date - 12 months
   )
 
 define PrecedingCytologyIsHsil:
@@ -733,7 +762,7 @@ define PrecedingCytologyResultsBeforeSecondMostRecentBiopsy:
   Coalesce(
     (Collate.SortedCytologyReports) S
       where S.date <= SecondMostRecentBiopsyReport.date and
-        S.date >= SecondMostRecentBiopsyReport.date - 6 months
+        S.date >= SecondMostRecentBiopsyReport.date - 12 months
   )
 
 define PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil:
@@ -779,6 +808,12 @@ define MostRecentBiopsyReportWasWithinPast12months:
 
 define MostRecentBiopsyReportWasWithinPast18months:
   Collate.MostRecentBiopsyReport.date >= Now() - 18 months
+
+define MostRecentBiopsyReportWasWithinPast2Years:
+  Collate.MostRecentBiopsyReport.date >= Now() - 2 years
+
+define TwoMostRecentBiopsyReportsWithin2YearsApart:
+  SecondMostRecentBiopsyReport.date within 2 years of Collate.MostRecentBiopsyReport.date
 
 define TwoMostRecentBiopsyReportsWithin18monthsApart:
   SecondMostRecentBiopsyReport.date within 18 months of Collate.MostRecentBiopsyReport.date
@@ -1044,7 +1079,8 @@ define RecommendationForAisHistologyResults:
           'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
           'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
         }
-      }      
+      }
+    // I.6 part 1  
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
@@ -1062,6 +1098,7 @@ define RecommendationForAisHistologyResults:
           'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
         }
       }
+    // I.6 part 2
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
@@ -1089,32 +1126,42 @@ define RecommendationForHistologyResults:
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
+      AnyHistologyInterpretedAsUnspecifiedHsil and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsUnspecifiedHsil
+      (
+        Collate.DateOfLastCervicalPrecancerTreatment is null or 
+        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date) or
+        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentHsilBiopsy.date
+      ) and
+      not SecondMostRecentNegativeHsilSurveillanceResultWithin18Months
     ) then
       {
         short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Managing Histology (I.1)',
         details: {
-          'Treatment is preferred for histologic HSIL. Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
-          'Observation, if elected includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
+          'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3].',
+          'Observation is acceptable if there are concerns related to future pregnancies and the following criteria are met: entire SCJ is visualized, lesion does not extend into endocervical canal, ECC is < CIN 2.',
+          'Observation, if elected, includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
         }
       }
     // I.1 Management of Histologic HSIL, not Further Specified or Qualified over age 50
     when (
       AgeInYears() > 50 and
+      AnyHistologyInterpretedAsUnspecifiedHsil and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsUnspecifiedHsil
+      (
+        Collate.DateOfLastCervicalPrecancerTreatment is null or 
+        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date) or
+        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentHsilBiopsy.date
+      )
     ) then
       {
         short: 'Treatment',
         date: Today(),
         group: 'Managing Histology (I.1)',
         details: {
-          'Treatment is recommended for histologic HSIL.'
+          'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3]).'
         }
       }
       
@@ -1143,6 +1190,7 @@ define RecommendationForHistologyResults:
     when ( // I2.2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
+      MostRecentBiopsyReportWasWithinPastThreeYears and
       HistologyInterpretedAsCin2 and
       (
         Collate.DateOfLastCervicalPrecancerTreatment is null or 
@@ -1277,51 +1325,56 @@ define RecommendationForHistologyResults:
       }
 
     // I.4 Management of LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology
-    when ( // I4.1
+
+    when ( // I4.5
       AgeInYears() >= 25 and
-      MostRecentBiopsyReportWasWithinPastYear and
       HistologyInterpretedAsCin1OrNormal and
-      PrecedingCytologyIsHsil
+      (
+        PrecedingCytologyIsHsil or
+        PrecedingCytologyIsAscH
+      ) and
+      (
+        not (
+          MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date
+        ) or
+        MostRecentTreatment is null
+      ) and
+      (
+        (
+          CytologyInterpretedAsHsil and
+          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date
+        ) or
+        (
+          CytologyInterpretedAsAscH and
+          MostRecentCytologyReport.date 2 years or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date
+        )
+      )
     ) then
       {
         short: 'See Details',
         date: Today(),
-        group: 'Managing Histology (I.4.1)',
+        group: 'Managing Histology (I.4.5)',
         details: {
-          'Immediate diagnostic excisional procedure or observation with primary HPV testing or cotesting and colposcopy at 1 year, or review the cytologic, histologic, and colposcopic findings are acceptable.',
-          'Observation is only acceptable when the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2.'
+          'A diagnostic excisional procedure is recommended (unless the patient is pregnant).'
         }
-      }
-    when ( // I4.2
-      AgeInYears() >= 25 and
-      MostRecentBiopsyReportWasWithinPastYear and
-      HistologyInterpretedAsCin1OrNormal and
-      PrecedingCytologyIsAscH
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.4.2)',
-        details: {
-          'Observation with primary HPV testing or cotesting at 1 year, or review of the cytologic, histologic, and colposcopic findings are acceptable.',
-          'A diagnostic excisional procedure is not recommended.'
-        }
-      }
+      }    
+
+
     when ( // I4.3 - Recommendation #2
       AgeInYears() >= 25 and
-      MostRecentSurveillanceTestNegative and
-      Collate.MostRecentHpvReport.date >= Now() - 3.5 years and
       (
         (
           (
-            Collate.MostRecentBiopsyReport.date 18 months or less before Collate.MostRecentHpvReport.date and
             HistologyInterpretedAsNormal and
-            TwoMostRecentBiopsyReportsWithin18monthsApart
+            TwoMostRecentBiopsyReportsWithin2YearsApart
           ) and
           (
             HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less before Collate.MostRecentHpvReport.date and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 2 years or less after SecondMostRecentBiopsyReport.date and
+            Count(NegativeSurveillanceTestsAfterSecondMostRecentBiopsy) >= 2 and
+            NegativeSurveillanceTestsAfterSecondMostRecentBiopsy[1].date 18 months or less after Collate.MostRecentBiopsyReport.date   
           ) and
           (
             SecondMostRecentHistologyInterpretedAsCin1OrNormal and
@@ -1329,7 +1382,7 @@ define RecommendationForHistologyResults:
           ) and
           (
             not (
-              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+              MostRecentTreatmentDate 2 years or less after SecondMostRecentBiopsyReport.date
             ) or
             MostRecentTreatment is null
           ) 
@@ -1337,8 +1390,8 @@ define RecommendationForHistologyResults:
         (
           (
             HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less before Collate.MostRecentHpvReport.date and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after Collate.MostRecentBiopsyReport.date
+            Count(NegativeSurveillanceTestsAfterMostRecentBiopsy) >= 2 and
+            NegativeSurveillanceTestsAfterMostRecentBiopsy[1].date 3 years or less after Collate.MostRecentBiopsyReport.date  
           ) and
           (
             HistologyInterpretedAsCin1OrNormal and
@@ -1346,34 +1399,36 @@ define RecommendationForHistologyResults:
           ) and
           (
             not (
-              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+              MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date
             ) or
             MostRecentTreatment is null
           ) 
         )
-      )
+      ) and
+      not HasPositiveSurveillanceAfterMostRecentBiopsy
     ) then
       {
         short: 'See Details',
         date: Today(),
         group: 'Managing Histology (I.4.3.2)',
         details: {
-          'Primary hrHPV testing or cotesting every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveilance may continue for as long as the patient remains in good health.'
+          'Primary hrHPV testing or cotesting every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveillance may continue for as long as the patient remains in good health.'
         }
-      }    
+      }
+
     when ( // I4.3 - Recommendation #1
       AgeInYears() >= 25 and
       (
         (
           (
-            MostRecentBiopsyReportWasWithinPast18months and
+            MostRecentBiopsyReportWasWithinPast2Years and
             HistologyInterpretedAsNormal and
-            TwoMostRecentBiopsyReportsWithin18monthsApart
+            TwoMostRecentBiopsyReportsWithin2YearsApart
           ) and
           (
             HasFirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date > Now() - 18 months and
-            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 18 months or less after SecondMostRecentBiopsyReport.date
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date > Now() - 24 months and
+            FirstNegativeSurveillanceTestAfterSecondMostRecentBiopsy.date 24 months or less after SecondMostRecentBiopsyReport.date
           ) and
           (
             SecondMostRecentHistologyInterpretedAsCin1OrNormal and
@@ -1381,7 +1436,7 @@ define RecommendationForHistologyResults:
           ) and
           (
             not (
-              MostRecentTreatmentDate 1 year or less after SecondMostRecentBiopsyReport.date
+              MostRecentTreatmentDate 2 years or less after SecondMostRecentBiopsyReport.date
             ) or
             MostRecentTreatment is null
           )
@@ -1389,8 +1444,8 @@ define RecommendationForHistologyResults:
         (
           (
             HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date > Now() - 18 months and
-            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 18 months or less after Collate.MostRecentBiopsyReport.date
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date > Now() - 24 months and
+            FirstNegativeSurveillanceTestAfterMostRecentBiopsy.date 24 months or less after Collate.MostRecentBiopsyReport.date
           ) and
           (
             HistologyInterpretedAsCin1OrNormal and
@@ -1398,7 +1453,7 @@ define RecommendationForHistologyResults:
           ) and
           (
             not (
-              MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
+              MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date
             ) or
             MostRecentTreatment is null 
           ) 
@@ -1413,73 +1468,53 @@ define RecommendationForHistologyResults:
           'Primary hrHPV testing or cotesting is recommended in 1 year.'
         }
       }
-    when ( // I4.5
-      AgeInYears() >= 25 and
-      HistologyInterpretedAsCin1OrNormal and
-      (
-        PrecedingCytologyIsHsil or
-        PrecedingCytologyIsAscH
-      ) and
-      (
-        not (
-          MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
-        ) or
-        MostRecentTreatment is null
-      ) and
-      (
-        (
-          CytologyInterpretedAsHsil and
-          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        ) or
-        (
-          CytologyInterpretedAsAscH and
-          MostRecentCytologyReport.date 2 years or more after Collate.MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        )
-      )
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.4.5)',
-        details: {
-          'A diagnostic excisional procedure is recommended.'
-        }
-      }    
     when ( // I4.4
       AgeInYears() >= 25 and
-      HistologyInterpretedAsCin1OrNormal and
       (
-        PrecedingCytologyIsHsil or
-        PrecedingCytologyIsAscH
-      ) and
+        HistologyInterpretedAsCin1OrNormal and
+        (
+          PrecedingCytologyIsHsil or
+          PrecedingCytologyIsAscH
+        ) and
+        (
+          not (
+            MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date
+          ) or
+          MostRecentTreatment is null
+        ) and
+        (
+          (
+            (MostRecentCytologyReport is not null) and
+            not CytologyInterpretedAsNilm and
+            not CytologyInterpretedAsHsil and
+            MostRecentCytologyReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date and
+            MostRecentCytologyReport.date more than 6 months after Collate.MostRecentBiopsyReport.date 
+          ) or
+          (
+            (Collate.MostRecentHpvReport is not null) and
+            Collate.MostRecentHpvResult != 'HPV-negative' and
+            Collate.MostRecentHpvReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date and
+            Collate.MostRecentHpvReport.date more than 6 months after Collate.MostRecentBiopsyReport.date
+          )
+        )
+      ) or
       (
-        not (
-          MostRecentTreatmentDate 1 year or less after Collate.MostRecentBiopsyReport.date
-        ) or
-        MostRecentTreatment is null
-      ) and
-      (
+        SecondMostRecentHistologyInterpretedAsCin1OrNormal and
         (
-          (MostRecentCytologyReport is not null) and
-          not CytologyInterpretedAsNilm and
-          not CytologyInterpretedAsHsil and
-          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
-          MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        ) or
+          PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil or
+          PrecedingCytologyBeforeSecondMostRecentBiopsyIsAscH
+        ) and
         (
-          (Collate.MostRecentHpvReport is not null) and
-          Collate.MostRecentHpvResult != 'HPV-negative' and
-          Collate.MostRecentHpvReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
-          Collate.MostRecentHpvReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-        ) or
+          not (
+            MostRecentTreatmentDate 2 years or less after SecondMostRecentBiopsyReport.date
+          ) or
+          MostRecentTreatment is null
+        ) and
         (
-          // TODO: As written, this part of the path will not trigger. Going forward, we should look into a way to clarify the lookback for 'LSIL (CIN1) or Less Preceded by ASC-H or HSIL Cytology' so that it is not reliant on the MostRecentBiopsyReport
-          (Collate.MostRecentBiopsyReport is not null) and
-          not HistologyInterpretedAsNormal and
-          Collate.MostRecentBiopsyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
-          Collate.MostRecentBiopsyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+          (SecondMostRecentBiopsyReport is not null) and
+          not SecondMostRecentHistologyInterpretedAsNormal and
+          Collate.MostRecentBiopsyReport.date less than 3.5 years after SecondMostRecentBiopsyReport.date and
+          Collate.MostRecentBiopsyReport.date more than 6 months after SecondMostRecentBiopsyReport.date
         )
       )
     ) then
@@ -1491,13 +1526,50 @@ define RecommendationForHistologyResults:
           'Colposcopy is recommended.'
         }
       }
+    when ( // I4.1
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      PrecedingCytologyIsHsil and
+      not (HasTreatmentAfterMostRecentBiopsy)
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.4.1)',
+        details: {
+          'Immediate diagnostic excisional procedure (unless the patient is pregnant), or observation with primary HPV testing or cotesting and colposcopy at 1 year are acceptable.',
+          'Observation is only acceptable when the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2.'
+        }
+      }
+    when ( // I4.2
+      AgeInYears() >= 25 and
+      HistologyInterpretedAsCin1OrNormal and
+      PrecedingCytologyIsAscH and
+      not (HasTreatmentAfterMostRecentBiopsy)
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.4.2)',
+        details: {
+          'Observation with primary HPV testing or cotesting at 1 year is recommended if the colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and the endocervical sampling, if collected, was negative.',
+          'A diagnostic excisional procedure is not recommended.'
+        }
+      }
     // I.5 Histologic LSIL (CIN1) Diagnosed Repeatedly for at Least 2 Years
     when (
       AgeInYears() >= 25 and
-      MostRecentBiopsyReportWasWithinPast12months and
       HistologyInterpretedAsCin1 and
       SecondMostRecentHistologyInterpretedAsCin1 and
-      TwoMostRecentBiopsyReportsWithin15monthsApart
+      TwoMostRecentBiopsyReportsWithin15monthsApart and
+      MostRecentHsilBiopsyInPast6Years is null and
+      MostRecentCin2BiopsyInPast6Years is null and
+      (
+        not (
+          MostRecentTreatmentDate after SecondMostRecentBiopsyReport.date
+        ) or
+        MostRecentTreatment is null
+      )
     ) then
       {
         short: 'See Details',
@@ -1536,6 +1608,27 @@ define TreatmentInLastYear:
 
 define HasTreatmentInLastYear:
   TreatmentInLastYear is not null
+
+define HasTreatmentAfterMostRecentBiopsy:
+  (MostRecentTreatmentDate is not null) and
+  MostRecentTreatmentDate after Collate.MostRecentBiopsyReport.date
+
+define PositiveSurveillanceAfterMostRecentBiopsy:
+  Coalesce(
+    (Dash.RecentPositiveHpv) R
+      where ((R.effective as FHIR.dateTime).value > Collate.MostRecentBiopsyReport.date)
+  ) union 
+  Coalesce(
+    Dash.RecentAbnormalCytologyResults C
+      with Collate.SortedHpvReports P
+        such that (C.effective as FHIR.dateTime).value within 1 day of P.date
+      where (
+        (C.effective as FHIR.dateTime).value > Collate.MostRecentBiopsyReport.date
+      )
+  )
+
+define HasPositiveSurveillanceAfterMostRecentBiopsy:
+  exists PositiveSurveillanceAfterMostRecentBiopsy
 
 define AnyHistologicHsil:
   (Collate.SortedBiopsyReports) B
