@@ -330,8 +330,11 @@ define RecommendationForPatientsYoungerThan25:
       }  
     when ( // Heading4.1
       AgeInYears() < 25 and
-      Rare.MostRecentBiopsyReportWasWithinPastYear and
-      Rare.HistologyInterpretedAsCin3
+      Rare.AnyHistologyInterpretedAsCin3 and
+      (
+        Collate.DateOfLastCervicalPrecancerTreatment is null or 
+        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin3Biopsy.date)
+      )
     ) then
       {
         short: 'Treatment',
@@ -344,8 +347,11 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // Heading4.2
       AgeInYears() < 25 and
-      Rare.MostRecentBiopsyReportWasWithinPastYear and
-      Rare.HistologyInterpretedAsCin2
+      (Rare.MostRecentCin2BiopsyInPast2Years is not null) and
+      (
+        Collate.DateOfLastCervicalPrecancerTreatment is null or 
+        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date)
+      )
     ) then
       {
         short: 'See Details',
@@ -359,8 +365,11 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // Heading4.3
       AgeInYears() < 25 and
-      Rare.MostRecentBiopsyReportWasWithinPastYear and
-      Rare.HistologyInterpretedAsUnspecifiedHsil
+      (Rare.MostRecentHsilBiopsyInPast2Years is not null) and
+      (
+        Collate.DateOfLastCervicalPrecancerTreatment is null or 
+        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date)
+      )    
     ) then
       {
         short: 'See Details',
