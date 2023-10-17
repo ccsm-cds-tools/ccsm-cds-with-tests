@@ -994,7 +994,11 @@ define function HasBeenLocallyEdited(E EpisodeOfCare):
   else AnyTrue( (E.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
 
 define PregnancyEpisodesOfCare:
-  [EpisodeOfCare: "Pregnancy Episode Of Care"]
+  [EpisodeOfCare] E where
+    AnyTrue(
+      (E.type) t
+        return t ~ "Pregnancy Episode Of Care"
+    )
 
 define ActivePregnancyEpisodesOfCare:
   PregnancyEpisodesOfCare P

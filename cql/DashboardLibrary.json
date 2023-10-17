@@ -4,11 +4,6 @@
          "translatorVersion" : "2.4.0",
          "translatorOptions" : "",
          "type" : "CqlToElmInfo"
-      }, {
-         "message" : "List-valued expression was demoted to a singleton.",
-         "errorType" : "semantic",
-         "errorSeverity" : "warning",
-         "type" : "CqlToElmError"
       } ],
       "identifier" : {
          "id" : "DashboardLibrary",
@@ -8602,16 +8597,49 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
-               "codeProperty" : "type",
-               "codeComparator" : "~",
-               "type" : "Retrieve",
-               "codes" : {
-                  "type" : "ToList",
-                  "operand" : {
-                     "name" : "Pregnancy Episode Of Care",
-                     "type" : "CodeRef"
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
+                     "type" : "Retrieve"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "t",
+                        "expression" : {
+                           "path" : "type",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "t",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "Pregnancy Episode Of Care",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
                   }
                }
             }
