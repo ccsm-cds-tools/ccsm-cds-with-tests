@@ -97,6 +97,7 @@ code "Female-to-male Transsexual": '407377005' from "SNOMED-CT" display 'Female-
 code "Yes": '373066001' from "SNOMED-CT" display 'Yes (qualifier value)'
 code "Pregnancy Status": '82810-3' from "LOINC" display 'Pregnancy status'
 code "Patient currently pregnant": '77386006' from "SNOMED-CT" display 'Patient currently pregnant (finding)'
+code "Pregnancy Episode Of Care": '424525001' from "SNOMED-CT" display 'Antenatal care (regime/therapy)'
 code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History of exposure to diethystilbestrol in utero (situation)'
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
@@ -656,7 +657,7 @@ define PertinentMedicationDispensesSummary:
 define function displayStartDate(startDate String):
   if startDate is not null then
     startDate
-  else 
+  else
     'no start date available'
 
 define function displayEndDate(endDate String):
@@ -670,9 +671,9 @@ define PertinentMedicationAdministrationsSummary:
   return {
     name: Common.ConceptText(M.medication as FHIR.CodeableConcept),
     value: M.status.value,
-    date: displayStartDate(Common.DateTimeText((M.effective as FHIR.Period)."start")) +
+    date: displayStartDate(Common.PeriodObject(M.effective as FHIR.Period)."Start") +
       ' to ' +
-      displayEndDate(Common.DateTimeText((M.effective as FHIR.Period)."end")),
+      displayEndDate(Common.PeriodObject(M.effective as FHIR.Period)."End"),
     reference: 'MedicationAdministration/' + M.id
   }
   sort by date desc
@@ -682,9 +683,9 @@ define PertinentMedicationStatementsSummary:
   return {
     name:  Common.ConceptText(M.medication as FHIR.CodeableConcept),
     value: M.status.value,
-    date: displayStartDate(Common.DateTimeText((M.effective as FHIR.Period)."start")) +
+    date: displayStartDate(Common.PeriodObject(M.effective as FHIR.Period)."Start") +
       ' to ' +
-      displayEndDate(Common.DateTimeText((M.effective as FHIR.Period)."end")),
+      displayEndDate(Common.PeriodObject(M.effective as FHIR.Period)."End"),
     reference: 'MedicationStatement/' + M.id
   }
   sort by date desc
@@ -802,13 +803,13 @@ define Hpv18CodeToFHIRCodeableConcept:
 // or the CodeableConcept of HPV16+ or HPV18+ if the test was positive for code of HPV16 or HPV18
 define function ConvertHpvTestTypeToCodeableConcept(O Observation):
   if O.value as FHIR.CodeableConcept in "High Risk HPV Positive Results" then
-    if O.code in "HPV 16 Tests" then 
+    if O.code in "HPV 16 Tests" then
       Hpv16CodeToFhirCodeableConcept
-    else if O.code in "HPV 18 Tests" then 
+    else if O.code in "HPV 18 Tests" then
       Hpv18CodeToFHIRCodeableConcept
     else
       O.value as FHIR.CodeableConcept
-  else 
+  else
     O.value as FHIR.CodeableConcept
 
 define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observation>):
@@ -981,6 +982,54 @@ define PertinentImmunizationsSummary:
     reference: 'Immunization/' + I.id,
     edited: HasBeenLocallyEdited(I)
   }
+
+//------------------------------------------------------------------------------
+// PERTINENT EPISODES OF CARE
+//------------------------------------------------------------------------------
+// Episodes of care related to cervical cancer
+//    Allow all clinical statues and no lookback restriction // TODO: Modify this
+
+define function HasBeenLocallyEdited(E EpisodeOfCare):
+  if IsNull(E.identifier) then false
+  else AnyTrue( (E.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
+
+define PregnancyEpisodesOfCare:
+  [EpisodeOfCare] E where
+    AnyTrue(
+      (E.type) t
+        return t ~ "Pregnancy Episode Of Care"
+    )
+
+define ActivePregnancyEpisodesOfCare:
+  PregnancyEpisodesOfCare P
+  where P.status ~ 'active'
+
+define FinishedPregnancyEpisodesOfCare:
+  PregnancyEpisodesOfCare P
+  where P.status ~ 'finished'
+
+define HasActivePregnancyEpisodesOfCare:
+  Exists(ActivePregnancyEpisodesOfCare)
+
+define HasFinishedPregnancyEpisodesOfCare:
+  Exists(FinishedPregnancyEpisodesOfCare)
+
+define PertinentEpisodesOfCare:
+  PregnancyEpisodesOfCare
+
+define PertinentEpisodesOfCareSummary:
+  (PregnancyEpisodesOfCare) E
+  return {
+    name: Common.ConceptText(E.type[0]),
+    value: E.status.value,
+    date:
+      displayStartDate(Common.PeriodObject(E.period)."Start") +
+      ' to ' +
+      displayEndDate(Common.PeriodObject(E.period)."End"),
+    reference: 'EpisodeOfCare/' + E.id,
+    edited: HasBeenLocallyEdited(E)
+  }
+  sort by (date as String) desc
 
 //------------------------------------------------------------------------------
 // CLINICIAN PROVIDED INFORMATION
@@ -1247,8 +1296,17 @@ define Errors:
 // SUMMARY
 
 define Pregnant:
-  Exists(PregnancyDiagnoses) or
-  Exists(PregnancyObservations)
+  // IF any Epsidose of care with status = active
+  //    Pregnant = true
+  // If any Episode of care with status = finished
+  //    Pregnant = false
+  // Use existing logic with conditions and observations
+  if (HasActivePregnancyEpisodesOfCare) then
+    true
+  else if (HasFinishedPregnancyEpisodesOfCare) then
+    false
+  else
+    Exists(PregnancyDiagnoses) or Exists(PregnancyObservations)
 
 // The Summary object represents the full Cervical Cancer Screening and Management Medical History to be displayed to the clinician. A robust UI
 // should be created in order to display this information in a Cervical Cancer Screening and Management Dashboard
@@ -1273,6 +1331,7 @@ define CervicalCancerScreeningAndMedicalHistory:
     procedures: PertinentProceduresSummary,
     diagnosticReports: DiagnosticReportsSummary,
     encounters: PertinentEncountersSummary,
-    immunizations: PertinentImmunizationsSummary
+    immunizations: PertinentImmunizationsSummary,
+    episodeOfCares: PertinentEpisodesOfCareSummary
   }
 }

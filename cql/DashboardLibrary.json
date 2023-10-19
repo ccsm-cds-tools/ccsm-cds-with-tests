@@ -357,6 +357,14 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "Pregnancy Episode Of Care",
+            "id" : "424525001",
+            "display" : "Antenatal care (regime/therapy)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "In utero exposure to DES",
             "id" : "736060002",
             "display" : "History of exposure to diethystilbestrol in utero (situation)",
@@ -6001,13 +6009,13 @@
                                  "name" : "displayStartDate",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "name" : "DateTimeText",
-                                    "libraryName" : "Common",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "start",
-                                       "type" : "Property",
-                                       "source" : {
+                                    "path" : "Start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "PeriodObject",
+                                       "libraryName" : "Common",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
                                           "strict" : false,
                                           "type" : "As",
                                           "operand" : {
@@ -6019,8 +6027,8 @@
                                              "name" : "{http://hl7.org/fhir}Period",
                                              "type" : "NamedTypeSpecifier"
                                           }
-                                       }
-                                    } ]
+                                       } ]
+                                    }
                                  } ]
                               }, {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -6031,13 +6039,13 @@
                               "name" : "displayEndDate",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "DateTimeText",
-                                 "libraryName" : "Common",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "path" : "end",
-                                    "type" : "Property",
-                                    "source" : {
+                                 "path" : "End",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "PeriodObject",
+                                    "libraryName" : "Common",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
                                        "strict" : false,
                                        "type" : "As",
                                        "operand" : {
@@ -6049,8 +6057,8 @@
                                           "name" : "{http://hl7.org/fhir}Period",
                                           "type" : "NamedTypeSpecifier"
                                        }
-                                    }
-                                 } ]
+                                    } ]
+                                 }
                               } ]
                            } ]
                         }
@@ -6142,13 +6150,13 @@
                                  "name" : "displayStartDate",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "name" : "DateTimeText",
-                                    "libraryName" : "Common",
-                                    "type" : "FunctionRef",
-                                    "operand" : [ {
-                                       "path" : "start",
-                                       "type" : "Property",
-                                       "source" : {
+                                    "path" : "Start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "PeriodObject",
+                                       "libraryName" : "Common",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
                                           "strict" : false,
                                           "type" : "As",
                                           "operand" : {
@@ -6160,8 +6168,8 @@
                                              "name" : "{http://hl7.org/fhir}Period",
                                              "type" : "NamedTypeSpecifier"
                                           }
-                                       }
-                                    } ]
+                                       } ]
+                                    }
                                  } ]
                               }, {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -6172,13 +6180,13 @@
                               "name" : "displayEndDate",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "DateTimeText",
-                                 "libraryName" : "Common",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "path" : "end",
-                                    "type" : "Property",
-                                    "source" : {
+                                 "path" : "End",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "PeriodObject",
+                                    "libraryName" : "Common",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
                                        "strict" : false,
                                        "type" : "As",
                                        "operand" : {
@@ -6190,8 +6198,8 @@
                                           "name" : "{http://hl7.org/fhir}Period",
                                           "type" : "NamedTypeSpecifier"
                                        }
-                                    }
-                                 } ]
+                                    } ]
+                                 }
                               } ]
                            } ]
                         }
@@ -7725,6 +7733,74 @@
                }
             } ]
          }, {
+            "name" : "HasBeenLocallyEdited",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "path" : "identifier",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "E",
+                        "type" : "OperandRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "I",
+                        "expression" : {
+                           "path" : "identifier",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "E",
+                              "type" : "OperandRef"
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "system",
+                                 "scope" : "I",
+                                 "type" : "Property"
+                              } ]
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "http://OUR-PLACEHOLDER-URL.com",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "E",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}EpisodeOfCare",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "FormatReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8514,6 +8590,296 @@
                         }
                      } ]
                   }
+               }
+            }
+         }, {
+            "name" : "PregnancyEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}EpisodeOfCare",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
+                     "type" : "Retrieve"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "t",
+                        "expression" : {
+                           "path" : "type",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "t",
+                                 "type" : "AliasRef"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "Pregnancy Episode Of Care",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "ActivePregnancyEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "P",
+                  "expression" : {
+                     "name" : "PregnancyEpisodesOfCare",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "status",
+                        "scope" : "P",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "active",
+                     "type" : "Literal"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "FinishedPregnancyEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "P",
+                  "expression" : {
+                     "name" : "PregnancyEpisodesOfCare",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "status",
+                        "scope" : "P",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "finished",
+                     "type" : "Literal"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "HasActivePregnancyEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "ActivePregnancyEpisodesOfCare",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "HasFinishedPregnancyEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Exists",
+               "operand" : {
+                  "name" : "FinishedPregnancyEpisodesOfCare",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "PertinentEpisodesOfCare",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "PregnancyEpisodesOfCare",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "PertinentEpisodesOfCareSummary",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "name" : "PregnancyEpisodesOfCare",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "name",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "path" : "type",
+                                 "scope" : "E",
+                                 "type" : "Property"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "value",
+                        "value" : {
+                           "path" : "value",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "status",
+                              "scope" : "E",
+                              "type" : "Property"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "type" : "Concatenate",
+                              "operand" : [ {
+                                 "name" : "displayStartDate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "Start",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "PeriodObject",
+                                       "libraryName" : "Common",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "path" : "period",
+                                          "scope" : "E",
+                                          "type" : "Property"
+                                       } ]
+                                    }
+                                 } ]
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : " to ",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "displayEndDate",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "End",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "PeriodObject",
+                                    "libraryName" : "Common",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "period",
+                                       "scope" : "E",
+                                       "type" : "Property"
+                                    } ]
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "EpisodeOfCare/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "E",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "edited",
+                        "value" : {
+                           "name" : "HasBeenLocallyEdited",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "E",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "desc",
+                     "type" : "ByExpression",
+                     "expression" : {
+                        "strict" : false,
+                        "type" : "As",
+                        "operand" : {
+                           "name" : "date",
+                           "type" : "IdentifierRef"
+                        },
+                        "asTypeSpecifier" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }
+                  } ]
                }
             }
          }, {
@@ -9791,20 +10157,44 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Or",
-               "operand" : [ {
-                  "type" : "Exists",
-                  "operand" : {
-                     "name" : "PregnancyDiagnoses",
+               "type" : "If",
+               "condition" : {
+                  "name" : "HasActivePregnancyEpisodesOfCare",
+                  "type" : "ExpressionRef"
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "true",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "name" : "HasFinishedPregnancyEpisodesOfCare",
                      "type" : "ExpressionRef"
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                     "value" : "false",
+                     "type" : "Literal"
+                  },
+                  "else" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "PregnancyDiagnoses",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "name" : "PregnancyObservations",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
                   }
-               }, {
-                  "type" : "Exists",
-                  "operand" : {
-                     "name" : "PregnancyObservations",
-                     "type" : "ExpressionRef"
-                  }
-               } ]
+               }
             }
          }, {
             "name" : "CervicalCancerScreeningAndMedicalHistory",
@@ -10047,6 +10437,12 @@
                         "name" : "immunizations",
                         "value" : {
                            "name" : "PertinentImmunizationsSummary",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "episodeOfCares",
+                        "value" : {
+                           "name" : "PertinentEpisodesOfCareSummary",
                            "type" : "ExpressionRef"
                         }
                      } ]

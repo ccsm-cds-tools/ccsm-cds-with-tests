@@ -1,0 +1,24 @@
+---
+name: Active Pregnancy Episode Of Care
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: EpisodeOfCare
+  status: active
+  type: SNOMEDCT#424525001 Antenatal care (regime/therapy)
+  period:
+    start: 2021-05-01
+
+results:
+  PregnancyEpisodesOfCare: $should have length 1 
+  HasActivePregnancyEpisodesOfCare: true
+  HasFinishedPregnancyEpisodesOfCare: false
+  Pregnant: true
