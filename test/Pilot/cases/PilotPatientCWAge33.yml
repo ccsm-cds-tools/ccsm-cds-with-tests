@@ -1,0 +1,104 @@
+---
+name: Pilot Patient CW Age 33
+
+data:
+- 
+  resourceType: Patient
+  name: Carol77 Walton15
+  gender: female
+  birthDate: 1990-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# CIN 2 Colposcopy
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2023-05-18
+
+# CIN 3 Colposcopy
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-01-13
+
+
+# HSIL Pap and HRHPV+
+-
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2022-12-20
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2022-12-20
+
+
+# THINPREP IMAGING PAP AND HPV MRNA E6/E7
+# Assuming this is equiv to HPV16+? 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#82456-5 Human papilloma virus 16 E6+E7 mRNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
+  effectiveDateTime: 2021-05-13
+  
+# ASC-US Pap and HRHPV+ 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2016-11-15
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2016-11-15
+
+# LSIL Pap  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2015-07-09
+
+# HSIL Pap
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2014-02-13
+
+results:
+  ManagementRecommendation: 
+    short: 'Treatment'
+    date: '2023-10-20'
+    group: 'Managing Histology (I.2)'
+    details:
+    - 'Treatment of CIN3 is recommended. Observation is unacceptable except during pregnancy.'
+    - 'When treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable.'
+    - 'When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in circumstances defined by the WHO.'

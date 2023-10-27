@@ -1,0 +1,74 @@
+---
+name: Pilot Patient MK Age 40
+
+data:
+- 
+  resourceType: Patient
+  name: Melinda48 Kingston37
+  gender: female
+  birthDate: 1983-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+    
+# HRHPV+ and LSIL Thin Prep Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-08-23
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-08-23
+  
+  
+  
+  
+# HRHPV- and NILM Pap smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2019-11-13
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2019-11-13  
+  
+# HRHPV- and NILM Pap smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2014-05-13
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2014-05-13  
+
+
+results:
+  ManagementRecommendation: 
+    short: 'Surveillance'
+    date: '2024-08-23'
+    group: 'General Screening (Table 1)'
+    details:
+    - 'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
+    - 'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'

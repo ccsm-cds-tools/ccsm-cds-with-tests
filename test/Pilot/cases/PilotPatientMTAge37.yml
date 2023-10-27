@@ -1,0 +1,66 @@
+---
+name: Pilot Patient MT Age 37
+
+data:
+- 
+  resourceType: Patient
+  name: Margaret28 Taylor31
+  gender: female
+  birthDate: 1986-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+
+
+# ASC-US Pap and HRHPV+   
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-10-04
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-10-04  
+
+# HRHPV- and NILM Pap smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2018-05-30
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2018-05-30  
+
+# NILM Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2015-05-06
+
+# Should be 1 year follow up
+results:
+  ManagementRecommendation: 
+    short: 'Surveillance'
+    date: '2024-10-04'
+    group: 'General Screening (Table 1)'
+    details:
+    - 'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
+    - 'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
