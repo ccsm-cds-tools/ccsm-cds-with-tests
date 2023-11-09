@@ -312,6 +312,12 @@ define CervixRemovalDate:
     MostRecentCervixRemovalDiagnosisDate
   )
 
+define HasColposcopyProcedureAfterMostRecentBiopsy:
+  Exists(
+    (Dash.ColposcopyProcedures) P
+      where CCF.ProcedureDate(P) >= Collate.MostRecentBiopsyReport.date
+  )
+  
 define RecommendationForRareCytology:
   case
     // Subsequent Management
@@ -652,7 +658,7 @@ define MostSevereHistologyInterpretedAsCin2InPast3Years:
         aC ~ Dash."CIN2"
   )
 
-define MostRecentCin2BiopsyInPast6Years:
+define LastKnownCin2BiopsyInPast6Years:
   Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 6 years) and
@@ -663,7 +669,7 @@ define MostRecentCin2BiopsyInPast6Years:
     )
   )
 
-define MostRecentCin2BiopsyInPast3Years:
+define LastKnownCin2BiopsyInPast3Years:
   Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 3 years) and
@@ -674,7 +680,7 @@ define MostRecentCin2BiopsyInPast3Years:
     )
   )
 
-define MostRecentCin2BiopsyInPast2Years:
+define LastKnownCin2BiopsyInPast2Years:
   Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 2 years) and
@@ -685,7 +691,7 @@ define MostRecentCin2BiopsyInPast2Years:
     )
   )
 
-define MostRecentHsilBiopsyInPast6Years:
+define LastKnownHsilUnspecifiedBiopsyInPast6Years:
     Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 6 years) and
@@ -695,8 +701,7 @@ define MostRecentHsilBiopsyInPast6Years:
         aC ~ Dash."HSIL, Unspecified"
     )
   )
-
-define MostRecentHsilBiopsyInPast3Years:
+define LastKnownHsilUnspecifiedBiopsyInPast3Years:
     Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 3 years) and
@@ -707,7 +712,7 @@ define MostRecentHsilBiopsyInPast3Years:
     )
   )
 
- define MostRecentHsilUnpecifiedBiopsyInPast2Years:
+ define LastKnownHsilUnspecifiedBiopsyInPast2Years:
     Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 2 years) and
@@ -1049,6 +1054,8 @@ define function HadNoCervicalPrecancerTreatmentFromDateToPresent(d System.DateTi
 // Severity of AIS should recommend treatment until hysterectomy is performed.
 define RecommendationForAisHistologyResults:
   case
+    // I.6 part 1 no treatment after AIS
+    // Age over 50
     when (
       AgeInYears() > 50 and
       Collate.MostRecentAisBiopsy is not null and
@@ -1065,23 +1072,7 @@ define RecommendationForAisHistologyResults:
           'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
         }
       }
-    when ( 
-      AgeInYears() > 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      HasTreatmentAfterAis and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Managing Histology (I.6)',
-        details: {
-          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred.',
-          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
-          'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
-        }
-      }
-    // I.6 part 1  
+    // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
@@ -1099,7 +1090,26 @@ define RecommendationForAisHistologyResults:
           'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
         }
       }
-    // I.6 part 2
+      
+    // I.6 part 2 had treatment after AIS
+    // Age over 50
+    when ( 
+      AgeInYears() > 50 and
+      Collate.MostRecentAisBiopsy is not null and
+      HasTreatmentAfterAis and
+      not CervixRemovalDateIsAfterMostRecentAisBiopsy
+    ) then
+      {
+        short: 'See Details',
+        date: Today(),
+        group: 'Managing Histology (I.6)',
+        details: {
+          'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred.',
+          'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.',
+          'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
+        }
+      }
+    // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
@@ -1129,12 +1139,7 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       AnyHistologyInterpretedAsUnspecifiedHsil and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentHsilBiopsy.date
-      ) and
-      not SecondMostRecentNegativeHsilSurveillanceResultWithin18Months
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownHsilBiopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1151,11 +1156,7 @@ define RecommendationForHistologyResults:
       AgeInYears() > 50 and
       AnyHistologyInterpretedAsUnspecifiedHsil and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentHsilBiopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownHsilBiopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Treatment',
@@ -1172,7 +1173,7 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and
       not Dash.Pregnant and
       AnyHistologyInterpretedAsCin3 and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin3Biopsy.date, CervicalPrecancerTreatmentLookback)
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownCin3Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Treatment',
@@ -1186,10 +1187,10 @@ define RecommendationForHistologyResults:
       }
     when ( // I2.2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      MostRecentBiopsyReportWasWithinPastThreeYears and
-      HistologyInterpretedAsCin2 and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
+      not Dash.Pregnant and
+      not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
+      LastKnownCin2BiopsyInPast3Years is not null and
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1206,7 +1207,7 @@ define RecommendationForHistologyResults:
       AgeInYears() > 50 and
       not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       AnyHistologyInterpretedAsCin2 and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Treatment',
@@ -1227,7 +1228,7 @@ define RecommendationForHistologyResults:
       ) and
       HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1243,7 +1244,8 @@ define RecommendationForHistologyResults:
       (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years is not null) and
       HasTwoNegativeHsilSurveillanceTests and
       Count(NegativeSurveillanceTestDatesAfterHsilSurveillance) >= 3 and
-      RecentlyRespondedYesToFuturePregnancyConcernsQuestion
+      RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
+      not (HasPositiveSurveillanceAfterSecondNegativeHsilSurveillance)
     ) then
       {
         short: 'Surveillance',
@@ -1271,9 +1273,9 @@ define RecommendationForHistologyResults:
       }
     when ( // I3.2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentHsilUnpecifiedBiopsyInPast3Years is not null and
+      LastKnownHsilUnspecifiedBiopsyInPast3Years is not null and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentHsilBiopsy.date, CervicalPrecancerTreatmentLookback)
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownHsilBiopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1286,9 +1288,9 @@ define RecommendationForHistologyResults:
       }
     when ( // I3.1
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentCin2BiopsyInPast3Years is not null and
+      LastKnownCin2BiopsyInPast3Years is not null and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1319,12 +1321,12 @@ define RecommendationForHistologyResults:
       (
         (
           CytologyInterpretedAsHsil and
-          MostRecentCytologyReport.date 1 year or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date 6 months or more after Collate.MostRecentBiopsyReport.date and
           MostRecentCytologyReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date
         ) or
         (
           CytologyInterpretedAsAscH and
-          MostRecentCytologyReport.date 2 years or more after Collate.MostRecentBiopsyReport.date and
+          MostRecentCytologyReport.date 18 months or more after Collate.MostRecentBiopsyReport.date and
           MostRecentCytologyReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date
         )
       )
@@ -1489,7 +1491,7 @@ define RecommendationForHistologyResults:
         ) and
         (
           (SecondMostRecentBiopsyReport is not null) and
-          not SecondMostRecentHistologyInterpretedAsNormal and
+          not HistologyInterpretedAsNormal and
           Collate.MostRecentBiopsyReport.date less than 3.5 years after SecondMostRecentBiopsyReport.date and
           Collate.MostRecentBiopsyReport.date more than 6 months after SecondMostRecentBiopsyReport.date
         )
@@ -1507,7 +1509,9 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and
       HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsHsil and
-      not (HasTreatmentAfterMostRecentBiopsy)
+      not (HasTreatmentAfterMostRecentBiopsy) and
+      not (HasColposcopyProcedureAfterMostRecentBiopsy) and
+      not (HasSurveillanceAfterMostRecentBiopsy)
     ) then
       {
         short: 'See Details',
@@ -1522,7 +1526,9 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and
       HistologyInterpretedAsCin1OrNormal and
       PrecedingCytologyIsAscH and
-      not (HasTreatmentAfterMostRecentBiopsy)
+      not (HasTreatmentAfterMostRecentBiopsy) and
+      not (HasColposcopyProcedureAfterMostRecentBiopsy) and
+      not (HasSurveillanceAfterMostRecentBiopsy)
     ) then
       {
         short: 'See Details',
@@ -1539,8 +1545,8 @@ define RecommendationForHistologyResults:
       HistologyInterpretedAsCin1 and
       SecondMostRecentHistologyInterpretedAsCin1 and
       TwoMostRecentBiopsyReportsWithin15monthsApart and
-      MostRecentHsilBiopsyInPast6Years is null and
-      MostRecentCin2BiopsyInPast6Years is null and
+      LastKnownHsilUnspecifiedBiopsyInPast6Years is null and
+      LastKnownCin2BiopsyInPast6Years is null and
       (
         not (
           MostRecentTreatmentDate after SecondMostRecentBiopsyReport.date
@@ -1585,17 +1591,36 @@ define HasTreatmentAfterMostRecentBiopsy:
   MostRecentTreatmentDate after Collate.MostRecentBiopsyReport.date
 
 define PositiveSurveillanceAfterMostRecentBiopsy:
-  Coalesce(
-    (Dash.RecentPositiveHpv) R
-      where ((R.effective as FHIR.dateTime).value > Collate.MostRecentBiopsyReport.date)
+  (Dash.RecentPositiveHpv R
+   where CCF.DiagnosticReportDate(R) > Collate.MostRecentBiopsyReport.date
   ) union 
-  Coalesce(
-    Dash.RecentAbnormalCytologyResults C
-      with Collate.SortedHpvReports P
-        such that (C.effective as FHIR.dateTime).value within 1 day of P.date
-      where (
-        (C.effective as FHIR.dateTime).value > Collate.MostRecentBiopsyReport.date
-      )
+  (Dash.RecentAbnormalCytologyResults C
+    with Collate.SortedHpvReports P
+      such that CCF.DiagnosticReportDate(C) within 1 day of P.date
+    where (
+      CCF.DiagnosticReportDate(C) > Collate.MostRecentBiopsyReport.date
+    )
+  )
+
+define PositiveSurveillanceAfterSecondNegativeHsilSurveillance:
+  (Dash.RecentPositiveHpv R
+   where CCF.DiagnosticReportDate(R) > SecondNegativeHsilSurveillanceTestDate
+  ) union 
+  (Dash.RecentAbnormalCytologyResults C
+    with Collate.SortedHpvReports P
+      such that CCF.DiagnosticReportDate(C) within 1 day of P.date
+    where (
+      CCF.DiagnosticReportDate(C) > SecondNegativeHsilSurveillanceTestDate
+    )
+  )
+
+define HasPositiveSurveillanceAfterSecondNegativeHsilSurveillance:
+ Exists(PositiveSurveillanceAfterSecondNegativeHsilSurveillance)
+
+define HasSurveillanceAfterMostRecentBiopsy:
+  (
+    HasPositiveSurveillanceAfterMostRecentBiopsy or
+    HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy
   )
 
 define HasPositiveSurveillanceAfterMostRecentBiopsy:

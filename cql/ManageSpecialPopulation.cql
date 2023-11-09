@@ -336,7 +336,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.1
       AgeInYears() < 25 and
       Rare.AnyHistologyInterpretedAsCin3 and
-      HasNoTreatmentAfterDate(Collate.MostRecentCin3Biopsy.date)
+      HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
     ) then
       {
         short: 'Treatment',
@@ -349,8 +349,8 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // Heading4.2
       AgeInYears() < 25 and
-      (Rare.MostRecentCin2BiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.MostRecentCin2Biopsy.date)
+      (Rare.LastKnownCin2BiopsyInPast2Years is not null) and
+      HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
         short: 'See Details',
@@ -364,8 +364,8 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // Heading4.3
       AgeInYears() < 25 and
-      (Rare.MostRecentHsilUnpecifiedBiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.MostRecentHsilBiopsy.date)
+      (Rare.LastKnownHsilUnspecifiedBiopsyInPast2Years is not null) and
+      HasNoTreatmentAfterDate(Collate.LastKnownHsilBiopsy.date)
     ) then
       {
         short: 'See Details',
