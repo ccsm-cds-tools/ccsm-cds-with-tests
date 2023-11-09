@@ -66,6 +66,7 @@ code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stroma
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
+parameter CervicalPrecancerTreatmentLookback default 7 years
 
 /***** BEGIN CDS LOGIC ********************************************************/
 
@@ -706,7 +707,7 @@ define MostRecentHsilBiopsyInPast3Years:
     )
   )
 
- define MostRecentHsilBiopsyInPast2Years:
+ define MostRecentHsilUnpecifiedBiopsyInPast2Years:
     Coalesce(
     (Collate.SortedBiopsyReports) S
     where (S.date >= Now() - 2 years) and
@@ -842,23 +843,10 @@ define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months:
       )
   )
 
-define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast6Years:
-  First(
-    (Collate.SortedBiopsyReports) B
-      where B.date >= Now() - 6 years and
-      AnyTrue(
-        (B.allConclusions) aC
-          return
-            aC ~ Dash."HSIL, Unspecified" or
-            aC ~ Dash."CIN2"
-      )
-  )
-
 define InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years:
   First(
     (Collate.SortedBiopsyReports) B
       where B.date >= Now() - 31 years and
-      B.date occurs after Patient.birthDate.value and
       AnyTrue(
         (B.allConclusions) aC
           return
@@ -984,7 +972,7 @@ define SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast3
     null
 
 
-define RecentNegativeHSILSurveillanceTests:
+define RecentNegativeHsilSurveillanceTests:
   if (
     (SubsequentLowGradeHistologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years is not null) and
     (SubsequentLowGradeCytologyReportsSinceInitialUnspecifiedHsilOrCin2InLast31Years is not null)) then
@@ -1003,17 +991,19 @@ define RecentNegativeHSILSurveillanceTests:
     else
       null
 
-define FirstTwoNegativeHSILSurveillanceTests:
-  if (Count(RecentNegativeHSILSurveillanceTests) > 1) then
-    RecentNegativeHSILSurveillanceTests[0] union
-    RecentNegativeHSILSurveillanceTests[1]
-  else
-    null
+define HasTwoNegativeHsilSurveillanceTests:
+  Count(RecentNegativeHsilSurveillanceTests) >= 2
     
-define NegativeSurveillanceTestDatesAfterHSILSurveillance:
-  if (Count(FirstTwoNegativeHSILSurveillanceTests) > 1) then
+define SecondNegativeHsilSurveillanceTestDate:
+  if (HasTwoNegativeHsilSurveillanceTests) then
+      RecentNegativeHsilSurveillanceTests[1].date
+  else 
+    null
+
+define NegativeSurveillanceTestDatesAfterHsilSurveillance:
+  if HasTwoNegativeHsilSurveillanceTests then
     SortedNegativeSurveillanceTests T
-    where T.date after Last(FirstTwoNegativeHSILSurveillanceTests).date
+    where T.date after SecondNegativeHsilSurveillanceTestDate
   else
     null
 
@@ -1031,7 +1021,7 @@ define CytologyInterpretedAsHsil:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
       return aC in "HSIL"
-  )  
+  )
 
 define CervixRemovalDateIsAfterMostRecentAisBiopsy:
   (CervixRemovalDate is not null) and 
@@ -1042,7 +1032,18 @@ define MostRecentTreatmentAfterAis:
   where CCF.ProcedureDate(P) occurs after Collate.MostRecentAisBiopsy.date
 
 define HasTreatmentAfterAis:
-  MostRecentTreatmentAfterAis is not null  
+  MostRecentTreatmentAfterAis is not null
+
+/**
+* Check if the the date of the most recent cervical precancer treatment occurs
+* starting during the lookback period before the given date until the present time
+* @param d - a System date to compare
+* @param Lookback - a time quantity to be evaluated before date d
+* @returns {Boolean: external}
+*/
+define function HadNoCervicalPrecancerTreatmentFromDateToPresent(d System.DateTime, Lookback System.Quantity):
+  Collate.DateOfLastCervicalPrecancerTreatment is null or 
+  Collate.DateOfLastCervicalPrecancerTreatment in Interval[d - Lookback, Now()]
 
 // I.6 Management of AIS over 50: Adoption of Society of Gynecologic Oncology Recommendations
 // Severity of AIS should recommend treatment until hysterectomy is performed.
@@ -1164,18 +1165,14 @@ define RecommendationForHistologyResults:
           'Treatment is preferred if histologic HSIL cannot be specified (e.g., reported as histologic HSIL or histologic HSIL [CIN 2,3]).'
         }
       }
-      
+
 // =====================================================      
     // I.2 Management of Histologic HSIL (CIN2 or CIN3)
     when ( // I2.1
       AgeInYears() >= 25 and
       not Dash.Pregnant and
       AnyHistologyInterpretedAsCin3 and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin3Biopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentCin3Biopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin3Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Treatment',
@@ -1192,11 +1189,7 @@ define RecommendationForHistologyResults:
       not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       MostRecentBiopsyReportWasWithinPastThreeYears and
       HistologyInterpretedAsCin2 and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentCin2Biopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1213,11 +1206,7 @@ define RecommendationForHistologyResults:
       AgeInYears() > 50 and
       not Dash.Pregnant and not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       AnyHistologyInterpretedAsCin2 and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentCin2Biopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Treatment',
@@ -1228,7 +1217,7 @@ define RecommendationForHistologyResults:
           'Excisional treatment is preferred, and treatment with ablation is acceptable.'
         }
       }
-            
+
     // I.3 Management of CIN2 in Those Who Are Concerned About the Potential Effect of Treatment on Future Pregnancy Outcomes
     when ( // I3.5
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -1238,11 +1227,7 @@ define RecommendationForHistologyResults:
       ) and
       HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentCin2Biopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1252,12 +1237,12 @@ define RecommendationForHistologyResults:
           'Treatment is recommended for histologic HSIL (CIN 2) or histologic HSIL (unspecified) lasting 2 years.'
         }
       }
-  
+
     when ( // I3.4
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years is not null) and
-      Count(FirstTwoNegativeHSILSurveillanceTests) >= 2 and
-      Count(NegativeSurveillanceTestDatesAfterHSILSurveillance) >= 3 and
+      HasTwoNegativeHsilSurveillanceTests and
+      Count(NegativeSurveillanceTestDatesAfterHsilSurveillance) >= 3 and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion
     ) then
       {
@@ -1286,13 +1271,9 @@ define RecommendationForHistologyResults:
       }
     when ( // I3.2
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      MostRecentHsilBiopsyInPast3Years is not null and
+      MostRecentHsilUnpecifiedBiopsyInPast3Years is not null and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentHsilBiopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentHsilBiopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1307,11 +1288,7 @@ define RecommendationForHistologyResults:
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       MostRecentCin2BiopsyInPast3Years is not null and
       RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date) or
-        Collate.DateOfLastCervicalPrecancerTreatment 7 years or more before Collate.MostRecentCin2Biopsy.date
-      )
+      HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.MostRecentCin2Biopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {
         short: 'Surveillance or Treatment',
@@ -1584,12 +1561,6 @@ define RecommendationForHistologyResults:
       null
   end
 
-define bothTreatmentBiopsy:
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin3Biopsy.date)
-      )
-        
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // RARE ABNORMALITY #4: Surveillance After Abnormalities
 
@@ -1852,6 +1823,11 @@ define InitialIntensiveSurveillancePeriod:
   else
     false
 
+define HasHistologyAfterTreatmentForHighGradeResult:
+  Collate.MostRecentBiopsyReport is not null and
+  TreatmentForHighGradeHistologyOrCytology is not null and
+  Collate.MostRecentBiopsyReport.date after TreatmentForHighGradeHistologyOrCytologyDate
+  
 define RecommendationForSurveillanceAfterAbnormalities:
   case
     // J.2 Short-Term Follow-up After Treatment for Histologic HSIL
@@ -1906,9 +1882,8 @@ define RecommendationForSurveillanceAfterAbnormalities:
     when ( // J3.1
       HasTreatmentForHighGradeHistologyOrCytology and
       TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
-      not InitialIntensiveSurveillancePeriod // AFTER the treatment for high-grade HistologyOrCytology
-      // AND NOT Cervical Histology result AFTER the 'treatment for high-grade HistologyOrCytology
-      // Update aug 28 - sharon assigned task to change this
+      not InitialIntensiveSurveillancePeriod and 
+      not HasHistologyAfterTreatmentForHighGradeResult
     ) then
       {
         short: 'See Details',

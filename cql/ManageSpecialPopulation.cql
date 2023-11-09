@@ -55,6 +55,11 @@ context Patient
 // RECOMMENDATIONS FOR SPECIAL POPULATIONS
 //------------------------------------------------------------------------------
 
+
+define function HasNoTreatmentAfterDate(d System.DateTime):
+   Collate.DateOfLastCervicalPrecancerTreatment is null or 
+   not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
+   
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Management of Patients With Histologic Cancer
 
@@ -327,14 +332,11 @@ define RecommendationForPatientsYoungerThan25:
         details: {
           'Colposcopy and cervical cytology should be performed in 1 year.'
         }
-      }  
+      }
     when ( // Heading4.1
       AgeInYears() < 25 and
       Rare.AnyHistologyInterpretedAsCin3 and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin3Biopsy.date)
-      )
+      HasNoTreatmentAfterDate(Collate.MostRecentCin3Biopsy.date)
     ) then
       {
         short: 'Treatment',
@@ -348,10 +350,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.2
       AgeInYears() < 25 and
       (Rare.MostRecentCin2BiopsyInPast2Years is not null) and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentCin2Biopsy.date)
-      )
+      HasNoTreatmentAfterDate(Collate.MostRecentCin2Biopsy.date)
     ) then
       {
         short: 'See Details',
@@ -365,11 +364,8 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // Heading4.3
       AgeInYears() < 25 and
-      (Rare.MostRecentHsilBiopsyInPast2Years is not null) and
-      (
-        Collate.DateOfLastCervicalPrecancerTreatment is null or 
-        not (Collate.DateOfLastCervicalPrecancerTreatment occurs after Collate.MostRecentHsilBiopsy.date)
-      )    
+      (Rare.MostRecentHsilUnpecifiedBiopsyInPast2Years is not null) and
+      HasNoTreatmentAfterDate(Collate.MostRecentHsilBiopsy.date)
     ) then
       {
         short: 'See Details',
