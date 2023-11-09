@@ -651,13 +651,6 @@ define AnyHistologyInterpretedAsCin2:
         aC ~ Dash."CIN2"
   )
 
-define MostSevereHistologyInterpretedAsCin2InPast3Years:
-  AnyTrue(
-    (Collate.SortedBiopsyReports.allConclusions) aC
-      return
-        aC ~ Dash."CIN2"
-  )
-
 define LastKnownCin2BiopsyInPast6Years:
   Coalesce(
     (Collate.SortedBiopsyReports) S
