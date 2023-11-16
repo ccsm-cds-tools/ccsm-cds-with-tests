@@ -401,7 +401,7 @@ define Cin2Biopsies:
 define LastKnownCin2Biopsy:
   First(Cin2Biopsies)
   
-define HsilUnspecifiedBiopsies: // This was never addressed. What is an "Hsil Biopsy" here
+define HsilUnspecifiedBiopsies:
   SortedBiopsyReports S
     where S.riskTableInput in {'HSIL, Unspecified'}
 

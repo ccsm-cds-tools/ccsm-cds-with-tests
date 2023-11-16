@@ -1351,7 +1351,7 @@ define RecommendationForHistologyResults:
           (
             HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy and
             Count(NegativeSurveillanceTestsAfterMostRecentBiopsy) >= 2 and
-            NegativeSurveillanceTestsAfterMostRecentBiopsy[1].date 3.5 years or less after Collate.MostRecentBiopsyReport.date // Ginny made this 3.5
+            NegativeSurveillanceTestsAfterMostRecentBiopsy[1].date 3.5 years or less after Collate.MostRecentBiopsyReport.date
           ) and
           (
             HistologyInterpretedAsCin1OrNormal and
