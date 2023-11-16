@@ -89,12 +89,6 @@ define AssociatedHpvCotest:
       where H.date within 1 day of Under25And2YearsAgoCytologyReport.date
   )
 
-define ColposcopySinceMostRecentCytology:
-  Exists(
-    (Dash.ColposcopyProcedures) P
-      where CCF.ProcedureDate(P) >= Rare.MostRecentCytologyReport.date
-  )
-
 define HistologicHsilCin2OrUnspecified:
   First(
     (Collate.SortedBiopsyReports) B
@@ -365,7 +359,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.3
       AgeInYears() < 25 and
       (Rare.LastKnownHsilUnspecifiedBiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownHsilBiopsy.date)
+      HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
         short: 'See Details',

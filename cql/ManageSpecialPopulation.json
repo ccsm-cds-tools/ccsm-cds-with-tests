@@ -452,45 +452,6 @@
                } ]
             }
          }, {
-            "name" : "ColposcopySinceMostRecentCytology",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "P",
-                     "expression" : {
-                        "name" : "ColposcopyProcedures",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "name" : "ProcedureDate",
-                        "libraryName" : "CCF",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "name" : "P",
-                           "type" : "AliasRef"
-                        } ]
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyReport",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
             "name" : "HistologicHsilCin2OrUnspecified",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2409,7 +2370,7 @@
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "name" : "LastKnownHsilBiopsy",
+                              "name" : "LastKnownHsilUnspecifiedBiopsy",
                               "libraryName" : "Collate",
                               "type" : "ExpressionRef"
                            }

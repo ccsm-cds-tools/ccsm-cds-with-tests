@@ -4891,56 +4891,6 @@
                } ]
             }
          }, {
-            "name" : "MostRecentBiopsyReportWasWithinPast12months",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "GreaterOrEqual",
-               "operand" : [ {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentBiopsyReport",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "type" : "Subtract",
-                  "operand" : [ {
-                     "type" : "Now"
-                  }, {
-                     "value" : 12,
-                     "unit" : "months",
-                     "type" : "Quantity"
-                  } ]
-               } ]
-            }
-         }, {
-            "name" : "MostRecentBiopsyReportWasWithinPast18months",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "GreaterOrEqual",
-               "operand" : [ {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentBiopsyReport",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "type" : "Subtract",
-                  "operand" : [ {
-                     "type" : "Now"
-                  }, {
-                     "value" : 18,
-                     "unit" : "months",
-                     "type" : "Quantity"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "MostRecentBiopsyReportWasWithinPast2Years",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5013,142 +4963,6 @@
                         }, {
                            "value" : 2,
                            "unit" : "years",
-                           "type" : "Quantity"
-                        } ]
-                     }
-                  } ]
-               }, {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
-            "name" : "TwoMostRecentBiopsyReportsWithin18monthsApart",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "date",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "SecondMostRecentBiopsyReport",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "lowClosed" : true,
-                     "highClosed" : true,
-                     "type" : "Interval",
-                     "low" : {
-                        "type" : "Subtract",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 18,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
-                     },
-                     "high" : {
-                        "type" : "Add",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 18,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
-                     }
-                  } ]
-               }, {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               } ]
-            }
-         }, {
-            "name" : "TwoMostRecentBiopsyReportsWithin15monthsApart",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "date",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "SecondMostRecentBiopsyReport",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "lowClosed" : true,
-                     "highClosed" : true,
-                     "type" : "Interval",
-                     "low" : {
-                        "type" : "Subtract",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 15,
-                           "unit" : "months",
-                           "type" : "Quantity"
-                        } ]
-                     },
-                     "high" : {
-                        "type" : "Add",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "value" : 15,
-                           "unit" : "months",
                            "type" : "Quantity"
                         } ]
                      }
@@ -7471,29 +7285,32 @@
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "type" : "In",
-                  "operand" : [ {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "lowClosed" : true,
-                     "highClosed" : true,
-                     "type" : "Interval",
-                     "low" : {
-                        "type" : "Subtract",
-                        "operand" : [ {
-                           "name" : "d",
-                           "type" : "OperandRef"
-                        }, {
-                           "name" : "Lookback",
-                           "type" : "OperandRef"
-                        } ]
-                     },
-                     "high" : {
-                        "type" : "Now"
-                     }
-                  } ]
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "In",
+                     "operand" : [ {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "lowClosed" : true,
+                        "highClosed" : true,
+                        "type" : "Interval",
+                        "low" : {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "name" : "d",
+                              "type" : "OperandRef"
+                           }, {
+                              "name" : "Lookback",
+                              "type" : "OperandRef"
+                           } ]
+                        },
+                        "high" : {
+                           "type" : "Now"
+                        }
+                     } ]
+                  }
                } ]
             },
             "operand" : [ {
@@ -8503,68 +8320,77 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "GreaterOrEqual",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
+                                    "type" : "GreaterOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
-                                    }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
+                                    } ]
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "25",
-                                    "type" : "Literal"
+                                    "type" : "LessOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "50",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
                               }, {
-                                 "type" : "LessOrEqual",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "50",
-                                    "type" : "Literal"
-                                 } ]
+                                 "name" : "AnyHistologyInterpretedAsUnspecifiedHsil",
+                                 "type" : "ExpressionRef"
                               } ]
                            }, {
-                              "name" : "AnyHistologyInterpretedAsUnspecifiedHsil",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                                 "type" : "ExpressionRef"
+                              }
                            } ]
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "HadNoCervicalPrecancerTreatmentFromDateToPresent",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownHsilUnspecifiedBiopsy",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "name" : "CervicalPrecancerTreatmentLookback",
+                              "type" : "ParameterRef"
+                           } ]
                         } ]
                      }, {
-                        "name" : "HadNoCervicalPrecancerTreatmentFromDateToPresent",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "LastKnownHsilBiopsy",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "name" : "CervicalPrecancerTreatmentLookback",
-                           "type" : "ParameterRef"
-                        } ]
+                        "type" : "Not",
+                        "operand" : {
+                           "name" : "SecondMostRecentNegativeHsilSurveillanceResultWithin18Months",
+                           "type" : "ExpressionRef"
+                        }
                      } ]
                   },
                   "then" : {
@@ -8651,7 +8477,7 @@
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "name" : "LastKnownHsilBiopsy",
+                              "name" : "LastKnownHsilUnspecifiedBiopsy",
                               "libraryName" : "Collate",
                               "type" : "ExpressionRef"
                            }
@@ -8932,37 +8758,28 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "And",
+                              "type" : "Greater",
                               "operand" : [ {
-                                 "type" : "Greater",
-                                 "operand" : [ {
-                                    "precision" : "Year",
-                                    "type" : "CalculateAge",
-                                    "operand" : {
-                                       "path" : "birthDate.value",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "Patient",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                    "value" : "50",
-                                    "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "type" : "Not",
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
                                  "operand" : {
-                                    "name" : "Pregnant",
-                                    "libraryName" : "Dash",
-                                    "type" : "ExpressionRef"
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "50",
+                                 "type" : "Literal"
                               } ]
                            }, {
                               "type" : "Not",
                               "operand" : {
-                                 "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                                 "name" : "Pregnant",
+                                 "libraryName" : "Dash",
                                  "type" : "ExpressionRef"
                               }
                            } ]
@@ -9034,60 +8851,54 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "And",
+                                 "type" : "GreaterOrEqual",
                                  "operand" : [ {
-                                    "type" : "GreaterOrEqual",
-                                    "operand" : [ {
-                                       "precision" : "Year",
-                                       "type" : "CalculateAge",
-                                       "operand" : {
-                                          "path" : "birthDate.value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
                                        }
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "25",
-                                       "type" : "Literal"
-                                    } ]
+                                    }
                                  }, {
-                                    "type" : "LessOrEqual",
-                                    "operand" : [ {
-                                       "precision" : "Year",
-                                       "type" : "CalculateAge",
-                                       "operand" : {
-                                          "path" : "birthDate.value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "50",
-                                       "type" : "Literal"
-                                    } ]
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
                                  } ]
                               }, {
-                                 "type" : "Or",
+                                 "type" : "LessOrEqual",
                                  "operand" : [ {
-                                    "name" : "HistologyInterpretedAsUnspecifiedHsil",
-                                    "type" : "ExpressionRef"
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
                                  }, {
-                                    "name" : "HistologyInterpretedAsCin2",
-                                    "type" : "ExpressionRef"
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
                                  } ]
                               } ]
                            }, {
-                              "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
-                              "type" : "ExpressionRef"
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "HistologyInterpretedAsCin2",
+                                 "type" : "ExpressionRef"
+                              } ]
                            } ]
                         }, {
-                           "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                           "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
@@ -9152,75 +8963,69 @@
                               "operand" : [ {
                                  "type" : "And",
                                  "operand" : [ {
-                                    "type" : "And",
+                                    "type" : "GreaterOrEqual",
                                     "operand" : [ {
-                                       "type" : "GreaterOrEqual",
-                                       "operand" : [ {
-                                          "precision" : "Year",
-                                          "type" : "CalculateAge",
-                                          "operand" : {
-                                             "path" : "birthDate.value",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "Patient",
-                                                "type" : "ExpressionRef"
-                                             }
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
+                                       "operand" : {
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
                                           }
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                          "value" : "25",
-                                          "type" : "Literal"
-                                       } ]
+                                       }
                                     }, {
-                                       "type" : "LessOrEqual",
-                                       "operand" : [ {
-                                          "precision" : "Year",
-                                          "type" : "CalculateAge",
-                                          "operand" : {
-                                             "path" : "birthDate.value",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "Patient",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                          "value" : "50",
-                                          "type" : "Literal"
-                                       } ]
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "25",
+                                       "type" : "Literal"
                                     } ]
                                  }, {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
+                                    "type" : "LessOrEqual",
+                                    "operand" : [ {
+                                       "precision" : "Year",
+                                       "type" : "CalculateAge",
                                        "operand" : {
-                                          "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
-                                          "type" : "ExpressionRef"
+                                          "path" : "birthDate.value",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "Patient",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
-                                    }
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                       "value" : "50",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
                               }, {
-                                 "name" : "HasTwoNegativeHsilSurveillanceTests",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast31Years",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }, {
-                              "type" : "GreaterOrEqual",
-                              "operand" : [ {
-                                 "type" : "Count",
-                                 "source" : {
-                                    "name" : "NegativeSurveillanceTestDatesAfterHsilSurveillance",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "3",
-                                 "type" : "Literal"
-                              } ]
+                              "name" : "HasTwoNegativeHsilSurveillanceTests",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                           "type" : "ExpressionRef"
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "type" : "Count",
+                              "source" : {
+                                 "name" : "NegativeSurveillanceTestDatesAfterHsilSurveillance",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "3",
+                              "type" : "Literal"
+                           } ]
                         } ]
                      }, {
                         "type" : "Not",
@@ -9280,94 +9085,88 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "And",
+                                 "type" : "GreaterOrEqual",
                                  "operand" : [ {
-                                    "type" : "GreaterOrEqual",
-                                    "operand" : [ {
-                                       "precision" : "Year",
-                                       "type" : "CalculateAge",
-                                       "operand" : {
-                                          "path" : "birthDate.value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
                                        }
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "25",
-                                       "type" : "Literal"
-                                    } ]
+                                    }
                                  }, {
-                                    "type" : "LessOrEqual",
-                                    "operand" : [ {
-                                       "precision" : "Year",
-                                       "type" : "CalculateAge",
-                                       "operand" : {
-                                          "path" : "birthDate.value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "50",
-                                       "type" : "Literal"
-                                    } ]
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
                                  } ]
                               }, {
-                                 "type" : "Not",
-                                 "operand" : {
-                                    "type" : "IsNull",
+                                 "type" : "LessOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
                                     "operand" : {
-                                       "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
-                                       "type" : "ExpressionRef"
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
                                     }
-                                 }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "50",
+                                    "type" : "Literal"
+                                 } ]
                               } ]
                            }, {
-                              "type" : "Query",
-                              "source" : [ {
-                                 "alias" : "SecondMostRecentNegativeHsilSurveillanceResultWithin18Months",
-                                 "expression" : {
-                                    "name" : "MostRecentNegativeHsilSurveillanceResultWithin18Months",
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months",
                                     "type" : "ExpressionRef"
                                  }
-                              } ],
-                              "relationship" : [ ]
+                              }
                            } ]
                         }, {
-                           "type" : "SameOrAfter",
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "SecondMostRecentNegativeHsilSurveillanceResultWithin18Months",
+                              "expression" : {
+                                 "name" : "MostRecentNegativeHsilSurveillanceResultWithin18Months",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ],
+                           "relationship" : [ ]
+                        } ]
+                     }, {
+                        "type" : "SameOrAfter",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "type" : "Add",
                            "operand" : [ {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "libraryName" : "Collate",
+                                 "name" : "SecondMostRecentBiopsyReport",
                                  "type" : "ExpressionRef"
                               }
                            }, {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "SecondMostRecentBiopsyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 6,
-                                 "unit" : "months",
-                                 "type" : "Quantity"
-                              } ]
+                              "value" : 6,
+                              "unit" : "months",
+                              "type" : "Quantity"
                            } ]
                         } ]
-                     }, {
-                        "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                        "type" : "ExpressionRef"
                      } ]
                   },
                   "then" : {
@@ -9477,7 +9276,7 @@
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
-                              "name" : "LastKnownHsilBiopsy",
+                              "name" : "LastKnownHsilUnspecifiedBiopsy",
                               "libraryName" : "Collate",
                               "type" : "ExpressionRef"
                            }
@@ -10253,7 +10052,7 @@
                                                       "type" : "ExpressionRef"
                                                    }
                                                 }, {
-                                                   "value" : 3,
+                                                   "value" : 3.5,
                                                    "unit" : "years",
                                                    "type" : "Quantity"
                                                 } ]
@@ -11190,7 +10989,8 @@
                                     "operand" : {
                                        "type" : "IsNull",
                                        "operand" : {
-                                          "name" : "SecondMostRecentBiopsyReport",
+                                          "name" : "MostRecentBiopsyReport",
+                                          "libraryName" : "Collate",
                                           "type" : "ExpressionRef"
                                        }
                                     }
@@ -11534,7 +11334,7 @@
                                     "type" : "ExpressionRef"
                                  } ]
                               }, {
-                                 "name" : "TwoMostRecentBiopsyReportsWithin15monthsApart",
+                                 "name" : "TwoMostRecentBiopsyReportsWithin2YearsApart",
                                  "type" : "ExpressionRef"
                               } ]
                            }, {
