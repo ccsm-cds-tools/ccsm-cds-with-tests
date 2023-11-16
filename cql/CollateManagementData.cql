@@ -401,12 +401,12 @@ define Cin2Biopsies:
 define LastKnownCin2Biopsy:
   First(Cin2Biopsies)
   
-define HsilBiopsies:
+define HsilUnspecifiedBiopsies: // This was never addressed. What is an "Hsil Biopsy" here
   SortedBiopsyReports S
-    where S.riskTableInput in {'HSIL'}
+    where S.riskTableInput in {'HSIL, Unspecified'}
 
-define LastKnownHsilBiopsy:
-  First(HsilBiopsies)
+define LastKnownHsilUnspecifiedBiopsy:
+  First(HsilUnspecifiedBiopsies)
   
 // Find AIS biopsy
 define AisBiopsies:
