@@ -397,6 +397,27 @@ define Cin2orCin3Biopsies:
 define MostRecentCin2orCin3Biopsy:
   First(Cin2orCin3Biopsies)
 
+define Cin3Biopsies:
+  SortedBiopsyReports S
+    where S.riskTableInput in {'CIN3'}
+
+define LastKnownCin3Biopsy:
+  First(Cin3Biopsies)
+      
+define Cin2Biopsies:
+  SortedBiopsyReports S
+    where S.riskTableInput in {'CIN2'}
+
+define LastKnownCin2Biopsy:
+  First(Cin2Biopsies)
+  
+define HsilUnspecifiedBiopsies:
+  SortedBiopsyReports S
+    where S.riskTableInput in {'HSIL, Unspecified'}
+
+define LastKnownHsilUnspecifiedBiopsy:
+  First(HsilUnspecifiedBiopsies)
+  
 // Find AIS biopsy
 define AisBiopsies:
   SortedBiopsyReports S

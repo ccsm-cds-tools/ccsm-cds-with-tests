@@ -145,6 +145,42 @@
                }
             }
          }, {
+            "name" : "HasNoTreatmentAfterDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "d",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "RecommendationForPatientsWithHistologicCancer",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -414,45 +450,6 @@
                      } ]
                   }
                } ]
-            }
-         }, {
-            "name" : "ColposcopySinceMostRecentCytology",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Exists",
-               "operand" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "P",
-                     "expression" : {
-                        "name" : "ColposcopyProcedures",
-                        "libraryName" : "Dash",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "GreaterOrEqual",
-                     "operand" : [ {
-                        "name" : "ProcedureDate",
-                        "libraryName" : "CCF",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "name" : "P",
-                           "type" : "AliasRef"
-                        } ]
-                     }, {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyReport",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
-                        }
-                     } ]
-                  }
-               }
             }
          }, {
             "name" : "HistologicHsilCin2OrUnspecified",
@@ -2188,14 +2185,22 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
+                           "name" : "AnyHistologyInterpretedAsCin3",
                            "libraryName" : "Rare",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin3",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "name" : "HasNoTreatmentAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCin3Biopsy",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -2259,14 +2264,28 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "LastKnownCin2BiopsyInPast2Years",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsCin2",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "name" : "HasNoTreatmentAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCin2Biopsy",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -2334,14 +2353,28 @@
                               "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "MostRecentBiopsyReportWasWithinPastYear",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "LastKnownHsilUnspecifiedBiopsyInPast2Years",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
                         } ]
                      }, {
-                        "name" : "HistologyInterpretedAsUnspecifiedHsil",
-                        "libraryName" : "Rare",
-                        "type" : "ExpressionRef"
+                        "name" : "HasNoTreatmentAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownHsilUnspecifiedBiopsy",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
