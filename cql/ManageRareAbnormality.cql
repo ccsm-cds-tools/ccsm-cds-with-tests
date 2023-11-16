@@ -241,7 +241,9 @@ define UnknownHpvCotest:
       return
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
-  )
+  ) and
+  not PositiveHpv16or18Cotest and
+  not PositiveUntypedHpvCotest
 
 define NegativeOrUnknownHpvCotest:
   Collate.MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
@@ -251,7 +253,9 @@ define NegativeOrUnknownHpvCotest:
         aC in Dash."HPV Negative Results" or
         aC ~ "Unknown" or
         not (aC in "All Results of High Risk HPV Test")
-  )
+  ) and
+  not PositiveHpv16or18Cotest and
+  not PositiveUntypedHpvCotest
 
 define PositiveUntypedHpvCotest:
   Collate.MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and
@@ -259,7 +263,8 @@ define PositiveUntypedHpvCotest:
     (Collate.MostRecentHpvReport.allConclusions) aC 
       return 
         aC in Dash."High Risk Positive HPV Results Without HPV16 or HPV18"
-  )
+  ) and
+  not PositiveHpv16or18Cotest
 
 define PositiveHpv16or18Cotest:
   Collate.MostRecentHpvReport.date within 1 day of MostRecentCytologyReport.date and

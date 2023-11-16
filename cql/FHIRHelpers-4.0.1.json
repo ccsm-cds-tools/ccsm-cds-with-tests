@@ -1440,6 +1440,84 @@
                }
             } ]
          }, {
+            "name" : "ToFhirCodeableConcept",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "classType" : "{http://hl7.org/fhir}CodeableConcept",
+               "type" : "Instance",
+               "element" : [ {
+                  "name" : "coding",
+                  "value" : {
+                     "type" : "List",
+                     "element" : [ {
+                        "classType" : "{http://hl7.org/fhir}Coding",
+                        "type" : "Instance",
+                        "element" : [ {
+                           "name" : "system",
+                           "value" : {
+                              "classType" : "{http://hl7.org/fhir}uri",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "system",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "name" : "code",
+                           "value" : {
+                              "classType" : "{http://hl7.org/fhir}code",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "code",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "name" : "display",
+                           "value" : {
+                              "classType" : "{http://hl7.org/fhir}string",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "display",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
+                           }
+                        } ]
+                     } ]
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "c",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Code",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "reference",
             "context" : "Patient",
             "accessLevel" : "Public",

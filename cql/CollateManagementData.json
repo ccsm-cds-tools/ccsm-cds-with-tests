@@ -71,6 +71,14 @@
                "value" : "true",
                "type" : "Literal"
             }
+         }, {
+            "name" : "RarelyScreenedGracePeriod",
+            "accessLevel" : "Public",
+            "default" : {
+               "value" : 6,
+               "unit" : "months",
+               "type" : "Quantity"
+            }
          } ]
       },
       "contexts" : {
@@ -102,6 +110,21 @@
                   "type" : "Quantity"
                }, {
                   "name" : "HpvTestingGracePeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
+            "name" : "RarelyScreenedInterval",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Add",
+               "operand" : [ {
+                  "value" : 5,
+                  "unit" : "years",
+                  "type" : "Quantity"
+               }, {
+                  "name" : "RarelyScreenedGracePeriod",
                   "type" : "ParameterRef"
                } ]
             }
@@ -1617,6 +1640,69 @@
                   }, {
                      "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                      "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "SecondMostRecentCytologyReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "type" : "Indexer",
+                  "operand" : [ {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
                      "type" : "Literal"
                   } ]
                },

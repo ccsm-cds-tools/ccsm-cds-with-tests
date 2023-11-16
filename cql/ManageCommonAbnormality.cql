@@ -220,6 +220,9 @@ define PostTreatmentManagementRecommendation:
   if LookUpTable5 is not null then LookUpTable5.action
   else null
 
+define RarelyScreenedTreatmentRecommendation:
+  IsRarelyScreenedPatient and AgeInYears() >= 27
+  
 define TableRecommendation:
   Coalesce(
     PostTreatmentManagementRecommendation,
@@ -241,6 +244,7 @@ define WhichTableMadeTheRecommendation:
 
 define CommonAbnormalityGroup:
   case
+    when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
@@ -355,6 +359,9 @@ define ColposcopyOrTreatmentRecommendationText:
 define TreatmentRecommendationText:
   'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'
 
+define RarelyScreenedRecommendationText:
+  'For patients who have not been screened within the past 5 years or more, risks are higher and treatment is preferred to colposcopy to minimize loss to follow-up.'
+  
 define PositivePrimaryHpv:
   AnyTrue(
     (Collate.MostRecentHpvReport.allConclusions) aC 
@@ -365,8 +372,78 @@ define PositivePrimaryHpv:
 define MostRecentCytologyCotestWasAfterAge21:
   Collate.MostRecentCytologyCotest.date >= Patient.birthDate + 21 years
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+// Guidance for expedited Treatment (rarely screened) (Box 1. Essential Changes from Prior Management Guidelines, #3)
+// Expedited treatment is preferred for never or rarely screened patients with HPV-positive HSIL cytology regardless of HPV genotype.
+
+define RarelyScreenedLookbackInterval:
+  Interval[Collate.MostRecentCytologyCotest.date - Collate.RarelyScreenedInterval, Collate.MostRecentCytologyCotest.date)  
+
+define IsHsilAndHpvPositive:
+  Collate.MostRecentCytologyCotest is not null and
+  Collate.MostRecentCytologyCotestResult = 'HSIL+' and
+  HighRiskHPVPositiveResults
+  
+define HighRiskHPVPositiveResults:
+  AnyTrue(
+    (Collate.MostRecentHpvReport.allConclusions) aC 
+      return aC in Dash."High Risk HPV Positive Results"
+  )
+
+define PreviousCytologyOrSurveillanceIsOldOrAbsent:
+  not (
+    Collate.SecondMostRecentCytologyReport is not null and
+    Collate.SecondMostRecentCytologyReport.date included in RarelyScreenedLookbackInterval
+  ) and
+  not (
+    Collate.SecondMostRecentCytologyCotest is not null and 
+    Collate.SecondMostRecentCytologyCotest.date included in RarelyScreenedLookbackInterval
+  ) and
+  not ( 
+    Collate.SecondMostRecentHpvReport is not null and
+    Collate.SecondMostRecentHpvReport.date included in RarelyScreenedLookbackInterval
+  )
+
+define IsRarelyScreenedPatient: 
+  AgeInYears() >= 27 and 
+  IsHsilAndHpvPositive and
+  (
+    Collate.MostRecentBiopsyReport is null or
+    not (Collate.MostRecentBiopsyReport.date included in RarelyScreenedLookbackInterval)    
+  ) and
+  (
+    Collate.DateOfLastCervicalPrecancerTreatment is null or 
+    not (Collate.DateOfLastCervicalPrecancerTreatment included in RarelyScreenedLookbackInterval)
+  ) and
+  PreviousCytologyOrSurveillanceIsOldOrAbsent
+    
 define Action:
   case
+    when (
+      AgeInYears() >= 27 and AgeInYears() <= 50 and
+      IsRarelyScreenedPatient
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          TreatmentRecommendationText,
+          RarelyScreenedRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        }
+      }
+    when (
+      AgeInYears() > 50 and
+      IsRarelyScreenedPatient
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          TreatmentRecommendationText,
+          RarelyScreenedRecommendationText
+        }
+      }  
     when (
       PositivePrimaryHpv and
       not (Collate.MostRecentCytologyReport.date after Collate.MostRecentHpvReport.date) and
