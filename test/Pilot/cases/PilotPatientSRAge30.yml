@@ -1,0 +1,59 @@
+---
+name: Pilot Patient SR Age 30
+
+data:
+- 
+  resourceType: Patient
+  name: Selena45 Richardson40
+  gender: female
+  birthDate: 1993-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# CIN1 CIN2 Colposcopy
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2023-04-07
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-04-07
+  status: completed
+
+# Colposcopy OTHER
+# No biopsy taken (patient pregnant at the time)
+# Don't know if there is an empty diagnostic report in patient record for this?
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2022-11-17
+  status: completed
+
+# LSIL
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-09-07
+
+
+results:
+  ManagementRecommendation: 
+    short: 'Surveillance or Treatment'
+    date: '2023-11-30'
+    group: 'Managing Histology (I.2)'
+    details:
+    - "Treatment of CIN2 is recommended unless the patient's concerns about the effect of treatment on future pregnancy outweigh concerns about cancer."
+    - 'Excisional treatment is preferred, and treatment with ablation is acceptable.'
+    - 'Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded.'
+    - 'Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years.'
+  

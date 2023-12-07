@@ -1,0 +1,104 @@
+---
+name: Pilot Patient MM Age 43
+
+data:
+- 
+  resourceType: Patient
+  name: Martina56 Marchand13
+  gender: female
+  birthDate: 1980-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+    
+
+# Colposcopy CIN3, margins negative
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-05-24
+
+# CIN3 Colposcopy
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-04-23
+
+# Colposcopy
+-
+  resourceType: Procedure
+  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
+  performedDateTime: 2023-04-23
+  status: completed
+  
+# Biopsy endometrium
+-
+  resourceType: Procedure
+  code: SNOMEDCT#399713008 Specimen from uterine cervix obtained by cone biopsy (specimen)
+  performedDateTime: 2023-04-23
+  status: completed
+
+# LSIL Pap, HR HPV+ E6/E7 detected
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-03-21
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-03-21
+
+# LSIL Thin Prep Pap Smear and HRHPV+ 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2018-10-26
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2018-10-26
+  
+# NILM Pap Smear and HRHPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2015-12-04
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2015-12-04
+    
+results:
+  ManagementRecommendation: 
+    short: 'See Details'
+    date: '2023-11-30'
+    group: 'Management Surveillance (J.2.1)'
+    details:
+    - 'Getting J.2.3: Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment. If repeat excision is not feasible or not desired, hysterectomy is recommended.'
+    - 'Should be J.2.1 Primary HPV testing or cotesting in 6 months??'
+    - "Check that the patient history is coded correctly"

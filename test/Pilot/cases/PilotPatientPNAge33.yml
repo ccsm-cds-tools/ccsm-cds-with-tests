@@ -1,0 +1,57 @@
+---
+name: Pilot Patient PN Pregnant Age 33
+
+data:
+- 
+  resourceType: Patient
+  name: Paolina58 Nevis35
+  gender: female
+  birthDate: 1990-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# Currently Pregnant
+-
+  resourceType: Observation
+  code: LOINC#82810-3 Pregnancy status
+  status: final
+  valueCodeableConcept: SNOMEDCT#77386006 Patient currently pregnant (finding)
+  effectiveDateTime: 2023-08-01
+    
+# ASC-US Thin Prep Pap Smear and HRHPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-10-04
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-10-04
+  
+# CIN2 Pathology
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2021-09-23
+
+
+results:
+  ManagementRecommendation: 
+    short: 'Treatment'
+    date: '2023-11-30'
+    group: 'Colposcopy Results (Table 3)'
+    details:
+    - "NOTE: Confirm this is the correct recommendation"
+    - "Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable."
+    - "If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable."

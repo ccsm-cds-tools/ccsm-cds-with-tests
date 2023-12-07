@@ -28,23 +28,13 @@ data:
   - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
   effectiveDateTime: 2023-01-24
   
-
+# How should the ECC negative result be encoded here?
 # ECC Negative Gynecological Pathology from Colposcopy
 -
   resourceType: Procedure
   code: CPT#57456 Colposcopy of the cervix including upper/adjacent vagina; with endocervical curettage
   performedDateTime: 2021-08-12
   status: completed
-
-# This how we represent a result of "ECC: Negative"
--
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#165324008 Biopsy result normal (finding) 
-  effectiveDateTime: 2021-08-12
-
 
 # HRHPV+ and ASC-US Thin Prep Pap Smear
 - 
@@ -66,17 +56,17 @@ data:
 # NILM Pap Smear and HRHPV- Cotest
 - 
   resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
-  effectiveDateTime: 2018-11-07
-- 
-  resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: amended
   conclusionCode:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2018-11-07
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
   effectiveDateTime: 2018-11-07
 
     
@@ -130,3 +120,4 @@ results:
     details:
     - "Repeat testing in 1 year with primary HPV testing or cotesting is recommended."
     - "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals."
+    - "How should ECC Negative be encoded in this test patient?"

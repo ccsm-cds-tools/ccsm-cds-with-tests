@@ -1,0 +1,42 @@
+---
+name: Pilot Patient AH Age 28
+
+data:
+- 
+  resourceType: Patient
+  name: Anabella59 Heiberg48
+  gender: female
+  birthDate: 1995-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# ASC-H Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
+  effectiveDateTime: 2023-10-20
+  
+# NILM Pap 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2022-08-12
+
+results:
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-11-30'
+    group: 'Exception to Colposcopy Threshold (H.2)'
+    details:
+    - 'Colposcopy is recommended regardless of hrHPV result.'
+
+
+

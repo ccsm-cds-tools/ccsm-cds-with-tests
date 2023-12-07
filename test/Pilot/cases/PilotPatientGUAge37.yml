@@ -13,30 +13,49 @@ data:
     valueCode: F
 
 # HIV+ 
-# Doesn't specify how or when HIV+ in spreadsheet
+# Doesn't specify onset date for HIV+ in spreadsheet
 - 
   resourceType: Condition
   clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
   verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
   code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
-  onsetDateTime: 2023-06-01
+  onsetDateTime: 2023-01-01
   
+# CIN 3 Colposcopy, Margins Negative
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-09-21
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2023-09-21
+  status: completed  
+
+
 # CIN 2, CIN 3 Colposcopy
 -
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
   conclusionCode:
-  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
   - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
   effectiveDateTime: 2023-08-10
 
-# Colposcopy with no results
+
+# Endocervical curettage negative (not mapped)
 -
   resourceType: Procedure
-  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
-  performedDateTime: 2023-08-10
+  code: CPT#57456 Colposcopy of the cervix including upper/adjacent vagina; with endocervical curettage
+  performedDateTime: 2023-05-11
   status: completed
+  
   
 # Colposcopy  with no results
 -
@@ -64,9 +83,9 @@ data:
 
 results:
   ManagementRecommendation: 
-    short: 'xxColposcopy'
-    date: '2023-10-20'
+    short: 'Colposcopy'
+    date: '2023-11-30'
     group: 'Immunosuppressed (K.3)'
     details:
     - 'This is incorrect : Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'
-    - 'Should be HPV-based testing in 6 months'
+    - 'Should be post treatment recommendation. HPV-based testing in 6 months?'

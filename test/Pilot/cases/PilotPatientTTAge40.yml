@@ -4,7 +4,7 @@ name: Pilot Patient TT Age 40
 data:
 - 
   resourceType: Patient
-  name: Toni22 Silvestri39
+  name: Toni22 Tamerlane51
   gender: female
   birthDate: 1983-06-01
   extension:
@@ -46,7 +46,7 @@ data:
   status: completed
 
 
-# HRHPV+ and ASC-US Thin Prep Pap Smear
+# ASC-US Thin Prep Pap Smear and HRHPV+
 - 
   resourceType: DiagnosticReport
   code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
@@ -62,6 +62,14 @@ data:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
   effectiveDateTime: 2022-07-28
   
+# Colposcopy Normal
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#309162003 Normal histology findings (finding)
+  effectiveDateTime: 2021-09-23
 
 # ECC Negative Gynecological Pathology from Colposcopy
 -
@@ -70,24 +78,7 @@ data:
   performedDateTime: 2021-09-23
   status: completed
 
-# This how we represent a result of "ECC: Negative"
-# Is there a difference in how this is represented in the EHR?
--
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#165324008 Biopsy result normal (finding) 
-  effectiveDateTime: 2021-09-23
-
 # NILM Pap Smear and HRHPV+ Cotest
-- 
-  resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
-  effectiveDateTime: 2021-07-27
 - 
   resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
@@ -95,8 +86,16 @@ data:
   conclusionCode:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
   effectiveDateTime: 2021-07-27
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-07-27
 
-# This how we represent a result of "ECC: Negative"
+
+# Colposcopy normal, ECC Negative
 -
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
@@ -104,7 +103,13 @@ data:
   conclusionCode:
   - SNOMEDCT#165324008 Biopsy result normal (finding) 
   effectiveDateTime: 2018-10-10
+-
+  resourceType: Procedure
+  code: CPT#57456 Colposcopy of the cervix including upper/adjacent vagina; with endocervical curettage
+  performedDateTime: 2018-10-10
+  status: completed
 
+ 
 # HRHPV+ and ASC-US Thin Prep Pap Smear
 - 
   resourceType: DiagnosticReport
@@ -121,10 +126,6 @@ data:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
   effectiveDateTime: 2018-08-20
   
-
-
-
-
 
 results:
   ManagementRecommendation: 
