@@ -1,0 +1,67 @@
+---
+name: Pilot Patient BW2 Age 30
+
+data:
+- 
+  resourceType: Patient
+  name: Bertha86 Winchester41
+  gender: female
+  birthDate: 1993-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+
+# ASC-US Pap smear, HRHPV+, HRHPV16-, HRHPV18-, MRNA E6/E7 detected
+# Is it necessary to encode HPV16-, HPV18- ?
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  result:
+  - reference: Observation/1234
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-11-06
+-
+  resourceType: Observation
+  id: 1234
+  code: LOINC#77399-4 Human papilloma virus 16 DNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  valueCodeableConcept: SNOMEDCT#260415000 Not detected (qualifier value)
+  effectiveDateTime: 2023-11-06
+-
+  resourceType: Observation
+  id: 1234
+  code: LOINC#77400-0 Human papilloma virus 18 DNA [Presence] in Cervix by NAA with probe detection
+  status: final
+  valueCodeableConcept: SNOMEDCT#260373001 Detected (qualifier value)
+  effectiveDateTime: 2023-11-06
+  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-11-06
+
+# NILM Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2020-09-23
+
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-11-30'
+    group: 'General Screening (Table 1)'
+    details:
+    - 'Colposcopy is recommended.'

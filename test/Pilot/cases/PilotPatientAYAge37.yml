@@ -1,10 +1,10 @@
 ---
-name: Pilot Patient LT Age 37
+name: Pilot Patient AY Age 37
 
 data:
 - 
   resourceType: Patient
-  name: Liliana81 Tembourin43
+  name: Angelina48 Young39
   gender: female
   birthDate: 1986-06-01
   extension:
@@ -12,128 +12,115 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 
+# ASC-US Pap and HRHPV+   
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-10-12  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - NULL FLAVOR#UNK Unknown
+  effectiveDateTime: 2023-10-12
 
-# Gynecological Pathology report
-# Changed date to 2023-10-09 instead of 2023-11-09 to match testing scenario date
+# ASC-US Pap and HR HPV+
 - 
   resourceType: DiagnosticReport
   code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
-  effectiveDateTime: 2023-10-09
-  
-# Colposcopy
--
-  resourceType: Procedure
-  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
-  performedDateTime: 2023-10-09
-  status: completed
-  
-# Colposcopy: Other
--
-  resourceType: Procedure
-  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
-  performedDateTime: 2023-02-03
-  status: completed
-  
-# ASC-US Pap and HRHPV+   
-- 
-  resourceType: DiagnosticReport
-  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
-  status: amended
   conclusionCode:
   - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2022-12-22
+  effectiveDateTime: 2022-03-17
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
-  effectiveDateTime: 2022-12-22
-
-# Colposcopy Procedure
--
-  resourceType: Procedure
-  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
-  performedDateTime: 2021-10-26
-  status: completed
+  effectiveDateTime: 2022-03-17
 
 
-# ASC-US Pap and HRHPV+   
+# ASC-US Pap and HR HPV+
 - 
   resourceType: DiagnosticReport
-  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
-  status: amended
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
   conclusionCode:
   - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2021-10-26
+  effectiveDateTime: 2021-01-21
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
-  effectiveDateTime: 2021-10-26
+  effectiveDateTime: 2021-01-21
+
+# CIN1 Colposcopy 
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  effectiveDateTime: 2019-01-09
 
 
 # ASC-US Pap and HR HPV+
 - 
   resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
   conclusionCode:
   - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2020-09-18
--
-  resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#708301004 Deoxyribonucleic acid of Human papillomavirus 31 (substance)
-  effectiveDateTime: 2020-09-18
-
-# ASC-US Pap and HR HPV+
+  effectiveDateTime: 2018-11-29
 - 
   resourceType: DiagnosticReport
-  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: final
-  conclusionCode:
-  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2018-01-05
--
-  resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
-  - SNOMEDCT#708301004 Deoxyribonucleic acid of Human papillomavirus 31 (substance)
-  effectiveDateTime: 2018-01-05
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2018-11-29
 
-# ASC-H, LSIL Pap and HR HPV+
+
+# LSIL Pap Smear and HRHPV+
 - 
   resourceType: DiagnosticReport
   code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
-  status: final
+  status: amended
   conclusionCode:
-  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
   - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
-  effectiveDateTime: 2016-05-18  
+  effectiveDateTime: 2016-10-25
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
-  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
-  effectiveDateTime: 2016-05-18  
-  
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2016-10-25
+ 
+# LSIL Pap 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2015-08-13
+
+
 results:
   HasRecentAbnormalScreening: true
   Errors:
   - "A laboratory test was found with an unexpected result code. Please review patient record to resolve."
-  ErrorsHaveOccurred: true
+  ErrorsHaveOccurred: true  
   ManagementRecommendation: 
     short: 'xxx'
-    date: '2024-09-12'
+    date: '2023-11-30'
     group: 'xxx'
     details:
-    - 'Getting No Recommendation'
-    - 'Is this due to a missing result?'
+    - 'Getting no recommendation'
