@@ -262,15 +262,33 @@ define CommonAbnormalityGroup:
 // clinical scenario in the 2019 ASCCP guidelines (e.g., the 2019 guidelines expressed in this CDS already covers ‘cervical cytology alone’
 // where the result is ASC-H, and AGC or AIS not including endometrial cells, therefore it is not expressed in this section).
 
-define MostRecentHpvCotest:
+define MostRecentCytologyIsNotACotest:
   Coalesce(
     (Collate.SortedHpvReports) S
       where S.date within 1 day of Collate.MostRecentCytologyReport.date
-  )
+  ) is null
+
+define MostRecentHpvIsNotACotest:
+  Coalesce(
+    (Collate.SortedCytologyReports) S
+      where S.date within 1 day of Collate.MostRecentHpvReport.date
+  ) is null
 
 define MostRecentCytologyAlone:
-  if MostRecentHpvCotest is null then
+  if MostRecentCytologyIsNotACotest then
     Collate.MostRecentCytologyReport
+  else
+    null
+
+define SecondMostRecentCytologyIsNotACotest:
+  Coalesce(
+    (Collate.SortedHpvReports) S
+      where S.date within 1 day of Collate.SecondMostRecentCytologyReport.date
+  ) is null
+
+define SecondMostRecentCytologyAlone:
+  if SecondMostRecentCytologyIsNotACotest then
+    Collate.SecondMostRecentCytologyReport
   else
     null
 
@@ -282,6 +300,42 @@ define CytologyAloneInterpretedAsLsil:
 
 define CytologyAloneInterpretedAsHsil:
   MostRecentCytologyAlone.riskTableInput = 'HSIL+'
+
+define CytologyAloneInterpretedAsAscusOrAbove:
+  MostRecentCytologyAlone.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+
+define SecondMostRecentCytologyAloneInterpretedAsLsil:
+  SecondMostRecentCytologyAlone.riskTableInput = 'LSIL'
+
+define SecondMostRecentCytologyAloneInterpretedAsAscus:
+  SecondMostRecentCytologyAlone.riskTableInput = 'ASC-US'
+
+define SecondMostRecentCytologyAloneInterpretedAsNilm:
+  SecondMostRecentCytologyAlone.riskTableInput = 'NILM'
+
+define SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone:
+  (
+    SecondMostRecentCytologyAloneInterpretedAsNilm and
+    SecondMostRecentCytologyAlone.date 18 months or less before MostRecentCytologyAlone.date
+  ) or
+  (
+    Collate.MostRecentHpvResult = 'HPV-negative' and
+    MostRecentCytologyIsNotACotest and
+    MostRecentHpvIsNotACotest and
+    Collate.MostRecentHpvReport.date 18 months or less before MostRecentCytologyAlone.date
+  ) or
+  (
+    Collate.MostRecentHpvResult = 'HPV-negative' and
+    MostRecentCytologyIsNotACotest and
+    Collate.MostRecentCytologyCotestResult = 'NILM' and
+    Collate.MostRecentCytologyCotest.date 18 months or less before MostRecentCytologyAlone.date
+  )
+
+
+
+define CotestInterpretedAsHpvPositiveNilm:
+  Collate.MostRecentCytologyCotestResult = 'NILM' and
+  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // REVIEW: Is this the most consistent way to do this?
 
 
 define ErrataRecommendation:
@@ -300,7 +354,7 @@ define ErrataRecommendation:
       }
     when ( // LSIL Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil
+      CytologyAloneInterpretedAsLsil // L2 QUESTION: Is this most recent?
     ) then
       {
         short: 'Colposcopy',
@@ -311,17 +365,62 @@ define ErrataRecommendation:
       }
     when ( // HSIL or SCC Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsHsil
+      CytologyAloneInterpretedAsHsil // L2: Is this most recent?
     ) then
       {
         short: 'Colposcopy or Treatment',
         date: Today(),
         details: {
-          'Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.'
+          'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
+          'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
         }
       }
     // The following logic phrases come directly from the JLGTD article:
-    // TODO: Implement rest of the 2023 Errata section
+
+    when ( // Repeat testing shows persistent HPV-positive or cytologic abnormality
+      AgeInYears() >= 25 and // REVIEW: Do we need to check for no histology after all of these?
+      (
+        CytologyAloneInterpretedAsAscusOrAbove or
+        CotestInterpretedAsHpvPositiveNilm
+      ) and
+      (
+        SecondMostRecentCytologyAloneInterpretedAsLsil or
+        SecondMostRecentCytologyAloneInterpretedAsAscus
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended'
+        }
+      }
+    when ( // ASC-US Alone after a negative test
+    // L2 QUESTION: Wording here is unconventional (+ rec below)
+    // L2 QUESTION: I believe this will be blocked by the first more general ASCUS errata recommendation (this needs to take precedence) (+ rec below)
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsAscus and
+      SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
+    ) then
+      {
+        short: 'Surveillance',
+        date: MostRecentCytologyAlone.date + 3 years,
+        details: {
+          'HPV testing or cotesting is recommended in three years.'
+        }
+      }
+    when ( // LSIL Alone after a negative test
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil and
+      SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
+    ) then
+      {
+        short: 'Surveillance',
+        date: MostRecentCytologyAlone.date + 1 years,
+        details: {
+          'Primary HPV testing or cotesting is recommended in one year.'
+        }
+      }
     else
       null
   end
