@@ -83,7 +83,13 @@ define RecommendationForPatientsWithHistologicCancer:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
-define AssociatedHpvCotest:
+define Associated18MonthHpvCotest:
+  Coalesce(
+    (Collate.SortedHpvReports) H
+      where H.date within 1 day of Under25And18MonthsAgoCytologyReport.date
+  )
+
+define Associated2YearHpvCotest:
   Coalesce(
     (Collate.SortedHpvReports) H
       where H.date within 1 day of Under25And2YearsAgoCytologyReport.date
@@ -137,40 +143,51 @@ define Under25AndLowGradeCytologyResults:
     )
   )
 
-define Under25And2YearsAgoCytologyResults:
+define function Under25CytologyResultsInPastInterval(LookBackStart System.Quantity, LookBackEnd System.Quantity):
   (Collate.SortedCytologyReports) C
+  let LookbackInterval: Interval[(Rare.MostRecentCytologyReport).date - LookBackEnd, (Rare.MostRecentCytologyReport).date - LookBackStart]
     where (
-      C.date 2 years or more before Rare.MostRecentCytologyReport.date and
-      C.date 3 years or less before Rare.MostRecentCytologyReport.date)
+      C.date in LookbackInterval
+    )
+
+define Under25And18MonthsAgoCytologyResults:
+  Under25CytologyResultsInPastInterval(18 months, 3 years)
+
+define Under25And2YearsAgoCytologyResults:
+  Under25CytologyResultsInPastInterval(2 years, 3 years)
+  
+
+define Under25And18MonthsAgoCytologyReport:
+  Under25And18MonthsAgoCytologyResults[0]
 
 define Under25And2YearsAgoCytologyReport:
   Under25And2YearsAgoCytologyResults[0]
 
-define Under25And2YearsAgoCytologyReportInterpretedAsLsil:
+define Under25And18MonthsAgoCytologyReportInterpretedAsLsil:
   AnyTrue(
-    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+    (Under25And18MonthsAgoCytologyReport.allConclusions) aC
       return aC ~ "LSIL"
   )
 
-define Under25And2YearsAgoCytologyReportInterpretedAsAscus:
+define Under25And18MonthsAgoCytologyReportInterpretedAsAscus:
   AnyTrue(
-    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+    (Under25And18MonthsAgoCytologyReport.allConclusions) aC
       return aC ~ "ASC-US"
   )
 
-define Under25And2YearsAgoLowGradeCytologyResults: 
+define Under25And18MonthsAgoLowGradeCytologyResults: 
   AgeInYears() < 25 and
   ( 
-    Exists(Under25And2YearsAgoCytologyResults) and
+    Exists(Under25And18MonthsAgoCytologyResults) and
     (
-      Under25And2YearsAgoCytologyReportInterpretedAsLsil or
+      Under25And18MonthsAgoCytologyReportInterpretedAsLsil or
       (
-        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
-        AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+        Under25And18MonthsAgoCytologyReportInterpretedAsAscus and
+        Associated18MonthHpvCotest.riskTableInput = 'HPV-positive'
       ) or
       (
-        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
-        AssociatedHpvCotest is null
+        Under25And18MonthsAgoCytologyReportInterpretedAsAscus and
+        Associated18MonthHpvCotest is null
       )
     )
   )
@@ -181,11 +198,11 @@ define Under25AndSecondMostRecentLowGradeCytologyResults:
     Rare.SecondMostRecentCytologyInterpretedAsLsil or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+      Associated2YearHpvCotest.riskTableInput = 'HPV-positive'
     ) or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      AssociatedHpvCotest is null
+      Associated2YearHpvCotest is null
     )
   )
 
@@ -433,7 +450,7 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // 1.c
       Under25AndLowGradeCytologyResults and
-      Under25And2YearsAgoLowGradeCytologyResults
+      Under25And18MonthsAgoLowGradeCytologyResults
     ) then
       {
         short: 'Colposcopy',
