@@ -1,5 +1,5 @@
 ---
-name: Pilot Patient JW Age 23
+name: Pilot Patient JW2 Age 23
 
 data:
 - 
@@ -12,7 +12,22 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 
-
+# Colposcopy CIN3
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-11-29
+  
+# Colposcopy  
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-11-29
+  status: completed
+  
 # LSIL Pap and HRHPV+ transformation zone absent
 - 
   resourceType: DiagnosticReport
@@ -68,8 +83,10 @@ data:
 results:
   HasRecentAbnormalScreening: true
   ManagementRecommendation: 
-    short: 'Colposcopy'
+    short: 'Treatment'
     date: '2023-11-30'
-    group: 'General Screening (Table 1)'
+    group: 'Younger Than 25 (K.1.4)'
     details:
-    - 'Colposcopy is recommended.'
+    - 'Treatment is recommended for CIN3. Observation is unacceptable unless the patient is pregnant.'
+    - 'Excisional treatment is recommended when the squamocolumnar junction or the lesions(s) are not fully visualized.'
+  WhichPopulationMadeTheRecommendation: 5

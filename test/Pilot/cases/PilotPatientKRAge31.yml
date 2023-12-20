@@ -1,0 +1,69 @@
+---
+name: Pilot Patient KR Age 31
+
+data:
+- 
+  resourceType: Patient
+  name: Katya39 Rose53
+  gender: female
+  birthDate: 1992-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+    
+
+# Colposcopy CIN2, CIN3
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-07-20
+
+# Colposcopy CIN2, CIN3
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-06-16
+
+
+# Colposcopy
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-06-16
+  status: completed
+
+# LSIL Pap Smear and HRHPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-05-09
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-05-09
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Treatment'
+    date: '2023-11-30'
+    group: 'Managing Histology (I.2)'
+    details:
+    - 'Treatment of CIN3 is recommended. Observation is unacceptable except during pregnancy.'
+    - 'When treatment of histologic HSIL is planned, excisional treatment is preferred, and treatment with ablation is acceptable.'
+    - 'When considering ablative therapy, in particular cryotherapy, ablation is unacceptable in circumstances defined by the WHO.'
