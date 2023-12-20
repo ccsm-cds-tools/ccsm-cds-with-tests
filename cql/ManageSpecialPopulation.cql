@@ -137,6 +137,28 @@ define Under25AndLowGradeCytologyResults:
     )
   )
 
+define Under25AndLowGradeCytologyResultsInPast3Years:
+  AgeInYears() < 25 and
+  (
+    ( 
+      Rare.CytologyInterpretedAsLsil and
+      Rare.MostRecentCytologyReport is not null and
+      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    ) or
+    (
+      Collate.MostRecentCytologyCotest is not null and
+      Collate.MostRecentCytologyCotestResult = 'ASC-US' and
+      Collate.MostRecentHpvResult = 'HPV-positive' and
+      Collate.MostRecentCytologyCotest.date 3 years or less before Now()
+    ) or
+    (
+      Rare.CytologyInterpretedAsAscus and
+      Collate.MostRecentCytologyCotestResult is null and
+      Rare.MostRecentCytologyReport is not null and
+      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    )
+  )
+
 define Under25And2YearsAgoCytologyResults:
   (Collate.SortedCytologyReports) C
     where (
@@ -444,7 +466,7 @@ define RecommendationForPatientsYoungerThan25:
         }
       }
     when ( // 1.a
-      Under25AndLowGradeCytologyResults 
+      Under25AndLowGradeCytologyResultsInPast3Years
     ) then
       {
         short: 'Cytology',
