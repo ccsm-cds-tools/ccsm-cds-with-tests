@@ -2424,54 +2424,45 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
+                           "type" : "Less",
                            "operand" : [ {
-                              "type" : "Less",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
                                  }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
-                              } ]
+                              }
                            }, {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
                            } ]
                         }, {
                            "type" : "Or",
                            "operand" : [ {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "CytologyInterpretedAsHsil",
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsHsilInPast5Years",
                                     "libraryName" : "Rare",
                                     "type" : "ExpressionRef"
-                                 }, {
-                                    "name" : "CytologyInterpretedAsAscH",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "name" : "CytologyInterpretedAsAgc",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
-                              } ]
+                                 }
+                              }
                            }, {
-                              "name" : "CytologyInterpretedAsAis",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast5Years",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         } ]
                      }, {

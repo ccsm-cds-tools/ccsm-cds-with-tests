@@ -3287,6 +3287,79 @@
                }
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsAscHInPast5Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "ASC-H",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "TwoMostRecentCytologyReportsWithin5yearsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7212,6 +7285,77 @@
                      }
                   }
                }
+            }
+         }, {
+            "name" : "LastKnownCytologyInterpretedAsHsilInPast5Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "HSIL",
+                                    "preserve" : true
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
