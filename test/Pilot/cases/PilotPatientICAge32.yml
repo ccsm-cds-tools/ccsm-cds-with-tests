@@ -1,0 +1,43 @@
+---
+name: Pilot Patient IC Age 32
+
+data:
+- 
+  resourceType: Patient
+  name: Innes61 Cuthbert39
+  gender: female
+  birthDate: 1991-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+
+# CIN1, CIN2, Margins negative
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2023-11-16
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2023-11-16
+  status: completed  
+
+
+results:
+  HasRecentAbnormalScreening: false
+  ManagementRecommendation: 
+    short: 'See Details'
+    date: '2023-12-30'
+    group: 'Management Surveillance (J.2.1)'
+    details:
+    - "Primary HPV testing or cotesting is preferred at 6 months regardless of the margin status of the excisional specimen."
+    - "Follow-up at 6 months with colposcopy and ECC is acceptable*."
+    - "*Refer to ASCCP Consensus Guideline 2019 Section J.2"
