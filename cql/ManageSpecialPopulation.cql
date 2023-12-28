@@ -89,12 +89,6 @@ define Associated18MonthHpvCotest:
       where H.date within 1 day of Under25And18MonthsAgoCytologyReport.date
   )
 
-define Associated2YearHpvCotest:
-  Coalesce(
-    (Collate.SortedHpvReports) H
-      where H.date within 1 day of Under25And2YearsAgoCytologyReport.date
-  )
-
 define HistologicHsilCin2OrUnspecified:
   First(
     (Collate.SortedBiopsyReports) B
@@ -153,15 +147,8 @@ define function Under25CytologyResultsInPastInterval(LookBackStart System.Quanti
 define Under25And18MonthsAgoCytologyResults:
   Under25CytologyResultsInPastInterval(18 months, 3 years)
 
-define Under25And2YearsAgoCytologyResults:
-  Under25CytologyResultsInPastInterval(2 years, 3 years)
-  
-
 define Under25And18MonthsAgoCytologyReport:
   Under25And18MonthsAgoCytologyResults[0]
-
-define Under25And2YearsAgoCytologyReport:
-  Under25And2YearsAgoCytologyResults[0]
 
 define Under25And18MonthsAgoCytologyReportInterpretedAsLsil:
   AnyTrue(
@@ -198,11 +185,11 @@ define Under25AndSecondMostRecentLowGradeCytologyResults:
     Rare.SecondMostRecentCytologyInterpretedAsLsil or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      Associated2YearHpvCotest.riskTableInput = 'HPV-positive'
+      Associated18MonthHpvCotest.riskTableInput = 'HPV-positive'
     ) or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      Associated2YearHpvCotest is null
+      Associated18MonthHpvCotest is null
     )
   )
 

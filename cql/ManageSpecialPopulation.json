@@ -453,115 +453,6 @@
                } ]
             }
          }, {
-            "name" : "Under25And2YearsAgoCytologyResults",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "Under25CytologyResultsInPastInterval",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "value" : 2,
-                  "unit" : "years",
-                  "type" : "Quantity"
-               }, {
-                  "value" : 3,
-                  "unit" : "years",
-                  "type" : "Quantity"
-               } ]
-            }
-         }, {
-            "name" : "Under25And2YearsAgoCytologyReport",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Indexer",
-               "operand" : [ {
-                  "name" : "Under25And2YearsAgoCytologyResults",
-                  "type" : "ExpressionRef"
-               }, {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "value" : "0",
-                  "type" : "Literal"
-               } ]
-            }
-         }, {
-            "name" : "Associated2YearHpvCotest",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Coalesce",
-               "operand" : [ {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "H",
-                     "expression" : {
-                        "name" : "SortedHpvReports",
-                        "libraryName" : "Collate",
-                        "type" : "ExpressionRef"
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "where" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "scope" : "H",
-                           "type" : "Property"
-                        }, {
-                           "lowClosed" : true,
-                           "highClosed" : true,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Under25And2YearsAgoCytologyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "day",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Under25And2YearsAgoCytologyReport",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "day",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "Under25And2YearsAgoCytologyReport",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        }
-                     } ]
-                  }
-               } ]
-            }
-         }, {
             "name" : "HistologicHsilCin2OrUnspecified",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1151,7 +1042,7 @@
                               "path" : "riskTableInput",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "Associated2YearHpvCotest",
+                                 "name" : "Associated18MonthHpvCotest",
                                  "type" : "ExpressionRef"
                               }
                            }, {
@@ -1170,7 +1061,7 @@
                      }, {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "Associated2YearHpvCotest",
+                           "name" : "Associated18MonthHpvCotest",
                            "type" : "ExpressionRef"
                         }
                      } ]
