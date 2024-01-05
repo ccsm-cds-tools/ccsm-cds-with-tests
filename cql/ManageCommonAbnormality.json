@@ -2030,85 +2030,30 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Colposcopy",
+                              "value" : "Colposcopy is recommended.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Today"
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Colposcopy is recommended.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                }, {
                   "when" : {
@@ -2160,97 +2105,39 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 3,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Surveillance",
+                              "value" : "HPV testing or cotesting is recommended in three years.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyAlone",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 3,
-                                 "unit" : "years",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "HPV testing or cotesting is recommended in three years.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                }, {
                   "when" : {
@@ -2302,97 +2189,39 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Surveillance",
+                              "value" : "Primary HPV testing or cotesting is recommended in one year.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Add",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyAlone",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 1,
-                                 "unit" : "years",
-                                 "type" : "Quantity"
-                              } ]
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Primary HPV testing or cotesting is recommended in one year.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                }, {
                   "when" : {
@@ -2438,85 +2267,30 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Reflex HPV",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Reflex HPV",
+                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Today"
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                }, {
                   "when" : {
@@ -2562,85 +2336,30 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Colposcopy",
+                              "value" : "Colposcopy is recommended.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Today"
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Colposcopy is recommended.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                }, {
                   "when" : {
@@ -2686,89 +2405,34 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "type" : "Tuple",
-                        "element" : [ {
-                           "name" : "short",
-                           "value" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy or Treatment",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Colposcopy or Treatment",
+                              "value" : "Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.",
                               "type" : "Literal"
-                           }
-                        }, {
-                           "name" : "date",
-                           "value" : {
-                              "type" : "Today"
-                           }
-                        }, {
-                           "name" : "details",
-                           "value" : {
-                              "type" : "List",
-                              "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.",
-                                 "type" : "Literal"
-                              } ]
-                           }
-                        } ]
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "ChoiceTypeSpecifier",
-                        "choice" : [ {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
                            }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}Date",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.",
+                              "type" : "Literal"
                            } ]
-                        }, {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "short",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "date",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }, {
-                              "name" : "details",
-                              "elementType" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
-                              }
-                           } ]
-                        } ]
-                     }
+                        }
+                     } ]
                   }
                } ],
                "else" : {
@@ -2777,55 +2441,28 @@
                      "type" : "Null"
                   },
                   "asTypeSpecifier" : {
-                     "type" : "ChoiceTypeSpecifier",
-                     "choice" : [ {
-                        "type" : "TupleTypeSpecifier",
-                        "element" : [ {
-                           "name" : "short",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "date",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}Date",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "details",
-                           "elementType" : {
-                              "type" : "ListTypeSpecifier",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }
-                        } ]
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
                      }, {
-                        "type" : "TupleTypeSpecifier",
-                        "element" : [ {
-                           "name" : "short",
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
                            "elementType" : {
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
-                        }, {
-                           "name" : "date",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "details",
-                           "elementType" : {
-                              "type" : "ListTypeSpecifier",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }
-                        } ]
+                        }
                      } ]
                   }
                }
@@ -3376,36 +3013,8 @@
                      }
                   },
                   "then" : {
-                     "type" : "As",
-                     "operand" : {
-                        "name" : "ErrataRecommendation",
-                        "type" : "ExpressionRef"
-                     },
-                     "asTypeSpecifier" : {
-                        "type" : "TupleTypeSpecifier",
-                        "element" : [ {
-                           "name" : "short",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "date",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}Date",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }, {
-                           "name" : "details",
-                           "elementType" : {
-                              "type" : "ListTypeSpecifier",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
-                           }
-                        } ]
-                     }
+                     "name" : "ErrataRecommendation",
+                     "type" : "ExpressionRef"
                   }
                }, {
                   "when" : {

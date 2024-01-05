@@ -338,13 +338,12 @@ define CotestInterpretedAsHpvPositiveNilm:
 // L2 QUESTION: Can these errata updates be labeled so that they can be mapped to the L3.
 // L2 QUESTION: Is there an errata section on having two consecutive HPV tests?
 define ErrataRecommendation:
-// !!!!!!!!!!!!! TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
   case
     // Managing abnormal cervical cytology alone
     // The following logic phrases come directly from the JLGTD article:
     when ( // Errata Recommendation #4: Repeat testing shows persistent HPV-positive or cytologic abnormality
       // L2 QUESTION: This will need to be evaluated before risk tables, or else this will get rec from risk table 1. Many of the 'ASCUS or above' recs will also be taken over by the recs above
-      AgeInYears() >= 25 and // REVIEW: Do we need to check for no histology after all of these?
+      AgeInYears() >= 25 and
       (
         CytologyAloneInterpretedAsAscusOrAbove and Collate.MostRecentReport = MostRecentCytologyAlone.date or // TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
         CotestInterpretedAsHpvPositiveNilm and Collate.MostRecentReport = Collate.MostRecentCytologyReport.date
@@ -361,16 +360,17 @@ define ErrataRecommendation:
           'Colposcopy is recommended.'
         }
       }
+    // TODO: Last two errata recommendations need to be modified.
     when ( // Errata Recommendation #5: ASC-US Alone after a negative test
     // L2 QUESTION: Wording here is unconventional (+ rec below). Is this ASCUS first of Negative Test first
     // L2 QUESTION: I believe this will be blocked by the first more general ASCUS errata recommendation (this needs to take precedence) (+ rec below)
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date and // L2 QUESTION: Why is MostRecent not used here? This is pretty much saying that if a patient as ASCUS alone followed by a negative test, they will keep getting this recommendation forever, until they get a histology or cervical cytology of ASCUS or above. What if they get a positive HPV during their follow up? As written, they would continue to get this recommendation.
       SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
     ) then
       {
         short: 'Surveillance',
-        date: MostRecentCytologyAlone.date + 3 years,
+        date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           'HPV testing or cotesting is recommended in three years.'
         }
@@ -382,7 +382,7 @@ define ErrataRecommendation:
     ) then
       {
         short: 'Surveillance',
-        date: MostRecentCytologyAlone.date + 1 years,
+        date: Collate.DateOfMostRecentReport + 1 years,
         details: {
           'Primary HPV testing or cotesting is recommended in one year.'
         }
