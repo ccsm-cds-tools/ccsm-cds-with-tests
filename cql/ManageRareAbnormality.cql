@@ -1142,7 +1142,6 @@ define RecommendationForHistologyResults:
     when (
       AgeInYears() > 50 and
       AnyHistologyInterpretedAsUnspecifiedHsil and
-      not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownHsilUnspecifiedBiopsy.date, CervicalPrecancerTreatmentLookback)
     ) then
       {

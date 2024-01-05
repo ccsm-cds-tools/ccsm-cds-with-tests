@@ -245,12 +245,12 @@ define WhichTableMadeTheRecommendation:
 define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
+    when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
-    when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     else 'N/A'
   end
 
@@ -331,57 +331,23 @@ define SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone:
     Collate.MostRecentCytologyCotest.date 18 months or less before MostRecentCytologyAlone.date
   )
 
-
-
 define CotestInterpretedAsHpvPositiveNilm:
   Collate.MostRecentCytologyCotestResult = 'NILM' and
   Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // REVIEW: Is this the most consistent way to do this?
 
-
+// L2 QUESTION: Can these errata updates be labeled so that they can be mapped to the L3.
+// L2 QUESTION: Is there an errata section on having two consecutive HPV tests?
 define ErrataRecommendation:
+// !!!!!!!!!!!!! TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
   case
     // Managing abnormal cervical cytology alone
-    when ( // ASC-US Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus
-    ) then
-      {
-        short: 'Reflex HPV',
-        date: Today(),
-        details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
-        }
-      }
-    when ( // LSIL Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil // L2 QUESTION: Is this most recent?
-    ) then
-      {
-        short: 'Colposcopy',
-        date: Today(),
-        details: {
-          'Colposcopy is recommended.'
-        }
-      }
-    when ( // HSIL or SCC Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsHsil // L2: Is this most recent?
-    ) then
-      {
-        short: 'Colposcopy or Treatment',
-        date: Today(),
-        details: {
-          'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
-          'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
-        }
-      }
     // The following logic phrases come directly from the JLGTD article:
-
-    when ( // Repeat testing shows persistent HPV-positive or cytologic abnormality
+    when ( // Errata Recommendation #4: Repeat testing shows persistent HPV-positive or cytologic abnormality
+      // L2 QUESTION: This will need to be evaluated before risk tables, or else this will get rec from risk table 1. Many of the 'ASCUS or above' recs will also be taken over by the recs above
       AgeInYears() >= 25 and // REVIEW: Do we need to check for no histology after all of these?
       (
-        CytologyAloneInterpretedAsAscusOrAbove or
-        CotestInterpretedAsHpvPositiveNilm
+        CytologyAloneInterpretedAsAscusOrAbove and Collate.MostRecentReport = MostRecentCytologyAlone.date or // TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
+        CotestInterpretedAsHpvPositiveNilm and Collate.MostRecentReport = Collate.MostRecentCytologyReport.date
       ) and
       (
         SecondMostRecentCytologyAloneInterpretedAsLsil or
@@ -392,14 +358,14 @@ define ErrataRecommendation:
         short: 'Colposcopy',
         date: Today(),
         details: {
-          'Colposcopy is recommended'
+          'Colposcopy is recommended.'
         }
       }
-    when ( // ASC-US Alone after a negative test
-    // L2 QUESTION: Wording here is unconventional (+ rec below)
+    when ( // Errata Recommendation #5: ASC-US Alone after a negative test
+    // L2 QUESTION: Wording here is unconventional (+ rec below). Is this ASCUS first of Negative Test first
     // L2 QUESTION: I believe this will be blocked by the first more general ASCUS errata recommendation (this needs to take precedence) (+ rec below)
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and
+      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date and
       SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
     ) then
       {
@@ -409,9 +375,9 @@ define ErrataRecommendation:
           'HPV testing or cotesting is recommended in three years.'
         }
       }
-    when ( // LSIL Alone after a negative test
+    when ( // Errata Recommendation #6: LSIL Alone after a negative test
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil and
+      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date and
       SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
     ) then
       {
@@ -419,6 +385,40 @@ define ErrataRecommendation:
         date: MostRecentCytologyAlone.date + 1 years,
         details: {
           'Primary HPV testing or cotesting is recommended in one year.'
+        }
+      }
+    when ( // Errata Recommendation #1: ASC-US Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date
+    ) then
+      {
+        short: 'Reflex HPV',
+        date: Today(),
+        details: {
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
+        }
+      }
+    when ( // Errata Recommendation #2: LSIL Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date // L2 QUESTION: Is this most recent?
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+    when ( // Errata Recommendation #3: HSIL or SCC Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsHsil and Collate.MostRecentReport = MostRecentCytologyAlone.date// L2: Is this most recent?
+    ) then
+      {
+        short: 'Colposcopy or Treatment',
+        date: Today(),
+        details: {
+          'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
+          'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
         }
       }
     else
@@ -556,6 +556,10 @@ define Action:
         }
       }
     when (
+      ErrataRecommendation is not null
+    ) then
+      ErrataRecommendation
+    when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '1-year follow-up'
     ) then
@@ -684,10 +688,6 @@ define Action:
           TreatmentRecommendationText
         }
       }
-    when (
-      ErrataRecommendation is not null
-    ) then
-      ErrataRecommendation
     when ( // Handle Special Case < 25 NILM & hrHPV positive
       AgeInYears() < 25 and
       MostRecentCytologyCotestWasAfterAge21 and
