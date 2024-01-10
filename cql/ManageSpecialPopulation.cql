@@ -713,7 +713,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
+          'Primary hrHPV testing or cotesting is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
         }
       }
     when ( // no hysterectomy date

@@ -327,7 +327,7 @@ define RecommendationText:
   else // Propose Future Testing
     case 
       when Age21Through29 then 
-        { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
+        { 'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
       when Age30AndOlder then
         if LastCytologyWasCotest then
           { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }

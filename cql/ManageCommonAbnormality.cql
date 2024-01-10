@@ -333,7 +333,7 @@ define Pap6MonthIntervalText:
   'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
   
 define Pap1YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1 year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals.'
  
 define Pap3YearIntervalText:
   'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals.'
@@ -348,7 +348,7 @@ define ThreeYearSurveillanceRecommendationText:
   'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Routine screening at 5 year intervals using primary HPV testing or cotesting is recommended.'
+  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
