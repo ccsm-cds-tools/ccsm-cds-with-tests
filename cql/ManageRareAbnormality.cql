@@ -1247,7 +1247,7 @@ define RecommendationForHistologyResults:
       (InitialCervicalHistologyInterpretedAsUnspecifiedHsilOrCin2InLast18Months is not null) and
       MostRecentNegativeHsilSurveillanceResultWithin18Months
       SecondMostRecentNegativeHsilSurveillanceResultWithin18Months and
-      Collate.MostRecentBiopsyReport.date 6 months or more after SecondMostRecentBiopsyReport.date
+      Collate.MostRecentBiopsyReport.date 3 months or more after SecondMostRecentBiopsyReport.date
       // TODO: Investigate whether RecentlyRespondedYesToFuturePregnancyConcernsQuestion needs to be checked for I3.3, 13.4, and I3.5
     ) then
       {
