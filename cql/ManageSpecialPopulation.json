@@ -839,6 +839,246 @@
                } ]
             }
          }, {
+            "name" : "Under25AndLowGradeCytologyResultsInPast3Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Less",
+                  "operand" : [ {
+                     "precision" : "Year",
+                     "type" : "CalculateAge",
+                     "operand" : {
+                        "path" : "birthDate.value",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "25",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "CytologyInterpretedAsLsil",
+                              "libraryName" : "Rare",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyReport",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : true,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "type" : "Subtract",
+                                    "operand" : [ {
+                                       "type" : "Now"
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 },
+                                 "high" : {
+                                    "type" : "Now"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "type" : "Now"
+                                 }
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "name" : "MostRecentCytologyCotestResult",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ASC-US",
+                                    "type" : "Literal"
+                                 } ]
+                              } ]
+                           }, {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "name" : "MostRecentHpvResult",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-positive",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentCytologyCotest",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "lowClosed" : true,
+                                 "highClosed" : false,
+                                 "type" : "Interval",
+                                 "low" : {
+                                    "type" : "Subtract",
+                                    "operand" : [ {
+                                       "type" : "Now"
+                                    }, {
+                                       "value" : 3,
+                                       "unit" : "years",
+                                       "type" : "Quantity"
+                                    } ]
+                                 },
+                                 "high" : {
+                                    "type" : "Now"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "type" : "Now"
+                                 }
+                              }
+                           } ]
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "CytologyInterpretedAsAscus",
+                              "libraryName" : "Rare",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentCytologyCotestResult",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "In",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "lowClosed" : true,
+                              "highClosed" : false,
+                              "type" : "Interval",
+                              "low" : {
+                                 "type" : "Subtract",
+                                 "operand" : [ {
+                                    "type" : "Now"
+                                 }, {
+                                    "value" : 3,
+                                    "unit" : "years",
+                                    "type" : "Quantity"
+                                 } ]
+                              },
+                              "high" : {
+                                 "type" : "Now"
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "type" : "Now"
+                              }
+                           }
+                        } ]
+                     } ]
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsLsil",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2425,54 +2665,45 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
+                           "type" : "Less",
                            "operand" : [ {
-                              "type" : "Less",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
                                  }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
-                              } ]
+                              }
                            }, {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
                            } ]
                         }, {
                            "type" : "Or",
                            "operand" : [ {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "type" : "Or",
-                                 "operand" : [ {
-                                    "name" : "CytologyInterpretedAsHsil",
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsHsilInPast5Years",
                                     "libraryName" : "Rare",
                                     "type" : "ExpressionRef"
-                                 }, {
-                                    "name" : "CytologyInterpretedAsAscH",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 } ]
-                              }, {
-                                 "name" : "CytologyInterpretedAsAgc",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
-                              } ]
+                                 }
+                              }
                            }, {
-                              "name" : "CytologyInterpretedAsAis",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast5Years",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         } ]
                      }, {
@@ -2819,7 +3050,7 @@
                   }
                }, {
                   "when" : {
-                     "name" : "Under25AndLowGradeCytologyResults",
+                     "name" : "Under25AndLowGradeCytologyResultsInPast3Years",
                      "type" : "ExpressionRef"
                   },
                   "then" : {

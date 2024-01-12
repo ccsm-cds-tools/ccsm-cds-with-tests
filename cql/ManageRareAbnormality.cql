@@ -558,6 +558,16 @@ define CytologyInterpretedAsAscH:
       return aC ~ "ASC-H"
   )
 
+define LastKnownCytologyInterpretedAsAscHInPast5Years:
+  Coalesce(
+    (Collate.SortedCytologyReports) S
+    where (S.date >= Now() - 5 years) and
+    AnyTrue(
+      (S.allConclusions) aC
+        return aC ~ "ASC-H"
+    )
+  )
+  
 define SecondMostRecentCytologyReport:
   if Count(Collate.SortedCytologyReports) > 1 then
     Collate.SortedCytologyReports[1]
@@ -1014,6 +1024,16 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )
 
+define LastKnownCytologyInterpretedAsHsilInPast5Years:
+  Coalesce(
+    (Collate.SortedCytologyReports) S
+    where (S.date >= Now() - 5 years) and
+    AnyTrue(
+      (S.allConclusions) aC
+        return aC in "HSIL"
+    )
+  )
+  
 define CervixRemovalDateIsAfterMostRecentAisBiopsy:
   (CervixRemovalDate is not null) and 
   CervixRemovalDate after Collate.MostRecentAisBiopsy.date
