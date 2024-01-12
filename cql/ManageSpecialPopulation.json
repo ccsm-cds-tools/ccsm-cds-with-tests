@@ -265,9 +265,10 @@
                }
             }
          }, {
-            "name" : "Under25And2YearsAgoCytologyResults",
+            "name" : "Under25CytologyResultsInPastInterval",
             "context" : "Patient",
             "accessLevel" : "Public",
+            "type" : "FunctionDef",
             "expression" : {
                "type" : "Query",
                "source" : [ {
@@ -278,16 +279,13 @@
                      "type" : "ExpressionRef"
                   }
                } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "And",
-                  "operand" : [ {
-                     "type" : "SameOrBefore",
-                     "operand" : [ {
-                        "path" : "date",
-                        "scope" : "C",
-                        "type" : "Property"
-                     }, {
+               "let" : [ {
+                  "identifier" : "LookbackInterval",
+                  "expression" : {
+                     "lowClosed" : true,
+                     "highClosed" : true,
+                     "type" : "Interval",
+                     "low" : {
                         "type" : "Subtract",
                         "operand" : [ {
                            "path" : "date",
@@ -298,75 +296,78 @@
                               "type" : "ExpressionRef"
                            }
                         }, {
-                           "value" : 2,
-                           "unit" : "years",
-                           "type" : "Quantity"
+                           "name" : "LookBackEnd",
+                           "type" : "OperandRef"
                         } ]
-                     } ]
-                  }, {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "In",
+                     },
+                     "high" : {
+                        "type" : "Subtract",
                         "operand" : [ {
                            "path" : "date",
-                           "scope" : "C",
-                           "type" : "Property"
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "libraryName" : "Rare",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
-                           "lowClosed" : true,
-                           "highClosed" : false,
-                           "type" : "Interval",
-                           "low" : {
-                              "type" : "Subtract",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyReport",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "value" : 3,
-                                 "unit" : "years",
-                                 "type" : "Quantity"
-                              } ]
-                           },
-                           "high" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
+                           "name" : "LookBackStart",
+                           "type" : "OperandRef"
                         } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentCytologyReport",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
-                        }
-                     } ]
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "C",
+                     "type" : "Property"
+                  }, {
+                     "name" : "LookbackInterval",
+                     "type" : "QueryLetRef"
                   } ]
                }
+            },
+            "operand" : [ {
+               "name" : "LookBackStart",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Quantity",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "LookBackEnd",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Quantity",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "Under25And18MonthsAgoCytologyResults",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "Under25CytologyResultsInPastInterval",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "value" : 18,
+                  "unit" : "months",
+                  "type" : "Quantity"
+               }, {
+                  "value" : 3,
+                  "unit" : "years",
+                  "type" : "Quantity"
+               } ]
             }
          }, {
-            "name" : "Under25And2YearsAgoCytologyReport",
+            "name" : "Under25And18MonthsAgoCytologyReport",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
                "type" : "Indexer",
                "operand" : [ {
-                  "name" : "Under25And2YearsAgoCytologyResults",
+                  "name" : "Under25And18MonthsAgoCytologyResults",
                   "type" : "ExpressionRef"
                }, {
                   "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
@@ -375,7 +376,7 @@
                } ]
             }
          }, {
-            "name" : "AssociatedHpvCotest",
+            "name" : "Associated18MonthHpvCotest",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -409,7 +410,7 @@
                                  "path" : "date",
                                  "type" : "Property",
                                  "source" : {
-                                    "name" : "Under25And2YearsAgoCytologyReport",
+                                    "name" : "Under25And18MonthsAgoCytologyReport",
                                     "type" : "ExpressionRef"
                                  }
                               }, {
@@ -424,7 +425,7 @@
                                  "path" : "date",
                                  "type" : "Property",
                                  "source" : {
-                                    "name" : "Under25And2YearsAgoCytologyReport",
+                                    "name" : "Under25And18MonthsAgoCytologyReport",
                                     "type" : "ExpressionRef"
                                  }
                               }, {
@@ -442,7 +443,7 @@
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "Under25And2YearsAgoCytologyReport",
+                                 "name" : "Under25And18MonthsAgoCytologyReport",
                                  "type" : "ExpressionRef"
                               }
                            }
@@ -1078,7 +1079,7 @@
                } ]
             }
          }, {
-            "name" : "Under25And2YearsAgoCytologyReportInterpretedAsLsil",
+            "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsLsil",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1091,7 +1092,7 @@
                         "path" : "allConclusions",
                         "type" : "Property",
                         "source" : {
-                           "name" : "Under25And2YearsAgoCytologyReport",
+                           "name" : "Under25And18MonthsAgoCytologyReport",
                            "type" : "ExpressionRef"
                         }
                      }
@@ -1120,7 +1121,7 @@
                }
             }
          }, {
-            "name" : "Under25And2YearsAgoCytologyReportInterpretedAsAscus",
+            "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsAscus",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1133,7 +1134,7 @@
                         "path" : "allConclusions",
                         "type" : "Property",
                         "source" : {
-                           "name" : "Under25And2YearsAgoCytologyReport",
+                           "name" : "Under25And18MonthsAgoCytologyReport",
                            "type" : "ExpressionRef"
                         }
                      }
@@ -1162,7 +1163,7 @@
                }
             }
          }, {
-            "name" : "Under25And2YearsAgoLowGradeCytologyResults",
+            "name" : "Under25And18MonthsAgoLowGradeCytologyResults",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1190,7 +1191,7 @@
                   "operand" : [ {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "Under25And2YearsAgoCytologyResults",
+                        "name" : "Under25And18MonthsAgoCytologyResults",
                         "type" : "ExpressionRef"
                      }
                   }, {
@@ -1198,12 +1199,12 @@
                      "operand" : [ {
                         "type" : "Or",
                         "operand" : [ {
-                           "name" : "Under25And2YearsAgoCytologyReportInterpretedAsLsil",
+                           "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsLsil",
                            "type" : "ExpressionRef"
                         }, {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "Under25And2YearsAgoCytologyReportInterpretedAsAscus",
+                              "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsAscus",
                               "type" : "ExpressionRef"
                            }, {
                               "type" : "Equal",
@@ -1211,7 +1212,7 @@
                                  "path" : "riskTableInput",
                                  "type" : "Property",
                                  "source" : {
-                                    "name" : "AssociatedHpvCotest",
+                                    "name" : "Associated18MonthHpvCotest",
                                     "type" : "ExpressionRef"
                                  }
                               }, {
@@ -1224,12 +1225,12 @@
                      }, {
                         "type" : "And",
                         "operand" : [ {
-                           "name" : "Under25And2YearsAgoCytologyReportInterpretedAsAscus",
+                           "name" : "Under25And18MonthsAgoCytologyReportInterpretedAsAscus",
                            "type" : "ExpressionRef"
                         }, {
                            "type" : "IsNull",
                            "operand" : {
-                              "name" : "AssociatedHpvCotest",
+                              "name" : "Associated18MonthHpvCotest",
                               "type" : "ExpressionRef"
                            }
                         } ]
@@ -1281,7 +1282,7 @@
                               "path" : "riskTableInput",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "AssociatedHpvCotest",
+                                 "name" : "Associated18MonthHpvCotest",
                                  "type" : "ExpressionRef"
                               }
                            }, {
@@ -1300,7 +1301,7 @@
                      }, {
                         "type" : "IsNull",
                         "operand" : {
-                           "name" : "AssociatedHpvCotest",
+                           "name" : "Associated18MonthHpvCotest",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -3010,7 +3011,7 @@
                         "name" : "Under25AndLowGradeCytologyResults",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "Under25And2YearsAgoLowGradeCytologyResults",
+                        "name" : "Under25And18MonthsAgoLowGradeCytologyResults",
                         "type" : "ExpressionRef"
                      } ]
                   },
