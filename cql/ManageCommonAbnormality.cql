@@ -37,17 +37,57 @@ context Patient
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR COMMON ABNORMALITIES
 //------------------------------------------------------------------------------
+define HpvDates:
+  Collate.SortedHpvReports H
+  return H.date
+
+define CytologyAloneReports:
+  if Exists(HpvDates) then
+    Collate.SortedCytologyReports C
+      where not (C.date in HpvDates)
+    return C
+    sort by date desc
+  else
+    Collate.SortedCytologyReports C
+    return C
+    sort by date desc
+
+define LastKnownCytologyAloneResult:
+  First(CytologyAloneReports)
+
+define CytologyAloneInRecentHistory:
+  if Collate.SecondMostRecentHpvResult is not null and
+    LastKnownCytologyAloneResult is not null
+    and LastKnownCytologyAloneResult.date occurs after Collate.SecondMostRecentHpvReport.date
+  then
+    true
+  else if Collate.SecondMostRecentHpvResult is null
+    and LastKnownCytologyAloneResult is not null
+  then
+    true
+  else
+    false
+
+define DefaultLookupTableReturnValue:
+  {
+    "action": null,
+    "riskNow": null,
+    "risk5yr": null
+  }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  RiskTableLookup.GetGeneralScreeningManagement(
-    Collate.SecondMostRecentHpvResult,
-    Collate.SecondMostRecentCytologyCotestResult,
-    Collate.MostRecentHpvResult,
-    Collate.MostRecentCytologyCotestResult
-  )
+  if not CytologyAloneInRecentHistory then
+    RiskTableLookup.GetGeneralScreeningManagement(
+      Collate.SecondMostRecentHpvResult,
+      Collate.SecondMostRecentCytologyCotestResult,
+      Collate.MostRecentHpvResult,
+      Collate.MostRecentCytologyCotestResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable1:
   RiskTableLookup.GetRowTable1(
@@ -73,14 +113,17 @@ define GeneralScreeningManagementRecommendation:
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
 define LookUpTable2: // NOTE: Review whether we are correctly handling the multiple negative cotests referenced in Table 2b and 2c
-  RiskTableLookup.GetSurveillanceManagement(
-    Collate.ThirdMostRecentHpvResult,
-    Collate.ThirdMostRecentCytologyCotestResult,
-    Collate.SecondMostRecentHpvResult,
-    Collate.SecondMostRecentCytologyCotestResult,
-    Collate.MostRecentHpvResult,
-    Collate.MostRecentCytologyCotestResult
-  )
+  if not CytologyAloneInRecentHistory then
+    RiskTableLookup.GetSurveillanceManagement(
+      Collate.ThirdMostRecentHpvResult,
+      Collate.ThirdMostRecentCytologyCotestResult,
+      Collate.SecondMostRecentHpvResult,
+      Collate.SecondMostRecentCytologyCotestResult,
+      Collate.MostRecentHpvResult,
+      Collate.MostRecentCytologyCotestResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable2:
   RiskTableLookup.GetRowTable2(
@@ -184,15 +227,15 @@ define PostColposcopyManagementRecommendation:
 // COMMON ABNORMALITY #5: Follow-up after treatment for CIN2 or CIN 3
 // Tables 5A and 5B
 define LookUpTable5:
-  RiskTableLookup.GetPostTreatmentManagement(
-    Collate.MostRecentBiopsyResult,
-    Collate.ThirdMostRecentHpvResultAfterTreatment,
-    Collate.ThirdMostRecentCytologyResultAfterTreatment,
-    Collate.SecondMostRecentHpvResultAfterTreatment,
-    Collate.SecondMostRecentCytologyResultAfterTreatment,
-    Collate.MostRecentHpvResultAfterTreatment,
-    Collate.MostRecentCytologyResultAfterTreatment
-  )
+    RiskTableLookup.GetPostTreatmentManagement(
+      Collate.MostRecentBiopsyResult,
+      Collate.ThirdMostRecentHpvResultAfterTreatment,
+      Collate.ThirdMostRecentCytologyResultAfterTreatment,
+      Collate.SecondMostRecentHpvResultAfterTreatment,
+      Collate.SecondMostRecentCytologyResultAfterTreatment,
+      Collate.MostRecentHpvResultAfterTreatment,
+      Collate.MostRecentCytologyResultAfterTreatment
+    )
 
 define RowTable5:
   RiskTableLookup.GetRowTable5(
@@ -245,12 +288,12 @@ define WhichTableMadeTheRecommendation:
 define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
-    when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
+    when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     else 'N/A'
   end
 
@@ -661,10 +704,6 @@ define Action:
         }
       }
     when (
-      ErrataRecommendation is not null
-    ) then
-      ErrataRecommendation
-    when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '1-year follow-up'
     ) then
@@ -793,6 +832,10 @@ define Action:
           TreatmentRecommendationText
         }
       }
+    when (
+      ErrataRecommendation is not null
+    ) then
+      ErrataRecommendation
     when ( // Handle Special Case < 25 NILM & hrHPV positive
       AgeInYears() < 25 and
       MostRecentCytologyCotestWasAfterAge21 and
