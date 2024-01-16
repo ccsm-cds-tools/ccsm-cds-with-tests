@@ -362,7 +362,6 @@ define ErrataRecommendation:
       }
     // TODO: Last two errata recommendations need to be modified.
     when ( // Errata Recommendation #5: ASC-US Alone after a negative test
-    // L2 QUESTION: Wording here is unconventional (+ rec below). Is this ASCUS first of Negative Test first
     // L2 QUESTION: I believe this will be blocked by the first more general ASCUS errata recommendation (this needs to take precedence) (+ rec below)
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date and // L2 QUESTION: Why is MostRecent not used here? This is pretty much saying that if a patient as ASCUS alone followed by a negative test, they will keep getting this recommendation forever, until they get a histology or cervical cytology of ASCUS or above. What if they get a positive HPV during their follow up? As written, they would continue to get this recommendation.
@@ -387,9 +386,10 @@ define ErrataRecommendation:
           'Primary HPV testing or cotesting is recommended in one year.'
         }
       }
-    when ( // Errata Recommendation #1: ASC-US Alone
+    when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date
+      // TODO: No treatment after cytology alone
     ) then
       {
         short: 'Reflex HPV',
@@ -398,9 +398,10 @@ define ErrataRecommendation:
           'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
         }
       }
-    when ( // Errata Recommendation #2: LSIL Alone
+    when ( // Errata Recommendation 3.1.2: LSIL Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date // L2 QUESTION: Is this most recent?
+      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date
+      // TODO: No treatment after cytology alone
     ) then
       {
         short: 'Colposcopy',
@@ -409,9 +410,10 @@ define ErrataRecommendation:
           'Colposcopy is recommended.'
         }
       }
-    when ( // Errata Recommendation #3: HSIL or SCC Alone
+    when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsHsil and Collate.MostRecentReport = MostRecentCytologyAlone.date// L2: Is this most recent?
+      CytologyAloneInterpretedAsHsil and Collate.MostRecentReport = MostRecentCytologyAlone.date
+      // TODO: No treatment after cytology alone
     ) then
       {
         short: 'Colposcopy or Treatment',
