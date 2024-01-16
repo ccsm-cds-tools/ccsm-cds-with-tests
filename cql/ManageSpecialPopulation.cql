@@ -195,9 +195,6 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndSecondMostRecentLowGradeCytologyResults and
   Collate.MostRecentBiopsyReport.date 3 years or less after Rare.MostRecentCytologyReport.date
 
-define CytologyInterpretedAsAscusOrAbove:
-  Rare.MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
-
 define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
   AnyTrue(
     (Rare.SecondMostRecentCytologyReport.allConclusions) aC
@@ -242,7 +239,7 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() >= 21 and AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date and
@@ -549,7 +546,7 @@ define RecommendationForImmunosuppressedPatients:
       Immunocompromised and
       Rare.MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and

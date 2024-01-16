@@ -268,12 +268,6 @@ define MostRecentCytologyIsNotACotest:
       where S.date within 1 day of Collate.MostRecentCytologyReport.date
   ) is null
 
-define MostRecentHpvIsNotACotest:
-  Coalesce(
-    (Collate.SortedCytologyReports) S
-      where S.date within 1 day of Collate.MostRecentHpvReport.date
-  ) is null
-
 define MostRecentCytologyAlone:
   if MostRecentCytologyIsNotACotest then
     Collate.MostRecentCytologyReport
@@ -301,56 +295,132 @@ define CytologyAloneInterpretedAsLsil:
 define CytologyAloneInterpretedAsHsil:
   MostRecentCytologyAlone.riskTableInput = 'HSIL+'
 
-define CytologyAloneInterpretedAsAscusOrAbove:
-  MostRecentCytologyAlone.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+define CytologicHsil:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'HSIL+'
 
-define SecondMostRecentCytologyAloneInterpretedAsLsil:
-  SecondMostRecentCytologyAlone.riskTableInput = 'LSIL'
+define LastKnownHsilCytology:
+  First(CytologicHsil)
 
-define SecondMostRecentCytologyAloneInterpretedAsAscus:
-  SecondMostRecentCytologyAlone.riskTableInput = 'ASC-US'
+define LastCervicalPrecancerTreatment:
+  Last(Collate.CervicalPrecancerTreatmentsSorted)
 
-define SecondMostRecentCytologyAloneInterpretedAsNilm:
-  SecondMostRecentCytologyAlone.riskTableInput = 'NILM'
+define AnyPositiveHpv:
+  Collate.SortedHpvReports H
+    where H.riskTableInput in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // L2 Question: Does HPV positive include HPV16+ or HPV18+?
 
-define SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone:
-  (
-    SecondMostRecentCytologyAloneInterpretedAsNilm and
-    SecondMostRecentCytologyAlone.date 18 months or less before MostRecentCytologyAlone.date
-  ) or
-  (
-    Collate.MostRecentHpvResult = 'HPV-negative' and
-    MostRecentCytologyIsNotACotest and
-    MostRecentHpvIsNotACotest and
-    Collate.MostRecentHpvReport.date 18 months or less before MostRecentCytologyAlone.date
-  ) or
-  (
-    Collate.MostRecentHpvResult = 'HPV-negative' and
-    MostRecentCytologyIsNotACotest and
-    Collate.MostRecentCytologyCotestResult = 'NILM' and
-    Collate.MostRecentCytologyCotest.date 18 months or less before MostRecentCytologyAlone.date
-  )
+define LastKnownPositiveHpv:
+  First(AnyPositiveHpv)
 
-define CotestInterpretedAsHpvPositiveNilm:
-  Collate.MostRecentCytologyCotestResult = 'NILM' and
-  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // REVIEW: Is this the most consistent way to do this?
+define CytologyInterpretedAsAscusOrAbove:
+  Collate.CytologyInterpretedAsAscusOrAbove
 
-// L2 QUESTION: Can these errata updates be labeled so that they can be mapped to the L3.
+define HpvInterpretedAsPositive:
+  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // L2 Question: Does HPV positive include HPV16+ or HPV18+?
+
+define MostRecentScreeningResultIsPositive:
+  CytologyInterpretedAsAscusOrAbove or
+  HpvInterpretedAsPositive
+
+define DateOfMostRecentPositiveScreeningResult:
+  if (CytologyInterpretedAsAscusOrAbove and HpvInterpretedAsPositive) then
+    if (Collate.MostRecentCytologyReport.date same or after Collate.MostRecentHpvReport.date) then
+      Collate.MostRecentCytologyReport.date
+    else
+      Collate.MostRecentHpvReport.date
+  else if (CytologyInterpretedAsAscusOrAbove) then
+    Collate.MostRecentCytologyReport.date
+  else if (HpvInterpretedAsPositive) then 
+    Collate.MostRecentHpvReport.date
+  else
+    null
+
+define AnyCytologicLsil:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'LSIL'
+
+define LsilBeforeMostRecentPositiveResult:
+  if MostRecentScreeningResultIsPositive then // TODO: Remove if statement here?
+    AnyCytologicLsil C
+      where C.date before DateOfMostRecentPositiveScreeningResult
+  else
+    null
+
+define LastKnownLsilBeforeMostRecentPositiveResult:
+  First(LsilBeforeMostRecentPositiveResult)
+
+define AnyCytologicAscus:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'ASC-US'
+
+define AnyHpvPositiveCotest:
+  Collate.SortedHpvReports H
+    where H.riskTableInput = 'HPV-positive'
+
+define AnyAscusHpvPositiveCotest:
+  from AnyCytologicAscus C, AnyHpvPositiveCotest H
+    where C.date = H.date
+    return C
+
+define AscusHpvPositiveCotestBeforeMostRecentPositiveResult:
+  AnyAscusHpvPositiveCotest C
+    where C.date before DateOfMostRecentPositiveScreeningResult
+
+define LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult:
+  First(AscusHpvPositiveCotestBeforeMostRecentPositiveResult)
+
+define DateOfMostRecentHpvReport:
+  Collate.MostRecentHpvReport.date
+
+define LsilBeforeMostRecentHpvReport:
+  AnyCytologicLsil C
+    where C.date before DateOfMostRecentHpvReport
+
+define LastKnownLsilBeforeMostRecentMostRecentHpvReport:
+  First(LsilBeforeMostRecentHpvReport)
+
+define AscusHpvPositiveBeforeMostRecentHpvReport:
+  AnyAscusHpvPositiveCotest C
+    where C.date before DateOfMostRecentHpvReport
+
+define LastKnownAscusHpvPositiveBeforeMostRecentHpvReport:
+  First(AscusHpvPositiveBeforeMostRecentHpvReport)
+
+define AnyCytologyInterpretedAsAscusOrAbove:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+
+define LastKnownCytologyInterpretedAsAscusOrAbove:
+  First(AnyCytologyInterpretedAsAscusOrAbove)
+
+define function HasNoBiopsyOrTreatmentAfterDate(d System.DateTime):
+   (
+    Collate.DateOfLastCervicalPrecancerTreatment is null or
+    not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
+   ) and
+   (
+    Collate.MostRecentBiopsyReport.date is null or
+    not (Collate.MostRecentBiopsyReport.date occurs after d)
+   )
+
 // L2 QUESTION: Is there an errata section on having two consecutive HPV tests?
 define ErrataRecommendation:
   case
-    // Managing abnormal cervical cytology alone
-    // The following logic phrases come directly from the JLGTD article:
-    when ( // Errata Recommendation #4: Repeat testing shows persistent HPV-positive or cytologic abnormality
-      // L2 QUESTION: This will need to be evaluated before risk tables, or else this will get rec from risk table 1. Many of the 'ASCUS or above' recs will also be taken over by the recs above
+    when ( // Errata Recommendation 3.2.2: Low grade cytology followed by persistent abnormality
       AgeInYears() >= 25 and
       (
-        CytologyAloneInterpretedAsAscusOrAbove and Collate.MostRecentReport = MostRecentCytologyAlone.date or // TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
-        CotestInterpretedAsHpvPositiveNilm and Collate.MostRecentReport = Collate.MostRecentCytologyReport.date
+        CytologyInterpretedAsAscusOrAbove or
+        HpvInterpretedAsPositive
       ) and
       (
-        SecondMostRecentCytologyAloneInterpretedAsLsil or
-        SecondMostRecentCytologyAloneInterpretedAsAscus
+        (
+          LastKnownLsilBeforeMostRecentPositiveResult is not null and
+          HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentPositiveResult.date)
+        ) or
+        (
+          LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult is not null and
+          HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
+        )
       )
     ) then
       {
@@ -360,35 +430,11 @@ define ErrataRecommendation:
           'Colposcopy is recommended.'
         }
       }
-    // TODO: Last two errata recommendations need to be modified.
-    when ( // Errata Recommendation #5: ASC-US Alone after a negative test
-    // L2 QUESTION: I believe this will be blocked by the first more general ASCUS errata recommendation (this needs to take precedence) (+ rec below)
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date and // L2 QUESTION: Why is MostRecent not used here? This is pretty much saying that if a patient as ASCUS alone followed by a negative test, they will keep getting this recommendation forever, until they get a histology or cervical cytology of ASCUS or above. What if they get a positive HPV during their follow up? As written, they would continue to get this recommendation.
-      SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
-    ) then
-      {
-        short: 'Surveillance',
-        date: Collate.DateOfMostRecentReport + 3 years,
-        details: {
-          'HPV testing or cotesting is recommended in three years.'
-        }
-      }
-    when ( // Errata Recommendation #6: LSIL Alone after a negative test
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date and
-      SecondMostRecentTestIsNegativeAndWithin18MonthsOfMostRecentCytologyAlone
-    ) then
-      {
-        short: 'Surveillance',
-        date: Collate.DateOfMostRecentReport + 1 years,
-        details: {
-          'Primary HPV testing or cotesting is recommended in one year.'
-        }
-      }
+
+    // Managing abnormal cervical cytology alone
     when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date
+      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date // TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
       // TODO: No treatment after cytology alone
     ) then
       {
@@ -421,6 +467,63 @@ define ErrataRecommendation:
         details: {
           'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
           'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
+        }
+      }
+
+    // The following logic phrases come directly from the JLGTD article:
+    when ( // Errata Recommendation 3.2.1: High grade cytology and patient did not receive colposcopy
+      AgeInYears() >= 25 and
+      LastKnownHsilCytology is not null and
+      HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date) and
+      (
+        LastKnownPositiveHpv.date is null or
+        not (LastKnownPositiveHpv.date occurs after LastKnownHsilCytology.date)
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+
+    when ( // Errata Recommendation 3.2.3: Low grade cytology followed by a negative HPV-based test
+      AgeInYears() >= 25 and
+      (
+        (
+          Collate.MostRecentHpvResult = 'HPV-negative' and
+          Collate.MostRecentCytologyCotest is null
+        ) or
+        (
+          Collate.MostRecentHpvResult = 'HPV-negative' and
+          Collate.MostRecentCytologyCotest.riskTableInput = 'NILM'
+        )
+      ) and
+      (
+        (
+          LastKnownLsilBeforeMostRecentMostRecentHpvReport is not null and 
+          HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentMostRecentHpvReport.date) and
+          (
+            LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
+            not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownLsilBeforeMostRecentMostRecentHpvReport.date)
+          )
+        ) or
+        (
+          LastKnownAscusHpvPositiveBeforeMostRecentHpvReport is not null and
+          HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date) and
+          (
+            LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
+            not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date)
+          ) 
+        )
+      )
+    ) then
+      {
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 1 years,
+        details: {
+          'Primary HPV testing or cotesting is recommended in one year.'
         }
       }
     else
