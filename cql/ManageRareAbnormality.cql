@@ -1878,7 +1878,8 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.2.3)',
         details: {
-          'Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment. If repeat excision is not feasible or not desired, hysterectomy is recommended.'
+          'Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment.',
+          'If repeat excision is not feasible or not desired, hysterectomy is recommended.'
         }
       }    
     when ( // J2.2
@@ -1921,7 +1922,8 @@ define RecommendationForSurveillanceAfterAbnormalities:
         date: Today(),
         group: 'Management Surveillance (J.3.1)',
         details: {
-          'Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
+          'Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment.',
+          'After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
         }
       }
     when ( // J3.2, Part 1
