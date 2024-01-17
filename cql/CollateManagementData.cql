@@ -438,8 +438,14 @@ define AisBiopsies:
   SortedBiopsyReports S
     where S.riskTableInput in {'AIS'}
 
+// I believe this is mis-named - it does not refer to the Most Recent Biopsy being AIS
+// but instead finds the chronologically newest of all AIS biopsies
+// This is what should be called LastKnownAisBiopsy
 define MostRecentAisBiopsy:
   First(AisBiopsies)
+  
+define LastKnownAisBiopsy:
+  First(AisBiopsies) 
   
 // Look for treatments after this CIN2/CIN3 biopsy
 define CervicalPrecancerTreatments:

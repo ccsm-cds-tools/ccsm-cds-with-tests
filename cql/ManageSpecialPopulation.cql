@@ -244,8 +244,15 @@ define RecommendationForPatientsYoungerThan25:
         Rare.CytologyInterpretedAsHsil or
         Rare.CytologyInterpretedAsAscH
       ) and
-      Rare.MostRecentCytologyReport.date more than 18 months after Collate.MostRecentBiopsyReport.date and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+      Rare.MostRecentCytologyReport.date more than 2 years after Collate.MostRecentBiopsyReport.date and
+      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date and
+      not (
+      // cannot find these in the 2-3 year window after the Histology interpreted as Cin1OrNormal
+      // NOT histologic HSIL (CIN2)
+      // NOT Histologic HSIL, Unspecified
+      // NOT Histologic AIS
+      // NOT Histologic Cancer
+      )
     ) then
       {
         short: 'See Details',
