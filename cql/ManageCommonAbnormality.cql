@@ -292,6 +292,7 @@ define WhichTableMadeTheRecommendation:
 define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
+    when MostRecentPrimaryHpvPositive then 'Reflex Cytology'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
@@ -618,6 +619,17 @@ define PositivePrimaryHpv:
   ) and 
   Collate.MostRecentCytologyCotest is null
 
+define MostRecentPrimaryHpvPositive:
+    PositivePrimaryHpv and
+    (
+      Collate.MostRecentCytologyReport.date is null or
+      not (Collate.MostRecentCytologyReport.date occurs after Collate.MostRecentHpvReport.date)
+    ) and
+    (
+      Collate.MostRecentBiopsyReport.date is null or 
+      not (Collate.MostRecentBiopsyReport.date occurs after Collate.MostRecentHpvReport.date)
+    )
+
 define MostRecentCytologyCotestWasAfterAge21:
   Collate.MostRecentCytologyCotest.date >= Patient.birthDate + 21 years
 
@@ -694,9 +706,7 @@ define Action:
         }
       }  
     when (
-      PositivePrimaryHpv and
-      not (Collate.MostRecentCytologyReport.date after Collate.MostRecentHpvReport.date) and
-      not (Collate.MostRecentBiopsyReport.date after Collate.MostRecentHpvReport.date)
+      MostRecentPrimaryHpvPositive
     ) then
       {
         short: 'Cytology',

@@ -1467,6 +1467,143 @@
                }
             }
          }, {
+            "name" : "PositivePrimaryHpv",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "AnyTrue",
+                  "source" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "aC",
+                        "expression" : {
+                           "path" : "allConclusions",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "InValueSet",
+                           "code" : {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "aC",
+                                 "type" : "AliasRef"
+                              } ]
+                           },
+                           "valueset" : {
+                              "name" : "High Risk HPV Positive Results",
+                              "libraryName" : "Dash"
+                           }
+                        }
+                     }
+                  }
+               }, {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "MostRecentCytologyCotest",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "MostRecentPrimaryHpvPositive",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "And",
+                  "operand" : [ {
+                     "name" : "PositivePrimaryHpv",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentCytologyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "After",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentHpvReport",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }
+                     } ]
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "After",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     }
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "CytologyInterpretedAsAscusOrAbove",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3069,6 +3206,16 @@
                   }
                }, {
                   "when" : {
+                     "name" : "MostRecentPrimaryHpvPositive",
+                     "type" : "ExpressionRef"
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Reflex Cytology",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
                      "type" : "Not",
                      "operand" : {
                         "type" : "IsNull",
@@ -3421,57 +3568,6 @@
                "type" : "Literal"
             }
          }, {
-            "name" : "PositivePrimaryHpv",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "AnyTrue",
-                  "source" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "aC",
-                        "expression" : {
-                           "path" : "allConclusions",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentHpvReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "InValueSet",
-                           "code" : {
-                              "name" : "ToConcept",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "aC",
-                                 "type" : "AliasRef"
-                              } ]
-                           },
-                           "valueset" : {
-                              "name" : "High Risk HPV Positive Results",
-                              "libraryName" : "Dash"
-                           }
-                        }
-                     }
-                  }
-               }, {
-                  "type" : "IsNull",
-                  "operand" : {
-                     "name" : "MostRecentCytologyCotest",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ]
-            }
-         }, {
             "name" : "MostRecentCytologyCotestWasAfterAge21",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3649,58 +3745,8 @@
                   }
                }, {
                   "when" : {
-                     "type" : "And",
-                     "operand" : [ {
-                        "type" : "And",
-                        "operand" : [ {
-                           "name" : "PositivePrimaryHpv",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "After",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyReport",
-                                    "libraryName" : "Collate",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentHpvReport",
-                                    "libraryName" : "Collate",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ]
-                           }
-                        } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "After",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "libraryName" : "Collate",
-                                 "type" : "ExpressionRef"
-                              }
-                           }, {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "MostRecentHpvReport",
-                                 "libraryName" : "Collate",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
-                        }
-                     } ]
+                     "name" : "MostRecentPrimaryHpvPositive",
+                     "type" : "ExpressionRef"
                   },
                   "then" : {
                      "type" : "Tuple",
