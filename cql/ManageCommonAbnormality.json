@@ -165,7 +165,7 @@
                }
             }
          }, {
-            "name" : "LastKnownCytologyAloneResult",
+            "name" : "LastKnownCytologyAloneReport",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -200,7 +200,7 @@
                         "operand" : {
                            "type" : "IsNull",
                            "operand" : {
-                              "name" : "LastKnownCytologyAloneResult",
+                              "name" : "LastKnownCytologyAloneReport",
                               "type" : "ExpressionRef"
                            }
                         }
@@ -211,7 +211,7 @@
                         "path" : "date",
                         "type" : "Property",
                         "source" : {
-                           "name" : "LastKnownCytologyAloneResult",
+                           "name" : "LastKnownCytologyAloneReport",
                            "type" : "ExpressionRef"
                         }
                      }, {
@@ -246,7 +246,7 @@
                         "operand" : {
                            "type" : "IsNull",
                            "operand" : {
-                              "name" : "LastKnownCytologyAloneResult",
+                              "name" : "LastKnownCytologyAloneReport",
                               "type" : "ExpressionRef"
                            }
                         }
@@ -263,6 +263,50 @@
                      "type" : "Literal"
                   }
                }
+            }
+         }, {
+            "name" : "AbnormalCytologyAloneInRecentHistory",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "CytologyAloneInRecentHistory",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "riskTableInput",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "LastKnownCytologyAloneReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "List",
+                     "element" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ASC-US",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "LSIL",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ASC-H",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "AGC",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HSIL+",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               } ]
             }
          }, {
             "name" : "DefaultLookupTableReturnValue",
@@ -296,7 +340,7 @@
                "condition" : {
                   "type" : "Not",
                   "operand" : {
-                     "name" : "CytologyAloneInRecentHistory",
+                     "name" : "AbnormalCytologyAloneInRecentHistory",
                      "type" : "ExpressionRef"
                   }
                },
@@ -416,7 +460,7 @@
                "condition" : {
                   "type" : "Not",
                   "operand" : {
-                     "name" : "CytologyAloneInRecentHistory",
+                     "name" : "AbnormalCytologyAloneInRecentHistory",
                      "type" : "ExpressionRef"
                   }
                },

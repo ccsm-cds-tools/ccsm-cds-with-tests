@@ -52,21 +52,25 @@ define CytologyAloneReports:
     return C
     sort by date desc
 
-define LastKnownCytologyAloneResult:
+define LastKnownCytologyAloneReport:
   First(CytologyAloneReports)
 
-define CytologyAloneInRecentHistory: // TODO: Change to AbnormalCytologyAloneInRecentHistory
+define CytologyAloneInRecentHistory:
   if Collate.SecondMostRecentHpvResult is not null and
-    LastKnownCytologyAloneResult is not null
-    and LastKnownCytologyAloneResult.date occurs after Collate.SecondMostRecentHpvReport.date
+    LastKnownCytologyAloneReport is not null
+    and LastKnownCytologyAloneReport.date occurs after Collate.SecondMostRecentHpvReport.date
   then
     true
   else if Collate.SecondMostRecentHpvResult is null
-    and LastKnownCytologyAloneResult is not null
+    and LastKnownCytologyAloneReport is not null
   then
     true
   else
     false
+
+define AbnormalCytologyAloneInRecentHistory:
+  CytologyAloneInRecentHistory and
+  LastKnownCytologyAloneReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
 
 define DefaultLookupTableReturnValue:
   {
@@ -79,7 +83,7 @@ define DefaultLookupTableReturnValue:
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  if not CytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory then
     RiskTableLookup.GetGeneralScreeningManagement(
       Collate.SecondMostRecentHpvResult,
       Collate.SecondMostRecentCytologyCotestResult,
@@ -113,7 +117,7 @@ define GeneralScreeningManagementRecommendation:
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
 define LookUpTable2: // NOTE: Review whether we are correctly handling the multiple negative cotests referenced in Table 2b and 2c
-  if not CytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory then
     RiskTableLookup.GetSurveillanceManagement(
       Collate.ThirdMostRecentHpvResult,
       Collate.ThirdMostRecentCytologyCotestResult,
