@@ -361,6 +361,505 @@
                }
             } ]
          }, {
+            "name" : "CervicalPrecancerTreatments",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Union",
+               "operand" : [ {
+                  "name" : "CervicalExcisionProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "CervicalAblationProcedures",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
+            "name" : "CervicalPrecancerTreatmentsSorted",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "T",
+                  "expression" : {
+                     "name" : "CervicalPrecancerTreatments",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "ToDate",
+                           "operand" : {
+                              "name" : "ProcedureDate",
+                              "libraryName" : "Common",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "name" : "T",
+                                 "type" : "AliasRef"
+                              } ]
+                           }
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "LookbackReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "LookBack",
+               "libraryName" : "Common",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "AllCompletedDiagnosticReport",
+                  "libraryName" : "Dash",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "BiopsyLookbackPeriod",
+                  "type" : "ParameterRef"
+               } ]
+            }
+         }, {
+            "name" : "HistologyObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HistologyObservations",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
+            "name" : "SortedReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "LookbackReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "value" : {
+                           "name" : "HighestRankedInterpretation",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "BiopsyInterpretation",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "X",
+                                    "expression" : {
+                                       "name" : "CollateConclusionCodes",
+                                       "libraryName" : "Dash",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "B",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "HistologyObservations",
+                                          "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "Biopsy Report",
+                                          "libraryName" : "Dash",
+                                          "type" : "CodeRef"
+                                       } ]
+                                    }
+                                 } ],
+                                 "return" : {
+                                    "distinct" : false,
+                                    "expression" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "X",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "value" : {
+                           "name" : "CollateConclusionCodes",
+                           "libraryName" : "Dash",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "B",
+                              "type" : "AliasRef"
+                           }, {
+                              "name" : "HistologyObservations",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "Biopsy Report",
+                              "libraryName" : "Dash",
+                              "type" : "CodeRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "B",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "desc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "SortedBiopsyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "SortedReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "riskTableInput",
+                        "scope" : "B",
+                        "type" : "Property"
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "Cin2orCin3Biopsies",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "S",
+                  "expression" : {
+                     "name" : "SortedBiopsyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "riskTableInput",
+                     "scope" : "S",
+                     "type" : "Property"
+                  }, {
+                     "type" : "List",
+                     "element" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN2",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN3",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "MostRecentCin2orCin3Biopsy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "First",
+               "source" : {
+                  "name" : "Cin2orCin3Biopsies",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "T",
+                  "expression" : {
+                     "name" : "CervicalPrecancerTreatments",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "name" : "ProcedureDate",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "T",
+                        "type" : "AliasRef"
+                     } ]
+                  }, {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCin2orCin3Biopsy",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "ProcedureDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "T",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               },
+               "sort" : {
+                  "by" : [ {
+                     "direction" : "asc",
+                     "path" : "date",
+                     "type" : "ByColumn"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "DateOfLastCervicalPrecancerTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "name" : "ManageTreatmentWithoutPreviousBiopsy",
+                  "type" : "ParameterRef"
+               },
+               "then" : {
+                  "type" : "ToDateTime",
+                  "operand" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "type" : "Last",
+                        "source" : {
+                           "name" : "CervicalPrecancerTreatmentsSorted",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "type" : "Last",
+                     "source" : {
+                        "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "HasNoTreatmentAfterDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "type" : "ExpressionRef"
+                     }, {
+                        "name" : "d",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "MostRecentBiopsyReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "type" : "Indexer",
+                  "operand" : [ {
+                     "name" : "SortedBiopsyReports",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HasNoBiopsyOrTreatmentAfterDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "name" : "HasNoTreatmentAfterDate",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "d",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentBiopsyReport",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "After",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "name" : "d",
+                           "type" : "OperandRef"
+                        } ]
+                     }
+                  } ]
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "HpvReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1818,222 +2317,6 @@
                } ]
             }
          }, {
-            "name" : "LookbackReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "LookBack",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "AllCompletedDiagnosticReport",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "BiopsyLookbackPeriod",
-                  "type" : "ParameterRef"
-               } ]
-            }
-         }, {
-            "name" : "HistologyObservations",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "HistologyObservations",
-               "libraryName" : "Dash",
-               "type" : "ExpressionRef"
-            }
-         }, {
-            "name" : "SortedReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "B",
-                  "expression" : {
-                     "name" : "LookbackReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "riskTableInput",
-                        "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "BiopsyInterpretation",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "B",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HistologyObservations",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "name" : "Biopsy Report",
-                                          "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       } ]
-                                    }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
-                              } ]
-                           } ]
-                        }
-                     }, {
-                        "name" : "allConclusions",
-                        "value" : {
-                           "name" : "CollateConclusionCodes",
-                           "libraryName" : "Dash",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "B",
-                              "type" : "AliasRef"
-                           }, {
-                              "name" : "HistologyObservations",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "Biopsy Report",
-                              "libraryName" : "Dash",
-                              "type" : "CodeRef"
-                           } ]
-                        }
-                     }, {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "DiagnosticReportDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "B",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "desc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
-            "name" : "SortedBiopsyReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "B",
-                  "expression" : {
-                     "name" : "SortedReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "riskTableInput",
-                        "scope" : "B",
-                        "type" : "Property"
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "MostRecentBiopsyReport",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "type" : "Greater",
-                  "operand" : [ {
-                     "type" : "Count",
-                     "source" : {
-                        "name" : "SortedBiopsyReports",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
-                  } ]
-               },
-               "then" : {
-                  "type" : "Indexer",
-                  "operand" : [ {
-                     "name" : "SortedBiopsyReports",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
-                  } ]
-               },
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "riskTableInput",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     }, {
-                        "name" : "allConclusions",
-                        "elementType" : {
-                           "type" : "ListTypeSpecifier",
-                           "elementType" : {
-                              "name" : "{http://hl7.org/fhir}CodeableConcept",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }
-                     }, {
-                        "name" : "date",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            }
-         }, {
             "name" : "MostRecentBiopsyResult",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2626,51 +2909,6 @@
                }
             }
          }, {
-            "name" : "Cin2orCin3Biopsies",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "S",
-                  "expression" : {
-                     "name" : "SortedBiopsyReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "riskTableInput",
-                     "scope" : "S",
-                     "type" : "Property"
-                  }, {
-                     "type" : "List",
-                     "element" : [ {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "CIN2",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "CIN3",
-                        "type" : "Literal"
-                     } ]
-                  } ]
-               }
-            }
-         }, {
-            "name" : "MostRecentCin2orCin3Biopsy",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "First",
-               "source" : {
-                  "name" : "Cin2orCin3Biopsies",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
             "name" : "Cin3Biopsies",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2832,158 +3070,6 @@
                "source" : {
                   "name" : "AisBiopsies",
                   "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "CervicalPrecancerTreatments",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Union",
-               "operand" : [ {
-                  "name" : "CervicalExcisionProcedures",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "CervicalAblationProcedures",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "T",
-                  "expression" : {
-                     "name" : "CervicalPrecancerTreatments",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "After",
-                  "operand" : [ {
-                     "name" : "ProcedureDate",
-                     "libraryName" : "Common",
-                     "type" : "FunctionRef",
-                     "operand" : [ {
-                        "name" : "T",
-                        "type" : "AliasRef"
-                     } ]
-                  }, {
-                     "path" : "date",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "MostRecentCin2orCin3Biopsy",
-                        "type" : "ExpressionRef"
-                     }
-                  } ]
-               },
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "date",
-                        "value" : {
-                           "name" : "ProcedureDate",
-                           "libraryName" : "Common",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "T",
-                              "type" : "AliasRef"
-                           } ]
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
-            "name" : "CervicalPrecancerTreatmentsSorted",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "T",
-                  "expression" : {
-                     "name" : "CervicalPrecancerTreatments",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "date",
-                        "value" : {
-                           "type" : "ToDate",
-                           "operand" : {
-                              "name" : "ProcedureDate",
-                              "libraryName" : "Common",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "T",
-                                 "type" : "AliasRef"
-                              } ]
-                           }
-                        }
-                     } ]
-                  }
-               },
-               "sort" : {
-                  "by" : [ {
-                     "direction" : "asc",
-                     "path" : "date",
-                     "type" : "ByColumn"
-                  } ]
-               }
-            }
-         }, {
-            "name" : "DateOfLastCervicalPrecancerTreatment",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "name" : "ManageTreatmentWithoutPreviousBiopsy",
-                  "type" : "ParameterRef"
-               },
-               "then" : {
-                  "type" : "ToDateTime",
-                  "operand" : {
-                     "path" : "date",
-                     "type" : "Property",
-                     "source" : {
-                        "type" : "Last",
-                        "source" : {
-                           "name" : "CervicalPrecancerTreatmentsSorted",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }
-               },
-               "else" : {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "type" : "Last",
-                     "source" : {
-                        "name" : "CervicalPrecancerTreatmentsAfterBiopsySorted",
-                        "type" : "ExpressionRef"
-                     }
-                  }
                }
             }
          }, {

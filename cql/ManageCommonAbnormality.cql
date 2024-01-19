@@ -55,7 +55,7 @@ define CytologyAloneReports:
 define LastKnownCytologyAloneResult:
   First(CytologyAloneReports)
 
-define CytologyAloneInRecentHistory:
+define CytologyAloneInRecentHistory: // TODO: Change to AbnormalCytologyAloneInRecentHistory
   if Collate.SecondMostRecentHpvResult is not null and
     LastKnownCytologyAloneResult is not null
     and LastKnownCytologyAloneResult.date occurs after Collate.SecondMostRecentHpvReport.date
@@ -298,7 +298,7 @@ define CommonAbnormalityGroup:
   end
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-// ERRATA: 2023 Journal of Lower Genital Track Disease (JLGTD) Addendum to the 2019 ASCCP Guidelines
+// ERRATA: 2024 Journal of Lower Genital Track Disease (JLGTD) Addendum to the 2019 ASCCP Guidelines
 
 // Per the JLGTD article, “for individuals aged 25 years or older screened with cytology alone, the 2012 guidelines should be followed.”
 // As such, the following logic is derived from the 2012 ASCCP guidelines when there is no care recommendation mentioned for the same
@@ -379,7 +379,7 @@ define AnyCytologicLsil:
     where C.riskTableInput = 'LSIL'
 
 define LsilBeforeMostRecentPositiveResult:
-  if MostRecentScreeningResultIsPositive then // TODO: Remove if statement here?
+  if MostRecentScreeningResultIsPositive then
     AnyCytologicLsil C
       where C.date before DateOfMostRecentPositiveScreeningResult
   else
@@ -394,7 +394,7 @@ define AnyCytologicAscus:
 
 define AnyHpvPositiveCotest:
   Collate.SortedHpvReports H
-    where H.riskTableInput = 'HPV-positive'
+    where H.riskTableInput in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
 
 define AnyAscusHpvPositiveCotest:
   from AnyCytologicAscus C, AnyHpvPositiveCotest H
@@ -432,17 +432,6 @@ define AnyCytologyInterpretedAsAscusOrAbove:
 define LastKnownCytologyInterpretedAsAscusOrAbove:
   First(AnyCytologyInterpretedAsAscusOrAbove)
 
-define function HasNoBiopsyOrTreatmentAfterDate(d System.DateTime):
-   (
-    Collate.DateOfLastCervicalPrecancerTreatment is null or
-    not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
-   ) and
-   (
-    Collate.MostRecentBiopsyReport.date is null or
-    not (Collate.MostRecentBiopsyReport.date occurs after d)
-   )
-
-// L2 QUESTION: Is there an errata section on having two consecutive HPV tests?
 define ErrataRecommendation:
   case
     when ( // Errata Recommendation 3.2.2.a: Low grade cytology followed by persistent abnormality
@@ -454,11 +443,11 @@ define ErrataRecommendation:
       (
         (
           LastKnownLsilBeforeMostRecentPositiveResult is not null and
-          HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentPositiveResult.date)
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentPositiveResult.date)
         ) or
         (
           LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult is not null and
-          HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
         )
       )
     ) then
@@ -474,7 +463,7 @@ define ErrataRecommendation:
       AgeInYears() >= 25 and
       HpvInterpretedAsPositive and
       SecondMostRecentHpvInterpretedAsPositive and
-      HasNoBiopsyOrTreatmentAfterDate(Collate.SecondMostRecentHpvReport.date)
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.SecondMostRecentHpvReport.date)
     ) then
       {
         short: 'Colposcopy',
@@ -487,8 +476,9 @@ define ErrataRecommendation:
     // Managing abnormal cervical cytology alone
     when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and Collate.MostRecentReport = MostRecentCytologyAlone.date // TODO: Create an "IsMostRecentTest()" function. This will solve the whole issue of needing to check if histology or anything else was more recent than this test. Need to make sure it also checks that no treatments happened more recently.
-      // TODO: No treatment after cytology alone
+      CytologyAloneInterpretedAsAscus and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
         short: 'Reflex HPV',
@@ -499,8 +489,9 @@ define ErrataRecommendation:
       }
     when ( // Errata Recommendation 3.1.2: LSIL Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil and Collate.MostRecentReport = MostRecentCytologyAlone.date
-      // TODO: No treatment after cytology alone
+      CytologyAloneInterpretedAsLsil and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
         short: 'Colposcopy',
@@ -511,8 +502,9 @@ define ErrataRecommendation:
       }
     when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsHsil and Collate.MostRecentReport = MostRecentCytologyAlone.date
-      // TODO: No treatment after cytology alone
+      CytologyAloneInterpretedAsHsil and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
         short: 'Colposcopy or Treatment',
@@ -523,11 +515,11 @@ define ErrataRecommendation:
         }
       }
 
-    // The following logic phrases come directly from the JLGTD article:
+    // The following 3.2.x logic phrases come directly from the JLGTD article:
     when ( // Errata Recommendation 3.2.1: High grade cytology and patient did not receive colposcopy
       AgeInYears() >= 25 and
       LastKnownHsilCytology is not null and
-      HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date)
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date)
     ) then
       {
         short: 'Colposcopy',
@@ -552,7 +544,7 @@ define ErrataRecommendation:
       (
         (
           LastKnownLsilBeforeMostRecentMostRecentHpvReport is not null and 
-          HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentMostRecentHpvReport.date) and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentMostRecentHpvReport.date) and
           (
             LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
             not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownLsilBeforeMostRecentMostRecentHpvReport.date)
@@ -560,7 +552,7 @@ define ErrataRecommendation:
         ) or
         (
           LastKnownAscusHpvPositiveBeforeMostRecentHpvReport is not null and
-          HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date) and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date) and
           (
             LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
             not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date)

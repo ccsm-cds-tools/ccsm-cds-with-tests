@@ -54,11 +54,6 @@ context Patient
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR SPECIAL POPULATIONS
 //------------------------------------------------------------------------------
-
-
-define function HasNoTreatmentAfterDate(d System.DateTime):
-   Collate.DateOfLastCervicalPrecancerTreatment is null or 
-   not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
    
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Management of Patients With Histologic Cancer
@@ -327,7 +322,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.1
       AgeInYears() < 25 and
       Rare.AnyHistologyInterpretedAsCin3 and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
     ) then
       {
         short: 'Treatment',
@@ -341,7 +336,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.2
       AgeInYears() < 25 and
       (Rare.LastKnownCin2BiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
         short: 'See Details',
@@ -356,7 +351,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.3
       AgeInYears() < 25 and
       (Rare.LastKnownHsilUnspecifiedBiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
+     Collate.HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
         short: 'See Details',

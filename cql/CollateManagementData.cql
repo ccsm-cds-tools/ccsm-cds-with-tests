@@ -74,6 +74,18 @@ define function HighestRankedInterpretation(interpretations List<Tuple { text Sy
 define function BiopsyInterpretation(conclusions List<System.Concept>):
   Dash.BiopsyInterpretation(conclusions)
 
+define function HasNoTreatmentAfterDate(d System.DateTime):
+   DateOfLastCervicalPrecancerTreatment is null or 
+   not (DateOfLastCervicalPrecancerTreatment occurs after d)
+
+define function HasNoBiopsyOrTreatmentAfterDate(d System.DateTime):
+    HasNoTreatmentAfterDate(d) and
+   (
+    MostRecentBiopsyReport.date is null or
+    not (MostRecentBiopsyReport.date occurs after d)
+   )
+
+
 //------------------------------------------------------------------------------
 // DATA RETRIEVAL
 //------------------------------------------------------------------------------

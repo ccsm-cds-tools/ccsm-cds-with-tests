@@ -1676,76 +1676,6 @@
                }
             }
          }, {
-            "name" : "HasNoBiopsyOrTreatmentAfterDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "type" : "FunctionDef",
-            "expression" : {
-               "type" : "And",
-               "operand" : [ {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "DateOfLastCervicalPrecancerTreatment",
-                        "libraryName" : "Collate",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "After",
-                        "operand" : [ {
-                           "name" : "DateOfLastCervicalPrecancerTreatment",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "d",
-                           "type" : "OperandRef"
-                        } ]
-                     }
-                  } ]
-               }, {
-                  "type" : "Or",
-                  "operand" : [ {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "date",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentBiopsyReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  }, {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "After",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentBiopsyReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "name" : "d",
-                           "type" : "OperandRef"
-                        } ]
-                     }
-                  } ]
-               } ]
-            },
-            "operand" : [ {
-               "name" : "d",
-               "operandTypeSpecifier" : {
-                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                  "type" : "NamedTypeSpecifier"
-               }
-            } ]
-         }, {
             "name" : "AnyCytologicAscus",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1789,15 +1719,26 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "Equal",
+                  "type" : "In",
                   "operand" : [ {
                      "path" : "riskTableInput",
                      "scope" : "H",
                      "type" : "Property"
                   }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "HPV-positive",
-                     "type" : "Literal"
+                     "type" : "List",
+                     "element" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV16+",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV16-, HPV18+",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV-positive",
+                        "type" : "Literal"
+                     } ]
                   } ]
                }
             }
@@ -2329,6 +2270,7 @@
                               }
                            }, {
                               "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                              "libraryName" : "Collate",
                               "type" : "FunctionRef",
                               "operand" : [ {
                                  "path" : "date",
@@ -2352,6 +2294,7 @@
                               }
                            }, {
                               "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                              "libraryName" : "Collate",
                               "type" : "FunctionRef",
                               "operand" : [ {
                                  "path" : "date",
@@ -2426,6 +2369,7 @@
                         } ]
                      }, {
                         "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "libraryName" : "Collate",
                         "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
@@ -2470,34 +2414,49 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "GreaterOrEqual",
+                           "type" : "And",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
+                              "name" : "CytologyAloneInterpretedAsAscus",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "CytologyAloneInterpretedAsAscus",
-                           "type" : "ExpressionRef"
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyAlone",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         } ]
                      }, {
-                        "type" : "Equal",
+                        "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "libraryName" : "Collate",
+                        "type" : "FunctionRef",
                         "operand" : [ {
-                           "name" : "MostRecentReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }, {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
@@ -2539,34 +2498,49 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "GreaterOrEqual",
+                           "type" : "And",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
+                              "name" : "CytologyAloneInterpretedAsLsil",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "CytologyAloneInterpretedAsLsil",
-                           "type" : "ExpressionRef"
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyAlone",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         } ]
                      }, {
-                        "type" : "Equal",
+                        "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "libraryName" : "Collate",
+                        "type" : "FunctionRef",
                         "operand" : [ {
-                           "name" : "MostRecentReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }, {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
@@ -2608,34 +2582,49 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "GreaterOrEqual",
+                           "type" : "And",
                            "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
+                              "name" : "CytologyAloneInterpretedAsHsil",
+                              "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "name" : "CytologyAloneInterpretedAsHsil",
-                           "type" : "ExpressionRef"
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "name" : "MostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "MostRecentCytologyAlone",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         } ]
                      }, {
-                        "type" : "Equal",
+                        "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "libraryName" : "Collate",
+                        "type" : "FunctionRef",
                         "operand" : [ {
-                           "name" : "MostRecentReport",
-                           "libraryName" : "Collate",
-                           "type" : "ExpressionRef"
-                        }, {
                            "path" : "date",
                            "type" : "Property",
                            "source" : {
@@ -2710,6 +2699,7 @@
                         } ]
                      }, {
                         "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "libraryName" : "Collate",
                         "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
@@ -2841,6 +2831,7 @@
                                  }
                               }, {
                                  "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
                                     "path" : "date",
@@ -2900,6 +2891,7 @@
                                  }
                               }, {
                                  "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
                                     "path" : "date",
