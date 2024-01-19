@@ -348,18 +348,14 @@ define LastKnownHsilCytology:
 define LastCervicalPrecancerTreatment:
   Last(Collate.CervicalPrecancerTreatmentsSorted)
 
-define AnyPositiveHpv:
-  Collate.SortedHpvReports H
-    where H.riskTableInput in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // L2 Question: Does HPV positive include HPV16+ or HPV18+?
-
-define LastKnownPositiveHpv:
-  First(AnyPositiveHpv)
-
 define CytologyInterpretedAsAscusOrAbove:
   Collate.CytologyInterpretedAsAscusOrAbove
 
 define HpvInterpretedAsPositive:
-  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} // L2 Question: Does HPV positive include HPV16+ or HPV18+?
+  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
+
+define SecondMostRecentHpvInterpretedAsPositive:
+  Collate.SecondMostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
 
 define MostRecentScreeningResultIsPositive:
   CytologyInterpretedAsAscusOrAbove or
@@ -449,7 +445,7 @@ define function HasNoBiopsyOrTreatmentAfterDate(d System.DateTime):
 // L2 QUESTION: Is there an errata section on having two consecutive HPV tests?
 define ErrataRecommendation:
   case
-    when ( // Errata Recommendation 3.2.2: Low grade cytology followed by persistent abnormality
+    when ( // Errata Recommendation 3.2.2.a: Low grade cytology followed by persistent abnormality
       AgeInYears() >= 25 and
       (
         CytologyInterpretedAsAscusOrAbove or
@@ -465,6 +461,20 @@ define ErrataRecommendation:
           HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
         )
       )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+  
+    when ( // Errata Recommendation 3.2.2.b: Positive HPV followed by persistent abnormality
+      AgeInYears() >= 25 and
+      HpvInterpretedAsPositive and
+      SecondMostRecentHpvInterpretedAsPositive and
+      HasNoBiopsyOrTreatmentAfterDate(Collate.SecondMostRecentHpvReport.date)
     ) then
       {
         short: 'Colposcopy',
@@ -517,11 +527,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.2.1: High grade cytology and patient did not receive colposcopy
       AgeInYears() >= 25 and
       LastKnownHsilCytology is not null and
-      HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date) and
-      (
-        LastKnownPositiveHpv.date is null or
-        not (LastKnownPositiveHpv.date occurs after LastKnownHsilCytology.date)
-      )
+      HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date)
     ) then
       {
         short: 'Colposcopy',

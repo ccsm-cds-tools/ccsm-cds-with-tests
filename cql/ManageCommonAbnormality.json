@@ -1878,6 +1878,33 @@
                }
             }
          }, {
+            "name" : "SecondMostRecentHpvInterpretedAsPositive",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "In",
+               "operand" : [ {
+                  "name" : "SecondMostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "type" : "List",
+                  "element" : [ {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV16+",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV16-, HPV18+",
+                     "type" : "Literal"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV-positive",
+                     "type" : "Literal"
+                  } ]
+               } ]
+            }
+         }, {
             "name" : "MostRecentCytologyIsNotACotest",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2100,56 +2127,6 @@
                "type" : "First",
                "source" : {
                   "name" : "CytologicHsil",
-                  "type" : "ExpressionRef"
-               }
-            }
-         }, {
-            "name" : "AnyPositiveHpv",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "H",
-                  "expression" : {
-                     "name" : "SortedHpvReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "riskTableInput",
-                     "scope" : "H",
-                     "type" : "Property"
-                  }, {
-                     "type" : "List",
-                     "element" : [ {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV16+",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV16-, HPV18+",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV-positive",
-                        "type" : "Literal"
-                     } ]
-                  } ]
-               }
-            }
-         }, {
-            "name" : "LastKnownPositiveHpv",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "First",
-               "source" : {
-                  "name" : "AnyPositiveHpv",
                   "type" : "ExpressionRef"
                }
             }
@@ -2420,6 +2397,79 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "name" : "HpvInterpretedAsPositive",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "SecondMostRecentHpvInterpretedAsPositive",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }, {
+                        "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "SecondMostRecentHpvReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
                            "type" : "GreaterOrEqual",
                            "operand" : [ {
                               "precision" : "Year",
@@ -2631,78 +2681,42 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
+                           "type" : "GreaterOrEqual",
                            "operand" : [ {
-                              "type" : "GreaterOrEqual",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "type" : "Not",
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
                               "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "name" : "LastKnownHsilCytology",
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
                                     "type" : "ExpressionRef"
                                  }
                               }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
                            } ]
-                        }, {
-                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "LastKnownHsilCytology",
-                                 "type" : "ExpressionRef"
-                              }
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "Or",
-                        "operand" : [ {
-                           "type" : "IsNull",
-                           "operand" : {
-                              "path" : "date",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "LastKnownPositiveHpv",
-                                 "type" : "ExpressionRef"
-                              }
-                           }
                         }, {
                            "type" : "Not",
                            "operand" : {
-                              "type" : "After",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "LastKnownPositiveHpv",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "LastKnownHsilCytology",
-                                    "type" : "ExpressionRef"
-                                 }
-                              } ]
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "LastKnownHsilCytology",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        } ]
+                     }, {
+                        "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownHsilCytology",
+                              "type" : "ExpressionRef"
                            }
                         } ]
                      } ]

@@ -1,5 +1,5 @@
 ---
-name: 3.2.2 - ASC-US HPV Positive Cotest Followed By ASC-US Alone Or Above
+name: 3.2.2.a - ASC-US HPV Positive Followed by HPV Positive NILM
 
 externalData:
 - resources
@@ -29,7 +29,15 @@ data:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
   effectiveDateTime: 2020-05-01
 -
-  $iterate: *MostRecentCytologyAloneAscusOrAbove
+  $iterate: *MostRecentHpvPositive
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+
 
 results:
   Recommendation:
@@ -38,3 +46,4 @@ results:
     group: '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     details:
     - 'Colposcopy is recommended.'
+
