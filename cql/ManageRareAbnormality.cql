@@ -1038,12 +1038,12 @@ define CervixRemovalDateIsAfterMostRecentAisBiopsy:
   (CervixRemovalDate is not null) and 
   CervixRemovalDate after Collate.MostRecentAisBiopsy.date
 
-define MostRecentTreatmentAfterAis:
+define MostRecentTreatmentSameDateOrAfterAis:
   MostRecentTreatment P
-  where CCF.ProcedureDate(P) occurs after Collate.MostRecentAisBiopsy.date
+  where CCF.ProcedureDate(P) same or after Collate.MostRecentAisBiopsy.date
 
-define HasTreatmentAfterAis:
-  MostRecentTreatmentAfterAis is not null
+define AisFoundDuringTreatmentOrHadTreatmentAfterAis:
+  MostRecentTreatmentSameDateOrAfterAis is not null
 
 /**
 * Check that the the date of the most recent cervical precancer treatment does not occur during the
@@ -1066,7 +1066,7 @@ define RecommendationForAisHistologyResults:
       AgeInYears() > 50 and
       Collate.MostRecentAisBiopsy is not null and
       not CervixRemovalDateIsAfterMostRecentAisBiopsy and
-      not HasTreatmentAfterAis
+      not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
         short: 'See Details',
@@ -1083,7 +1083,7 @@ define RecommendationForAisHistologyResults:
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
       not CervixRemovalDateIsAfterMostRecentAisBiopsy and
-      not HasTreatmentAfterAis
+      not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
         short: 'See Details',
@@ -1102,7 +1102,7 @@ define RecommendationForAisHistologyResults:
     when ( 
       AgeInYears() > 50 and
       Collate.MostRecentAisBiopsy is not null and
-      HasTreatmentAfterAis and
+      AisFoundDuringTreatmentOrHadTreatmentAfterAis and
       not CervixRemovalDateIsAfterMostRecentAisBiopsy
     ) then
       {
@@ -1120,7 +1120,7 @@ define RecommendationForAisHistologyResults:
       AgeInYears() >= 25 and AgeInYears() <= 50 and
       Collate.MostRecentAisBiopsy is not null and
       not CervixRemovalDateIsAfterMostRecentAisBiopsy and
-      HasTreatmentAfterAis
+      AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
         short: 'See Details',
