@@ -145,42 +145,6 @@
                }
             }
          }, {
-            "name" : "HasNoTreatmentAfterDate",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "type" : "FunctionDef",
-            "expression" : {
-               "type" : "Or",
-               "operand" : [ {
-                  "type" : "IsNull",
-                  "operand" : {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "After",
-                     "operand" : [ {
-                        "name" : "DateOfLastCervicalPrecancerTreatment",
-                        "libraryName" : "Collate",
-                        "type" : "ExpressionRef"
-                     }, {
-                        "name" : "d",
-                        "type" : "OperandRef"
-                     } ]
-                  }
-               } ]
-            },
-            "operand" : [ {
-               "name" : "d",
-               "operandTypeSpecifier" : {
-                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                  "type" : "NamedTypeSpecifier"
-               }
-            } ]
-         }, {
             "name" : "RecommendationForPatientsWithHistologicCancer",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1390,45 +1354,6 @@
                } ]
             }
          }, {
-            "name" : "CytologyInterpretedAsAscusOrAbove",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "In",
-               "operand" : [ {
-                  "path" : "riskTableInput",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentCytologyReport",
-                     "libraryName" : "Rare",
-                     "type" : "ExpressionRef"
-                  }
-               }, {
-                  "type" : "List",
-                  "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "ASC-US",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "LSIL",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "ASC-H",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "AGC",
-                     "type" : "Literal"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "HSIL+",
-                     "type" : "Literal"
-                  } ]
-               } ]
-            }
-         }, {
             "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1758,6 +1683,7 @@
                                  "type" : "Or",
                                  "operand" : [ {
                                     "name" : "CytologyInterpretedAsAscusOrAbove",
+                                    "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }, {
                                     "name" : "CytologyInterpretedAsAis",
@@ -2432,6 +2358,7 @@
                         } ]
                      }, {
                         "name" : "HasNoTreatmentAfterDate",
+                        "libraryName" : "Collate",
                         "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
@@ -2517,6 +2444,7 @@
                         } ]
                      }, {
                         "name" : "HasNoTreatmentAfterDate",
+                        "libraryName" : "Collate",
                         "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
@@ -2606,6 +2534,7 @@
                         } ]
                      }, {
                         "name" : "HasNoTreatmentAfterDate",
+                        "libraryName" : "Collate",
                         "type" : "FunctionRef",
                         "operand" : [ {
                            "path" : "date",
@@ -3644,6 +3573,7 @@
                               "type" : "Or",
                               "operand" : [ {
                                  "name" : "CytologyInterpretedAsAscusOrAbove",
+                                 "libraryName" : "Collate",
                                  "type" : "ExpressionRef"
                               }, {
                                  "name" : "CytologyInterpretedAsAis",

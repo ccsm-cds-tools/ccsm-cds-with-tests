@@ -54,11 +54,6 @@ context Patient
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR SPECIAL POPULATIONS
 //------------------------------------------------------------------------------
-
-
-define function HasNoTreatmentAfterDate(d System.DateTime):
-   Collate.DateOfLastCervicalPrecancerTreatment is null or 
-   not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
    
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Management of Patients With Histologic Cancer
@@ -221,9 +216,6 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndSecondMostRecentLowGradeCytologyResults and
   Collate.MostRecentBiopsyReport.date 3 years or less after Rare.MostRecentCytologyReport.date
 
-define CytologyInterpretedAsAscusOrAbove:
-  Rare.MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
-
 define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
   AnyTrue(
     (Rare.SecondMostRecentCytologyReport.allConclusions) aC
@@ -268,7 +260,7 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() >= 21 and AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date and
@@ -356,7 +348,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.1
       AgeInYears() < 25 and
       Rare.AnyHistologyInterpretedAsCin3 and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
     ) then
       {
         short: 'Treatment',
@@ -370,7 +362,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.2
       AgeInYears() < 25 and
       (Rare.LastKnownCin2BiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
         short: 'See Details',
@@ -385,7 +377,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.3
       AgeInYears() < 25 and
       (Rare.LastKnownHsilUnspecifiedBiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
+     Collate.HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
         short: 'See Details',
@@ -572,7 +564,7 @@ define RecommendationForImmunosuppressedPatients:
       Immunocompromised and
       Rare.MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
