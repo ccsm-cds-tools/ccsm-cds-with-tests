@@ -389,6 +389,60 @@
                } ]
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsAgc",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "C",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "aC",
+                           "expression" : {
+                              "path" : "allConclusions",
+                              "scope" : "C",
+                              "type" : "Property"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "AGC",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }
+                        }
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3706,6 +3760,79 @@
                } ]
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 10,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "ASC-H",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "TwoMostRecentCytologyReportsWithin5yearsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3813,6 +3940,44 @@
                }
             }
          }, {
+            "name" : "HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "LastKnownCytologyInterpretedAsAgc",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAgc",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "RecommendationForExceptionsToColposcopyThreshold",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -3822,10 +3987,45 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                        "type" : "ExpressionRef"
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                              "libraryName" : "Collate",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
                      }, {
-                        "name" : "CytologyInterpretedAsAscH",
+                        "name" : "HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH",
                         "type" : "ExpressionRef"
                      } ]
                   },
