@@ -1024,6 +1024,10 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )
 
+define CytologyInterpretedAsAscHOrHsil:
+  CytologyInterpretedAsAscH or
+  CytologyInterpretedAsHsil
+  
 define LastKnownCytologyInterpretedAsHsilInPast5Years:
   Coalesce(
     (Collate.SortedCytologyReports) S

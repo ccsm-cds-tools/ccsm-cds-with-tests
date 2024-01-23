@@ -246,23 +246,18 @@ define ShouldSwitchToRiskAt25Text:
 define RecommendationForPatientsYoungerThan25:
   case
     // Heading 3: Management of Histology of Less than CIN2 Preceded by Cytology ASC-H and HSIL in Patients Younger than 25 Year
-    when ( // Heading 3.3
+    // ===========    
+    when ( // K.1 Heading 3 case 1
       AgeInYears() < 25 and
       not Dash.Pregnant and
       Rare.HistologyInterpretedAsCin1OrNormal and
+      SecondMostRecentCytologyInterpretedAsAscHOrHsil and
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
       (
-        Rare.CytologyInterpretedAsHsil or
-        Rare.CytologyInterpretedAsAscH
-      ) and
-      Rare.MostRecentCytologyReport.date more than 2 years after Collate.MostRecentBiopsyReport.date and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-      // and    not (
-      // cannot find these in the 2-3 year window after the Histology interpreted as Cin1OrNormal
-      // NOT histologic HSIL (CIN2)
-      // NOT Histologic HSIL, Unspecified
-      // NOT Histologic AIS
-      // NOT Histologic Cancer
-//      )
+        Rare.CytologyInterpretedAsAscHOrHsil and
+        Rare.MostRecentCytologyReport.date more than 2 years after Collate.MostRecentBiopsyReport.date and
+        Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+      )
     ) then
       {
         short: 'See Details',
@@ -274,111 +269,32 @@ define RecommendationForPatientsYoungerThan25:
         }
       }    
 
-    when ( // Heading 3.2
-      AgeInYears() >= 21 and AgeInYears() < 25 and 
-      Rare.HistologyInterpretedAsCin1OrNormal and
+    when ( // K.1 Heading 3 case 2
+      AgeInYears() < 25 and
+      not Dash.Pregnant and
+      Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+      SecondMostRecentCytologyInterpretedAsAscHOrHsil and 
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
       (
-        Collate.CytologyInterpretedAsAscusOrAbove or
-        Rare.CytologyInterpretedAsAis
+        Rare.CytologyInterpretedAsAscHOrHsil and
+        Rare.MostRecentCytologyReport.date more than 2 years after Rare.SecondMostRecentBiopsyReport.date and
+        Rare.MostRecentCytologyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
       ) and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date and
-      SecondMostRecentCytologyInterpretedAsAscHOrHsil and
-      Rare.SecondMostRecentCytologyReport.date less than 6 months before Collate.MostRecentBiopsyReport.date
+      (
+        Rare.HistologyInterpretedAsCin1OrNormal and
+        Collate.MostRecentBiopsyReport.date more than 2 years after Rare.SecondMostRecentBiopsyReport.date and
+        Collate.MostRecentBiopsyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
+      )
     ) then
       {
-        short: 'Colposcopy',
+        short: 'See Details',
         date: Today(),
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Colposcopy is recommended.'
+          'A diagnostic excisional procedure is recommended for patients under 25 years, unless the patient is pregnant.',
+          'A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
         }
-      }    
-
-// ===========    
-// K.1 Heading 3 Heading Part 1
-
-    when ( // Heading K.1.3.1 case a
-      AgeInYears() < 25 and
-      Rare.HistologyInterpretedAsCin1OrNormal and
-      Rare.CytologyInterpretedAsHsil
-      // How far back can the CIN1 Histology report be?
-      // Rare.MostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date
-      // DO WE HAVE A DATE RANGE FOR THIS HSIL BEFORE THE CIN1?
-    ) then
-      {
-        short: 'Colposcopy and Cytology',
-        date: Collate.DateOfMostRecentReport + 1 year,
-        group: 'Younger Than 25 (K.1.3)',
-        details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
-          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
-          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
-        }
-      }
-
-    when ( // Heading K.1.3.1 case b
-      AgeInYears() < 25 and
-      Rare.CytologyInterpretedAsNilm and  // we don't have a < NILM
-      Rare.HistologyInterpretedAsCin1OrNormal and
-      SecondMostRecentCytologyInterpretedAsHsil and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-      
-      // DO WE HAVE A DATE RANGE FOR THIS HSIL BEFORE THE CIN1?
-    ) then
-      {
-        short: 'Colposcopy and Cytology',
-        date: Collate.DateOfMostRecentReport + 1 year,
-        group: 'Younger Than 25 (K.1.3)',
-        details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
-          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
-          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
-        }
-      }
-
-    when ( // Heading K.1.3.1 case c
-      // 1 biopsy after CIN1 preceded by HSIL
-      AgeInYears() < 25 and
-      Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-      Rare.CytologyInterpretedAsHsil and
-      Rare.HistologyInterpretedAsCin1OrNormal  and
-      Collate.MostRecentBiopsyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
-      
-      // Rare.MostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date
-      // DO WE HAVE A DATE RANGE FOR THIS HSIL BEFORE THE CIN1?
-    ) then
-      {
-        short: 'Colposcopy and Cytology',
-        date: Collate.DateOfMostRecentReport + 1 year,
-        group: 'Younger Than 25 (K.1.3)',
-        details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
-          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
-          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
-        }
-      }
-
-    when ( // Heading K.1.3.1 case d
-      // 1 cyto, 1 biopsy after CIN1 preceded by HSIL
-      AgeInYears() < 25 and
-      Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-      SecondMostRecentCytologyInterpretedAsHsil and
-      Collate.MostRecentBiopsyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date and
-      Rare.MostRecentCytologyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
-      
-      
-      // DO WE HAVE A DATE RANGE FOR THIS HSIL BEFORE THE CIN1?
-    ) then
-      {
-        short: 'Colposcopy and Cytology',
-        date: Collate.DateOfMostRecentReport + 1 year,
-        group: 'Younger Than 25 (K.1.3)',
-        details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
-          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
-          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
-        }
-      }
+      }   
 
 // ============
 // K.1 Heading 3 Part 2(a)
@@ -386,9 +302,8 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading K1.3.2(a) case 1
       AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
-      Rare.CytologyInterpretedAsAscH
-      // Is there a lookback range to the Cin1OrNormal Histology?
-      // Is there a lookback range between the Cin1OrNormal and the ASC-H ?
+      Rare.CytologyInterpretedAsAscH and
+      Rare.MostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date
     ) then
       {
         short: 'Cytology',
@@ -400,14 +315,16 @@ define RecommendationForPatientsYoungerThan25:
           '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
       }
-      
+
     when ( // Heading K1.3.2(a) case 2
       AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
-      // Rare.CytologyInterpretedAsAscH and
       SecondMostRecentCytologyInterpretedAsAscH and
-      Rare.CytologyInterpretedAsNilm and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
+      (
+        Rare.CytologyInterpretedAsNilm and
+        Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+      )
     ) then
       {
         short: 'Cytology',
@@ -427,13 +344,12 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
       SecondMostRecentCytologyInterpretedAsAscHOrHsil and 
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
-      // Is there a lookback range to the Cin1OrNormal Histology?
-      // Is there a lookback range between the Cin1OrNormal and the ASC-H/HSIL?
     ) then
       {
         short: 'Colposcopy',
@@ -443,7 +359,86 @@ define RecommendationForPatientsYoungerThan25:
           'Colposcopy is recommended.'
         }
       }
-      
+
+// ===========    
+// K.1 Heading 3 Heading Part 1
+
+    when ( // Heading K.1.3.1 case a
+      AgeInYears() < 25 and
+      Rare.HistologyInterpretedAsCin1OrNormal and
+      Rare.CytologyInterpretedAsHsil and
+      Rare.MostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date
+    ) then
+      {
+        short: 'Colposcopy and Cytology',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        group: 'Younger Than 25 (K.1.3)',
+        details: {
+          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
+        }
+      }
+
+    when ( // Heading K.1.3.1 case b
+      AgeInYears() < 25 and
+      Rare.CytologyInterpretedAsNilm and  
+      Rare.HistologyInterpretedAsCin1OrNormal and
+      SecondMostRecentCytologyInterpretedAsHsil and
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
+      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+    ) then
+      {
+        short: 'Colposcopy and Cytology',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        group: 'Younger Than 25 (K.1.3)',
+        details: {
+          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
+        }
+      }
+
+    when ( // Heading K.1.3.1 case c
+      // 1 biopsy after CIN1 preceded by HSIL
+      AgeInYears() < 25 and
+      Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+      Rare.CytologyInterpretedAsHsil and
+      Rare.MostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
+      Rare.HistologyInterpretedAsCin1OrNormal  and
+      Collate.MostRecentBiopsyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
+          ) then
+      {
+        short: 'Colposcopy and Cytology',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        group: 'Younger Than 25 (K.1.3)',
+        details: {
+          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
+        }
+      }
+
+    when ( // Heading K.1.3.1 case d
+      // 1 cyto and 1 biopsy after CIN1 preceded by HSIL
+      AgeInYears() < 25 and
+      Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+      SecondMostRecentCytologyInterpretedAsHsil and
+      Rare.SecondMostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
+      Collate.MostRecentBiopsyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date and
+      Rare.MostRecentCytologyReport.date less than 3 years after Rare.SecondMostRecentBiopsyReport.date
+    ) then
+      {
+        short: 'Colposcopy and Cytology',
+        date: Collate.DateOfMostRecentReport + 1 year,
+        group: 'Younger Than 25 (K.1.3)',
+        details: {
+          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
+          '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
+        }
+      }
+
     // Heading 4: Management of Histologic HSIL (CIN2 or CIN3) for Patients Younger Than 25 Years
     when ( // Heading4.5
       AgeInYears() < 25 and
