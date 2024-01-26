@@ -54,11 +54,6 @@ context Patient
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR SPECIAL POPULATIONS
 //------------------------------------------------------------------------------
-
-
-define function HasNoTreatmentAfterDate(d System.DateTime):
-   Collate.DateOfLastCervicalPrecancerTreatment is null or 
-   not (Collate.DateOfLastCervicalPrecancerTreatment occurs after d)
    
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Management of Patients With Histologic Cancer
@@ -83,10 +78,10 @@ define RecommendationForPatientsWithHistologicCancer:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
-define AssociatedHpvCotest:
+define Associated18MonthHpvCotest:
   Coalesce(
     (Collate.SortedHpvReports) H
-      where H.date within 1 day of Under25And2YearsAgoCytologyReport.date
+      where H.date within 1 day of Under25And18MonthsAgoCytologyReport.date
   )
 
 define HistologicHsilCin2OrUnspecified:
@@ -137,40 +132,66 @@ define Under25AndLowGradeCytologyResults:
     )
   )
 
-define Under25And2YearsAgoCytologyResults:
+define Under25AndLowGradeCytologyResultsInPast3Years:
+  AgeInYears() < 25 and
+  (
+    ( 
+      Rare.CytologyInterpretedAsLsil and
+      Rare.MostRecentCytologyReport is not null and
+      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    ) or
+    (
+      Collate.MostRecentCytologyCotest is not null and
+      Collate.MostRecentCytologyCotestResult = 'ASC-US' and
+      Collate.MostRecentHpvResult = 'HPV-positive' and
+      Collate.MostRecentCytologyCotest.date 3 years or less before Now()
+    ) or
+    (
+      Rare.CytologyInterpretedAsAscus and
+      Collate.MostRecentCytologyCotestResult is null and
+      Rare.MostRecentCytologyReport is not null and
+      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    )
+  )
+
+define function Under25CytologyResultsInPastInterval(LookBackStart System.Quantity, LookBackEnd System.Quantity):
   (Collate.SortedCytologyReports) C
+  let LookbackInterval: Interval[(Rare.MostRecentCytologyReport).date - LookBackEnd, (Rare.MostRecentCytologyReport).date - LookBackStart]
     where (
-      C.date 2 years or more before Rare.MostRecentCytologyReport.date and
-      C.date 3 years or less before Rare.MostRecentCytologyReport.date)
+      C.date in LookbackInterval
+    )
 
-define Under25And2YearsAgoCytologyReport:
-  Under25And2YearsAgoCytologyResults[0]
+define Under25And18MonthsAgoCytologyResults:
+  Under25CytologyResultsInPastInterval(18 months, 3 years)
 
-define Under25And2YearsAgoCytologyReportInterpretedAsLsil:
+define Under25And18MonthsAgoCytologyReport:
+  Under25And18MonthsAgoCytologyResults[0]
+
+define Under25And18MonthsAgoCytologyReportInterpretedAsLsil:
   AnyTrue(
-    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+    (Under25And18MonthsAgoCytologyReport.allConclusions) aC
       return aC ~ "LSIL"
   )
 
-define Under25And2YearsAgoCytologyReportInterpretedAsAscus:
+define Under25And18MonthsAgoCytologyReportInterpretedAsAscus:
   AnyTrue(
-    (Under25And2YearsAgoCytologyReport.allConclusions) aC
+    (Under25And18MonthsAgoCytologyReport.allConclusions) aC
       return aC ~ "ASC-US"
   )
 
-define Under25And2YearsAgoLowGradeCytologyResults: 
+define Under25And18MonthsAgoLowGradeCytologyResults: 
   AgeInYears() < 25 and
   ( 
-    Exists(Under25And2YearsAgoCytologyResults) and
+    Exists(Under25And18MonthsAgoCytologyResults) and
     (
-      Under25And2YearsAgoCytologyReportInterpretedAsLsil or
+      Under25And18MonthsAgoCytologyReportInterpretedAsLsil or
       (
-        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
-        AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+        Under25And18MonthsAgoCytologyReportInterpretedAsAscus and
+        Associated18MonthHpvCotest.riskTableInput = 'HPV-positive'
       ) or
       (
-        Under25And2YearsAgoCytologyReportInterpretedAsAscus and
-        AssociatedHpvCotest is null
+        Under25And18MonthsAgoCytologyReportInterpretedAsAscus and
+        Associated18MonthHpvCotest is null
       )
     )
   )
@@ -181,11 +202,11 @@ define Under25AndSecondMostRecentLowGradeCytologyResults:
     Rare.SecondMostRecentCytologyInterpretedAsLsil or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      AssociatedHpvCotest.riskTableInput = 'HPV-positive'
+      Associated18MonthHpvCotest.riskTableInput = 'HPV-positive'
     ) or
     (
       Rare.SecondMostRecentCytologyInterpretedAsAscus and
-      AssociatedHpvCotest is null
+      Associated18MonthHpvCotest is null
     )
   )
 
@@ -194,9 +215,6 @@ define HistologyInterpretedAsLessThanCin2AfterAbnormalCytologyScreening:
   Under25AndLowGradeCytologyResults and
   Under25AndSecondMostRecentLowGradeCytologyResults and
   Collate.MostRecentBiopsyReport.date 3 years or less after Rare.MostRecentCytologyReport.date
-
-define CytologyInterpretedAsAscusOrAbove:
-  Rare.MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
 
 define SecondMostRecentCytologyInterpretedAsAscHOrHsil:
   AnyTrue(
@@ -242,7 +260,7 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() >= 21 and AgeInYears() < 25 and
       Rare.HistologyInterpretedAsCin1OrNormal and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date and
@@ -301,7 +319,7 @@ define RecommendationForPatientsYoungerThan25:
         Rare.SecondMostRecentHistologyInterpretedAsCin2 or
         Rare.SecondMostRecentHistologyInterpretedAsUnspecifiedHsil
       ) and
-      Rare.SecondMostRecentBiopsyReport.date 2 years or more before Collate.MostRecentBiopsyReport.date and
+      Rare.SecondMostRecentBiopsyReport.date 18 months or more before Collate.MostRecentBiopsyReport.date and
       Rare.SecondMostRecentBiopsyReport.date less than 3 years before Collate.MostRecentBiopsyReport.date
     ) then
       {
@@ -330,7 +348,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.1
       AgeInYears() < 25 and
       Rare.AnyHistologyInterpretedAsCin3 and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin3Biopsy.date)
     ) then
       {
         short: 'Treatment',
@@ -344,7 +362,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.2
       AgeInYears() < 25 and
       (Rare.LastKnownCin2BiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
+      Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
         short: 'See Details',
@@ -359,7 +377,7 @@ define RecommendationForPatientsYoungerThan25:
     when ( // Heading4.3
       AgeInYears() < 25 and
       (Rare.LastKnownHsilUnspecifiedBiopsyInPast2Years is not null) and
-      HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
+     Collate.HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
         short: 'See Details',
@@ -374,12 +392,9 @@ define RecommendationForPatientsYoungerThan25:
     // Heading 1 & Heading 2: Initial Management After an Abnormal Screening Test Result; Management of Cytology ASC-H and HSIL in Patients Younger than 25 Years
     when ( // 2
       AgeInYears() < 25 and
-      Rare.MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        Rare.CytologyInterpretedAsHsil or
-        Rare.CytologyInterpretedAsAscH or
-        Rare.CytologyInterpretedAsAgc or
-        Rare.CytologyInterpretedAsAis
+        Rare.LastKnownCytologyInterpretedAsHsilInPast5Years is not null or
+        Rare.LastKnownCytologyInterpretedAsAscHInPast5Years is not null
       ) and
       not BiopsySinceMostRecentCytology
     ) then
@@ -433,7 +448,7 @@ define RecommendationForPatientsYoungerThan25:
       }
     when ( // 1.c
       Under25AndLowGradeCytologyResults and
-      Under25And2YearsAgoLowGradeCytologyResults
+      Under25And18MonthsAgoLowGradeCytologyResults
     ) then
       {
         short: 'Colposcopy',
@@ -444,7 +459,7 @@ define RecommendationForPatientsYoungerThan25:
         }
       }
     when ( // 1.a
-      Under25AndLowGradeCytologyResults 
+      Under25AndLowGradeCytologyResultsInPast3Years
     ) then
       {
         short: 'Cytology',
@@ -549,7 +564,7 @@ define RecommendationForImmunosuppressedPatients:
       Immunocompromised and
       Rare.MostRecentCytologyReportWasWithinPastFiveYears and
       (
-        CytologyInterpretedAsAscusOrAbove or
+        Collate.CytologyInterpretedAsAscusOrAbove or
         Rare.CytologyInterpretedAsAis
       ) and
       Rare.SecondMostRecentCytologyReport.riskTableInput = 'ASC-US' and
@@ -713,7 +728,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'HPV-based testing (cotest or primary hrHPV test) is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
+          'Primary hrHPV testing or cotesting is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
         }
       }
     when ( // no hysterectomy date

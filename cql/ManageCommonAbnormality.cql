@@ -37,17 +37,61 @@ context Patient
 //------------------------------------------------------------------------------
 // RECOMMENDATIONS FOR COMMON ABNORMALITIES
 //------------------------------------------------------------------------------
+define HpvDates:
+  Collate.SortedHpvReports H
+  return H.date
+
+define CytologyAloneReports:
+  if Exists(HpvDates) then
+    Collate.SortedCytologyReports C
+      where not (C.date in HpvDates)
+    return C
+    sort by date desc
+  else
+    Collate.SortedCytologyReports C
+    return C
+    sort by date desc
+
+define LastKnownCytologyAloneReport:
+  First(CytologyAloneReports)
+
+define CytologyAloneInRecentHistory:
+  if Collate.SecondMostRecentHpvResult is not null and
+    LastKnownCytologyAloneReport is not null
+    and LastKnownCytologyAloneReport.date occurs after Collate.SecondMostRecentHpvReport.date
+  then
+    true
+  else if Collate.SecondMostRecentHpvResult is null
+    and LastKnownCytologyAloneReport is not null
+  then
+    true
+  else
+    false
+
+define AbnormalCytologyAloneInRecentHistory:
+  CytologyAloneInRecentHistory and
+  LastKnownCytologyAloneReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+
+define DefaultLookupTableReturnValue:
+  {
+    "action": null,
+    "riskNow": null,
+    "risk5yr": null
+  }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  RiskTableLookup.GetGeneralScreeningManagement(
-    Collate.SecondMostRecentHpvResult,
-    Collate.SecondMostRecentCytologyCotestResult,
-    Collate.MostRecentHpvResult,
-    Collate.MostRecentCytologyCotestResult
-  )
+  if not AbnormalCytologyAloneInRecentHistory then
+    RiskTableLookup.GetGeneralScreeningManagement(
+      Collate.SecondMostRecentHpvResult,
+      Collate.SecondMostRecentCytologyCotestResult,
+      Collate.MostRecentHpvResult,
+      Collate.MostRecentCytologyCotestResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable1:
   RiskTableLookup.GetRowTable1(
@@ -73,14 +117,17 @@ define GeneralScreeningManagementRecommendation:
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
 define LookUpTable2: // NOTE: Review whether we are correctly handling the multiple negative cotests referenced in Table 2b and 2c
-  RiskTableLookup.GetSurveillanceManagement(
-    Collate.ThirdMostRecentHpvResult,
-    Collate.ThirdMostRecentCytologyCotestResult,
-    Collate.SecondMostRecentHpvResult,
-    Collate.SecondMostRecentCytologyCotestResult,
-    Collate.MostRecentHpvResult,
-    Collate.MostRecentCytologyCotestResult
-  )
+  if not AbnormalCytologyAloneInRecentHistory then
+    RiskTableLookup.GetSurveillanceManagement(
+      Collate.ThirdMostRecentHpvResult,
+      Collate.ThirdMostRecentCytologyCotestResult,
+      Collate.SecondMostRecentHpvResult,
+      Collate.SecondMostRecentCytologyCotestResult,
+      Collate.MostRecentHpvResult,
+      Collate.MostRecentCytologyCotestResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable2:
   RiskTableLookup.GetRowTable2(
@@ -184,15 +231,15 @@ define PostColposcopyManagementRecommendation:
 // COMMON ABNORMALITY #5: Follow-up after treatment for CIN2 or CIN 3
 // Tables 5A and 5B
 define LookUpTable5:
-  RiskTableLookup.GetPostTreatmentManagement(
-    Collate.MostRecentBiopsyResult,
-    Collate.ThirdMostRecentHpvResultAfterTreatment,
-    Collate.ThirdMostRecentCytologyResultAfterTreatment,
-    Collate.SecondMostRecentHpvResultAfterTreatment,
-    Collate.SecondMostRecentCytologyResultAfterTreatment,
-    Collate.MostRecentHpvResultAfterTreatment,
-    Collate.MostRecentCytologyResultAfterTreatment
-  )
+    RiskTableLookup.GetPostTreatmentManagement(
+      Collate.MostRecentBiopsyResult,
+      Collate.ThirdMostRecentHpvResultAfterTreatment,
+      Collate.ThirdMostRecentCytologyResultAfterTreatment,
+      Collate.SecondMostRecentHpvResultAfterTreatment,
+      Collate.SecondMostRecentCytologyResultAfterTreatment,
+      Collate.MostRecentHpvResultAfterTreatment,
+      Collate.MostRecentCytologyResultAfterTreatment
+    )
 
 define RowTable5:
   RiskTableLookup.GetRowTable5(
@@ -245,6 +292,7 @@ define WhichTableMadeTheRecommendation:
 define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
+    when MostRecentPrimaryHpvPositive then 'Reflex Cytology'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
@@ -255,22 +303,34 @@ define CommonAbnormalityGroup:
   end
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-// ERRATA: 2023 Journal of Lower Genital Track Disease (JLGTD) Addendum to the 2019 ASCCP Guidelines
+// ERRATA: 2024 Journal of Lower Genital Track Disease (JLGTD) Addendum to the 2019 ASCCP Guidelines
 
 // Per the JLGTD article, “for individuals aged 25 years or older screened with cytology alone, the 2012 guidelines should be followed.”
 // As such, the following logic is derived from the 2012 ASCCP guidelines when there is no care recommendation mentioned for the same
 // clinical scenario in the 2019 ASCCP guidelines (e.g., the 2019 guidelines expressed in this CDS already covers ‘cervical cytology alone’
 // where the result is ASC-H, and AGC or AIS not including endometrial cells, therefore it is not expressed in this section).
 
-define MostRecentHpvCotest:
+define MostRecentCytologyIsNotACotest:
   Coalesce(
     (Collate.SortedHpvReports) S
       where S.date within 1 day of Collate.MostRecentCytologyReport.date
-  )
+  ) is null
 
 define MostRecentCytologyAlone:
-  if MostRecentHpvCotest is null then
+  if MostRecentCytologyIsNotACotest then
     Collate.MostRecentCytologyReport
+  else
+    null
+
+define SecondMostRecentCytologyIsNotACotest:
+  Coalesce(
+    (Collate.SortedHpvReports) S
+      where S.date within 1 day of Collate.SecondMostRecentCytologyReport.date
+  ) is null
+
+define SecondMostRecentCytologyAlone:
+  if SecondMostRecentCytologyIsNotACotest then
+    Collate.SecondMostRecentCytologyReport
   else
     null
 
@@ -283,24 +343,118 @@ define CytologyAloneInterpretedAsLsil:
 define CytologyAloneInterpretedAsHsil:
   MostRecentCytologyAlone.riskTableInput = 'HSIL+'
 
+define CytologicHsil:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'HSIL+'
+
+define LastKnownHsilCytology:
+  First(CytologicHsil)
+
+define LastCervicalPrecancerTreatment:
+  Last(Collate.CervicalPrecancerTreatmentsSorted)
+
+define CytologyInterpretedAsAscusOrAbove:
+  Collate.CytologyInterpretedAsAscusOrAbove
+
+define HpvInterpretedAsPositive:
+  Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
+
+define SecondMostRecentHpvInterpretedAsPositive:
+  Collate.SecondMostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
+
+define MostRecentScreeningResultIsPositive:
+  CytologyInterpretedAsAscusOrAbove or
+  HpvInterpretedAsPositive
+
+define DateOfMostRecentPositiveScreeningResult:
+  if (CytologyInterpretedAsAscusOrAbove and HpvInterpretedAsPositive) then
+    if (Collate.MostRecentCytologyReport.date same or after Collate.MostRecentHpvReport.date) then
+      Collate.MostRecentCytologyReport.date
+    else
+      Collate.MostRecentHpvReport.date
+  else if (CytologyInterpretedAsAscusOrAbove) then
+    Collate.MostRecentCytologyReport.date
+  else if (HpvInterpretedAsPositive) then 
+    Collate.MostRecentHpvReport.date
+  else
+    null
+
+define AnyCytologicLsil:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'LSIL'
+
+define LsilBeforeMostRecentPositiveResult:
+  if MostRecentScreeningResultIsPositive then
+    AnyCytologicLsil C
+      where C.date before DateOfMostRecentPositiveScreeningResult
+  else
+    null
+
+define LastKnownLsilBeforeMostRecentPositiveResult:
+  First(LsilBeforeMostRecentPositiveResult)
+
+define AnyCytologicAscus:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput = 'ASC-US'
+
+define AnyHpvPositiveCotest:
+  Collate.SortedHpvReports H
+    where H.riskTableInput in {'HPV16+','HPV16-, HPV18+','HPV-positive'}
+
+define AnyAscusHpvPositiveCotest:
+  from AnyCytologicAscus C, AnyHpvPositiveCotest H
+    where C.date = H.date
+    return C
+
+define AscusHpvPositiveCotestBeforeMostRecentPositiveResult:
+  AnyAscusHpvPositiveCotest C
+    where C.date before DateOfMostRecentPositiveScreeningResult
+
+define LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult:
+  First(AscusHpvPositiveCotestBeforeMostRecentPositiveResult)
+
+define DateOfMostRecentHpvReport:
+  Collate.MostRecentHpvReport.date
+
+define LsilBeforeMostRecentHpvReport:
+  AnyCytologicLsil C
+    where C.date before DateOfMostRecentHpvReport
+
+define LastKnownLsilBeforeMostRecentMostRecentHpvReport:
+  First(LsilBeforeMostRecentHpvReport)
+
+define AscusHpvPositiveBeforeMostRecentHpvReport:
+  AnyAscusHpvPositiveCotest C
+    where C.date before DateOfMostRecentHpvReport
+
+define LastKnownAscusHpvPositiveBeforeMostRecentHpvReport:
+  First(AscusHpvPositiveBeforeMostRecentHpvReport)
+
+define AnyCytologyInterpretedAsAscusOrAbove:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+
+define LastKnownCytologyInterpretedAsAscusOrAbove:
+  First(AnyCytologyInterpretedAsAscusOrAbove)
 
 define ErrataRecommendation:
   case
-    // Managing abnormal cervical cytology alone
-    when ( // ASC-US Alone
+    when ( // Errata Recommendation 3.2.2.a: Low grade cytology followed by persistent abnormality
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus
-    ) then
-      {
-        short: 'Reflex HPV',
-        date: Today(),
-        details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
-        }
-      }
-    when ( // LSIL Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil
+      (
+        CytologyInterpretedAsAscusOrAbove or
+        HpvInterpretedAsPositive
+      ) and
+      (
+        (
+          LastKnownLsilBeforeMostRecentPositiveResult is not null and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentPositiveResult.date)
+        ) or
+        (
+          LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult is not null and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
+        )
+      )
     ) then
       {
         short: 'Colposcopy',
@@ -309,19 +463,115 @@ define ErrataRecommendation:
           'Colposcopy is recommended.'
         }
       }
-    when ( // HSIL or SCC Alone
+  
+    when ( // Errata Recommendation 3.2.2.b: Positive HPV followed by persistent abnormality
       AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsHsil
+      HpvInterpretedAsPositive and
+      SecondMostRecentHpvInterpretedAsPositive and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.SecondMostRecentHpvReport.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+
+    // Managing abnormal cervical cytology alone
+    when ( // Errata Recommendation 3.1.1: ASC-US Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsAscus and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
+    ) then
+      {
+        short: 'Reflex HPV',
+        date: Today(),
+        details: {
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
+        }
+      }
+    when ( // Errata Recommendation 3.1.2: LSIL Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+    when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsHsil and
+      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
         short: 'Colposcopy or Treatment',
         date: Today(),
         details: {
-          'Immediate loop electrosurgical excision or colposcopy is recommended, except in special populations.'
+          'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
+          'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
         }
       }
-    // The following logic phrases come directly from the JLGTD article:
-    // TODO: Implement rest of the 2023 Errata section
+
+    // The following 3.2.x logic phrases come directly from the JLGTD article:
+    when ( // Errata Recommendation 3.2.1: High grade cytology and patient did not receive colposcopy
+      AgeInYears() >= 25 and
+      LastKnownHsilCytology is not null and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        }
+      }
+
+    when ( // Errata Recommendation 3.2.3: Low grade cytology followed by a negative HPV-based test
+      AgeInYears() >= 25 and
+      (
+        (
+          Collate.MostRecentHpvResult = 'HPV-negative' and
+          Collate.MostRecentCytologyCotest is null
+        ) or
+        (
+          Collate.MostRecentHpvResult = 'HPV-negative' and
+          Collate.MostRecentCytologyCotest.riskTableInput = 'NILM'
+        )
+      ) and
+      (
+        (
+          LastKnownLsilBeforeMostRecentMostRecentHpvReport is not null and 
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownLsilBeforeMostRecentMostRecentHpvReport.date) and
+          (
+            LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
+            not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownLsilBeforeMostRecentMostRecentHpvReport.date)
+          )
+        ) or
+        (
+          LastKnownAscusHpvPositiveBeforeMostRecentHpvReport is not null and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date) and
+          (
+            LastKnownCytologyInterpretedAsAscusOrAbove.date is null or
+            not (LastKnownCytologyInterpretedAsAscusOrAbove.date occurs after LastKnownAscusHpvPositiveBeforeMostRecentHpvReport.date)
+          ) 
+        )
+      )
+    ) then
+      {
+        short: 'Surveillance',
+        date: Collate.DateOfMostRecentReport + 1 years,
+        details: {
+          'Primary HPV testing or cotesting is recommended in one year.'
+        }
+      }
     else
       null
   end
@@ -333,7 +583,7 @@ define Pap6MonthIntervalText:
   'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
   
 define Pap1YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1 year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals.'
  
 define Pap3YearIntervalText:
   'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals.'
@@ -348,7 +598,7 @@ define ThreeYearSurveillanceRecommendationText:
   'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Routine screening at 5 year intervals using primary HPV testing or cotesting is recommended.'
+  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
@@ -368,6 +618,17 @@ define PositivePrimaryHpv:
       return aC in Dash."High Risk HPV Positive Results"
   ) and 
   Collate.MostRecentCytologyCotest is null
+
+define MostRecentPrimaryHpvPositive:
+    PositivePrimaryHpv and
+    (
+      Collate.MostRecentCytologyReport.date is null or
+      not (Collate.MostRecentCytologyReport.date occurs after Collate.MostRecentHpvReport.date)
+    ) and
+    (
+      Collate.MostRecentBiopsyReport.date is null or 
+      not (Collate.MostRecentBiopsyReport.date occurs after Collate.MostRecentHpvReport.date)
+    )
 
 define MostRecentCytologyCotestWasAfterAge21:
   Collate.MostRecentCytologyCotest.date >= Patient.birthDate + 21 years
@@ -445,9 +706,7 @@ define Action:
         }
       }  
     when (
-      PositivePrimaryHpv and
-      not (Collate.MostRecentCytologyReport.date after Collate.MostRecentHpvReport.date) and
-      not (Collate.MostRecentBiopsyReport.date after Collate.MostRecentHpvReport.date)
+      MostRecentPrimaryHpvPositive
     ) then
       {
         short: 'Cytology',

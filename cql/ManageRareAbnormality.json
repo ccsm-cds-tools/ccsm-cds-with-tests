@@ -3287,6 +3287,79 @@
                }
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsAscHInPast5Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "ASC-H",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "TwoMostRecentCytologyReportsWithin5yearsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7214,6 +7287,77 @@
                }
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsHsilInPast5Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 5,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "InValueSet",
+                                 "code" : {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 },
+                                 "valueset" : {
+                                    "name" : "HSIL",
+                                    "preserve" : true
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8485,35 +8629,26 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
+                           "type" : "Greater",
                            "operand" : [ {
-                              "type" : "Greater",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
                                  }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "50",
-                                 "type" : "Literal"
-                              } ]
+                              }
                            }, {
-                              "name" : "AnyHistologyInterpretedAsUnspecifiedHsil",
-                              "type" : "ExpressionRef"
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "50",
+                              "type" : "Literal"
                            } ]
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "AnyHistologyInterpretedAsUnspecifiedHsil",
+                           "type" : "ExpressionRef"
                         } ]
                      }, {
                         "name" : "HadNoCervicalPrecancerTreatmentFromDateToPresent",
@@ -9207,7 +9342,7 @@
                                  "type" : "ExpressionRef"
                               }
                            }, {
-                              "value" : 6,
+                              "value" : 3,
                               "unit" : "months",
                               "type" : "Quantity"
                            } ]
@@ -13052,7 +13187,11 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment. If repeat excision is not feasible or not desired, hysterectomy is recommended.",
+                              "value" : "Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "If repeat excision is not feasible or not desired, hysterectomy is recommended.",
                               "type" : "Literal"
                            } ]
                         }
@@ -13222,7 +13361,11 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment. After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.",
+                              "value" : "Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.",
                               "type" : "Literal"
                            } ]
                         }
