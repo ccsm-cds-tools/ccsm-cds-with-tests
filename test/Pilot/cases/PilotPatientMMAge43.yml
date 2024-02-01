@@ -13,19 +13,13 @@ data:
     valueCode: F
     
 
-# Colposcopy CIN3, margins negative
--
-  resourceType: DiagnosticReport
-  code: LOINC#65753-6 Cervix Pathology biopsy report
-  status: final
-  conclusionCode:
-  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
-  effectiveDateTime: 2023-05-24
+# Patient history lists Colposcopy: Excision CIN3, Margins Negative
+# The CDS does not currently map histology results from an excision
+# but we recognize the excision
 
-# Colposcopy
--
-  resourceType: Procedure
-  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
+# Colposcopic Excision
+- resourceType: Procedure
+  code: SNOMED#120038005 Cervix excision (procedure)
   performedDateTime: 2023-05-24
   status: completed
 
@@ -45,12 +39,12 @@ data:
   performedDateTime: 2023-04-23
   status: completed
   
-# Biopsy endometrium
--
-  resourceType: Procedure
-  code: SNOMEDCT#399713008 Specimen from uterine cervix obtained by cone biopsy (specimen)
-  performedDateTime: 2023-04-23
-  status: completed
+# Biopsy endometrium in patient history but not evaluated by the CDS
+#-
+#  resourceType: Procedure
+#  code: SNOMEDCT#399713008 Specimen from uterine cervix obtained by cone biopsy (specimen)
+#  performedDateTime: 2023-04-23
+#  status: completed
 
 # LSIL Pap, HR HPV+ E6/E7 detected
 - 
