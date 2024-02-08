@@ -596,26 +596,69 @@
                }
             }
          }, {
+            "name" : "IsMostRecentTest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "name" : "MostRecentReport",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "d",
+                  "type" : "OperandRef"
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "LookUpTable3",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetColposcopyResultsManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
+               "type" : "If",
+               "condition" : {
+                  "name" : "IsMostRecentTest",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               },
+               "then" : {
+                  "name" : "GetColposcopyResultsManagement",
+                  "libraryName" : "RiskTableLookup",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ReferringHpvResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ReferringCytologyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
                   "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
+               }
             }
          }, {
             "name" : "RowTable3",
@@ -686,11 +729,7 @@
                   }
                },
                "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
+                  "type" : "Null"
                }
             }
          }, {
@@ -1353,8 +1392,12 @@
                   "name" : "PostColposcopyManagementRecommendation",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ColposcopyResultsManagementRecommendation",
-                  "type" : "ExpressionRef"
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "ColposcopyResultsManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
                }, {
                   "asType" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "As",
@@ -2619,12 +2662,10 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                           "libraryName" : "Collate",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -2703,12 +2744,9 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "IsMostRecentTest",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -2787,12 +2825,9 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "IsMostRecentTest",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
