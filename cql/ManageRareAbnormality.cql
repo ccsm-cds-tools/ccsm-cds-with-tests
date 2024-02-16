@@ -1034,13 +1034,13 @@ define LastKnownCytologyInterpretedAsHsilInPast5Years:
     )
   )
   
-define CervixRemovalDateIsAfterMostRecentAisBiopsy:
+define CervixRemovalDateIsAfterLastKnownAisBiopsy:
   (CervixRemovalDate is not null) and 
-  CervixRemovalDate after Collate.MostRecentAisBiopsy.date
+  CervixRemovalDate after Collate.LastKnownAisBiopsy.date
 
 define MostRecentTreatmentAfterAis:
   MostRecentTreatment P
-  where CCF.ProcedureDate(P) occurs after Collate.MostRecentAisBiopsy.date
+  where CCF.ProcedureDate(P) occurs after Collate.LastKnownAisBiopsy.date
 
 define HasTreatmentAfterAis:
   MostRecentTreatmentAfterAis is not null
@@ -1064,8 +1064,8 @@ define RecommendationForAisHistologyResults:
     // Age over 50
     when (
       AgeInYears() > 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       not HasTreatmentAfterAis
     ) then
       {
@@ -1081,8 +1081,8 @@ define RecommendationForAisHistologyResults:
     // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       not HasTreatmentAfterAis
     ) then
       {
@@ -1101,9 +1101,9 @@ define RecommendationForAisHistologyResults:
     // Age over 50
     when ( 
       AgeInYears() > 50 and
-      Collate.MostRecentAisBiopsy is not null and
+      Collate.LastKnownAisBiopsy is not null and
       HasTreatmentAfterAis and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy
     ) then
       {
         short: 'See Details',
@@ -1118,8 +1118,8 @@ define RecommendationForAisHistologyResults:
     // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       HasTreatmentAfterAis
     ) then
       {

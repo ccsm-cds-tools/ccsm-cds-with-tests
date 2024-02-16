@@ -438,7 +438,7 @@ define AisBiopsies:
   SortedBiopsyReports S
     where S.riskTableInput in {'AIS'}
 
-define MostRecentAisBiopsy:
+define LastKnownAisBiopsy:
   First(AisBiopsies)
   
 // Look for treatments after this CIN2/CIN3 biopsy
