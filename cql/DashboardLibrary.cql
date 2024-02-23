@@ -164,7 +164,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
         when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 8}
         when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'AEC-FN', rank: 8}
-        when c ~ "AIS" then {text: 'AIS', rank: 9}
+        when c in "AIS" then {text: 'AIS', rank: 9}
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end
