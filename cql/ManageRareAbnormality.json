@@ -7411,7 +7411,7 @@
                } ]
             }
          }, {
-            "name" : "MostRecentTreatmentAfterAis",
+            "name" : "MostRecentTreatmentSameDateOrAfterAis",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -7425,7 +7425,7 @@
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "After",
+                  "type" : "SameOrAfter",
                   "operand" : [ {
                      "name" : "ProcedureDate",
                      "libraryName" : "CCF",
@@ -7446,7 +7446,7 @@
                }
             }
          }, {
-            "name" : "HasTreatmentAfterAis",
+            "name" : "AisFoundDuringTreatmentOrHadTreatmentAfterAis",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -7454,7 +7454,7 @@
                "operand" : {
                   "type" : "IsNull",
                   "operand" : {
-                     "name" : "MostRecentTreatmentAfterAis",
+                     "name" : "MostRecentTreatmentSameDateOrAfterAis",
                      "type" : "ExpressionRef"
                   }
                }
@@ -7567,7 +7567,7 @@
                      }, {
                         "type" : "Not",
                         "operand" : {
-                           "name" : "HasTreatmentAfterAis",
+                           "name" : "AisFoundDuringTreatmentOrHadTreatmentAfterAis",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -7680,7 +7680,7 @@
                      }, {
                         "type" : "Not",
                         "operand" : {
-                           "name" : "HasTreatmentAfterAis",
+                           "name" : "AisFoundDuringTreatmentOrHadTreatmentAfterAis",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -7767,7 +7767,7 @@
                               }
                            } ]
                         }, {
-                           "name" : "HasTreatmentAfterAis",
+                           "name" : "AisFoundDuringTreatmentOrHadTreatmentAfterAis",
                            "type" : "ExpressionRef"
                         } ]
                      }, {
@@ -7884,7 +7884,7 @@
                            }
                         } ]
                      }, {
-                        "name" : "HasTreatmentAfterAis",
+                        "name" : "AisFoundDuringTreatmentOrHadTreatmentAfterAis",
                         "type" : "ExpressionRef"
                      } ]
                   },

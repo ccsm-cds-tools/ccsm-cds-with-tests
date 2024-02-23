@@ -1,0 +1,36 @@
+---
+name: I6 Management of AIS Over 50 Found on Excision
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1965-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: Procedure
+  code: SNOMED#120038005 Cervix excision (procedure)
+  performedDateTime: 2021-06-01
+  status: completed
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#447760009 Endocervical adenocarcinoma in situ (disorder)
+  effectiveDateTime: 2021-06-01
+
+results:
+  Recommendation:
+    short: 'See Details'
+    date: '2021-06-02'
+    group: 'Managing Histology (I.6)'
+    details:
+      - 'If negative margins on the diagnostic excisional specimen, a hysterectomy is preferred.'
+      - 'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
+      - 'For patients with AIS and persistent positive margins for whom additional excisional procedures are not feasible, either a simple or modified radical hysterectomy is acceptable.'
+  WhichRarityMadeTheRecommendation: 3
