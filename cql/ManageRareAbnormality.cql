@@ -182,6 +182,18 @@ define CytologyInterpretedAsHistiocytes:
       return aC ~ "Histiocytes"
   )
 
+define AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult:
+  Exists(
+    Collate.AnyCytologyInterpretedAsAscusOrAbove C
+      where C.date after TreatmentForHighGradeHistologyOrCytologyDate
+  )
+
+define HasPositiveHpvAfterTreatmentForHighGradeResult:
+  Exists(
+    Dash.RecentPositiveHpv D
+      where CCF.DiagnosticReportDate(D) after TreatmentForHighGradeHistologyOrCytologyDate
+  )
+
 define HasPremenopausalObservationOrCondition:
   Exists(Dash.PremenopausalObservations) or
   Exists(Dash.PremenopausalConditions)
@@ -321,6 +333,12 @@ define HasColposcopyProcedureAfterMostRecentBiopsy:
   Exists(
     (Dash.ColposcopyProcedures) P
       where CCF.ProcedureDate(P) >= Collate.MostRecentBiopsyReport.date
+  )
+
+define HasColposcopyProcedureAfterMostRecentTreatment:
+  Exists(
+    (Dash.ColposcopyProcedures) P
+      where CCF.ProcedureDate(P) >= MostRecentTreatmentDate
   )
 
 define RecommendationForRareCytology:
@@ -666,10 +684,11 @@ define AnyHistologyInterpretedAsCin2:
         aC ~ Dash."CIN2"
   )
 
-define LastKnownCin2BiopsyInPast6Years:
+define function LastKnownCin2BiopsyInPast(LookBackEnd System.Quantity):
   Coalesce(
     (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 6 years) and
+    let LookbackInterval: Interval[Now() - LookBackEnd, Now()]
+    where (S.date in LookbackInterval) and
     AnyTrue(
     (S.allConclusions) aC
       return 
@@ -677,59 +696,40 @@ define LastKnownCin2BiopsyInPast6Years:
     )
   )
 
+define LastKnownCin2BiopsyInPast7Years:
+  LastKnownCin2BiopsyInPast(7 years)
+
+define LastKnownCin2BiopsyInPast6Years:
+  LastKnownCin2BiopsyInPast(6 years)
+  
 define LastKnownCin2BiopsyInPast3Years:
-  Coalesce(
-    (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 3 years) and
-    AnyTrue(
-    (S.allConclusions) aC
-      return 
-        aC ~ Dash."CIN2"
-    )
-  )
+  LastKnownCin2BiopsyInPast(3 years)
 
 define LastKnownCin2BiopsyInPast2Years:
+  LastKnownCin2BiopsyInPast(2 years)
+
+
+define function LastKnownHsilUnspecifiedBiopsyInPast(LookBackEnd System.Quantity):
   Coalesce(
     (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 2 years) and
+    let LookbackInterval: Interval[Now() - LookBackEnd, Now()]
+    where (S.date in LookbackInterval) and
     AnyTrue(
     (S.allConclusions) aC
       return 
-        aC ~ Dash."CIN2"
+        aC ~ Dash."HSIL, Unspecified"
     )
   )
 
 define LastKnownHsilUnspecifiedBiopsyInPast6Years:
-    Coalesce(
-    (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 6 years) and
-    AnyTrue(
-    (S.allConclusions) aC
-      return 
-        aC ~ Dash."HSIL, Unspecified"
-    )
-  )
+   LastKnownHsilUnspecifiedBiopsyInPast(6 years)
+   
 define LastKnownHsilUnspecifiedBiopsyInPast3Years:
-    Coalesce(
-    (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 3 years) and
-    AnyTrue(
-    (S.allConclusions) aC
-      return 
-        aC ~ Dash."HSIL, Unspecified"
-    )
-  )
+   LastKnownHsilUnspecifiedBiopsyInPast(3 years)
 
- define LastKnownHsilUnspecifiedBiopsyInPast2Years:
-    Coalesce(
-    (Collate.SortedBiopsyReports) S
-    where (S.date >= Now() - 2 years) and
-    AnyTrue(
-    (S.allConclusions) aC
-      return 
-        aC ~ Dash."HSIL, Unspecified"
-    )
-  ) 
+define LastKnownHsilUnspecifiedBiopsyInPast2Years:
+   LastKnownHsilUnspecifiedBiopsyInPast(2 years)
+
 define HistologyInterpretedAsAis:
   AnyTrue(
     (Collate.MostRecentBiopsyReport.allConclusions) aC
@@ -1684,7 +1684,16 @@ define HasHistologicHsilWithin12MonthsBeforeTreatment:
     Collate.ManageTreatmentWithoutPreviousBiopsy
   )
 
+define HistologicHsilWithin5YearsBeforeTreatment:
+  AnyHistologicHsil B
+  where
+    B.date 5 years or less before MostRecentTreatmentDate
 
+define HistologicHsilWithin7YearsAfterTreatment:
+  AnyHistologicHsil B
+  where
+    B.date 7 years or less after MostRecentTreatmentDate
+    
 define PositiveHrHpvTestAfterTreatment:
   Collate.MostRecentHpvReport.date >= Now() - 12 months and
   Collate.MostRecentHpvReport.date 12 months or less after MostRecentTreatmentDate and
@@ -1694,21 +1703,11 @@ define PositiveHrHpvTestAfterTreatment:
         aC in Dash."High Risk HPV Positive Results"
   )
 
-define RareAbnormalityHighGradeHistology:
-  (Collate.SortedBiopsyReports) B
-    where AnyTrue(
-      (B.allConclusions) aC
-        return
-          aC ~ Dash."CIN2" or
-          aC in Dash."Histologic CIN3" or
-          aC ~ Dash."HSIL, Unspecified"
-    )
-
 define RareAbnormalityHighGradeHistologyBeforeTreatment:
   if (MostRecentTreatment is not null) then
-    RareAbnormalityHighGradeHistology C
+    AnyHistologicHsil C
     where
-      C.date 12 months or less before MostRecentTreatmentDate
+      C.date 18 months or less before MostRecentTreatmentDate
   else
     null
 
@@ -1857,18 +1856,14 @@ define HasHistologyAfterTreatmentForHighGradeResult:
   Collate.MostRecentBiopsyReport is not null and
   TreatmentForHighGradeHistologyOrCytology is not null and
   Collate.MostRecentBiopsyReport.date after TreatmentForHighGradeHistologyOrCytologyDate
-  
+
 define RecommendationForSurveillanceAfterAbnormalities:
   case
     // J.2 Short-Term Follow-up After Treatment for Histologic HSIL
     when ( // J2.3
-      HistologyInterpretedAsHistologicHsil and
-      Collate.MostRecentBiopsyReport.date 5 years or less after MostRecentTreatmentDate and
+      Exists(HistologicHsilWithin7YearsAfterTreatment) and
       (
-        (
-          SecondMostRecentHistologyInterpretedAsHistologicHsil and
-          SecondMostRecentBiopsyReport.date 5 years or less before MostRecentTreatmentDate
-        ) or 
+        Exists(HistologicHsilWithin5YearsBeforeTreatment) or
         Collate.ManageTreatmentWithoutPreviousBiopsy
       )
     ) then
@@ -1881,21 +1876,18 @@ define RecommendationForSurveillanceAfterAbnormalities:
           'If repeat excision is not feasible or not desired, hysterectomy is recommended.'
         }
       }    
-    when ( // J2.2
-      PositiveHrHpvTestAfterTreatment and
-      HasHistologicHsilWithin12MonthsBeforeTreatment
-    ) then
-      {
-        short: 'See Details',
-        date: Today(),
-        group: 'Management Surveillance (J.2.2)',
-        details: {
-          'Colposcopy is recommended.'
-        }
-      }    
+
+    // J.2.2 Specific care recommendations based on primary HPV or cotests performed 6 months
+    // after treatment are found in common abnormality table 5A
+
     when ( // J2.1
       HasTreatmentInLastYear and
-      HasHistologicHsilWithin12MonthsBeforeTreatment
+      HasHistologicHsilWithin12MonthsBeforeTreatment and
+      (
+        Collate.DateOfMostRecentReport is null or
+        not (Collate.DateOfMostRecentReport after MostRecentTreatmentDate)
+      ) and
+      not HasColposcopyProcedureAfterMostRecentTreatment
     ) then
       {
         short: 'See Details',
@@ -1914,7 +1906,9 @@ define RecommendationForSurveillanceAfterAbnormalities:
       HasTreatmentForHighGradeHistologyOrCytology and
       TreatmentForHighGradeHistologyOrCytologyDate >= Now() - 25 years and
       not InitialIntensiveSurveillancePeriod and 
-      not HasHistologyAfterTreatmentForHighGradeResult
+      not HasHistologyAfterTreatmentForHighGradeResult and
+      not AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult and
+      not HasPositiveHpvAfterTreatmentForHighGradeResult
     ) then
       {
         short: 'See Details',

@@ -1,5 +1,5 @@
 ---
-name: J2.3 Short-Term Follow-up After Treatment Without Previous Biopsy
+name: J2.3 Recurrent HSIL After Treatment Max Duration
 
 externalData:
 - resources
@@ -14,10 +14,10 @@ data:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
-
-
+-
+  $iterate: *HistologicHSIL12YearsAgo
 - 
-  $iterate: *HasTreatment2YearsAgo
+  $iterate: *HasTreatment7YearsAgo
 
 # Presence of histology < CIN2 should NOT affect the logic for J.2.3
 -
@@ -25,7 +25,7 @@ data:
 
 -
   $iterate: *HistologicHSILThisYear
-
+  
 results:
   Recommendation: 
     short: 'See Details'
