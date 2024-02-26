@@ -1,5 +1,5 @@
 ---
-name: Under 30 and need cytology test number 1
+name: Over 30 and need cytology test number 1 - Immunocompromised Condition Plus Observation
 
 externalData:
 - resources
@@ -9,7 +9,7 @@ data:
   resourceType: Patient
   name: Joanne Smith
   gender: female
-  birthDate: 1996-01-01
+  birthDate: 1976-01-01
   extension:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
@@ -20,6 +20,12 @@ data:
   verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
   code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
   onsetDateTime: 2017-05-01
+-
+  resourceType: Observation
+  id: new-observation-for-immunosuppressed
+  code: SNOMEDCT#370388006 Patient immunocompromised (finding)
+  status: amended
+  effectiveDateTime: 2021-05-01
 
 results:
   IsIncludedAndNotExcluded: true
@@ -34,6 +40,10 @@ results:
     unit: months
   ProposedDateOfNextScreening: '2021-06-23T00:00:00.000+00:00'
   RecommendImmediateCervicalCytology: true
-  RecommendImmediateCotesting: false
+  RecommendImmediateCotesting: true
   RecommendationText:
-  - 'Cervical cytology screening is recommended.'
+  - 'Cervical cancer screening is recommended.'
+  - 'The screening can be performed using one of the following screening approaches:'
+  - '1. Primary HPV testing'
+  - '2. Cotesting with cervical cytology and hrHPV testing'
+  - '3. Cervical cytology testing alone'
