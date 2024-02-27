@@ -488,7 +488,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsAscus and
-      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date) and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
