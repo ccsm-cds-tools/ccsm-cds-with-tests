@@ -389,46 +389,372 @@
                } ]
             }
          }, {
-            "name" : "CytologyInterpretedAsAgc",
+            "name" : "LastKnownCytologyInterpretedAsAgc",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
+               "type" : "Coalesce",
+               "operand" : [ {
                   "type" : "Query",
                   "source" : [ {
-                     "alias" : "aC",
+                     "alias" : "C",
                      "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyReport",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
                      }
                   } ],
                   "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "AGC",
-                              "type" : "CodeRef"
+                  "where" : {
+                     "type" : "AnyTrue",
+                     "source" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "aC",
+                           "expression" : {
+                              "path" : "allConclusions",
+                              "scope" : "C",
+                              "type" : "Property"
                            }
-                        } ]
+                        } ],
+                        "relationship" : [ ],
+                        "return" : {
+                           "expression" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "aC",
+                                    "type" : "AliasRef"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "AGC",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }
+                        }
                      }
                   }
-               }
+               } ]
+            }
+         }, {
+            "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "C",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "AGC",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "InValueSet",
+                                    "code" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "AIS",
+                                       "libraryName" : "Dash"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     }, {
+                        "type" : "AllTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Atypical Endometrial Cells",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "C",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "AGC",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "InValueSet",
+                                    "code" : {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    },
+                                    "valueset" : {
+                                       "name" : "AIS",
+                                       "libraryName" : "Dash"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "Atypical Endometrial Cells",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "C",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "C",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "AGC",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Equivalent",
+                                    "operand" : [ {
+                                       "name" : "ToConcept",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "name" : "aC",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }, {
+                                       "type" : "ToConcept",
+                                       "operand" : {
+                                          "name" : "Atypical Endocervical Cells",
+                                          "type" : "CodeRef"
+                                       }
+                                    } ]
+                                 } ]
+                              }
+                           }
+                        }
+                     }, {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 7,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     } ]
+                  }
+               } ]
             }
          }, {
             "name" : "CytologyInterpretedAsAgcFavorNeoplasia",
@@ -508,62 +834,6 @@
                            "name" : "AIS",
                            "libraryName" : "Dash"
                         }
-                     }
-                  }
-               }
-            }
-         }, {
-            "name" : "CytologyInterpretedAsAgcOrAis",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Or",
-               "operand" : [ {
-                  "name" : "CytologyInterpretedAsAgc",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "CytologyInterpretedAsAis",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "AnyTrue",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "aC",
-                     "expression" : {
-                        "path" : "allConclusions",
-                        "type" : "Property",
-                        "source" : {
-                           "name" : "MostRecentCytologyReport",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "type" : "Equivalent",
-                        "operand" : [ {
-                           "name" : "ToConcept",
-                           "libraryName" : "FHIRHelpers",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "aC",
-                              "type" : "AliasRef"
-                           } ]
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Atypical Endometrial Cells",
-                              "type" : "CodeRef"
-                           }
-                        } ]
                      }
                   }
                }
@@ -2942,6 +3212,79 @@
                }
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "riskTableInput",
+                        "scope" : "S",
+                        "type" : "Property"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HSIL+",
+                        "type" : "Literal"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "LastKnownCytologyInterpretedAsHsil",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsHsil",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "name" : "d",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "RecommendationForRareCytology",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2953,20 +3296,14 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "type" : "Or",
-                              "operand" : [ {
-                                 "name" : "CytologyInterpretedAsAgc",
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years",
                                  "type" : "ExpressionRef"
-                              }, {
-                                 "name" : "CytologyInterpretedAsAtypicalEndocervicalCells",
-                                 "type" : "ExpressionRef"
-                              } ]
-                           } ]
+                              }
+                           }
                         }, {
                            "type" : "And",
                            "operand" : [ {
@@ -2987,7 +3324,7 @@
                                     "path" : "date",
                                     "type" : "Property",
                                     "source" : {
-                                       "name" : "MostRecentCytologyReport",
+                                       "name" : "LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years",
                                        "type" : "ExpressionRef"
                                     }
                                  },
@@ -2997,11 +3334,11 @@
                                        "path" : "date",
                                        "type" : "Property",
                                        "source" : {
-                                          "name" : "MostRecentCytologyReport",
+                                          "name" : "LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years",
                                           "type" : "ExpressionRef"
                                        }
                                     }, {
-                                       "value" : 12,
+                                       "value" : 18,
                                        "unit" : "months",
                                        "type" : "Quantity"
                                     } ]
@@ -3015,7 +3352,7 @@
                                     "path" : "date",
                                     "type" : "Property",
                                     "source" : {
-                                       "name" : "MostRecentCytologyReport",
+                                       "name" : "LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years",
                                        "type" : "ExpressionRef"
                                     }
                                  }
@@ -3201,27 +3538,47 @@
                                     "type" : "Literal"
                                  } ]
                               }, {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }, {
-                              "name" : "CytologyInterpretedAsAgcOrAis",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "Pregnant",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              }
                            } ]
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
+                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                           "libraryName" : "Collate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
                               "type" : "ExpressionRef"
                            }
                         } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "name" : "Pregnant",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
                      } ]
                   },
                   "then" : {
@@ -3293,27 +3650,47 @@
                                     "type" : "Literal"
                                  } ]
                               }, {
-                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }, {
-                              "name" : "CytologyInterpretedAsAgcOrAis",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "Pregnant",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              }
                            } ]
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
+                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                           "libraryName" : "Collate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
                               "type" : "ExpressionRef"
                            }
                         } ]
-                     }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "name" : "Pregnant",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
                      } ]
                   },
                   "then" : {
@@ -3365,23 +3742,46 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            }, {
-                              "name" : "CytologyInterpretedAsAgcOrAis",
-                              "type" : "ExpressionRef"
+                              "type" : "Not",
+                              "operand" : {
+                                 "name" : "Pregnant",
+                                 "libraryName" : "Dash",
+                                 "type" : "ExpressionRef"
+                              }
                            } ]
                         }, {
-                           "name" : "CytologyInterpretedAsAtypicalEndometrialCells",
-                           "type" : "ExpressionRef"
+                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                           "libraryName" : "Collate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
                         } ]
                      }, {
-                        "type" : "Not",
-                        "operand" : {
-                           "name" : "Pregnant",
-                           "libraryName" : "Dash",
-                           "type" : "ExpressionRef"
-                        }
+                        "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
                      } ]
                   },
                   "then" : {
@@ -4147,6 +4547,79 @@
                } ]
             }
          }, {
+            "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "name" : "SortedCytologyReports",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "S",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "type" : "Now"
+                           }, {
+                              "value" : 10,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "AnyTrue",
+                        "source" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "aC",
+                              "expression" : {
+                                 "path" : "allConclusions",
+                                 "scope" : "S",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "return" : {
+                              "expression" : {
+                                 "type" : "Equivalent",
+                                 "operand" : [ {
+                                    "name" : "ToConcept",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "aC",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }, {
+                                    "type" : "ToConcept",
+                                    "operand" : {
+                                       "name" : "ASC-H",
+                                       "type" : "CodeRef"
+                                    }
+                                 } ]
+                              }
+                           }
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "TwoMostRecentCytologyReportsWithin5yearsApart",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4254,6 +4727,44 @@
                }
             }
          }, {
+            "name" : "HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "IsNull",
+                  "operand" : {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "LastKnownCytologyInterpretedAsAgc",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAgc",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "RecommendationForExceptionsToColposcopyThreshold",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4263,10 +4774,45 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                        "type" : "ExpressionRef"
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                              "libraryName" : "Collate",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "type" : "ExpressionRef"
+                                 }
+                              } ]
+                           } ]
+                        }, {
+                           "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
                      }, {
-                        "name" : "CytologyInterpretedAsAscH",
+                        "name" : "HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH",
                         "type" : "ExpressionRef"
                      } ]
                   },
