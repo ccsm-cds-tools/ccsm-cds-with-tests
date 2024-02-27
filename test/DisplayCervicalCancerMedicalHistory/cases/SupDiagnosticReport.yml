@@ -1,0 +1,35 @@
+---
+name: SUP DiagnosticReport
+data:
+-
+  resourceType: Patient
+  name: SUP MITRE
+  gender: female
+  birthDate: 1997-01-18
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  status: final
+  code: LOINC#47527-7
+  effectiveDateTime: 2020-03-10T17:44:00Z
+-
+  resourceType: Observation
+  status: final
+  code:
+    coding:
+    -
+      LOINC#50595-8
+      LOINC#47527-7
+  effectiveDateTime: 2020-03-10T17:44:00Z
+  valueCodeableConcept: SNOMEDCT#62051000119105
+
+results:
+  CervicalCytologyReports: $should have length 1
+  CervicalCytologyReportsSummary: $should have length 1
+  DiagnosticReportsSummary: $should have length 1
+
+
+

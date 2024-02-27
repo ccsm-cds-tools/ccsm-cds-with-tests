@@ -3,4 +3,4 @@ import * as path from 'path'
 
 const __dirname = path.resolve();
 
-cqlt.test(path.join(__dirname));
+cqlt.test('./test/DisplayCervicalCancerMedicalHistory/');

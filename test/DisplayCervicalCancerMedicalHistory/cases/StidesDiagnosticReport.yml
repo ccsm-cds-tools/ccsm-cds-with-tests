@@ -1,0 +1,23 @@
+---
+name: Strides DiagnosticReport
+data:
+-
+  resourceType: Patient
+  name: Strides MITRE
+  gender: female
+  birthDate: 1997-01-18
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  status: final
+  code: LOINC#65753-6
+  effectiveDateTime: 2018-04-02T17:54:00Z
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+
+results:
+  HistologyDiagnosticReports: $should have length 1
+  HistologyDiagnosticReportsSummary: $should have length 1
