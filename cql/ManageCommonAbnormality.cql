@@ -430,12 +430,8 @@ define AscusHpvPositiveBeforeMostRecentHpvReport:
 define LastKnownAscusHpvPositiveBeforeMostRecentHpvReport:
   First(AscusHpvPositiveBeforeMostRecentHpvReport)
 
-define AnyCytologyInterpretedAsAscusOrAbove:
-  Collate.SortedCytologyReports C
-    where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
-
 define LastKnownCytologyInterpretedAsAscusOrAbove:
-  First(AnyCytologyInterpretedAsAscusOrAbove)
+  First(Collate.AnyCytologyInterpretedAsAscusOrAbove)
 
 define ErrataRecommendation:
   case
