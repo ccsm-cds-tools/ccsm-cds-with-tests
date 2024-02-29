@@ -80,10 +80,7 @@ context Patient
 // RARE ABNORMALITY #1: Rare Cytology
 
 define MostRecentCytologyReport:
-  if Count(Collate.SortedCytologyReports) > 0 then
-    Collate.SortedCytologyReports[0]
-  else
-    null
+  Collate.MostRecentCytologyReport
 
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
