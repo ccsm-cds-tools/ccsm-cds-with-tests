@@ -124,6 +124,11 @@ code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macroph
 code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Curettage": '52889002' from "SNOMED-CT" display 'Endocervical curettage (procedure)'
+code "Atypical Glandular Cells Uncertain": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)'
+code "Atypical Endometrial Cells": '103646000' from "SNOMED-CT" display 'Atypical endometrial cells of undetermined significance (morphologic abnormality)'
+code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)'
+code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
+code "Endocervical AIS": '447760009' from "SNOMED-CT" display 'Endocervical adenocarcinoma in situ (disorder)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -163,8 +168,19 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "AGC" then {text: 'AGC', rank: 6}
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
         when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 8}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'AEC-FN', rank: 8}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'AEC-FN', rank: 8}        
+        when c ~ "Endocervical AIS" then {text: 'AIS', rank: 9}
         when c in "AIS" then {text: 'AIS', rank: 9}
+
+        // Rare cytologies added so they are not interpreted as UNK, but ranked low, to-do: confirm names
+        when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
+        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
+        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
+        when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank:1}
+        when c ~ "Unsatisfactory" then {text: "Unsatisfactory", rank: 1}
+        when c ~ "Absent Transformation Zone" then {text: 'Absent Transformation Zone', rank: 1}
+        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank:1}
+
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end

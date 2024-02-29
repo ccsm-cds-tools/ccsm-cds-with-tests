@@ -46,6 +46,24 @@
             "version" : "1.0.0"
          } ]
       },
+      "codeSystems" : {
+         "def" : [ {
+            "name" : "SNOMED-CT",
+            "id" : "http://snomed.info/sct",
+            "accessLevel" : "Public"
+         } ]
+      },
+      "codes" : {
+         "def" : [ {
+            "name" : "ASC-US",
+            "id" : "441087007",
+            "display" : "Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         } ]
+      },
       "contexts" : {
          "def" : [ {
             "name" : "Patient"
@@ -3316,6 +3334,68 @@
                   "value" : "N/A",
                   "type" : "Literal"
                }
+            }
+         }, {
+            "name" : "debugCytologyInterpretedAsAscus",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "AnyTrue",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "aC",
+                     "expression" : {
+                        "path" : "allConclusions",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyReport",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Equivalent",
+                        "operand" : [ {
+                           "name" : "ToConcept",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "aC",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "type" : "ToConcept",
+                           "operand" : {
+                              "name" : "ASC-US",
+                              "type" : "CodeRef"
+                           }
+                        } ]
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "debugCytologyAloneInterpretedAsAscus",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "path" : "riskTableInput",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyAlone",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "ASC-US",
+                  "type" : "Literal"
+               } ]
             }
          }, {
             "name" : "SecondMostRecentCytologyIsNotACotest",
