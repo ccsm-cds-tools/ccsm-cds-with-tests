@@ -157,11 +157,14 @@ define SurveillanceManagementRecommendation:
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
 // Table 3
 define LookUpTable3: // NOTE: Review whether we need to look at history going further back
-  RiskTableLookup.GetColposcopyResultsManagement(
-    Collate.ReferringHpvResult,
-    Collate.ReferringCytologyResult,
-    Collate.MostRecentBiopsyResult
-  )
+  if IsMostRecentTest(Collate.MostRecentBiopsyReport.date) then
+    RiskTableLookup.GetColposcopyResultsManagement(
+      Collate.ReferringHpvResult,
+      Collate.ReferringCytologyResult,
+      Collate.MostRecentBiopsyResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable3:
   RiskTableLookup.GetRowTable3(
@@ -433,6 +436,9 @@ define LastKnownAscusHpvPositiveBeforeMostRecentHpvReport:
 define LastKnownCytologyInterpretedAsAscusOrAbove:
   First(Collate.AnyCytologyInterpretedAsAscusOrAbove)
 
+define function IsMostRecentTest(d System.DateTime):
+  Collate.MostRecentReport = d
+
 define ErrataRecommendation:
   case
     when ( // Errata Recommendation 3.2.2.a: Low grade cytology followed by persistent abnormality
@@ -478,7 +484,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsAscus and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
@@ -491,7 +497,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.2: LSIL Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsLsil and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
@@ -504,7 +510,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsHsil and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
