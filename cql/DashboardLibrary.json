@@ -397,7 +397,15 @@
                "name" : "ICD-10"
             }
          }, {
-            "name" : "Immunocompromised Observation Code",
+            "name" : "Immune Status",
+            "id" : "96381-9",
+            "display" : "Immune status",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOINC"
+            }
+         }, {
+            "name" : "Patient immunocompromised",
             "id" : "370388006",
             "display" : "Patient immunocompromised (finding)",
             "accessLevel" : "Public",
@@ -5330,17 +5338,47 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "dataType" : "{http://hl7.org/fhir}Observation",
-               "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
-               "codeProperty" : "code",
-               "codeComparator" : "~",
-               "type" : "Retrieve",
-               "codes" : {
-                  "type" : "ToList",
-                  "operand" : {
-                     "name" : "Immunocompromised Observation Code",
-                     "type" : "CodeRef"
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "I",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}Observation",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Immune Status",
+                           "type" : "CodeRef"
+                        }
+                     }
                   }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "ToConcept",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "scope" : "I",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }, {
+                     "type" : "ToConcept",
+                     "operand" : {
+                        "name" : "Patient immunocompromised",
+                        "type" : "CodeRef"
+                     }
+                  } ]
                }
             }
          }, {

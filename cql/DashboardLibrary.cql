@@ -102,7 +102,8 @@ code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History o
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
-code "Immunocompromised Observation Code": '370388006' from "SNOMED-CT" display 'Patient immunocompromised (finding)'
+code "Immune Status": '96381-9' from "LOINC" display 'Immune status'
+code "Patient immunocompromised": '370388006' from "SNOMED-CT" display 'Patient immunocompromised (finding)'
 code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy report' // A.K.A. "Histology tests"
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
@@ -544,7 +545,8 @@ define PostmenopausalObservations:
 
 define ImmunocompromisedObservations:
   // Note: does not need to be verified, since this could be manually enterred (for example, via a toggle switch)
-  [Observation: "Immunocompromised Observation Code"]
+  [Observation: "Immune Status"] I
+    where I.value ~ "Patient immunocompromised"
 
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
