@@ -88,10 +88,67 @@ define MostRecentCytologyReport:
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
 
-define CytologyInterpretedAsAgc:
-  AnyTrue(
-    (MostRecentCytologyReport.allConclusions) aC
-      return aC ~ "AGC"
+define LastKnownCytologyInterpretedAsAgc:
+  Coalesce(
+    Collate.SortedCytologyReports C
+      where
+        AnyTrue(
+          (C.allConclusions) aC 
+            return aC ~ "AGC"
+        )
+  )
+
+define LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells:
+  Coalesce(
+    Collate.SortedCytologyReports C
+      where
+        AnyTrue(
+          (C.allConclusions) aC 
+            return  
+              (
+                aC ~ "AGC" or
+                aC in Dash."AIS"
+              )
+        ) and
+        AllTrue(
+          (C.allConclusions) aC
+            return
+              aC !~ "Atypical Endometrial Cells"
+        )
+  )
+
+define LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells:
+  Coalesce(
+    Collate.SortedCytologyReports C
+      where
+        AnyTrue(
+          (C.allConclusions) aC 
+            return  
+              (
+                aC ~ "AGC" or
+                aC in Dash."AIS"
+              )
+        ) and
+        AnyTrue(
+          (C.allConclusions) aC
+            return
+              aC ~ "Atypical Endometrial Cells"
+        )
+  )
+
+define LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years:
+  Coalesce(
+    Collate.SortedCytologyReports C
+      where
+        AnyTrue(
+          (C.allConclusions) aC 
+            return  
+              (
+                aC ~ "AGC" or
+                aC ~ "Atypical Endocervical Cells"
+              )
+        ) and
+        C.date >= Now() - 7 years
   )
 
 define CytologyInterpretedAsAgcFavorNeoplasia:
@@ -104,16 +161,6 @@ define CytologyInterpretedAsAis:
   AnyTrue(
     (MostRecentCytologyReport.allConclusions) aC
       return aC in Dash."AIS"
-  )
-
-define CytologyInterpretedAsAgcOrAis:
-  CytologyInterpretedAsAgc or
-  CytologyInterpretedAsAis
-
-define CytologyInterpretedAsAtypicalEndometrialCells:
-  AnyTrue(
-    (MostRecentCytologyReport.allConclusions) aC
-      return aC ~ "Atypical Endometrial Cells"
   )
 
 define CytologyInterpretedAsAtypicalEndocervicalCells:
@@ -341,16 +388,16 @@ define HasColposcopyProcedureAfterMostRecentTreatment:
       where CCF.ProcedureDate(P) >= MostRecentTreatmentDate
   )
 
+define function HasNoCytologyInterpretedAsHsilAfterDate(d System.DateTime):
+  LastKnownCytologyInterpretedAsHsil.date is null or
+  not (LastKnownCytologyInterpretedAsHsil.date occurs after d)
+
 define RecommendationForRareCytology:
   case
     // Subsequent Management
     when ( // G1.4
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      (
-        CytologyInterpretedAsAgc or
-        CytologyInterpretedAsAtypicalEndocervicalCells
-      ) and
-      Collate.MostRecentBiopsyReport.date 12 months or less after MostRecentCytologyReport.date and
+      LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years is not null and
+      Collate.MostRecentBiopsyReport.date 18 months or less after LastKnownCytologyInterpretedAsAgcOrAtypicalEndocervicalCellsInPast7Years.date and
       HistologyInterpretedAsCin1OrNormal
     ) then
       {
@@ -390,10 +437,10 @@ define RecommendationForRareCytology:
     // G.1 Evaluation of Cytology Interpreted as AGC or AIS
     when ( // G1.1
       AgeInYears() < 35 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
+      LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells is not null and
+      not Dash.Pregnant and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date) and
+      HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date)
     ) then
       {
         short: 'See Details',
@@ -407,10 +454,10 @@ define RecommendationForRareCytology:
       }
     when ( // G1.2
       AgeInYears() >= 35 and
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      not CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
+      LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells is not null and
+      not Dash.Pregnant and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date) and
+      HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date)
     ) then
       {
         short: 'See Details',
@@ -423,10 +470,10 @@ define RecommendationForRareCytology:
         }
       }
     when ( // G1.3
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAgcOrAis and
-      CytologyInterpretedAsAtypicalEndometrialCells and
-      not Dash.Pregnant
+      LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells is not null and
+      not Dash.Pregnant and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells.date) and
+      HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells.date)
     ) then
       {
         short: 'See Details',
@@ -585,6 +632,16 @@ define LastKnownCytologyInterpretedAsAscHInPast5Years:
         return aC ~ "ASC-H"
     )
   )
+
+define LastKnownCytologyInterpretedAsAscHInPast10Years:
+  Coalesce(
+    (Collate.SortedCytologyReports) S
+    where (S.date >= Now() - 10 years) and
+    AnyTrue(
+      (S.allConclusions) aC
+        return aC ~ "ASC-H"
+    )
+  )
   
 define SecondMostRecentCytologyReport:
   if Count(Collate.SortedCytologyReports) > 1 then
@@ -601,11 +658,17 @@ define SecondMostRecentCytologyUnsatisfactory:
       return aC ~ "Unsatisfactory"
   )
 
+define HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH:
+  LastKnownCytologyInterpretedAsAgc.date is null or
+  not (LastKnownCytologyInterpretedAsAgc.date occurs after LastKnownCytologyInterpretedAsAscHInPast10Years.date)
+
 define RecommendationForExceptionsToColposcopyThreshold:
   case
     when (
-      MostRecentCytologyReportWasWithinPastFiveYears and
-      CytologyInterpretedAsAscH
+      LastKnownCytologyInterpretedAsAscHInPast10Years is not null and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
+      HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
+      HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH
     ) then
       {
         short: 'Colposcopy',
@@ -1024,7 +1087,14 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )
 
-define LastKnownCytologyInterpretedAsHsilInPast5Years:
+define LastKnownCytologyInterpretedAsHsil:
+  Coalesce(
+    (Collate.SortedCytologyReports) S
+    where 
+      S.riskTableInput = 'HSIL+'
+  )
+
+define LastKnownCytologyInterpretedAsHsilInPast5Years: // TODO: Combine this with expression above
   Coalesce(
     (Collate.SortedCytologyReports) S
     where (S.date >= Now() - 5 years) and

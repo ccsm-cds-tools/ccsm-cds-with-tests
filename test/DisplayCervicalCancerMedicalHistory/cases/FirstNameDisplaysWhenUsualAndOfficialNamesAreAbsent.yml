@@ -1,0 +1,28 @@
+---
+name: First name displays when usual and official names are absent
+
+data:
+-
+  resourceType: Patient
+  name: 
+  - 
+    given:
+    - Joanne
+    family: Smith
+  - 
+    given:
+    - Joanne
+    family: McMaiden
+    use: maiden
+  identifier:
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  language: es
+  
+
+results:
+  PatientName: Joanne Smith

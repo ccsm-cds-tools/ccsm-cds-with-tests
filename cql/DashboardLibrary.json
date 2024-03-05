@@ -3238,6 +3238,201 @@
                }
             }
          }, {
+            "name" : "UsualPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "N",
+                  "expression" : {
+                     "path" : "name",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "use",
+                        "scope" : "N",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "usual",
+                     "type" : "Literal"
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "N",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "OfficialPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "N",
+                  "expression" : {
+                     "path" : "name",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "use",
+                        "scope" : "N",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "official",
+                     "type" : "Literal"
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "N",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "FormatPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Concatenate",
+               "operand" : [ {
+                  "type" : "Concatenate",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "path" : "given",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "name",
+                              "type" : "OperandRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : " ",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "name" : "ToString",
+                  "libraryName" : "FHIRHelpers",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "path" : "family",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "name",
+                        "type" : "OperandRef"
+                     }
+                  } ]
+               } ]
+            },
+            "operand" : [ {
+               "name" : "name",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}HumanName",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "PatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "UsualPatientName",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "name" : "FormatPatientName",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "First",
+                     "source" : {
+                        "name" : "UsualPatientName",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "OfficialPatientName",
+                        "type" : "ExpressionRef"
+                     }
+                  },
+                  "then" : {
+                     "name" : "FormatPatientName",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "name" : "OfficialPatientName",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  },
+                  "else" : {
+                     "name" : "FormatPatientName",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "path" : "name",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "RaceExtensionValues",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -10288,110 +10483,8 @@
                      "element" : [ {
                         "name" : "name",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "ToString",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "type" : "First",
-                                    "source" : {
-                                       "type" : "Flatten",
-                                       "operand" : {
-                                          "type" : "Query",
-                                          "source" : [ {
-                                             "alias" : "$this",
-                                             "expression" : {
-                                                "path" : "name",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "Patient",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          } ],
-                                          "where" : {
-                                             "type" : "Not",
-                                             "operand" : {
-                                                "type" : "IsNull",
-                                                "operand" : {
-                                                   "path" : "given",
-                                                   "type" : "Property",
-                                                   "source" : {
-                                                      "name" : "$this",
-                                                      "type" : "AliasRef"
-                                                   }
-                                                }
-                                             }
-                                          },
-                                          "return" : {
-                                             "distinct" : false,
-                                             "expression" : {
-                                                "path" : "given",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       }
-                                    }
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : " ",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "type" : "First",
-                                 "source" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "path" : "name",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "family",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "family",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 }
-                              } ]
-                           } ]
+                           "name" : "PatientName",
+                           "type" : "ExpressionRef"
                         }
                      }, {
                         "name" : "id",

@@ -313,6 +313,27 @@ define GenderText:
   if Exists(GenderIdentityExtension) then GenderIdentityExtension[0].value.coding[0].code.value
   else Patient.gender.value
 
+define UsualPatientName:
+  Patient.name N
+    where N.use = 'usual'
+    return N
+
+define OfficialPatientName:
+  Patient.name N
+    where N.use = 'official'
+    return N
+
+define function FormatPatientName(name FHIR.HumanName):
+  First(name.given) + ' ' + name.family
+
+define PatientName:
+  if Exists(UsualPatientName) then
+    FormatPatientName(First(UsualPatientName))
+  else if Exists(OfficialPatientName) then
+    FormatPatientName(First(OfficialPatientName))
+  else
+    FormatPatientName(First(Patient.name))
+
 define RaceExtensionValues:
   (Patient.extension) E
     where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-race'
@@ -1323,7 +1344,7 @@ define Pregnant:
 define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
-    name: First(Patient.name.given) + ' ' +First(Patient.name.family),
+    name: PatientName,
     id: Patient.identifier,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,
