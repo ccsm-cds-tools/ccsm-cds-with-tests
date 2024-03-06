@@ -397,6 +397,22 @@
                "name" : "ICD-10"
             }
          }, {
+            "name" : "Immune Status",
+            "id" : "96381-9",
+            "display" : "Immune status",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOINC"
+            }
+         }, {
+            "name" : "Patient immunocompromised",
+            "id" : "370388006",
+            "display" : "Patient immunocompromised (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Biopsy Report",
             "id" : "65753-6",
             "display" : "Cervix Pathology biopsy report",
@@ -5513,6 +5529,54 @@
                } ]
             }
          }, {
+            "name" : "ImmunocompromisedObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "I",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}Observation",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Immune Status",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "ToConcept",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "scope" : "I",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }, {
+                     "type" : "ToConcept",
+                     "operand" : {
+                        "name" : "Patient immunocompromised",
+                        "type" : "CodeRef"
+                     }
+                  } ]
+               }
+            }
+         }, {
             "name" : "ResponsesToAbnormalBleedingQuestion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5660,23 +5724,29 @@
                            "name" : "PostmenopausalObservations",
                            "type" : "ExpressionRef"
                         }, {
-                           "name" : "ResponsesToAbnormalBleedingQuestion",
+                           "name" : "ImmunocompromisedObservations",
                            "type" : "ExpressionRef"
                         } ]
                      } ]
                   }, {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "ResponsesToVisibleLesionQuestion",
+                        "name" : "ResponsesToAbnormalBleedingQuestion",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "ResponsesToDesExposureQuestion",
+                        "name" : "ResponsesToVisibleLesionQuestion",
                         "type" : "ExpressionRef"
                      } ]
                   } ]
                }, {
-                  "name" : "ResponsesToFuturePregnancyConcernsQuestion",
-                  "type" : "ExpressionRef"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "ResponsesToDesExposureQuestion",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ResponsesToFuturePregnancyConcernsQuestion",
+                     "type" : "ExpressionRef"
+                  } ]
                } ]
             }
          }, {
@@ -9548,64 +9618,73 @@
                                  "operand" : [ {
                                     "type" : "Or",
                                     "operand" : [ {
-                                       "type" : "Exists",
-                                       "operand" : {
-                                          "name" : "HivDiagnoses",
-                                          "type" : "ExpressionRef"
-                                       }
+                                       "type" : "Or",
+                                       "operand" : [ {
+                                          "type" : "Exists",
+                                          "operand" : {
+                                             "name" : "HivDiagnoses",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "type" : "Exists",
+                                          "operand" : {
+                                             "name" : "SolidOrganTransplantDiagnoses",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ]
                                     }, {
                                        "type" : "Exists",
                                        "operand" : {
-                                          "name" : "SolidOrganTransplantDiagnoses",
+                                          "name" : "SolidOrganTransplantProcedures",
                                           "type" : "ExpressionRef"
                                        }
                                     } ]
                                  }, {
                                     "type" : "Exists",
                                     "operand" : {
-                                       "name" : "SolidOrganTransplantProcedures",
+                                       "name" : "SystemicLupusErythematosusDiagnoses",
                                        "type" : "ExpressionRef"
                                     }
                                  } ]
                               }, {
                                  "type" : "Exists",
                                  "operand" : {
-                                    "name" : "SystemicLupusErythematosusDiagnoses",
+                                    "name" : "HematopoieticStemCellTransplantDiagnoses",
                                     "type" : "ExpressionRef"
                                  }
                               } ]
                            }, {
                               "type" : "Exists",
                               "operand" : {
-                                 "name" : "HematopoieticStemCellTransplantDiagnoses",
+                                 "name" : "HematopoieticStemCellTransplantProcedures",
                                  "type" : "ExpressionRef"
                               }
                            } ]
                         }, {
                            "type" : "Exists",
                            "operand" : {
-                              "name" : "HematopoieticStemCellTransplantProcedures",
+                              "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
                               "type" : "ExpressionRef"
                            }
                         } ]
                      }, {
                         "type" : "Exists",
                         "operand" : {
-                           "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                           "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
                            "type" : "ExpressionRef"
                         }
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                        "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
                         "type" : "ExpressionRef"
                      }
                   } ]
                }, {
                   "type" : "Exists",
                   "operand" : {
-                     "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
+                     "name" : "ImmunocompromisedObservations",
                      "type" : "ExpressionRef"
                   }
                } ]

@@ -308,8 +308,29 @@ define ProposeImmediateTesting:
   Count(NilmCytologyReportsSinceImmunosuppressionOnset) = 0 or
   ProposedDateOfNextScreening same or before Now()
 
+define UnknownDateOfImmunosuppression:
+  Exists(Dash.ImmunocompromisedObservations) and
+  DateOfImmunosuppressionOnset is null
+
 define RecommendationText:
-  if ProposeImmediateTesting then
+  if UnknownDateOfImmunosuppression then
+    case
+      when Age21Through29 then
+        {
+          'For immunosuppressed individuals age 21 to 29, cervical cytology screening is recommended at the time of initial diagnosis, and should occur annually for 3 consecutive normal tests.',
+          'If the results of 3 consecutive cytology tests are normal, follow-up cytology screening should occur every 3 years until the age of 30 (given normal results).',
+          'After 30, continue screening with cytology alone or cotesting every 3 years and continue throughout the patient\'s lifetime.'
+        }
+      when Age30AndOlder then
+        {
+          'For immunosuppressed individuals age 30 or older, cervical cancer screening is recommended at the time of initial diagnosis using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone.',
+          'Cotesting should continue every 3 years throughout the patient\'s lifetime (given normal results).',
+          'If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient\'s lifetime.'
+        }
+      else // No recommendation for Age < 21
+        null
+      end
+  else if ProposeImmediateTesting then
     case
       when Age21Through29 then 
         { 'Cervical cytology screening is recommended.' }
