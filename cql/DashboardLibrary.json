@@ -1284,17 +1284,15 @@
                            }
                         }, {
                            "when" : {
-                              "type" : "Equivalent",
-                              "operand" : [ {
+                              "type" : "InValueSet",
+                              "code" : {
                                  "name" : "c",
                                  "type" : "AliasRef"
-                              }, {
-                                 "type" : "ToConcept",
-                                 "operand" : {
-                                    "name" : "Endocervical AIS",
-                                    "type" : "CodeRef"
-                                 }
-                              } ]
+                              },
+                              "valueset" : {
+                                 "name" : "AIS",
+                                 "preserve" : true
+                              }
                            },
                            "then" : {
                               "type" : "As",
@@ -1353,15 +1351,17 @@
                            }
                         }, {
                            "when" : {
-                              "type" : "InValueSet",
-                              "code" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
                                  "name" : "c",
                                  "type" : "AliasRef"
-                              },
-                              "valueset" : {
-                                 "name" : "AIS",
-                                 "preserve" : true
-                              }
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Endocervical AIS",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
                            },
                            "then" : {
                               "type" : "As",
@@ -1378,7 +1378,7 @@
                                     "name" : "rank",
                                     "value" : {
                                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "9",
+                                       "value" : "1",
                                        "type" : "Literal"
                                     }
                                  } ]

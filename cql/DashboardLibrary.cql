@@ -169,10 +169,10 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
         when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 8}
         when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'AEC-FN', rank: 8}        
-        when c ~ "Endocervical AIS" then {text: 'AIS', rank: 9}
         when c in "AIS" then {text: 'AIS', rank: 9}
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked low, to-do: confirm names
+        when c ~ "Endocervical AIS" then {text: 'AIS', rank: 1}
         when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
         when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
         when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
