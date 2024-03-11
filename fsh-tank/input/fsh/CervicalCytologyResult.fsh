@@ -42,6 +42,34 @@ Usage: #definition
 * compose.include[=].concept[=].display = "SCC"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Squamous cell carcinoma (morphologic abnormality)"
+* compose.include[=].concept[+].code = #373882004
+* compose.include[=].concept[=].display = "Endocervical Cells Favor Neoplasia"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Atypical endocervical cells, favor neoplastic (morphologic abnormality)"
+* compose.include[=].concept[+].code = #447760009
+* compose.include[=].concept[=].display = "Endocervical AIS"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Endocervical adenocarcinoma in situ (disorder)"
+* compose.include[=].concept[+].code = #441094005
+* compose.include[=].concept[=].display = "Atypical Endocervical Cells"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Atypical endocervical cells on cervical Papanicolaou smear (finding)"
+* compose.include[=].concept[+].code = #103646000
+* compose.include[=].concept[=].display = "Atypical Endometrial Cells"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Atypical endometrial cells of undetermined significance (morphologic abnormality)"
+* compose.include[=].concept[+].code = #125155008
+* compose.include[=].concept[=].display = "Benign Endometrial Cells"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Endometrial cells, cytologically benign, in a postmenopausal woman (finding)"
+* compose.include[=].concept[+].code = #126481000119106
+* compose.include[=].concept[=].display = "Unsatisfactory"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)"
+* compose.include[=].concept[+].code = #103639009
+* compose.include[=].concept[=].display = "Atypical Glandular Cells Uncertain"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)"
 * compose.include[=].concept[+].code = #373883009
 * compose.include[=].concept[=].display = "AGC favors neoplasia"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
@@ -54,3 +82,7 @@ Usage: #definition
 * compose.include[=].concept[=].display = "Absent Transformation Zone"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Cervical smear transformation zone cells absent (situation)"
+* compose.include[=].concept[+].code = #14295007
+* compose.include[=].concept[=].display = "Histiocytes"
+* compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
+* compose.include[=].concept[=].designation.value = "Resident tissue macrophage (cell)"

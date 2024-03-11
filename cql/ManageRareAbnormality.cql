@@ -80,10 +80,7 @@ context Patient
 // RARE ABNORMALITY #1: Rare Cytology
 
 define MostRecentCytologyReport:
-  if Count(Collate.SortedCytologyReports) > 0 then
-    Collate.SortedCytologyReports[0]
-  else
-    null
+  Collate.MostRecentCytologyReport
 
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
@@ -1104,13 +1101,13 @@ define LastKnownCytologyInterpretedAsHsilInPast5Years: // TODO: Combine this wit
     )
   )
   
-define CervixRemovalDateIsAfterMostRecentAisBiopsy:
+define CervixRemovalDateIsAfterLastKnownAisBiopsy:
   (CervixRemovalDate is not null) and 
-  CervixRemovalDate after Collate.MostRecentAisBiopsy.date
+  CervixRemovalDate after Collate.LastKnownAisBiopsy.date
 
 define MostRecentTreatmentSameDateOrAfterAis:
   MostRecentTreatment P
-  where CCF.ProcedureDate(P) same or after Collate.MostRecentAisBiopsy.date
+  where CCF.ProcedureDate(P) same or after Collate.LastKnownAisBiopsy.date
 
 define AisFoundDuringTreatmentOrHadTreatmentAfterAis:
   MostRecentTreatmentSameDateOrAfterAis is not null
@@ -1134,8 +1131,8 @@ define RecommendationForAisHistologyResults:
     // Age over 50
     when (
       AgeInYears() > 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
@@ -1151,8 +1148,8 @@ define RecommendationForAisHistologyResults:
     // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
@@ -1171,9 +1168,9 @@ define RecommendationForAisHistologyResults:
     // Age over 50
     when ( 
       AgeInYears() > 50 and
-      Collate.MostRecentAisBiopsy is not null and
+      Collate.LastKnownAisBiopsy is not null and
       AisFoundDuringTreatmentOrHadTreatmentAfterAis and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy
     ) then
       {
         short: 'See Details',
@@ -1188,8 +1185,8 @@ define RecommendationForAisHistologyResults:
     // Age 25 to 50
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
-      Collate.MostRecentAisBiopsy is not null and
-      not CervixRemovalDateIsAfterMostRecentAisBiopsy and
+      Collate.LastKnownAisBiopsy is not null and
+      not CervixRemovalDateIsAfterLastKnownAisBiopsy and
       AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
