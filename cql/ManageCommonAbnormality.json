@@ -614,26 +614,69 @@
                }
             }
          }, {
+            "name" : "IsMostRecentTest",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Equal",
+               "operand" : [ {
+                  "name" : "MostRecentReport",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "d",
+                  "type" : "OperandRef"
+               } ]
+            },
+            "operand" : [ {
+               "name" : "d",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "LookUpTable3",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetColposcopyResultsManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
+               "type" : "If",
+               "condition" : {
+                  "name" : "IsMostRecentTest",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               },
+               "then" : {
+                  "name" : "GetColposcopyResultsManagement",
+                  "libraryName" : "RiskTableLookup",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ReferringHpvResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ReferringCytologyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
                   "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
+               }
             }
          }, {
             "name" : "RowTable3",
@@ -704,11 +747,7 @@
                   }
                },
                "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
+                  "type" : "Null"
                }
             }
          }, {
@@ -1371,8 +1410,12 @@
                   "name" : "PostColposcopyManagementRecommendation",
                   "type" : "ExpressionRef"
                }, {
-                  "name" : "ColposcopyResultsManagementRecommendation",
-                  "type" : "ExpressionRef"
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "name" : "ColposcopyResultsManagementRecommendation",
+                     "type" : "ExpressionRef"
+                  }
                }, {
                   "asType" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "As",
@@ -2321,53 +2364,6 @@
                }
             }
          }, {
-            "name" : "AnyCytologyInterpretedAsAscusOrAbove",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "C",
-                  "expression" : {
-                     "name" : "SortedCytologyReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "In",
-                  "operand" : [ {
-                     "path" : "riskTableInput",
-                     "scope" : "C",
-                     "type" : "Property"
-                  }, {
-                     "type" : "List",
-                     "element" : [ {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "ASC-US",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "LSIL",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "ASC-H",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "AGC",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HSIL+",
-                        "type" : "Literal"
-                     } ]
-                  } ]
-               }
-            }
-         }, {
             "name" : "LastKnownCytologyInterpretedAsAscusOrAbove",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2375,6 +2371,7 @@
                "type" : "First",
                "source" : {
                   "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                  "libraryName" : "Collate",
                   "type" : "ExpressionRef"
                }
             }
@@ -2637,12 +2634,9 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "IsMostRecentTest",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -2721,12 +2715,9 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "IsMostRecentTest",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
@@ -2805,12 +2796,9 @@
                               "type" : "ExpressionRef"
                            } ]
                         }, {
-                           "type" : "Equal",
+                           "name" : "IsMostRecentTest",
+                           "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "MostRecentReport",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {

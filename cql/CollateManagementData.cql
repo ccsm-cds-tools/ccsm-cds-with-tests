@@ -266,6 +266,10 @@ define MostRecentCytologyReportWasWithinPastFiveYears:
 define CytologyInterpretedAsAscusOrAbove:
   MostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
 
+define AnyCytologyInterpretedAsAscusOrAbove:
+  SortedCytologyReports C
+    where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // BIOPSIES / HISTOLOGY
 
