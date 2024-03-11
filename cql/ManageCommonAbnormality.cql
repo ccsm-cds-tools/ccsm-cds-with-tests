@@ -326,15 +326,6 @@ define MostRecentCytologyAlone:
   else
     null
 
-define debugCytologyInterpretedAsAscus:
-  AnyTrue(
-    (Collate.MostRecentCytologyReport.allConclusions) aC
-      return aC ~ "ASC-US"
-  )
-  
-define debugCytologyAloneInterpretedAsAscus:
-  MostRecentCytologyAlone.riskTableInput = 'ASC-US'  
-  
 define SecondMostRecentCytologyIsNotACotest:
   Coalesce(
     (Collate.SortedHpvReports) S
