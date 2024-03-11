@@ -168,7 +168,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "AGC" then {text: 'AGC', rank: 6}
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
         when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 8}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'AEC-FN', rank: 8}        
+        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 8}        
         when c in "AIS" then {text: 'AIS', rank: 9}
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked low, to-do: confirm names
@@ -176,11 +176,12 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
         when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
         when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
-        when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank:1}
-        when c ~ "Unsatisfactory" then {text: "Unsatisfactory", rank: 1}
+        when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank: 1}
+        when c ~ "Unsatisfactory" then {text: 'Unsatisfactory', rank: 1}
         when c ~ "Absent Transformation Zone" then {text: 'Absent Transformation Zone', rank: 1}
-        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank:1}
-
+        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
+        when c ~ "Benign Glandular Cells" then {text: 'Benign Glandular Cells', rank: 1}
+        when c ~ "Endometrial Stromal Cells" then {text: 'Endometrial stromal cells', rank: 1}
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end
