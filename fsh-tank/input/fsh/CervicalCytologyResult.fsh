@@ -71,7 +71,7 @@ Usage: #definition
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)"
 * compose.include[=].concept[+].code = #373883009
-* compose.include[=].concept[=].display = "AGC favors neoplasia"
+* compose.include[=].concept[=].display = "AGC favor neoplasia"
 * compose.include[=].concept[=].designation.use = $SNOMED#900000000000003001 "Fully specified name"
 * compose.include[=].concept[=].designation.value = "Atypical glandular cells, favor neoplastic (morphologic abnormality)"
 * compose.include[=].concept[+].code = #254890008
