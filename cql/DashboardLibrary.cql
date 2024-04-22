@@ -496,6 +496,29 @@ define function HasBeenLocallyEdited(C Condition):
   if IsNull(C.identifier) then false
   else AnyTrue( (C.identifier) I return I.system = 'http://OUR-PLACEHOLDER-URL.com' )
 
+
+define function GetConditionDateFromEncounter(C Condition):
+  [Encounter] E 
+  where
+    Last(Split(C.encounter.reference, '/')) = E.id
+  return 
+    if E.period.end is not null then
+      E.period.end
+    else if E.period.start is not null then
+      E.period.start
+    else
+      null
+
+
+
+// define PertinentConditionDate:
+//   Common.DateTimeText(
+//       Coalesce(
+//         C.onset as FHIR.dateTime,
+//         C.recordedDate
+//       )
+//     ),
+
 define PertinentConditionsSummary:
   (PertinentConditions) C
   return {
@@ -504,7 +527,8 @@ define PertinentConditionsSummary:
     date: Common.DateTimeText(
       Coalesce(
         C.onset as FHIR.dateTime,
-        C.recordedDate
+        C.recordedDate,
+        First(GetConditionDateFromEncounter(C))
       )
     ),
     reference: 'Condition/' + C.id,
@@ -848,7 +872,7 @@ define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observati
     Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
     C3F.FindDate(O) = Common.DiagnosticReportDate(D)
   return ConvertHpvTestTypeToCodeableConcept(O) as FHIR.CodeableConcept
-
+ 
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(

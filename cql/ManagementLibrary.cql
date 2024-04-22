@@ -113,6 +113,7 @@ define IsIncluded:
     Exists(Dash.HighGradeOrCancerHistologyResults) or
     Exists(ManageSpecialPopulation.CervixRemovalWithHighGradePrecancerOrCancerReasonCode) or 
     Exists(ManageRareAbnormality.CervicalPrecancerTreatments)
+    // HasRecentAbnormalHistology ??
   )
 
 //------------------------------------------------------------------------------

@@ -5154,6 +5154,133 @@
                }
             } ]
          }, {
+            "name" : "GetConditionDateFromEncounter",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "E",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}Encounter",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Encounter",
+                     "type" : "Retrieve"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "type" : "Last",
+                     "source" : {
+                        "type" : "Split",
+                        "stringToSplit" : {
+                           "name" : "ToString",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "reference",
+                              "type" : "Property",
+                              "source" : {
+                                 "path" : "encounter",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "C",
+                                    "type" : "OperandRef"
+                                 }
+                              }
+                           } ]
+                        },
+                        "separator" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "/",
+                           "type" : "Literal"
+                        }
+                     }
+                  }, {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "id",
+                        "scope" : "E",
+                        "type" : "Property"
+                     } ]
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "type" : "If",
+                     "condition" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "end",
+                              "type" : "Property",
+                              "source" : {
+                                 "path" : "period",
+                                 "scope" : "E",
+                                 "type" : "Property"
+                              }
+                           }
+                        }
+                     },
+                     "then" : {
+                        "path" : "end",
+                        "type" : "Property",
+                        "source" : {
+                           "path" : "period",
+                           "scope" : "E",
+                           "type" : "Property"
+                        }
+                     },
+                     "else" : {
+                        "type" : "If",
+                        "condition" : {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "path" : "start",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "path" : "period",
+                                    "scope" : "E",
+                                    "type" : "Property"
+                                 }
+                              }
+                           }
+                        },
+                        "then" : {
+                           "path" : "start",
+                           "type" : "Property",
+                           "source" : {
+                              "path" : "period",
+                              "scope" : "E",
+                              "type" : "Property"
+                           }
+                        },
+                        "else" : {
+                           "asType" : "{http://hl7.org/fhir}dateTime",
+                           "type" : "As",
+                           "operand" : {
+                              "type" : "Null"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "C",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}Condition",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "PertinentConditionsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5232,6 +5359,16 @@
                                  "path" : "recordedDate",
                                  "scope" : "C",
                                  "type" : "Property"
+                              }, {
+                                 "type" : "First",
+                                 "source" : {
+                                    "name" : "GetConditionDateFromEncounter",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "name" : "C",
+                                       "type" : "AliasRef"
+                                    } ]
+                                 }
                               } ]
                            } ]
                         }
