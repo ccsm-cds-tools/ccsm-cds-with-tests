@@ -167,29 +167,25 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "ASC-US" then {text: 'ASC-US', rank: 3}
         when c ~ "LSIL" then {text: 'LSIL', rank: 4}
         when c ~ "ASC-H" then {text: 'ASC-H', rank: 5}
-
         when c ~ "AGC" then {text: 'AGC', rank: 6}
-        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 6}
-        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 6}
-        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 6}
-
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
 
-        // Will confirm and rerank
-        when c in "AIS" then {text: 'AIS', rank: 8}
-        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 8}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 8}        
+        // Rare cytologies added so they are not interpreted as UNK, but ranked
+        // low to avoid competing with existing cytology results
+        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 1}
+        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
+        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
+        when c in "AIS" then {text: 'AIS', rank: 1}
+        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 1}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 1}        
+        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
 
-        // Rare cytologies added so they are not interpreted as UNK, but ranked low, to-do: confirm names
         when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
         when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank: 1}
         when c ~ "Benign Glandular Cells" then {text: 'Benign Glandular Cells', rank: 1}
         when c ~ "Endometrial Stromal Cells" then {text: 'Endometrial stromal cells', rank: 1}
         when c ~ "Unsatisfactory" then {text: 'Unsatisfactory', rank: 1}
         when c ~ "Absent Transformation Zone" then {text: 'Absent Transformation Zone', rank: 1}
-
-        // Special case for AEC, will rerank 
-        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
 
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
