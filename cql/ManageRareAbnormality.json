@@ -304,65 +304,9 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "type" : "Greater",
-                  "operand" : [ {
-                     "type" : "Count",
-                     "source" : {
-                        "name" : "SortedCytologyReports",
-                        "libraryName" : "Collate",
-                        "type" : "ExpressionRef"
-                     }
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
-                  } ]
-               },
-               "then" : {
-                  "type" : "Indexer",
-                  "operand" : [ {
-                     "name" : "SortedCytologyReports",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
-                  } ]
-               },
-               "else" : {
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  },
-                  "asTypeSpecifier" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "riskTableInput",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     }, {
-                        "name" : "allConclusions",
-                        "elementType" : {
-                           "type" : "ListTypeSpecifier",
-                           "elementType" : {
-                              "name" : "{http://hl7.org/fhir}CodeableConcept",
-                              "type" : "NamedTypeSpecifier"
-                           }
-                        }
-                     }, {
-                        "name" : "date",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
+               "name" : "MostRecentCytologyReport",
+               "libraryName" : "Collate",
+               "type" : "ExpressionRef"
             }
          }, {
             "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
@@ -8530,7 +8474,7 @@
                } ]
             }
          }, {
-            "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
+            "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -8553,7 +8497,7 @@
                      "path" : "date",
                      "type" : "Property",
                      "source" : {
-                        "name" : "MostRecentAisBiopsy",
+                        "name" : "LastKnownAisBiopsy",
                         "libraryName" : "Collate",
                         "type" : "ExpressionRef"
                      }
@@ -8588,7 +8532,7 @@
                      "path" : "date",
                      "type" : "Property",
                      "source" : {
-                        "name" : "MostRecentAisBiopsy",
+                        "name" : "LastKnownAisBiopsy",
                         "libraryName" : "Collate",
                         "type" : "ExpressionRef"
                      }
@@ -8701,7 +8645,7 @@
                               "operand" : {
                                  "type" : "IsNull",
                                  "operand" : {
-                                    "name" : "MostRecentAisBiopsy",
+                                    "name" : "LastKnownAisBiopsy",
                                     "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }
@@ -8710,7 +8654,7 @@
                         }, {
                            "type" : "Not",
                            "operand" : {
-                              "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
+                              "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",
                               "type" : "ExpressionRef"
                            }
                         } ]
@@ -8814,7 +8758,7 @@
                               "operand" : {
                                  "type" : "IsNull",
                                  "operand" : {
-                                    "name" : "MostRecentAisBiopsy",
+                                    "name" : "LastKnownAisBiopsy",
                                     "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }
@@ -8823,7 +8767,7 @@
                         }, {
                            "type" : "Not",
                            "operand" : {
-                              "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
+                              "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",
                               "type" : "ExpressionRef"
                            }
                         } ]
@@ -8910,7 +8854,7 @@
                               "operand" : {
                                  "type" : "IsNull",
                                  "operand" : {
-                                    "name" : "MostRecentAisBiopsy",
+                                    "name" : "LastKnownAisBiopsy",
                                     "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }
@@ -8923,7 +8867,7 @@
                      }, {
                         "type" : "Not",
                         "operand" : {
-                           "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
+                           "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",
                            "type" : "ExpressionRef"
                         }
                      } ]
@@ -9020,7 +8964,7 @@
                               "operand" : {
                                  "type" : "IsNull",
                                  "operand" : {
-                                    "name" : "MostRecentAisBiopsy",
+                                    "name" : "LastKnownAisBiopsy",
                                     "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }
@@ -9029,7 +8973,7 @@
                         }, {
                            "type" : "Not",
                            "operand" : {
-                              "name" : "CervixRemovalDateIsAfterMostRecentAisBiopsy",
+                              "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",
                               "type" : "ExpressionRef"
                            }
                         } ]
