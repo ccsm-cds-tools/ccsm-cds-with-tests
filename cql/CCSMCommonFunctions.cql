@@ -262,8 +262,8 @@ define function LookBack(DiagnosticReportList List<DiagnosticReport>, LookBack S
 * @param DiagnosticReportList - a list of DiagnosticReports
 * @param LookBack - the lookback period for when the DiagnosticReport specimen was collected
 * @param LookBackDate - the date that the DiagnosticReport test must fall after
-* @returns {List<DiagnosticReport>} a list of DiagnosticReports in the look back period, or null if null
-* was passed in
+* @returns {List<DiagnosticReport>} a list of DiagnosticReports in the look back period and after the
+* look back date, or null if null was passed in
 */
 define function LookBack(DiagnosticReportList List<DiagnosticReport>, LookBack System.Quantity, LookBackDate System.DateTime):
   DiagnosticReportList D
