@@ -146,7 +146,9 @@ code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stroma
 
 parameter MedicationLookbackPeriod default 6 months
 parameter HrHPVLookbackPeriod default 10 years
+parameter HrHPVLookbackDate default '1900-01-01'
 parameter CervicalCytologyLookbackPeriod default 10 years
+parameter CervicalCytologyLookbackDate default '1900-01-01'
 parameter QuestionnaireUrl default 'http://OUR-PLACEHOLDER-URL.com/Questionnaire/ProvideMoreInformation'
 parameter AbnormalTestLookbackPeriod default 8 years
 
@@ -872,11 +874,16 @@ define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observati
     C3F.FindDate(O) = Common.DiagnosticReportDate(D)
   return ConvertHpvTestTypeToCodeableConcept(O) as FHIR.CodeableConcept
 
+
+define HrHPVLookbackDateTime:
+  ToDateTime(HrHPVLookbackDate)
+
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
       [DiagnosticReport: "HPV Test"],
-      HrHPVLookbackPeriod
+      HrHPVLookbackPeriod,
+      HrHPVLookbackDateTime
     )
   )
 
@@ -898,11 +905,15 @@ define MostRecentPositiveHpv:
       (CollateConclusionCodes(R,HpvObservations)) CCC return CCC in "High Risk HPV Positive Results"
     )
 
+define CervicalCytologyLookbackDateTime:
+  ToDateTime(CervicalCytologyLookbackDate)
+
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
       [DiagnosticReport: "Pap Test"],
-      CervicalCytologyLookbackPeriod
+      CervicalCytologyLookbackPeriod,
+      CervicalCytologyLookbackDateTime
     )
   )
 
