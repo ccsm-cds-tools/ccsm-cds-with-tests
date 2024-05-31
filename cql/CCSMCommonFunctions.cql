@@ -246,9 +246,9 @@ define function MostRecentDiagnosticReport(ReportList List<FHIR.DiagnosticReport
 /**
 * Diagnostic Reports that are issued in the specified "look back" period.
 * TODO: Rename to LookBack once the execution engine supports overloaded functions.
-* @param MedList - a list of MedicationAdministrations
-* @param LookBack - the lookback period for when the medication was prescribed
-* @returns {List<MedicationStatement>} a list of MedicationAdministrations prescribed in the look back period, or null if null
+* @param DiagnosticReportList - a list of DiagnosticReports
+* @param LookBack - the lookback period for when the DiagnosticReport specimen was collected
+* @returns {List<DiagnosticReport>} a list of DiagnosticReports in the look back period, or null if null
 * was passed in
 */
 define function LookBack(DiagnosticReportList List<DiagnosticReport>, LookBack System.Quantity):
@@ -256,6 +256,20 @@ define function LookBack(DiagnosticReportList List<DiagnosticReport>, LookBack S
     let LookBackInterval: Interval[Now() - LookBack, Now()]
     where (D.effective as FHIR.dateTime).value in LookBackInterval
       or C3F.PeriodToInterval(D.effective as FHIR.Period) overlaps LookBackInterval
+
+  /**
+* Diagnostic Reports that are issued in the specified "look back" period and after a specified "look back" date
+* @param DiagnosticReportList - a list of DiagnosticReports
+* @param LookBack - the lookback period for when the DiagnosticReport specimen was collected
+* @param LookBackDate - the date that the DiagnosticReport test must fall after
+* @returns {List<DiagnosticReport>} a list of DiagnosticReports in the look back period and after the
+* look back date, or null if null was passed in
+*/
+define function LookBack(DiagnosticReportList List<DiagnosticReport>, LookBack System.Quantity, LookBackDate System.DateTime):
+  DiagnosticReportList D
+    let LookBackInterval: Interval[Now() - LookBack, Now()]
+    where ( ((D.effective as FHIR.dateTime).value in LookBackInterval) and ((D.effective as FHIR.dateTime).value after LookBackDate) )
+      or ( (C3F.PeriodToInterval(D.effective as FHIR.Period) overlaps LookBackInterval) and (C3F.PeriodToInterval(D.effective as FHIR.Period) starts after LookBackDate) )
 
 // TODO: Parameterize by association window (currently hard-coded to 1 day)
 define function AssociateDiagnosticReports(d1 FHIR.DiagnosticReport, d2 FHIR.DiagnosticReport):
