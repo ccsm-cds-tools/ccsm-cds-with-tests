@@ -196,6 +196,25 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     {{text: 'ALL', rank: 0}}
 
 /**
+ * Takes an interpreted test result tuple and maps it to a sting value that represents
+ * the text that should be used to describe this result in the front-end.
+ * @param testInterpretation System.String - a String representing the
+ * interpretation of a test
+ * @returns System.String the lab result interpretation text to be displayed to the front-end
+ */
+define function FormatTestResultInterpretation(testInterpretation System.String):
+  if testInterpretation is not null then
+    (testInterpretation) i
+    return
+      case
+        when i = 'UNK' then ''
+        when i = 'NULL' then ''
+        else i
+      end
+  else 
+    ''
+
+/**
  * Takes a list of HPV conclusion codes and maps each to a text value and a numerical
  * ranking. The text value can be used as input to the risk tables and the numerical
  * ranking is meant to convey precendence so that the most specific conclusion can
@@ -944,7 +963,7 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
   return {
     name: ReportType,
     longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType)),
+    value: FormatTestResultInterpretation(HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType))),
     longValue: flatten(
       (CollatedCodes) cC
         return (cC.coding) cCC

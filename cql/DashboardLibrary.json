@@ -1452,6 +1452,91 @@
                }
             } ]
          }, {
+            "name" : "FormatTestResultInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "testInterpretation",
+                        "type" : "OperandRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "i",
+                     "expression" : {
+                        "name" : "testInterpretation",
+                        "type" : "OperandRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "type" : "Case",
+                        "caseItem" : [ {
+                           "when" : {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "name" : "i",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "UNK",
+                                 "type" : "Literal"
+                              } ]
+                           },
+                           "then" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equal",
+                              "operand" : [ {
+                                 "name" : "i",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "NULL",
+                                 "type" : "Literal"
+                              } ]
+                           },
+                           "then" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           }
+                        } ],
+                        "else" : {
+                           "name" : "i",
+                           "type" : "AliasRef"
+                        }
+                     }
+                  }
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "",
+                  "type" : "Literal"
+               }
+            },
+            "operand" : [ {
+               "name" : "testInterpretation",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "HpvInterpretation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8616,17 +8701,21 @@
                      }, {
                         "name" : "value",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
+                           "name" : "FormatTestResultInterpretation",
                            "type" : "FunctionRef",
                            "operand" : [ {
-                              "name" : "Interpretation",
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "CollatedCodes",
-                                 "type" : "QueryLetRef"
-                              }, {
-                                 "name" : "ReportType",
-                                 "type" : "OperandRef"
+                                 "name" : "Interpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "CollatedCodes",
+                                    "type" : "QueryLetRef"
+                                 }, {
+                                    "name" : "ReportType",
+                                    "type" : "OperandRef"
+                                 } ]
                               } ]
                            } ]
                         }
