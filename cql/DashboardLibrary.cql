@@ -102,6 +102,8 @@ code "In utero exposure to DES": '736060002' from "SNOMED-CT" display 'History o
 code "Systemic lupus erythematosus ICD-9-CM Code": '710.0' from "ICD-9" display 'Systemic lupus erythematosus' // AKA: Diagnosis of Systemic Lupus Erythematosus
 code "Chronic GvHD ICD-9 Code": '279.52' from "ICD-9" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
 code "Chronic GvHD ICD-10 Code": 'D89.811' from "ICD-10" display 'Chronic graft-versus-host disease' // AKA: Diagnosis of Chronic GvHD
+code "Immune Status": '96381-9' from "LOINC" display 'Immune status'
+code "Patient immunocompromised": '370388006' from "SNOMED-CT" display 'Patient immunocompromised (finding)'
 code "Biopsy Report": '65753-6' from "LOINC" display 'Cervix Pathology biopsy report' // A.K.A. "Histology tests"
 code "Negative": '260385009' from "SNOMED-CT" display 'Negative (qualifier value)'
 code "NILM": '373887005' from "SNOMED-CT" display 'Negative for intraepithelial lesion or malignancy (finding)'
@@ -124,6 +126,11 @@ code "Histiocytes": '14295007' from "SNOMED-CT" display 'Resident tissue macroph
 code "AGC Favor Neoplasia": '373883009' from "SNOMED-CT" display 'Atypical glandular cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Cells Favor Neoplasia": '373882004' from "SNOMED-CT" display 'Atypical endocervical cells, favor neoplastic (morphologic abnormality)'
 code "Endocervical Curettage": '52889002' from "SNOMED-CT" display 'Endocervical curettage (procedure)'
+code "Atypical Glandular Cells Uncertain": '103639009' from "SNOMED-CT" display 'Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)'
+code "Atypical Endometrial Cells": '103646000' from "SNOMED-CT" display 'Atypical endometrial cells of undetermined significance (morphologic abnormality)'
+code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)'
+code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
+code "Endocervical AIS": '447760009' from "SNOMED-CT" display 'Endocervical adenocarcinoma in situ (disorder)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -139,7 +146,9 @@ code "Endometrial Stromal Cells": 'ESC' from "LOCAL" display 'Endometrial stroma
 
 parameter MedicationLookbackPeriod default 6 months
 parameter HrHPVLookbackPeriod default 10 years
+parameter HrHPVLookbackDate default '1900-01-01'
 parameter CervicalCytologyLookbackPeriod default 10 years
+parameter CervicalCytologyLookbackDate default '1900-01-01'
 parameter QuestionnaireUrl default 'http://OUR-PLACEHOLDER-URL.com/Questionnaire/ProvideMoreInformation'
 parameter AbnormalTestLookbackPeriod default 8 years
 
@@ -162,6 +171,24 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "ASC-H" then {text: 'ASC-H', rank: 5}
         when c ~ "AGC" then {text: 'AGC', rank: 6}
         when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
+
+        // Rare cytologies added so they are not interpreted as UNK, but ranked
+        // low to avoid competing with existing cytology results
+        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 1}
+        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
+        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
+        when c in "AIS" then {text: 'AIS', rank: 1}
+        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 1}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 1}        
+        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
+
+        when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
+        when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank: 1}
+        when c ~ "Benign Glandular Cells" then {text: 'Benign Glandular Cells', rank: 1}
+        when c ~ "Endometrial Stromal Cells" then {text: 'Endometrial stromal cells', rank: 1}
+        when c ~ "Unsatisfactory" then {text: 'Unsatisfactory', rank: 1}
+        when c ~ "Absent Transformation Zone" then {text: 'Absent Transformation Zone', rank: 1}
+
         when c is null then {text: 'NULL', rank: -1}
         else {text: 'UNK', rank: 1}
       end
@@ -310,6 +337,27 @@ define FemaleorTransgenderMale:
 define GenderText:
   if Exists(GenderIdentityExtension) then GenderIdentityExtension[0].value.coding[0].code.value
   else Patient.gender.value
+
+define UsualPatientName:
+  Patient.name N
+    where N.use = 'usual'
+    return N
+
+define OfficialPatientName:
+  Patient.name N
+    where N.use = 'official'
+    return N
+
+define function FormatPatientName(name FHIR.HumanName):
+  First(name.given) + ' ' + name.family
+
+define PatientName:
+  if Exists(UsualPatientName) then
+    FormatPatientName(First(UsualPatientName))
+  else if Exists(OfficialPatientName) then
+    FormatPatientName(First(OfficialPatientName))
+  else
+    FormatPatientName(First(Patient.name))
 
 define RaceExtensionValues:
   (Patient.extension) E
@@ -541,6 +589,11 @@ define PostmenopausalObservations:
     [Observation: "Postmenopausal"]
   )
 
+define ImmunocompromisedObservations:
+  // Note: does not need to be verified, since this could be manually enterred (for example, via a toggle switch)
+  [Observation: "Immune Status"] I
+    where I.value ~ "Patient immunocompromised"
+
 define PertinentObservations:
   AbnormalUterineOrVaginalBleedingObservations union
   CervicalOrVaginalLesionObservations union
@@ -549,6 +602,7 @@ define PertinentObservations:
   AbsenceOfCervixObservations union
   PremenopausalObservations union
   PostmenopausalObservations union
+  ImmunocompromisedObservations union
   // Clinician-provided Observations:
   ResponsesToAbnormalBleedingQuestion union
   ResponsesToVisibleLesionQuestion union
@@ -820,11 +874,16 @@ define function ValuesFromObservation(D DiagnosticReport, ObsList List<Observati
     C3F.FindDate(O) = Common.DiagnosticReportDate(D)
   return ConvertHpvTestTypeToCodeableConcept(O) as FHIR.CodeableConcept
 
+
+define HrHPVLookbackDateTime:
+  ToDateTime(HrHPVLookbackDate)
+
 define HpvDiagnosticReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
       [DiagnosticReport: "HPV Test"],
-      HrHPVLookbackPeriod
+      HrHPVLookbackPeriod,
+      HrHPVLookbackDateTime
     )
   )
 
@@ -846,11 +905,15 @@ define MostRecentPositiveHpv:
       (CollateConclusionCodes(R,HpvObservations)) CCC return CCC in "High Risk HPV Positive Results"
     )
 
+define CervicalCytologyLookbackDateTime:
+  ToDateTime(CervicalCytologyLookbackDate)
+
 define CervicalCytologyReports:
   Common.CompletedDiagnosticReport(
     Common.LookBack(
       [DiagnosticReport: "Pap Test"],
-      CervicalCytologyLookbackPeriod
+      CervicalCytologyLookbackPeriod,
+      CervicalCytologyLookbackDateTime
     )
   )
 
@@ -1130,7 +1193,8 @@ define Immunocompromised:
   Exists(HematopoieticStemCellTransplantProcedures) or
   Exists(ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell) or
   Exists(GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell) or
-  Exists(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant)
+  Exists(InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant) or
+  Exists(ImmunocompromisedObservations)
 
 // Logic to determine most recent distinct immunocompromised event:
 
@@ -1314,7 +1378,7 @@ define Pregnant:
 define CervicalCancerScreeningAndMedicalHistory:
 {
   patientInfo: {
-    name: First(Patient.name.given) + ' ' +First(Patient.name.family),
+    name: PatientName,
     id: Patient.identifier,
     isPregnant: Pregnant,
     dateOfBirth: Patient.birthDate,

@@ -56,12 +56,28 @@
                "type" : "Quantity"
             }
          }, {
+            "name" : "HrHPVLookbackDate",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "1900-01-01",
+               "type" : "Literal"
+            }
+         }, {
             "name" : "CervicalCytologyLookbackPeriod",
             "accessLevel" : "Public",
             "default" : {
                "value" : 10,
                "unit" : "years",
                "type" : "Quantity"
+            }
+         }, {
+            "name" : "CervicalCytologyLookbackDate",
+            "accessLevel" : "Public",
+            "default" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "1900-01-01",
+               "type" : "Literal"
             }
          }, {
             "name" : "QuestionnaireUrl",
@@ -397,6 +413,22 @@
                "name" : "ICD-10"
             }
          }, {
+            "name" : "Immune Status",
+            "id" : "96381-9",
+            "display" : "Immune status",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "LOINC"
+            }
+         }, {
+            "name" : "Patient immunocompromised",
+            "id" : "370388006",
+            "display" : "Patient immunocompromised (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Biopsy Report",
             "id" : "65753-6",
             "display" : "Cervix Pathology biopsy report",
@@ -568,6 +600,46 @@
             "name" : "Endocervical Curettage",
             "id" : "52889002",
             "display" : "Endocervical curettage (procedure)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Atypical Glandular Cells Uncertain",
+            "id" : "103639009",
+            "display" : "Atypical glandular cells of uncertain significance, probably benign (morphologic abnormality)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Atypical Endometrial Cells",
+            "id" : "103646000",
+            "display" : "Atypical endometrial cells of undetermined significance (morphologic abnormality)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Unsatisfactory",
+            "id" : "126481000119106",
+            "display" : "Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Absent Transformation Zone",
+            "id" : "412716005",
+            "display" : "Cervical smear transformation zone cells absent (situation)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Endocervical AIS",
+            "id" : "447760009",
+            "display" : "Endocervical adenocarcinoma in situ (disorder)",
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
@@ -878,6 +950,420 @@
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "7",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "AGC Favor Neoplasia",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC-FN",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Atypical Endocervical Cells",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Atypical Endocervical Cells",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Atypical Glandular Cells Uncertain",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC-US",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "InValueSet",
+                              "code" : {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              },
+                              "valueset" : {
+                                 "name" : "AIS",
+                                 "preserve" : true
+                              }
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Endocervical AIS",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Endocervical AIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Endocervical Cells Favor Neoplasia",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Endocervical Cells Favor Neoplasia",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Atypical Endometrial Cells",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Atypical Endometrial Cells",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Histiocytes",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Histiocytes",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Benign Endometrial Cells",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Benign Endometrial Cells",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Benign Glandular Cells",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Benign Glandular Cells",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Endometrial Stromal Cells",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Endometrial stromal cells",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Unsatisfactory",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Unsatisfactory",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Absent Transformation Zone",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "text",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Absent Transformation Zone",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
                                     "type" : "Literal"
                                  }
                               } ]
@@ -3222,6 +3708,201 @@
                }
             }
          }, {
+            "name" : "UsualPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "N",
+                  "expression" : {
+                     "path" : "name",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "use",
+                        "scope" : "N",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "usual",
+                     "type" : "Literal"
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "N",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "OfficialPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "N",
+                  "expression" : {
+                     "path" : "name",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "use",
+                        "scope" : "N",
+                        "type" : "Property"
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "official",
+                     "type" : "Literal"
+                  } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "N",
+                     "type" : "AliasRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "FormatPatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Concatenate",
+               "operand" : [ {
+                  "type" : "Concatenate",
+                  "operand" : [ {
+                     "name" : "ToString",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "path" : "given",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "name",
+                              "type" : "OperandRef"
+                           }
+                        }
+                     } ]
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : " ",
+                     "type" : "Literal"
+                  } ]
+               }, {
+                  "name" : "ToString",
+                  "libraryName" : "FHIRHelpers",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "path" : "family",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "name",
+                        "type" : "OperandRef"
+                     }
+                  } ]
+               } ]
+            },
+            "operand" : [ {
+               "name" : "name",
+               "operandTypeSpecifier" : {
+                  "name" : "{http://hl7.org/fhir}HumanName",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "PatientName",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Exists",
+                  "operand" : {
+                     "name" : "UsualPatientName",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "name" : "FormatPatientName",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "type" : "First",
+                     "source" : {
+                        "name" : "UsualPatientName",
+                        "type" : "ExpressionRef"
+                     }
+                  } ]
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "Exists",
+                     "operand" : {
+                        "name" : "OfficialPatientName",
+                        "type" : "ExpressionRef"
+                     }
+                  },
+                  "then" : {
+                     "name" : "FormatPatientName",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "name" : "OfficialPatientName",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  },
+                  "else" : {
+                     "name" : "FormatPatientName",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "type" : "First",
+                        "source" : {
+                           "path" : "name",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "RaceExtensionValues",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5318,6 +5999,54 @@
                } ]
             }
          }, {
+            "name" : "ImmunocompromisedObservations",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "I",
+                  "expression" : {
+                     "dataType" : "{http://hl7.org/fhir}Observation",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Observation",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Immune Status",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Equivalent",
+                  "operand" : [ {
+                     "name" : "ToConcept",
+                     "libraryName" : "FHIRHelpers",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "asType" : "{http://hl7.org/fhir}CodeableConcept",
+                        "type" : "As",
+                        "operand" : {
+                           "path" : "value",
+                           "scope" : "I",
+                           "type" : "Property"
+                        }
+                     } ]
+                  }, {
+                     "type" : "ToConcept",
+                     "operand" : {
+                        "name" : "Patient immunocompromised",
+                        "type" : "CodeRef"
+                     }
+                  } ]
+               }
+            }
+         }, {
             "name" : "ResponsesToAbnormalBleedingQuestion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -5465,23 +6194,29 @@
                            "name" : "PostmenopausalObservations",
                            "type" : "ExpressionRef"
                         }, {
-                           "name" : "ResponsesToAbnormalBleedingQuestion",
+                           "name" : "ImmunocompromisedObservations",
                            "type" : "ExpressionRef"
                         } ]
                      } ]
                   }, {
                      "type" : "Union",
                      "operand" : [ {
-                        "name" : "ResponsesToVisibleLesionQuestion",
+                        "name" : "ResponsesToAbnormalBleedingQuestion",
                         "type" : "ExpressionRef"
                      }, {
-                        "name" : "ResponsesToDesExposureQuestion",
+                        "name" : "ResponsesToVisibleLesionQuestion",
                         "type" : "ExpressionRef"
                      } ]
                   } ]
                }, {
-                  "name" : "ResponsesToFuturePregnancyConcernsQuestion",
-                  "type" : "ExpressionRef"
+                  "type" : "Union",
+                  "operand" : [ {
+                     "name" : "ResponsesToDesExposureQuestion",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ResponsesToFuturePregnancyConcernsQuestion",
+                     "type" : "ExpressionRef"
+                  } ]
                } ]
             }
          }, {
@@ -7096,6 +7831,17 @@
                }
             } ]
          }, {
+            "name" : "HrHPVLookbackDateTime",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "ToDateTime",
+               "operand" : {
+                  "name" : "HrHPVLookbackDate",
+                  "type" : "ParameterRef"
+               }
+            }
+         }, {
             "name" : "HpvDiagnosticReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7121,6 +7867,9 @@
                   }, {
                      "name" : "HrHPVLookbackPeriod",
                      "type" : "ParameterRef"
+                  }, {
+                     "name" : "HrHPVLookbackDateTime",
+                     "type" : "ExpressionRef"
                   } ]
                } ]
             }
@@ -7262,6 +8011,17 @@
                }
             }
          }, {
+            "name" : "CervicalCytologyLookbackDateTime",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "ToDateTime",
+               "operand" : {
+                  "name" : "CervicalCytologyLookbackDate",
+                  "type" : "ParameterRef"
+               }
+            }
+         }, {
             "name" : "CervicalCytologyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -7287,6 +8047,9 @@
                   }, {
                      "name" : "CervicalCytologyLookbackPeriod",
                      "type" : "ParameterRef"
+                  }, {
+                     "name" : "CervicalCytologyLookbackDateTime",
+                     "type" : "ExpressionRef"
                   } ]
                } ]
             }
@@ -9353,64 +10116,73 @@
                                  "operand" : [ {
                                     "type" : "Or",
                                     "operand" : [ {
-                                       "type" : "Exists",
-                                       "operand" : {
-                                          "name" : "HivDiagnoses",
-                                          "type" : "ExpressionRef"
-                                       }
+                                       "type" : "Or",
+                                       "operand" : [ {
+                                          "type" : "Exists",
+                                          "operand" : {
+                                             "name" : "HivDiagnoses",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }, {
+                                          "type" : "Exists",
+                                          "operand" : {
+                                             "name" : "SolidOrganTransplantDiagnoses",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       } ]
                                     }, {
                                        "type" : "Exists",
                                        "operand" : {
-                                          "name" : "SolidOrganTransplantDiagnoses",
+                                          "name" : "SolidOrganTransplantProcedures",
                                           "type" : "ExpressionRef"
                                        }
                                     } ]
                                  }, {
                                     "type" : "Exists",
                                     "operand" : {
-                                       "name" : "SolidOrganTransplantProcedures",
+                                       "name" : "SystemicLupusErythematosusDiagnoses",
                                        "type" : "ExpressionRef"
                                     }
                                  } ]
                               }, {
                                  "type" : "Exists",
                                  "operand" : {
-                                    "name" : "SystemicLupusErythematosusDiagnoses",
+                                    "name" : "HematopoieticStemCellTransplantDiagnoses",
                                     "type" : "ExpressionRef"
                                  }
                               } ]
                            }, {
                               "type" : "Exists",
                               "operand" : {
-                                 "name" : "HematopoieticStemCellTransplantDiagnoses",
+                                 "name" : "HematopoieticStemCellTransplantProcedures",
                                  "type" : "ExpressionRef"
                               }
                            } ]
                         }, {
                            "type" : "Exists",
                            "operand" : {
-                              "name" : "HematopoieticStemCellTransplantProcedures",
+                              "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
                               "type" : "ExpressionRef"
                            }
                         } ]
                      }, {
                         "type" : "Exists",
                         "operand" : {
-                           "name" : "ChronicGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                           "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
                            "type" : "ExpressionRef"
                         }
                      } ]
                   }, {
                      "type" : "Exists",
                      "operand" : {
-                        "name" : "GenitalGraftVersusHostDiseaseDiagnosesAfterStemCell",
+                        "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
                         "type" : "ExpressionRef"
                      }
                   } ]
                }, {
                   "type" : "Exists",
                   "operand" : {
-                     "name" : "InflammatoryBowelDiseaseOrRheumatoidArthritisDiagnosesAndOnImmunosuppressant",
+                     "name" : "ImmunocompromisedObservations",
                      "type" : "ExpressionRef"
                   }
                } ]
@@ -10209,110 +10981,8 @@
                      "element" : [ {
                         "name" : "name",
                         "value" : {
-                           "type" : "Concatenate",
-                           "operand" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "name" : "ToString",
-                                 "libraryName" : "FHIRHelpers",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "type" : "First",
-                                    "source" : {
-                                       "type" : "Flatten",
-                                       "operand" : {
-                                          "type" : "Query",
-                                          "source" : [ {
-                                             "alias" : "$this",
-                                             "expression" : {
-                                                "path" : "name",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "Patient",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          } ],
-                                          "where" : {
-                                             "type" : "Not",
-                                             "operand" : {
-                                                "type" : "IsNull",
-                                                "operand" : {
-                                                   "path" : "given",
-                                                   "type" : "Property",
-                                                   "source" : {
-                                                      "name" : "$this",
-                                                      "type" : "AliasRef"
-                                                   }
-                                                }
-                                             }
-                                          },
-                                          "return" : {
-                                             "distinct" : false,
-                                             "expression" : {
-                                                "path" : "given",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "$this",
-                                                   "type" : "AliasRef"
-                                                }
-                                             }
-                                          }
-                                       }
-                                    }
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : " ",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "name" : "ToString",
-                              "libraryName" : "FHIRHelpers",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "type" : "First",
-                                 "source" : {
-                                    "type" : "Query",
-                                    "source" : [ {
-                                       "alias" : "$this",
-                                       "expression" : {
-                                          "path" : "name",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    } ],
-                                    "where" : {
-                                       "type" : "Not",
-                                       "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "family",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "$this",
-                                                "type" : "AliasRef"
-                                             }
-                                          }
-                                       }
-                                    },
-                                    "return" : {
-                                       "distinct" : false,
-                                       "expression" : {
-                                          "path" : "family",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "$this",
-                                             "type" : "AliasRef"
-                                          }
-                                       }
-                                    }
-                                 }
-                              } ]
-                           } ]
+                           "name" : "PatientName",
+                           "type" : "ExpressionRef"
                         }
                      }, {
                         "name" : "id",
