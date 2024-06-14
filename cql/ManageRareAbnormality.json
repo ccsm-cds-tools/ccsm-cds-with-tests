@@ -5240,6 +5240,97 @@
                }
             }
          }, {
+            "name" : "AnyHistologyInterpretedAsCin1OrLess",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "aC",
+                  "expression" : {
+                     "name" : "SortedBiopsyReports",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "In",
+                  "operand" : [ {
+                     "path" : "riskTableInput",
+                     "scope" : "aC",
+                     "type" : "Property"
+                  }, {
+                     "type" : "List",
+                     "element" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "CIN1",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "<CIN1",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            }
+         }, {
+            "name" : "AnyCin1OrLessPrecededByAscHOrHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "AnyHistologyInterpretedAsCin1OrLess",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ {
+                  "alias" : "C",
+                  "type" : "With",
+                  "expression" : {
+                     "name" : "AnyCytologyInterpretedAsAscHOrHsil",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  },
+                  "suchThat" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "LessOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }, {
+                           "path" : "date",
+                           "scope" : "H",
+                           "type" : "Property"
+                        } ]
+                     }, {
+                        "type" : "GreaterOrEqual",
+                        "operand" : [ {
+                           "path" : "date",
+                           "scope" : "C",
+                           "type" : "Property"
+                        }, {
+                           "type" : "Subtract",
+                           "operand" : [ {
+                              "path" : "date",
+                              "scope" : "H",
+                              "type" : "Property"
+                           }, {
+                              "value" : 12,
+                              "unit" : "months",
+                              "type" : "Quantity"
+                           } ]
+                        } ]
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "LastKnownCin2BiopsyInPast",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8401,6 +8492,20 @@
                      }
                   }
                }
+            }
+         }, {
+            "name" : "CytologyInterpretedAsAscHOrHsil",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "name" : "CytologyInterpretedAsAscH",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "CytologyInterpretedAsHsil",
+                  "type" : "ExpressionRef"
+               } ]
             }
          }, {
             "name" : "LastKnownCytologyInterpretedAsHsilInPast5Years",

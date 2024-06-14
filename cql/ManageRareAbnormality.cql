@@ -744,6 +744,17 @@ define AnyHistologyInterpretedAsCin2:
         aC ~ Dash."CIN2"
   )
 
+define AnyHistologyInterpretedAsCin1OrLess:
+  Collate.SortedBiopsyReports aC
+    where aC.riskTableInput in {'CIN1','<CIN1'}
+    
+define AnyCin1OrLessPrecededByAscHOrHsil:
+    (AnyHistologyInterpretedAsCin1OrLess) H
+      with (Collate.AnyCytologyInterpretedAsAscHOrHsil) C
+        such that (C.date <= H.date and
+            C.date >= H.date - 12 months
+          )
+  
 define function LastKnownCin2BiopsyInPast(LookBackEnd System.Quantity):
   Coalesce(
     (Collate.SortedBiopsyReports) S
@@ -1084,6 +1095,11 @@ define CytologyInterpretedAsHsil:
       return aC in "HSIL"
   )
 
+define CytologyInterpretedAsAscHOrHsil:
+  CytologyInterpretedAsAscH or
+  CytologyInterpretedAsHsil
+
+// TODO: Confirm difference between these two statements
 define LastKnownCytologyInterpretedAsHsil:
   Coalesce(
     (Collate.SortedCytologyReports) S
@@ -1091,7 +1107,7 @@ define LastKnownCytologyInterpretedAsHsil:
       S.riskTableInput = 'HSIL+'
   )
 
-define LastKnownCytologyInterpretedAsHsilInPast5Years: // TODO: Combine this with expression above
+define LastKnownCytologyInterpretedAsHsilInPast5Years: 
   Coalesce(
     (Collate.SortedCytologyReports) S
     where (S.date >= Now() - 5 years) and
@@ -1100,7 +1116,7 @@ define LastKnownCytologyInterpretedAsHsilInPast5Years: // TODO: Combine this wit
         return aC in "HSIL"
     )
   )
-  
+
 define CervixRemovalDateIsAfterLastKnownAisBiopsy:
   (CervixRemovalDate is not null) and 
   CervixRemovalDate after Collate.LastKnownAisBiopsy.date
