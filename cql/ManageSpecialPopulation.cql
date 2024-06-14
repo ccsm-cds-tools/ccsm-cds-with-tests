@@ -232,32 +232,22 @@ define RecommendationForPatientsYoungerThan25:
     when (
       AgeInYears() < 25 and
       not Dash.Pregnant and
-      Rare.SecondMostRecentCytologyInterpretedAsAscHOrHsil and
       (
-        ( // case 1
-          Rare.HistologyInterpretedAsCin1OrNormal and
-          Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
-          (
-            Rare.CytologyInterpretedAsAscHOrHsil and
-            Rare.MostRecentCytologyReport.date more than 2 years after Collate.MostRecentBiopsyReport.date and
-            Rare.MostRecentCytologyReport.date 3 years or less after Collate.MostRecentBiopsyReport.date
-          )
-        )
-        or 
-        ( // case 2
-          Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-          Rare.SecondMostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
-          (
-            Rare.CytologyInterpretedAsAscHOrHsil and
-            Rare.MostRecentCytologyReport.date more than 2 years after Rare.SecondMostRecentBiopsyReport.date and
-            Rare.MostRecentCytologyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
+        Rare.CytologyInterpretedAsAscHOrHsil and
+        Count(Collate.AnyCytologyInterpretedAsAscHOrHsil) >= 2 and
+        Exists(
+         (Rare.AnyCin1OrLessPrecededByAscHOrHsil) C  
+          let FollowUpInterval: Interval[C.date + 2 years, C.date + 3 years]
+          where Rare.MostRecentCytologyReport.date in FollowUpInterval and
+            not ( 
+              Exists(Dash.HighGradeOrCancerHistologyResults) and
+              CCF.DiagnosticReportDate(First(Dash.HighGradeOrCancerHistologyResults)) in FollowUpInterval
+            )
           ) and
-          (
-            Rare.HistologyInterpretedAsCin1OrNormal and
-            Collate.MostRecentBiopsyReport.date more than 2 years after Rare.SecondMostRecentBiopsyReport.date and
-            Collate.MostRecentBiopsyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
-          )
-        )
+            not (
+              Exists(Rare.MostRecentTreatment) and
+              Rare.MostRecentTreatmentDate after Rare.MostRecentCytologyReport.date
+            )
       )
     ) then
       {
@@ -273,17 +263,19 @@ define RecommendationForPatientsYoungerThan25:
     // K.1.3.2(a)
     when ( 
       AgeInYears() < 25 and
-      Rare.HistologyInterpretedAsCin1OrNormal and
       (
         ( // case 1
-          Rare.CytologyInterpretedAsAscH and
-          Rare.MostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date
+          // Had CIN1 preceded by ASCH but no followup cytology yet 
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyIsAscH and
+          Rare.MostRecentCytologyReport.date before Collate.MostRecentBiopsyReport.date
         ) 
         or 
         ( // case 2
-          Rare.SecondMostRecentCytologyInterpretedAsAscH and
-          Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
+          // had 1 cytology follow up which was NILM, so get another obs cyto in a year
           Rare.CytologyInterpretedAsNilm and
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyIsAscH and
           Rare.MostRecentCytologyReport.date 3 years or less after Collate.MostRecentBiopsyReport.date
         )
       )
@@ -301,15 +293,19 @@ define RecommendationForPatientsYoungerThan25:
 
     // K.1.3.2(b)
     when (
-      AgeInYears() < 25 and
-      Rare.HistologyInterpretedAsCin1OrNormal and
-      Rare.SecondMostRecentCytologyInterpretedAsAscHOrHsil and 
-      Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
+      AgeInYears() < 25 and 
       (
-        Collate.CytologyInterpretedAsAscusOrAbove or
-        Rare.CytologyInterpretedAsAis
-      ) and
-      Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+        Rare.HistologyInterpretedAsCin1OrNormal and
+        (
+          Rare.PrecedingCytologyIsAscH or
+          Rare.PrecedingCytologyIsHsil
+        ) and
+        (
+          Collate.CytologyInterpretedAsAscusOrAbove or
+          Rare.CytologyInterpretedAsAis
+        ) and
+        Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
+      )
     ) then
       {
         short: 'Colposcopy',
@@ -325,35 +321,33 @@ define RecommendationForPatientsYoungerThan25:
       AgeInYears() < 25 and
 
       ( 
-        Rare.HistologyInterpretedAsCin1OrNormal and
-        (
-          ( // case 1
-            Rare.CytologyInterpretedAsHsil and
-            Rare.MostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date
-          )
-          or 
-          ( // case 2
-            Rare.CytologyInterpretedAsNilm and  
-            Rare.SecondMostRecentCytologyInterpretedAsHsil and
-            Rare.SecondMostRecentCytologyReport.date less than 12 months before Collate.MostRecentBiopsyReport.date and
-            Rare.MostRecentCytologyReport.date 3 years or less after Collate.MostRecentBiopsyReport.date
-          )
-          or
-          ( // case 3
-            Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-            Rare.CytologyInterpretedAsHsil and
-            Rare.MostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
-            Collate.MostRecentBiopsyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
-          )
-        )        
-      )
+        ( // case 1
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyIsHsil
+        )
       or 
-      ( // case 4
-        Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
-        Rare.SecondMostRecentCytologyInterpretedAsHsil and
-        Rare.SecondMostRecentCytologyReport.date less than 12 months before Rare.SecondMostRecentBiopsyReport.date and
-        Collate.MostRecentBiopsyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date and
-        Rare.MostRecentCytologyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
+        ( // case 2
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyIsHsil and
+          Rare.CytologyInterpretedAsNilm and  
+          Rare.MostRecentCytologyReport.date 3 years or less after Collate.MostRecentBiopsyReport.date
+        )
+      or
+        ( // case 3
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil and
+          Collate.MostRecentBiopsyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
+        )
+      or 
+        ( // case 4
+          Rare.HistologyInterpretedAsCin1OrNormal and
+          Rare.CytologyInterpretedAsNilm and  
+          Rare.SecondMostRecentHistologyInterpretedAsCin1OrNormal and
+          Rare.PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil and
+          Collate.MostRecentBiopsyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date and
+          Rare.MostRecentCytologyReport.date 3 years or less after Rare.SecondMostRecentBiopsyReport.date
+        )
       )
     ) then
       {

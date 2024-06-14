@@ -1409,270 +1409,102 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "And",
+                           "type" : "Less",
                            "operand" : [ {
-                              "type" : "Less",
-                              "operand" : [ {
-                                 "precision" : "Year",
-                                 "type" : "CalculateAge",
-                                 "operand" : {
-                                    "path" : "birthDate.value",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "Patient",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                 "value" : "25",
-                                 "type" : "Literal"
-                              } ]
-                           }, {
-                              "type" : "Not",
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
                               "operand" : {
-                                 "name" : "Pregnant",
-                                 "libraryName" : "Dash",
-                                 "type" : "ExpressionRef"
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
                            } ]
                         }, {
-                           "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "type" : "Not",
+                           "operand" : {
+                              "name" : "Pregnant",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           }
                         } ]
                      }, {
-                        "type" : "Or",
+                        "type" : "And",
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "name" : "CytologyInterpretedAsAscHOrHsil",
                                  "libraryName" : "Rare",
                                  "type" : "ExpressionRef"
                               }, {
-                                 "type" : "In",
+                                 "type" : "GreaterOrEqual",
                                  "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
+                                    "type" : "Count",
                                     "source" : {
-                                       "name" : "SecondMostRecentCytologyReport",
-                                       "libraryName" : "Rare",
+                                       "name" : "AnyCytologyInterpretedAsAscHOrHsil",
+                                       "libraryName" : "Collate",
                                        "type" : "ExpressionRef"
                                     }
                                  }, {
-                                    "lowClosed" : false,
-                                    "highClosed" : false,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 12,
-                                          "unit" : "months",
-                                          "type" : "Quantity"
-                                       } ]
-                                    },
-                                    "high" : {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "libraryName" : "Collate",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "2",
+                                    "type" : "Literal"
                                  } ]
                               } ]
                            }, {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "name" : "CytologyInterpretedAsAscHOrHsil",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "After",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentCytologyReport",
-                                          "libraryName" : "Rare",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 2,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "type" : "In",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentCytologyReport",
-                                          "libraryName" : "Rare",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "lowClosed" : false,
+                              "type" : "Exists",
+                              "operand" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "C",
+                                    "expression" : {
+                                       "name" : "AnyCin1OrLessPrecededByAscHOrHsil",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ],
+                                 "let" : [ {
+                                    "identifier" : "FollowUpInterval",
+                                    "expression" : {
+                                       "lowClosed" : true,
                                        "highClosed" : true,
                                        "type" : "Interval",
                                        "low" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
-                                             "type" : "ExpressionRef"
-                                          }
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "scope" : "C",
+                                             "type" : "Property"
+                                          }, {
+                                             "value" : 2,
+                                             "unit" : "years",
+                                             "type" : "Quantity"
+                                          } ]
                                        },
                                        "high" : {
                                           "type" : "Add",
                                           "operand" : [ {
                                              "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "MostRecentBiopsyReport",
-                                                "libraryName" : "Collate",
-                                                "type" : "ExpressionRef"
-                                             }
+                                             "scope" : "C",
+                                             "type" : "Property"
                                           }, {
                                              "value" : 3,
                                              "unit" : "years",
                                              "type" : "Quantity"
                                           } ]
                                        }
-                                    } ]
-                                 }, {
-                                    "type" : "Not",
-                                    "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
                                     }
-                                 } ]
-                              } ]
-                           } ]
-                        }, {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "In",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "SecondMostRecentCytologyReport",
-                                          "libraryName" : "Rare",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "lowClosed" : false,
-                                       "highClosed" : false,
-                                       "type" : "Interval",
-                                       "low" : {
-                                          "type" : "Subtract",
-                                          "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }, {
-                                             "value" : 12,
-                                             "unit" : "months",
-                                             "type" : "Quantity"
-                                          } ]
-                                       },
-                                       "high" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "SecondMostRecentBiopsyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "name" : "CytologyInterpretedAsAscHOrHsil",
-                                       "libraryName" : "Rare",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "type" : "After",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "type" : "Add",
-                                          "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }, {
-                                             "value" : 2,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
-                                          } ]
-                                       } ]
-                                    } ]
-                                 }, {
+                                 } ],
+                                 "relationship" : [ ],
+                                 "where" : {
                                     "type" : "And",
                                     "operand" : [ {
                                        "type" : "In",
@@ -1685,146 +1517,75 @@
                                              "type" : "ExpressionRef"
                                           }
                                        }, {
-                                          "lowClosed" : false,
-                                          "highClosed" : true,
-                                          "type" : "Interval",
-                                          "low" : {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          },
-                                          "high" : {
-                                             "type" : "Add",
-                                             "operand" : [ {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "SecondMostRecentBiopsyReport",
-                                                   "libraryName" : "Rare",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }, {
-                                                "value" : 3,
-                                                "unit" : "years",
-                                                "type" : "Quantity"
-                                             } ]
-                                          }
+                                          "name" : "FollowUpInterval",
+                                          "type" : "QueryLetRef"
                                        } ]
                                     }, {
                                        "type" : "Not",
                                        "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       }
-                                    } ]
-                                 } ]
-                              } ]
-                           }, {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "name" : "HistologyInterpretedAsCin1OrNormal",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }, {
-                                    "type" : "After",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "libraryName" : "Collate",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "type" : "Add",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "SecondMostRecentBiopsyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "value" : 2,
-                                          "unit" : "years",
-                                          "type" : "Quantity"
-                                       } ]
-                                    } ]
-                                 } ]
-                              }, {
-                                 "type" : "And",
-                                 "operand" : [ {
-                                    "type" : "In",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "libraryName" : "Collate",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "lowClosed" : false,
-                                       "highClosed" : true,
-                                       "type" : "Interval",
-                                       "low" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "SecondMostRecentBiopsyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       },
-                                       "high" : {
-                                          "type" : "Add",
+                                          "type" : "And",
                                           "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
+                                             "type" : "Exists",
+                                             "operand" : {
+                                                "name" : "HighGradeOrCancerHistologyResults",
+                                                "libraryName" : "Dash",
                                                 "type" : "ExpressionRef"
                                              }
                                           }, {
-                                             "value" : 3,
-                                             "unit" : "years",
-                                             "type" : "Quantity"
+                                             "type" : "In",
+                                             "operand" : [ {
+                                                "name" : "DiagnosticReportDate",
+                                                "libraryName" : "CCF",
+                                                "type" : "FunctionRef",
+                                                "operand" : [ {
+                                                   "type" : "First",
+                                                   "source" : {
+                                                      "name" : "HighGradeOrCancerHistologyResults",
+                                                      "libraryName" : "Dash",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                } ]
+                                             }, {
+                                                "name" : "FollowUpInterval",
+                                                "type" : "QueryLetRef"
+                                             } ]
                                           } ]
                                        }
                                     } ]
-                                 }, {
-                                    "type" : "Not",
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "Exists",
+                                 "operand" : {
+                                    "type" : "ToList",
                                     "operand" : {
-                                       "type" : "IsNull",
-                                       "operand" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "SecondMostRecentBiopsyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
+                                       "name" : "MostRecentTreatment",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "type" : "After",
+                                 "operand" : [ {
+                                    "name" : "MostRecentTreatmentDate",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyReport",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
                                     }
                                  } ]
                               } ]
-                           } ]
+                           }
                         } ]
                      } ]
                   },
@@ -1869,40 +1630,40 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "And",
+                        "type" : "Less",
                         "operand" : [ {
-                           "type" : "Less",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
                               }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
+                           }
                         }, {
-                           "name" : "HistologyInterpretedAsCin1OrNormal",
-                           "libraryName" : "Rare",
-                           "type" : "ExpressionRef"
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
                         } ]
                      }, {
                         "type" : "Or",
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "CytologyInterpretedAsAscH",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "name" : "PrecedingCytologyIsAscH",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
-                              "type" : "In",
+                              "type" : "Before",
                               "operand" : [ {
                                  "path" : "date",
                                  "type" : "Property",
@@ -1912,33 +1673,12 @@
                                     "type" : "ExpressionRef"
                                  }
                               }, {
-                                 "lowClosed" : false,
-                                 "highClosed" : false,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "type" : "Subtract",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "libraryName" : "Collate",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 12,
-                                       "unit" : "months",
-                                       "type" : "Quantity"
-                                    } ]
-                                 },
-                                 "high" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "libraryName" : "Collate",
-                                       "type" : "ExpressionRef"
-                                    }
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentBiopsyReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
                                  }
                               } ]
                            } ]
@@ -1949,52 +1689,16 @@
                               "operand" : [ {
                                  "type" : "And",
                                  "operand" : [ {
-                                    "name" : "SecondMostRecentCytologyInterpretedAsAscH",
+                                    "name" : "CytologyInterpretedAsNilm",
                                     "libraryName" : "Rare",
                                     "type" : "ExpressionRef"
                                  }, {
-                                    "type" : "In",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "SecondMostRecentCytologyReport",
-                                          "libraryName" : "Rare",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "lowClosed" : false,
-                                       "highClosed" : false,
-                                       "type" : "Interval",
-                                       "low" : {
-                                          "type" : "Subtract",
-                                          "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "MostRecentBiopsyReport",
-                                                "libraryName" : "Collate",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }, {
-                                             "value" : 12,
-                                             "unit" : "months",
-                                             "type" : "Quantity"
-                                          } ]
-                                       },
-                                       "high" : {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    } ]
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
                                  } ]
                               }, {
-                                 "name" : "CytologyInterpretedAsNilm",
+                                 "name" : "PrecedingCytologyIsAscH",
                                  "libraryName" : "Rare",
                                  "type" : "ExpressionRef"
                               } ]
@@ -2113,120 +1817,72 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
+                        "type" : "Less",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
                         "type" : "And",
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
-                                 "type" : "And",
+                                 "name" : "HistologyInterpretedAsCin1OrNormal",
+                                 "libraryName" : "Rare",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "type" : "Or",
                                  "operand" : [ {
-                                    "type" : "Less",
-                                    "operand" : [ {
-                                       "precision" : "Year",
-                                       "type" : "CalculateAge",
-                                       "operand" : {
-                                          "path" : "birthDate.value",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "Patient",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "value" : "25",
-                                       "type" : "Literal"
-                                    } ]
+                                    "name" : "PrecedingCytologyIsAscH",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
                                  }, {
-                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "name" : "PrecedingCytologyIsHsil",
                                     "libraryName" : "Rare",
                                     "type" : "ExpressionRef"
                                  } ]
+                              } ]
+                           }, {
+                              "type" : "Or",
+                              "operand" : [ {
+                                 "name" : "CytologyInterpretedAsAscusOrAbove",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
                               }, {
-                                 "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
+                                 "name" : "CytologyInterpretedAsAis",
                                  "libraryName" : "Rare",
                                  "type" : "ExpressionRef"
                               } ]
-                           }, {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "SecondMostRecentCytologyReport",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : false,
-                                 "highClosed" : false,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "type" : "Subtract",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "MostRecentBiopsyReport",
-                                          "libraryName" : "Collate",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 12,
-                                       "unit" : "months",
-                                       "type" : "Quantity"
-                                    } ]
-                                 },
-                                 "high" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "libraryName" : "Collate",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              } ]
                            } ]
                         }, {
-                           "type" : "Or",
+                           "type" : "In",
                            "operand" : [ {
-                              "name" : "CytologyInterpretedAsAscusOrAbove",
-                              "libraryName" : "Collate",
-                              "type" : "ExpressionRef"
-                           }, {
-                              "name" : "CytologyInterpretedAsAis",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "In",
-                        "operand" : [ {
-                           "path" : "date",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "MostRecentCytologyReport",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
-                           }
-                        }, {
-                           "lowClosed" : false,
-                           "highClosed" : false,
-                           "type" : "Interval",
-                           "low" : {
                               "path" : "date",
                               "type" : "Property",
                               "source" : {
-                                 "name" : "MostRecentBiopsyReport",
-                                 "libraryName" : "Collate",
+                                 "name" : "MostRecentCytologyReport",
+                                 "libraryName" : "Rare",
                                  "type" : "ExpressionRef"
                               }
-                           },
-                           "high" : {
-                              "type" : "Add",
-                              "operand" : [ {
+                           }, {
+                              "lowClosed" : false,
+                              "highClosed" : false,
+                              "type" : "Interval",
+                              "low" : {
                                  "path" : "date",
                                  "type" : "Property",
                                  "source" : {
@@ -2234,12 +1890,24 @@
                                     "libraryName" : "Collate",
                                     "type" : "ExpressionRef"
                                  }
-                              }, {
-                                 "value" : 3,
-                                 "unit" : "years",
-                                 "type" : "Quantity"
-                              } ]
-                           }
+                              },
+                              "high" : {
+                                 "type" : "Add",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentBiopsyReport",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }, {
+                                    "value" : 3,
+                                    "unit" : "years",
+                                    "type" : "Quantity"
+                                 } ]
+                              }
+                           } ]
                         } ]
                      } ]
                   },
@@ -2278,198 +1946,41 @@
                   }
                }, {
                   "when" : {
-                     "type" : "Or",
+                     "type" : "And",
                      "operand" : [ {
-                        "type" : "And",
+                        "type" : "Less",
                         "operand" : [ {
-                           "type" : "Less",
-                           "operand" : [ {
-                              "precision" : "Year",
-                              "type" : "CalculateAge",
-                              "operand" : {
-                                 "path" : "birthDate.value",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "Patient",
-                                    "type" : "ExpressionRef"
-                                 }
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
                               }
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                              "value" : "25",
-                              "type" : "Literal"
-                           } ]
+                           }
                         }, {
-                           "type" : "And",
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
                            "operand" : [ {
-                              "name" : "HistologyInterpretedAsCin1OrNormal",
-                              "libraryName" : "Rare",
-                              "type" : "ExpressionRef"
-                           }, {
                               "type" : "Or",
                               "operand" : [ {
-                                 "type" : "Or",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "name" : "CytologyInterpretedAsHsil",
-                                       "libraryName" : "Rare",
-                                       "type" : "ExpressionRef"
-                                    }, {
-                                       "type" : "In",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "lowClosed" : false,
-                                          "highClosed" : false,
-                                          "type" : "Interval",
-                                          "low" : {
-                                             "type" : "Subtract",
-                                             "operand" : [ {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "MostRecentBiopsyReport",
-                                                   "libraryName" : "Collate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }, {
-                                                "value" : 12,
-                                                "unit" : "months",
-                                                "type" : "Quantity"
-                                             } ]
-                                          },
-                                          "high" : {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "MostRecentBiopsyReport",
-                                                "libraryName" : "Collate",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       } ]
-                                    } ]
+                                    "name" : "HistologyInterpretedAsCin1OrNormal",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
                                  }, {
-                                    "type" : "And",
-                                    "operand" : [ {
-                                       "type" : "And",
-                                       "operand" : [ {
-                                          "type" : "And",
-                                          "operand" : [ {
-                                             "name" : "CytologyInterpretedAsNilm",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }, {
-                                             "name" : "SecondMostRecentCytologyInterpretedAsHsil",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          } ]
-                                       }, {
-                                          "type" : "In",
-                                          "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentCytologyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }, {
-                                             "lowClosed" : false,
-                                             "highClosed" : false,
-                                             "type" : "Interval",
-                                             "low" : {
-                                                "type" : "Subtract",
-                                                "operand" : [ {
-                                                   "path" : "date",
-                                                   "type" : "Property",
-                                                   "source" : {
-                                                      "name" : "MostRecentBiopsyReport",
-                                                      "libraryName" : "Collate",
-                                                      "type" : "ExpressionRef"
-                                                   }
-                                                }, {
-                                                   "value" : 12,
-                                                   "unit" : "months",
-                                                   "type" : "Quantity"
-                                                } ]
-                                             },
-                                             "high" : {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "MostRecentBiopsyReport",
-                                                   "libraryName" : "Collate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          } ]
-                                       } ]
-                                    }, {
-                                       "type" : "And",
-                                       "operand" : [ {
-                                          "type" : "In",
-                                          "operand" : [ {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "MostRecentCytologyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }, {
-                                             "lowClosed" : false,
-                                             "highClosed" : true,
-                                             "type" : "Interval",
-                                             "low" : {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "MostRecentBiopsyReport",
-                                                   "libraryName" : "Collate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             },
-                                             "high" : {
-                                                "type" : "Add",
-                                                "operand" : [ {
-                                                   "path" : "date",
-                                                   "type" : "Property",
-                                                   "source" : {
-                                                      "name" : "MostRecentBiopsyReport",
-                                                      "libraryName" : "Collate",
-                                                      "type" : "ExpressionRef"
-                                                   }
-                                                }, {
-                                                   "value" : 3,
-                                                   "unit" : "years",
-                                                   "type" : "Quantity"
-                                                } ]
-                                             }
-                                          } ]
-                                       }, {
-                                          "type" : "Not",
-                                          "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "MostRecentBiopsyReport",
-                                                   "libraryName" : "Collate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          }
-                                       } ]
-                                    } ]
+                                    "name" : "PrecedingCytologyIsHsil",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
                                  } ]
                               }, {
                                  "type" : "And",
@@ -2478,54 +1989,18 @@
                                     "operand" : [ {
                                        "type" : "And",
                                        "operand" : [ {
-                                          "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                                          "name" : "HistologyInterpretedAsCin1OrNormal",
                                           "libraryName" : "Rare",
                                           "type" : "ExpressionRef"
                                        }, {
-                                          "name" : "CytologyInterpretedAsHsil",
+                                          "name" : "PrecedingCytologyIsHsil",
                                           "libraryName" : "Rare",
                                           "type" : "ExpressionRef"
                                        } ]
                                     }, {
-                                       "type" : "In",
-                                       "operand" : [ {
-                                          "path" : "date",
-                                          "type" : "Property",
-                                          "source" : {
-                                             "name" : "MostRecentCytologyReport",
-                                             "libraryName" : "Rare",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }, {
-                                          "lowClosed" : false,
-                                          "highClosed" : false,
-                                          "type" : "Interval",
-                                          "low" : {
-                                             "type" : "Subtract",
-                                             "operand" : [ {
-                                                "path" : "date",
-                                                "type" : "Property",
-                                                "source" : {
-                                                   "name" : "SecondMostRecentBiopsyReport",
-                                                   "libraryName" : "Rare",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }, {
-                                                "value" : 12,
-                                                "unit" : "months",
-                                                "type" : "Quantity"
-                                             } ]
-                                          },
-                                          "high" : {
-                                             "path" : "date",
-                                             "type" : "Property",
-                                             "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       } ]
+                                       "name" : "CytologyInterpretedAsNilm",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
                                     } ]
                                  }, {
                                     "type" : "And",
@@ -2535,8 +2010,8 @@
                                           "path" : "date",
                                           "type" : "Property",
                                           "source" : {
-                                             "name" : "MostRecentBiopsyReport",
-                                             "libraryName" : "Collate",
+                                             "name" : "MostRecentCytologyReport",
+                                             "libraryName" : "Rare",
                                              "type" : "ExpressionRef"
                                           }
                                        }, {
@@ -2547,8 +2022,8 @@
                                              "path" : "date",
                                              "type" : "Property",
                                              "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
+                                                "name" : "MostRecentBiopsyReport",
+                                                "libraryName" : "Collate",
                                                 "type" : "ExpressionRef"
                                              }
                                           },
@@ -2558,8 +2033,8 @@
                                                 "path" : "date",
                                                 "type" : "Property",
                                                 "source" : {
-                                                   "name" : "SecondMostRecentBiopsyReport",
-                                                   "libraryName" : "Rare",
+                                                   "name" : "MostRecentBiopsyReport",
+                                                   "libraryName" : "Collate",
                                                    "type" : "ExpressionRef"
                                                 }
                                              }, {
@@ -2577,8 +2052,8 @@
                                              "path" : "date",
                                              "type" : "Property",
                                              "source" : {
-                                                "name" : "SecondMostRecentBiopsyReport",
-                                                "libraryName" : "Rare",
+                                                "name" : "MostRecentBiopsyReport",
+                                                "libraryName" : "Collate",
                                                 "type" : "ExpressionRef"
                                              }
                                           }
@@ -2586,42 +2061,43 @@
                                     } ]
                                  } ]
                               } ]
-                           } ]
-                        } ]
-                     }, {
-                        "type" : "And",
-                        "operand" : [ {
-                           "type" : "And",
-                           "operand" : [ {
+                           }, {
                               "type" : "And",
                               "operand" : [ {
                                  "type" : "And",
                                  "operand" : [ {
-                                    "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "name" : "HistologyInterpretedAsCin1OrNormal",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
+                                    }, {
+                                       "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
+                                    } ]
                                  }, {
-                                    "name" : "SecondMostRecentCytologyInterpretedAsHsil",
+                                    "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil",
                                     "libraryName" : "Rare",
                                     "type" : "ExpressionRef"
                                  } ]
                               }, {
-                                 "type" : "In",
+                                 "type" : "And",
                                  "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "SecondMostRecentCytologyReport",
-                                       "libraryName" : "Rare",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }, {
-                                    "lowClosed" : false,
-                                    "highClosed" : false,
-                                    "type" : "Interval",
-                                    "low" : {
-                                       "type" : "Subtract",
-                                       "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
+                                       "path" : "date",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "MostRecentBiopsyReport",
+                                          "libraryName" : "Collate",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
                                           "path" : "date",
                                           "type" : "Property",
                                           "source" : {
@@ -2629,19 +2105,124 @@
                                              "libraryName" : "Rare",
                                              "type" : "ExpressionRef"
                                           }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "SecondMostRecentBiopsyReport",
+                                                "libraryName" : "Rare",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 3,
+                                             "unit" : "years",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "libraryName" : "Rare",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       }
+                                    }
+                                 } ]
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "And",
+                                    "operand" : [ {
+                                       "type" : "And",
+                                       "operand" : [ {
+                                          "name" : "HistologyInterpretedAsCin1OrNormal",
+                                          "libraryName" : "Rare",
+                                          "type" : "ExpressionRef"
                                        }, {
-                                          "value" : 12,
-                                          "unit" : "months",
-                                          "type" : "Quantity"
+                                          "name" : "CytologyInterpretedAsNilm",
+                                          "libraryName" : "Rare",
+                                          "type" : "ExpressionRef"
                                        } ]
-                                    },
-                                    "high" : {
+                                    }, {
+                                       "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                                       "libraryName" : "Rare",
+                                       "type" : "ExpressionRef"
+                                    } ]
+                                 }, {
+                                    "name" : "PrecedingCytologyBeforeSecondMostRecentBiopsyIsHsil",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 } ]
+                              }, {
+                                 "type" : "And",
+                                 "operand" : [ {
+                                    "type" : "In",
+                                    "operand" : [ {
                                        "path" : "date",
                                        "type" : "Property",
                                        "source" : {
-                                          "name" : "SecondMostRecentBiopsyReport",
-                                          "libraryName" : "Rare",
+                                          "name" : "MostRecentBiopsyReport",
+                                          "libraryName" : "Collate",
                                           "type" : "ExpressionRef"
+                                       }
+                                    }, {
+                                       "lowClosed" : false,
+                                       "highClosed" : true,
+                                       "type" : "Interval",
+                                       "low" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "libraryName" : "Rare",
+                                             "type" : "ExpressionRef"
+                                          }
+                                       },
+                                       "high" : {
+                                          "type" : "Add",
+                                          "operand" : [ {
+                                             "path" : "date",
+                                             "type" : "Property",
+                                             "source" : {
+                                                "name" : "SecondMostRecentBiopsyReport",
+                                                "libraryName" : "Rare",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }, {
+                                             "value" : 3,
+                                             "unit" : "years",
+                                             "type" : "Quantity"
+                                          } ]
+                                       }
+                                    } ]
+                                 }, {
+                                    "type" : "Not",
+                                    "operand" : {
+                                       "type" : "IsNull",
+                                       "operand" : {
+                                          "path" : "date",
+                                          "type" : "Property",
+                                          "source" : {
+                                             "name" : "SecondMostRecentBiopsyReport",
+                                             "libraryName" : "Rare",
+                                             "type" : "ExpressionRef"
+                                          }
                                        }
                                     }
                                  } ]
@@ -2654,8 +2235,8 @@
                                     "path" : "date",
                                     "type" : "Property",
                                     "source" : {
-                                       "name" : "MostRecentBiopsyReport",
-                                       "libraryName" : "Collate",
+                                       "name" : "MostRecentCytologyReport",
+                                       "libraryName" : "Rare",
                                        "type" : "ExpressionRef"
                                     }
                                  }, {
@@ -2703,63 +2284,6 @@
                                     }
                                  }
                               } ]
-                           } ]
-                        }, {
-                           "type" : "And",
-                           "operand" : [ {
-                              "type" : "In",
-                              "operand" : [ {
-                                 "path" : "date",
-                                 "type" : "Property",
-                                 "source" : {
-                                    "name" : "MostRecentCytologyReport",
-                                    "libraryName" : "Rare",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }, {
-                                 "lowClosed" : false,
-                                 "highClosed" : true,
-                                 "type" : "Interval",
-                                 "low" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "SecondMostRecentBiopsyReport",
-                                       "libraryName" : "Rare",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 },
-                                 "high" : {
-                                    "type" : "Add",
-                                    "operand" : [ {
-                                       "path" : "date",
-                                       "type" : "Property",
-                                       "source" : {
-                                          "name" : "SecondMostRecentBiopsyReport",
-                                          "libraryName" : "Rare",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }, {
-                                       "value" : 3,
-                                       "unit" : "years",
-                                       "type" : "Quantity"
-                                    } ]
-                                 }
-                              } ]
-                           }, {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "SecondMostRecentBiopsyReport",
-                                       "libraryName" : "Rare",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 }
-                              }
                            } ]
                         } ]
                      } ]

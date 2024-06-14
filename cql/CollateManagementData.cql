@@ -270,6 +270,10 @@ define AnyCytologyInterpretedAsAscusOrAbove:
   SortedCytologyReports C
     where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
 
+define AnyCytologyInterpretedAsAscHOrHsil:
+  SortedCytologyReports C
+    where C.riskTableInput in {'ASC-H','HSIL+'}
+    
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // BIOPSIES / HISTOLOGY
 
