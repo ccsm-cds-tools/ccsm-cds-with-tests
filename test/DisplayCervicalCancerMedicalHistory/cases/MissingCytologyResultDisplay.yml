@@ -1,0 +1,31 @@
+---
+name: Missing Cytology Result Display
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  id: 1234
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  effectiveDateTime: 2016-05-01
+  
+
+results:
+  DiagnosticReportsSummary:
+    -
+      name: "Cervical Cytology"
+      longName: "Microscopic observation [Identifier] in Cervix by Cyto stain"
+      value: ""
+      longValue: []
+      date: "2016-05-01"
+      reference: "DiagnosticReport/1234"
+      edited: false
