@@ -196,8 +196,8 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
     {{text: 'ALL', rank: 0}}
 
 /**
- * Takes an interpreted test result tuple and maps it to a sting value that represents
- * the text that should be used to describe this result in the front-end.
+ * Takes an interpreted test result string and maps it to a string value that represents
+ * the text that should be displayed in the front-end.
  * @param testInterpretation System.String - a String representing the
  * interpretation of a test
  * @returns System.String the lab result interpretation text to be displayed to the front-end
@@ -967,7 +967,7 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     longValue: flatten(
       (CollatedCodes) cC
         return (cC.coding) cCC
-          return cCC.display
+          return cCC.display.value
     ),
     date: Common.DiagnosticReportDateString(D),
     reference: 'DiagnosticReport/' + D.id,
