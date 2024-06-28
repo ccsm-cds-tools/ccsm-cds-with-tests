@@ -402,7 +402,7 @@ define RecommendationForRareCytology:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Rare Cytology (G.1.4)',
         details: {
-          'Cotesting at 1 and 2 years is recommended.',
+          'Cotesting at 1 and 2 years from date of most recent test is recommended.',
           'If both cotests are negative, repeat cotesting at 3 years is recommended.',
           'If any test is abnormal, then colposcopy is recommended.'
         }
