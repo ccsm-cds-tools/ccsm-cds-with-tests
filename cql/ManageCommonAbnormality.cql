@@ -571,7 +571,7 @@ define ErrataRecommendation:
         short: 'Surveillance',
         date: Collate.DateOfMostRecentReport + 1 years,
         details: {
-          'Primary HPV testing or cotesting is recommended in one year.'
+          'Primary HPV testing or cotesting is recommended within one year from date of most recent test.'
         }
       }
     else
@@ -582,25 +582,28 @@ define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
 
 define Pap6MonthIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test.'
   
 define Pap1YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals from date of most recent test.'
  
 define Pap3YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals from date of most recent test.'
   
 define TreatmentWithPregnancyConcernsRecommendationText:
   'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
 
 define OneYearSurveillanceRecommendationText:
-  'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
-
+//  'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
+  'Primary HPV testing or cotesting is recommended within 1 year of most recent test.'
+  
 define ThreeYearSurveillanceRecommendationText:
-  'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
+//  'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
+  'Primary HPV testing or cotesting is recommended within 3 years of most recent test.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
+//  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
+  'Primary HPV testing or cotesting is recommended at 5-year intervals from date of most recent test.'
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
