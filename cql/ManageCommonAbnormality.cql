@@ -594,15 +594,12 @@ define TreatmentWithPregnancyConcernsRecommendationText:
   'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
 
 define OneYearSurveillanceRecommendationText:
-//  'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
   'Primary HPV testing or cotesting is recommended within 1 year of most recent test.'
   
 define ThreeYearSurveillanceRecommendationText:
-//  'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
   'Primary HPV testing or cotesting is recommended within 3 years of most recent test.'
   
 define FiveYearSurveillanceRecommendationText:
-//  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
   'Primary HPV testing or cotesting is recommended at 5-year intervals from date of most recent test.'
 
 define ColposcopyRecommendationText:
