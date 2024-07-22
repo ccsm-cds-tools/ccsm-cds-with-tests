@@ -207,8 +207,8 @@ define function FormatTestResultInterpretation(testInterpretation System.String)
     (testInterpretation) i
     return
       case
-        when i = 'UNK' then ''
-        when i = 'NULL' then ''
+        when i = 'UNK' then 'Unrecognized'
+        when i = 'NULL' then 'None'
         else i
       end
   else 
