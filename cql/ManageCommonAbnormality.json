@@ -2661,7 +2661,7 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
+                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology within 1 year from date of most recent test.",
                               "type" : "Literal"
                            } ]
                         }
@@ -3516,7 +3516,16 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Primary HPV testing or cotesting is recommended at 5-year intervals from date of most recent test.",
+               "value" : "Primary HPV testing or cotesting is recommended within 5 years of most recent test.",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "FiveYearSurveillanceIntervalText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "Future testing is recommended at 5-year intervals.",
                "type" : "Literal"
             }
          }, {
@@ -4168,6 +4177,9 @@
                               "name" : "FiveYearSurveillanceRecommendationText",
                               "type" : "ExpressionRef"
                            }, {
+                              "name" : "FiveYearSurveillanceIntervalText",
+                              "type" : "ExpressionRef"
+                           }, {
                               "name" : "Pap3YearIntervalText",
                               "type" : "ExpressionRef"
                            } ]
@@ -4236,6 +4248,9 @@
                            "type" : "List",
                            "element" : [ {
                               "name" : "FiveYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "FiveYearSurveillanceIntervalText",
                               "type" : "ExpressionRef"
                            }, {
                               "name" : "Pap3YearIntervalText",

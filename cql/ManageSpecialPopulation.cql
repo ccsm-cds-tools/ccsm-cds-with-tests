@@ -286,7 +286,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Observation is recommended with colposcopy and cytology within 1 year from date of most recent test.',
           'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
           '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
@@ -728,7 +728,9 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'Primary hrHPV testing or cotesting is recommended every 3 years after date of most recent test for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
+          'Primary hrHPV testing or cotesting is recommended within 3 years of most recent test.',
+          'Testing should continue for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.',
+          'Future testing is recommended at 3-year intervals.'
         }
       }
     when ( // no hysterectomy date

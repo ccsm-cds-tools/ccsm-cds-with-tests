@@ -491,7 +491,7 @@ define ErrataRecommendation:
         short: 'Reflex HPV',
         date: Today(),
         details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology within 1 year from date of most recent test.'
         }
       }
     when ( // Errata Recommendation 3.1.2: LSIL Alone
@@ -600,7 +600,10 @@ define ThreeYearSurveillanceRecommendationText:
   'Primary HPV testing or cotesting is recommended within 3 years of most recent test.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Primary HPV testing or cotesting is recommended at 5-year intervals from date of most recent test.'
+  'Primary HPV testing or cotesting is recommended within 5 years of most recent test.'
+
+define FiveYearSurveillanceIntervalText:
+  'Future testing is recommended at 5-year intervals.'  
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
@@ -774,6 +777,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
+          FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
         }
       }
@@ -786,6 +790,7 @@ define Action:
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
+          FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
         }
       }
