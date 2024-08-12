@@ -1341,7 +1341,7 @@ define RecommendationForHistologyResults:
         date: Today() + 1 year,
         group: 'Managing Histology (I.3)',
         details: {
-          'Primary HPV testing or cotesting within 1 year from date of most recent test is recommended.'
+          'Primary HPV testing or cotesting in 1 year from date of most recent test is recommended.'
         }
       }
     when ( // I3.2
@@ -1516,7 +1516,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.3.1)',
         details: {
-          'Primary hrHPV testing or cotesting is recommended within 1 year from date of most recent test.'
+          'Primary hrHPV testing or cotesting is recommended in 1 year from date of most recent test.'
         }
       }
     when ( // I4.4
@@ -1590,7 +1590,7 @@ define RecommendationForHistologyResults:
         date: Today(),
         group: 'Managing Histology (I.4.1)',
         details: {
-          'Immediate diagnostic excisional procedure (unless the patient is pregnant), or observation with primary HPV testing or cotesting and colposcopy within 1 year of most recent histology, or review of the cytologic, histologic and colposcopic findings are acceptable.',
+          'Immediate diagnostic excisional procedure (unless the patient is pregnant), or observation with primary HPV testing or cotesting and colposcopy in 1 year from date of most recent histology, or review of the cytologic, histologic and colposcopic findings are acceptable.',
           'Observation is only acceptable when the initial colposcopic examination fully visualized the squamocolumnar junction and the upper limit of any lesion, and that the endocervical sampling, if collected, was less than CIN 2.'
         }
       }

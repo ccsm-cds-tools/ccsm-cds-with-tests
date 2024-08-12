@@ -491,7 +491,7 @@ define ErrataRecommendation:
         short: 'Reflex HPV',
         date: Today(),
         details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology within 1 year from date of most recent test.'
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.'
         }
       }
     when ( // Errata Recommendation 3.1.2: LSIL Alone
@@ -571,7 +571,7 @@ define ErrataRecommendation:
         short: 'Surveillance',
         date: Collate.DateOfMostRecentReport + 1 years,
         details: {
-          'Primary HPV testing or cotesting is recommended within one year from date of most recent test.'
+          'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
         }
       }
     else
@@ -594,13 +594,13 @@ define TreatmentWithPregnancyConcernsRecommendationText:
   'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
 
 define OneYearSurveillanceRecommendationText:
-  'Primary HPV testing or cotesting is recommended within 1 year of most recent test.'
+  'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
   
 define ThreeYearSurveillanceRecommendationText:
-  'Primary HPV testing or cotesting is recommended within 3 years of most recent test.'
+  'Primary HPV testing or cotesting is recommended in 3 years from date of most recent test.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Primary HPV testing or cotesting is recommended within 5 years of most recent test.'
+  'Primary HPV testing or cotesting is recommended in 5 years from date of most recent test.'
 
 define FiveYearSurveillanceIntervalText:
   'Future testing is recommended at 5-year intervals.'  
