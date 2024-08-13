@@ -617,7 +617,7 @@ define RecommendationForImmunosuppressedPatients:
         date: Collate.DateOfMostRecentReport + 6 months,
         group: 'Immunosuppressed (K.3)',
         details: {
-          'Cervical cytology is recommended within 6 to 12 months from date of most recent test in this immunocompromised patient.'
+          'Cervical cytology is recommended in 6 to 12 months from date of most recent test in this immunocompromised patient.'
         }
       }   
     else
