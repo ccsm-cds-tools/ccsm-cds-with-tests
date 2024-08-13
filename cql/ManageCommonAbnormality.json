@@ -2661,7 +2661,7 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.",
+                              "value" : "Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.",
                               "type" : "Literal"
                            } ]
                         }
@@ -3137,7 +3137,7 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Primary HPV testing or cotesting is recommended in one year.",
+                              "value" : "Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.",
                               "type" : "Literal"
                            } ]
                         }
@@ -3462,7 +3462,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.",
+               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test.",
                "type" : "Literal"
             }
          }, {
@@ -3471,7 +3471,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals.",
+               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals from date of most recent test.",
                "type" : "Literal"
             }
          }, {
@@ -3480,7 +3480,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals.",
+               "value" : "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals from date of most recent test.",
                "type" : "Literal"
             }
          }, {
@@ -3498,7 +3498,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Repeat testing in 1 year with primary HPV testing or cotesting is recommended.",
+               "value" : "Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.",
                "type" : "Literal"
             }
          }, {
@@ -3507,7 +3507,7 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Repeat testing in 3 years with primary HPV testing or cotesting is recommended.",
+               "value" : "Primary HPV testing or cotesting is recommended in 3 years from date of most recent test.",
                "type" : "Literal"
             }
          }, {
@@ -3516,7 +3516,16 @@
             "accessLevel" : "Public",
             "expression" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-               "value" : "Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.",
+               "value" : "Primary HPV testing or cotesting is recommended in 5 years from date of most recent test.",
+               "type" : "Literal"
+            }
+         }, {
+            "name" : "FiveYearSurveillanceIntervalText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+               "value" : "Future testing is recommended at 5-year intervals.",
                "type" : "Literal"
             }
          }, {
@@ -4168,6 +4177,9 @@
                               "name" : "FiveYearSurveillanceRecommendationText",
                               "type" : "ExpressionRef"
                            }, {
+                              "name" : "FiveYearSurveillanceIntervalText",
+                              "type" : "ExpressionRef"
+                           }, {
                               "name" : "Pap3YearIntervalText",
                               "type" : "ExpressionRef"
                            } ]
@@ -4236,6 +4248,9 @@
                            "type" : "List",
                            "element" : [ {
                               "name" : "FiveYearSurveillanceRecommendationText",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "name" : "FiveYearSurveillanceIntervalText",
                               "type" : "ExpressionRef"
                            }, {
                               "name" : "Pap3YearIntervalText",
