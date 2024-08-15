@@ -1213,7 +1213,7 @@ define RecommendationForHistologyResults:
       AnyHistologyInterpretedAsUnspecifiedHsil and
       not RecentlyRespondedYesToFuturePregnancyConcernsQuestion and
       HadNoCervicalPrecancerTreatmentFromDateToPresent(Collate.LastKnownHsilUnspecifiedBiopsy.date, CervicalPrecancerTreatmentLookback) and
-      not SecondMostRecentNegativeHsilSurveillanceResultWithin18Months
+      SecondMostRecentNegativeHsilSurveillanceResultWithin18Months is null
     ) then
       {
         short: 'Surveillance or Treatment',

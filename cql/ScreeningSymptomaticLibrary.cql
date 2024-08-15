@@ -129,10 +129,12 @@ define MostRecentCoincidentNilmCytologyAndNegativeHpvReport:
     Common.CoincidentDiagnosticReports(C, H)
 
 define HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years:
-  MostRecentCoincidentNilmCytologyAndNegativeHpvReport M
-  return
+  if MostRecentCoincidentNilmCytologyAndNegativeHpvReport is not null then
+    MostRecentCoincidentNilmCytologyAndNegativeHpvReport M
+    return
       M.C is not null and M.H is not null
-
+  else
+    false
 
 define RecentVisibleLesionDiagnoses:
   C3F.ConditionLookBack(
