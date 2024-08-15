@@ -19,12 +19,14 @@
     "sushi": "node node_modules/.bin/sushi fsh-tank",
     "test-cql": "mocha --reporter spec --recursive --timeout 100000",
     "screening-example": "node --experimental-json-modules --no-warnings apply/screening-example.js",
+    "management-example": "node --experimental-json-modules --no-warnings apply/managementExample.js",
     "packager": "node util/packager.js",
     "prepack": "npx cql-to-elm cql && npm run packager && cp ./util/resourceConverter.js ./dist/fhir/resourceConverter.js"
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "encender": "^0.7.0",
+    "cql-exec-fhir": "github:ccsm-cds-tools/cql-exec-fhir#8e1916b9a3b5748206340f391e0ea8468db02384",
+    "encender": "github:ccsm-cds-tools/encender#cql-execution",
     "fsh-sushi": "^2.9.0"
   },
   "dependencies": {
