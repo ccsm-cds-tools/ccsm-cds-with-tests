@@ -26,7 +26,9 @@ const PertinentVaccinationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-
 const ScreeningAndManagementHistoryQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ScreeningAndManagementHistoryQuestionnaire.json'));
 
 // Bring in an example patient bundle from the test folder
-const examplePatientBundle = JSON.parse(readFileSync('test/ManagementTable4/test_results/ManageCommonAbnormality_v1.1.0/bundles/ASCUS_or_LSIL_Then_Less_Than_CIN2_Then_HPV_Negative_ASCUS_or_LSIL_Then_HPV_Negative_ASCUS_or_LSIL_-_1_Year_Follow_Up.json'));
+const patientFilePath = 'apply/fixtures/Lucille738.json';
+const examplePatientBundle = JSON.parse(readFileSync(patientFilePath));
+// console.log(examplePatientBundle);
 const examplePatientResources = examplePatientBundle.entry.map(r => r.resource); // convert from bundle to flat array
 
 // Read in ELM JSON representation of CDS logic
@@ -124,8 +126,10 @@ const aux = {
   valueSetJson
 };
 
+console.time('Apply Operation Time')
 // Run the $apply operations
 const [RequestGroup, ...otherResources] = await applyAndMerge(CervicalCancerScreeningAndManagementClinicalDecisionSupport, patientReference, resolver, aux);
+console.timeEnd('Apply Operation Time')
 
 // Concatenate all the resources created by $apply operation
 let outputResources = [
