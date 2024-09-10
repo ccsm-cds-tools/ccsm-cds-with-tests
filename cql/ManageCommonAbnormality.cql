@@ -568,7 +568,7 @@ define ErrataRecommendation:
       )
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 years,
         details: {
           'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
@@ -725,7 +725,7 @@ define Action:
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
@@ -737,7 +737,7 @@ define Action:
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
@@ -749,7 +749,7 @@ define Action:
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 3-year follow-up',
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
@@ -761,7 +761,7 @@ define Action:
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 3-year follow-up',
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
@@ -773,7 +773,7 @@ define Action:
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 5-year follow-up',
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
@@ -786,7 +786,7 @@ define Action:
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 5-year follow-up',
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,

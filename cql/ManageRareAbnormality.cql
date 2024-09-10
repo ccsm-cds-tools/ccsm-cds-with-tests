@@ -398,7 +398,7 @@ define RecommendationForRareCytology:
       HistologyInterpretedAsCin1OrNormal
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Rare Cytology (G.1.4)',
         details: {
@@ -1321,7 +1321,7 @@ define RecommendationForHistologyResults:
       not (HasPositiveSurveillanceAfterSecondNegativeHsilSurveillance)
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 3-year follow-up',
         date: Today() + 3 years,
         group: 'Managing Histology (I.3)',
         details: {
@@ -1337,7 +1337,7 @@ define RecommendationForHistologyResults:
       // TODO: Investigate whether RecentlyRespondedYesToFuturePregnancyConcernsQuestion needs to be checked for I3.3, 13.4, and I3.5
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Today() + 1 year,
         group: 'Managing Histology (I.3)',
         details: {
