@@ -248,7 +248,7 @@ define RecommendationForPatientsYoungerThan25:
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Younger Than 25 (K.1.3)',
         details: {
@@ -365,7 +365,7 @@ define RecommendationForPatientsYoungerThan25:
       Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 6-month follow-up',
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
@@ -380,7 +380,7 @@ define RecommendationForPatientsYoungerThan25:
      Collate.HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
@@ -534,7 +534,7 @@ define RecommendationForPregnantPatients:
       HistologicAisDuringPregnancy
     ) then
       {
-        short: 'See Details',
+        short: 'Referral',
         date: Today(),
         group: 'Pregnant (K.2)',
         details: {
@@ -737,7 +737,7 @@ define RecommendationForManagingPatientsAfterHysterectomy:
       Rare.AbsenceOrRemovalOfCervix
     ) then 
       {
-        short: 'See Details',
+        short: 'Surveillance',
         date: Today(),
         group: 'Hysterectomy (K.4)',
         details: {

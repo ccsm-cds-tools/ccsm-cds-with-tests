@@ -863,7 +863,7 @@ define Action:
       CCF.CoincidentDiagnosticReports(Dash.MostRecentNilmCytology, Dash.MostRecentPositiveHpv)
     ) then
       {
-        short: 'See Details',
+        short: 'Use Clinical Judgement',
         date: Today(),
         details: {
           'There is no specific recommendation for a NILM cytology and HPV + in a patient < 25 years of age. Use clinical judgement.'

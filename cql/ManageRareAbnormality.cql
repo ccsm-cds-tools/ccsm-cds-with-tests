@@ -423,7 +423,7 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Rare Cytology (G.1.5)',
         details: {
@@ -440,7 +440,7 @@ define RecommendationForRareCytology:
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Colposcopy',
         date: Today(),
         group: 'Rare Cytology (G.1.1)',
         details: {
@@ -457,7 +457,7 @@ define RecommendationForRareCytology:
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Colposcopy',
         date: Today(),
         group: 'Rare Cytology (G.1.2)',
         details: {
@@ -473,7 +473,7 @@ define RecommendationForRareCytology:
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithAtypicalEndometrialCells.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Endometrial and Endocervical Sampling',
         date: Today(),
         group: 'Rare Cytology (G.1.3)',
         details: {
@@ -535,7 +535,7 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsNilm
     ) then
       {
-        short: 'See Details',
+        short: 'Routine Screening',
         date: Today(),
         group: 'Rare Cytology (G.3.1)',
         details: {
@@ -553,7 +553,7 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'HPV Testing',
         date: Today(),
         group: 'Rare Cytology (G.3.2)',
         details: {
@@ -574,7 +574,7 @@ define RecommendationForRareCytology:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'No Further Evaluation',
         date: Today(),
         group: 'Rare Cytology (G.4.1)',
         details: {
@@ -587,7 +587,7 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsBenignEndometrialCells
     ) then
       {
-        short: 'See Details',
+        short: 'Endometrial Assessment',
         date: Today(),
         group: 'Rare Cytology (G.4.2)',
         details: {
@@ -600,7 +600,7 @@ define RecommendationForRareCytology:
       CytologyInterpretedAsBenignGlandularCells
     ) then
       {
-        short: 'See Details',
+        short: 'No Further Evaluation',
         date: Today(),
         group: 'Rare Cytology (G.4.3)',
         details: {
@@ -1136,7 +1136,7 @@ define RecommendationForAisHistologyResults:
       not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Managing Histology (I.6)',
         details: {
@@ -1153,7 +1153,7 @@ define RecommendationForAisHistologyResults:
       not AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Managing Histology (I.6)',
         details: {
@@ -1173,7 +1173,7 @@ define RecommendationForAisHistologyResults:
       not CervixRemovalDateIsAfterLastKnownAisBiopsy
     ) then
       {
-        short: 'See Details',
+        short: 'Hysterectomy',
         date: Today(),
         group: 'Managing Histology (I.6)',
         details: {
@@ -1190,7 +1190,7 @@ define RecommendationForAisHistologyResults:
       AisFoundDuringTreatmentOrHadTreatmentAfterAis
     ) then
       {
-        short: 'See Details',
+        short: 'Hysterectomy',
         date: Today(),
         group: 'Managing Histology (I.6)',
         details: {
@@ -1405,7 +1405,7 @@ define RecommendationForHistologyResults:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Managing Histology (I.4.5)',
         details: {
@@ -1459,7 +1459,7 @@ define RecommendationForHistologyResults:
       not HasPositiveSurveillanceAfterMostRecentBiopsy
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 3-year follow-up',
         date: Today(),
         group: 'Managing Histology (I.4.3.2)',
         details: {
@@ -1512,7 +1512,7 @@ define RecommendationForHistologyResults:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 1-year follow-up',
         date: Today(),
         group: 'Managing Histology (I.4.3.1)',
         details: {
@@ -1603,7 +1603,7 @@ define RecommendationForHistologyResults:
       not (HasSurveillanceAfterMostRecentBiopsy)
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 1-year follow-up',
         date: Today(),
         group: 'Managing Histology (I.4.2)',
         details: {
@@ -1627,7 +1627,7 @@ define RecommendationForHistologyResults:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance',
         date: Today(),
         group: 'Managing Histology (I.5)',
         details: {
@@ -1935,7 +1935,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       )
     ) then
       {
-        short: 'See Details',
+        short: 'Repeat Excision',
         date: Today(),
         group: 'Management Surveillance (J.2.3)',
         details: {
@@ -1957,7 +1957,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       not HasColposcopyProcedureAfterMostRecentTreatment
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 6-month follow-up',
         date: Today(),
         group: 'Management Surveillance (J.2.1)',
         details: {
@@ -1978,7 +1978,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       not HasPositiveHpvAfterTreatmentForHighGradeResult
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance',
         date: Today(),
         group: 'Management Surveillance (J.3.1)',
         details: {
@@ -1992,7 +1992,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       InitialIntensiveSurveillancePeriod
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 3-year follow-up',
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
@@ -2006,7 +2006,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
       InitialIntensiveSurveillancePeriod
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 3-year follow-up',
         date: Today(),
         group: 'Management Surveillance (J.3.2)',
         details: {
