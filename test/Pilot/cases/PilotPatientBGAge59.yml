@@ -1,0 +1,69 @@
+---
+name: Pilot Patient BG Age 59
+
+data:
+- 
+  resourceType: Patient
+  name: Becky93 Grossman19
+  gender: female
+  birthDate: 1964-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+
+# HPV 16, 18/45 Not detected
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2023-09-25
+
+
+# ASC-US, ASC-H Pap smear, HRHPV-, HRHPV+, MRNA E6/E7 detected
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2023-09-25
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  - SNOMEDCT#441088002 Atypical squamous cells on cervical Papanicolaou smear cannot exclude high grade squamous intraepithelial lesion (finding)
+  effectiveDateTime: 2023-09-25
+
+# NILM Pap Smear and HRHPV+ Cotest
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2018-09-17
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2018-09-17
+
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-12-30'
+    group: 'Exception to Colposcopy Threshold (H.2)'
+    details:
+    - 'Colposcopy is recommended regardless of hrHPV result.'

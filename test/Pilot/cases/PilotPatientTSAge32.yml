@@ -1,0 +1,38 @@
+---
+name: Pilot Patient TS Age 32
+
+data:
+- 
+  resourceType: Patient
+  name: Tanya44 Schuster09
+  gender: female
+  birthDate: 1991-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+    
+# ASC-US Pap and HRHPV+   
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2022-06-23  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2022-06-23
+  
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-12-30'
+    group: 'General Screening (Table 1)'
+    details:
+    - "Colposcopy is recommended."

@@ -1,0 +1,45 @@
+---
+name: Pilot Patient KC Age 42
+
+data:
+- 
+  resourceType: Patient
+  name: Kimberlee52 Chalmers28
+  gender: female
+  birthDate: 1981-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# ASC-US and HR HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-09-21
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-09-21
+
+# Cervical Biopsy with LEEP
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2015-01-01
+  status: completed  
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-12-30'
+    group: 'Post Treatment (Table 5)'
+    details:
+    - 'Colposcopy is recommended.'

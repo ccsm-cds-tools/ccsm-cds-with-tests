@@ -1,0 +1,93 @@
+---
+name: Pilot Patient GU Age 37
+
+data:
+- 
+  resourceType: Patient
+  name: Gayatri39 Upadhyay61
+  gender: female
+  birthDate: 1986-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# HIV+ 
+# Doesn't specify onset date for HIV+ in spreadsheet
+- 
+  resourceType: Condition
+  clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+  verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+  code: SNOMEDCT#186706006 Human immunodeficiency virus infection constitutional disease (disorder)
+  onsetDateTime: 2023-01-01
+  
+# CIN 3 Colposcopy, Margins Negative
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-09-21
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2023-09-21
+  status: completed  
+
+
+# CIN 2, CIN 3 Colposcopy
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-08-10
+
+
+# Endocervical curettage negative (not mapped)
+-
+  resourceType: Procedure
+  code: CPT#57456 Colposcopy of the cervix including upper/adjacent vagina; with endocervical curettage
+  performedDateTime: 2023-05-11
+  status: completed
+  
+  
+# Colposcopy  with no results
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-06-01
+  status: completed  
+
+# HSIL Pap and HRHPV+
+-
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-05-03
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-05-03
+
+# The HIV+ condition makes this patient immunocompromised.
+# Section K.3 does not look at the LEEP or CIN3 result so the colposcopy recommendation is shown
+results:
+  HasRecentAbnormalScreening: true
+  RecommendColposcopy: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-12-30'
+    group: 'Immunosuppressed (K.3)'
+    details:
+    - 'Colposcopy referral is recommended for immunocompromised patients of any age with cytology results of HPV-positive ASC-US or higher and for any cytology results of LSIL or worse.'

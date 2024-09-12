@@ -1,0 +1,65 @@
+---
+name: Pilot Patient CC Age 29
+
+data:
+- 
+  resourceType: Patient
+  name: Caroline39 Crawford64
+  gender: female
+  birthDate: 1994-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# ASC-US Pap and HRHPV+ 
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-09-29
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-09-29
+
+
+# Colposcopy without Pathology
+-
+  resourceType: Procedure
+  code: SNOMEDCT#392003006 Colposcopy (procedure)
+  performedDateTime: 2022-08-05
+  status: completed
+
+# LSIL Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2022-06-29
+
+# NILM Pap Smear - Thin Prep Tis w/RFL HPV - no HPV result listed
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2016-08-11
+
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Colposcopy'
+    date: '2023-12-30'
+    group: '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
+    details:
+    - 'Colposcopy is recommended.'
