@@ -929,14 +929,18 @@ define MostRecentNilmCytology:
       (CollateConclusionCodes(R,CytologyObservations)) cC return cC ~ "NILM"
     )
 
-define HistologyDiagnosticReports:
-  Common.CompletedDiagnosticReport([DiagnosticReport: "Biopsy Report"])
-
 define HistologyObservations:
   [Observation: "Biopsy Report"]
 
 define AllCompletedDiagnosticReport:
   Common.CompletedDiagnosticReport([DiagnosticReport])
+
+define HistologyDiagnosticReports:
+  AllCompletedDiagnosticReport B
+  where 
+    Count(
+      CollateConclusionCodes(B,HistologyObservations, "Biopsy Report")
+    ) > 0
 
 define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
   (DrList) D
