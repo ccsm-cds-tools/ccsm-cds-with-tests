@@ -947,7 +947,8 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
   let CollatedCodes: CollateConclusionCodes(D,ObsList)
   return {
     name: ReportType,
-    longName: Common.ConceptText(D.code),
+    // longName: Common.ConceptText(D.code),
+    longName: GetLongName(D, ObsList, ReportType),
     value: HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType)),
     longValue: flatten(
       (CollatedCodes) cC
@@ -958,6 +959,33 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     reference: 'DiagnosticReport/' + D.id,
     edited: HasBeenLocallyEdited(D)
   }
+
+// If a DiagnosticReport.code has a display value, then use that value.
+// If it does not, then look for the display value in the referenced Observations.
+define function GetLongName(D DiagnosticReport, ObsList List<Observation>, ReportType String):
+  if (Common.ConceptText(D.code) is not null) then
+    Common.ConceptText(D.code)
+  else
+    First(GetCodeDislayValuesFromObservation(D, ObsList, ReportType))
+
+define function ReportTypeCodeMapping(ReportType String):
+  if ReportType = 'HPV Test' then
+    ToConcept("HPV Test")
+  else if ReportType = 'Cervical Cytology' then
+    ToConcept("Pap Test")
+  else if ReportType = 'Cervical Histology' then
+    ToConcept("Biopsy Report")
+  else
+    null
+
+define function GetCodeDislayValuesFromObservation(D DiagnosticReport, ObsList List<Observation>, ReportType String):
+  (ObsList) O
+  where
+    Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+    Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+    C3F.FindDate(O) = Common.DiagnosticReportDate(D) and
+    O.code in ReportTypeCodeMapping(ReportType)
+  return Common.ConceptText(O.code)
 
 define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
   if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
