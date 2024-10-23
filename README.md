@@ -115,7 +115,32 @@ In order to execute CDS logic, the FHIR Clinical Guidelines Implementation guide
 
 ### Run CQL Tests
 
-To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a UMLS account and VSAC API key; please see documentation for the [CQL Testing Framework](https://github.com/AHRQ-CDS/CQL-Testing-Framework) for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
+To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a UMLS account and VSAC API key; please see the section below, [Setting Up VSAC](#setting-up-vsac), for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
+
+### Setting Up VSAC
+
+Retrieve your VSAC API key from [your UMLS profile](https://uts.nlm.nih.gov/uts/profile) if you already have an account.  If you do not have an account, you must [create one](https://uts.nlm.nih.gov/uts/signup-login) to gain access to an API key.
+
+To use the VSAC API, you must set the `UMLS_API_KEY` environment variable on your system. Follow the instructions according to your operating system:
+
+#### Windows
+
+1. Open the Start Menu and search for "Environment Variables".
+2. Click on "Edit the system environment variables".
+3. In the System Properties window, click on "Environment Variables".
+4. Under "User variables" or "System variables", click "New".
+5. Enter `UMLS_API_KEY` as the name and your API key as the value.
+6. Click "OK" to save.
+
+#### macOS or Linux
+
+1. Open a terminal.
+2. Use a text editor to open your shell profile. For example, `nano ~/.bash_profile` or `nano ~/.zshrc`.
+3. Add the line: `export UMLS_API_KEY=your_api_key`.
+4. Save the file and exit the editor.
+5. Run `source ~/.bash_profile` or `source ~/.zshrc` to apply the changes.
+
+After setting the environment variable, you will be able to retrieve valuesets from VSAC.
 
 ## Feedback
 
