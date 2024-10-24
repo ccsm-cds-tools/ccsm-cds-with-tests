@@ -1,0 +1,84 @@
+---
+name: Pilot Patient HM Age 31
+
+data:
+- 
+  resourceType: Patient
+  name: Hanna48 Moore16
+  gender: female
+  birthDate: 1992-06-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+    
+# Colposcopy without Pathology
+-
+  resourceType: Procedure
+  code: SNOMEDCT#392003006 Colposcopy (procedure)
+  performedDateTime: 2023-10-12
+  status: completed
+  
+# LSIL Pap Smear and HRHPV- Cotest
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-03-30
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2023-03-30
+
+
+# Colposcopy pathology CIN1 and CIN2
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2022-07-29
+
+# Colposcopy  
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2022-07-29
+  status: completed
+
+# LSIL Pap smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2022-03-15
+
+# NILM Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2016-10-24
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Surveillance or Treatment'
+    date: '2023-12-30'
+    group: 'Managing Histology (I.2)'
+    details:
+    - "Treatment of CIN2 is recommended unless the patient's concerns about the effect of treatment on future pregnancy outweigh concerns about cancer."
+    - "Excisional treatment is preferred, and treatment with ablation is acceptable."
+    - "Observation is unacceptable when the squamocolumnar junction or the upper limit of the lesion is not fully visualized or when the results of an endocervical sampling, if performed, is CIN 2+ or ungraded."
+    - "Observation includes colposcopy and primary hrHPV testing or cotesting at 6-month intervals for up to 2 years."
