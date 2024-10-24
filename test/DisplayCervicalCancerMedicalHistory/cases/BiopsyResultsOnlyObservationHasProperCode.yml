@@ -11,9 +11,11 @@ data:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
+
+# DiagnosticReport and Observation have same date
 -
   resourceType: DiagnosticReport
-  code: urn:oid:1.2.840.114350.1.13.284.3.7.5.737384.95#SURG01
+  code: LOINC#1234 Dummy LOINC code
   status: final
   effectiveDateTime: 2021-05-08T19:46:00Z
   issued: 2021-05-10T16:42:59Z
@@ -25,8 +27,50 @@ data:
   effectiveDateTime: 2021-05-08T19:46:00Z
   issued: 2021-05-10T16:42:59Z
 
+# DiagnosticReport references Observation
+-
+  resourceType: DiagnosticReport
+  code: LOINC#1234 Dummy LOINC code
+  status: final
+  effectiveDateTime: 2020-05-08T19:46:00Z
+  issued: 2020-05-10T16:42:59Z
+  result:
+  -
+    reference: Observation/1234
+- 
+  resourceType: Observation
+  id: 1234
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  valueCodeableConcept: SNOMEDCT#285836003 CIN 1
+
+# Diagnostic Report and Observation are 'based on' the same ServiceRequest
+-
+  resourceType: ServiceRequest
+  id: 5678
+  status: active
+  intent: plan
+  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
+-
+  resourceType: DiagnosticReport
+  code: LOINC#1234 Dummy LOINC code
+  status: final
+  effectiveDateTime: 2019-05-08T19:46:00Z
+  issued: 2019-05-10T16:42:59Z
+  basedOn:
+  -
+    reference: ServiceRequest/5678
+- 
+  resourceType: Observation
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  valueCodeableConcept: SNOMEDCT#285836003 CIN 1
+  basedOn:
+  -
+    reference: ServiceRequest/5678
+
 results:
-  HistologyDiagnosticReports: $should have length 1
+  HistologyDiagnosticReports: $should have length 3
   PertinentObservationsSummary: $should have length 0
-  HistologyDiagnosticReportsSummary: $should have length 1
-  DiagnosticReportsSummary: $should have length 1
+  HistologyDiagnosticReportsSummary: $should have length 3
+  DiagnosticReportsSummary: $should have length 3
