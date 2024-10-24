@@ -8139,29 +8139,6 @@
                }
             }
          }, {
-            "name" : "HistologyDiagnosticReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "CompletedDiagnosticReport",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}DiagnosticReport",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
-                  "codeProperty" : "code",
-                  "codeComparator" : "~",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "type" : "ToList",
-                     "operand" : {
-                        "name" : "Biopsy Report",
-                        "type" : "CodeRef"
-                     }
-                  }
-               } ]
-            }
-         }, {
             "name" : "HistologyObservations",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -8192,6 +8169,45 @@
                   "templateId" : "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
                   "type" : "Retrieve"
                } ]
+            }
+         }, {
+            "name" : "HistologyDiagnosticReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "AllCompletedDiagnosticReport",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "CollateConclusionCodes",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "B",
+                           "type" : "AliasRef"
+                        }, {
+                           "name" : "HistologyObservations",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "name" : "Biopsy Report",
+                           "type" : "CodeRef"
+                        } ]
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               }
             }
          }, {
             "name" : "Interpretation",
