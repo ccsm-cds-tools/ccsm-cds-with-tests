@@ -59,7 +59,7 @@ context Patient
 define HasRecentAbnormalScreening:
   Dash.HasRecentAbnormalScreening
 
-define HasRecenAbnormalHistology:
+define HasRecentAbnormalHistology:
   Dash.HasRecentAbnormalHistology
 
 define HasHighGradePreCancerCervicalLesion:
@@ -72,7 +72,7 @@ define IsIncluded:
   Dash.FemaleorTransgenderMale and
   (
     HasRecentAbnormalScreening or
-    HasRecenAbnormalHistology or
+    HasRecentAbnormalHistology or
     HasHighGradePreCancerCervicalLesion or
     HasCervicalCancerDiagnoses or
     Exists(Dash.HighGradeOrCancerHistologyResults) or
