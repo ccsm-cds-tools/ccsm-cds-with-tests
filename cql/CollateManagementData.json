@@ -3289,6 +3289,288 @@
                   "type" : "ExpressionRef"
                }
             }
+         }, {
+            "name" : "SortedHpvReportsAfterTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedHpvReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "H",
+                     "type" : "Property"
+                  }, {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "AbnormalHpvReportsAfterTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedHpvReportsAfterTreatment",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "riskTableInput",
+                        "scope" : "H",
+                        "type" : "Property"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV-negative",
+                        "type" : "Literal"
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "SortedCytologyReportsAfterTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "After",
+                  "operand" : [ {
+                     "path" : "date",
+                     "scope" : "C",
+                     "type" : "Property"
+                  }, {
+                     "name" : "DateOfLastCervicalPrecancerTreatment",
+                     "type" : "ExpressionRef"
+                  } ]
+               }
+            }
+         }, {
+            "name" : "AbnormalCytologyReportsAfterTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReportsAfterTreatment",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "where" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "In",
+                     "operand" : [ {
+                        "path" : "riskTableInput",
+                        "scope" : "C",
+                        "type" : "Property"
+                     }, {
+                        "type" : "List",
+                        "element" : [ {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "NILM",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ALL",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "HasHadMultipleTestsAfterTreatment",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "SortedHpvReportsAfterTreatment",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "1",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "SortedCytologyReportsAfterTreatment",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "1",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }, {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "type" : "Count",
+                           "source" : {
+                              "name" : "SortedHpvReportsAfterTreatment",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "type" : "Count",
+                           "source" : {
+                              "name" : "SortedCytologyReportsAfterTreatment",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "1",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedHpvReportsAfterTreatment",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        }, {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "type" : "Indexer",
+                              "operand" : [ {
+                                 "name" : "SortedCytologyReportsAfterTreatment",
+                                 "type" : "ExpressionRef"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "0",
+                                 "type" : "Literal"
+                              } ]
+                           }
+                        } ]
+                     }
+                  } ]
+               } ]
+            }
+         }, {
+            "name" : "HasAbnormalHpvTestAfterImmediateTreatmentFollowUp",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "name" : "HasHadMultipleTestsAfterTreatment",
+                  "type" : "ExpressionRef"
+               },
+               "then" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "AbnormalHpvReportsAfterTreatment",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
+         }, {
+            "name" : "HasAbnormalCytologyTestAfterImmediateTreatmentFollowUp",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "name" : "HasHadMultipleTestsAfterTreatment",
+                  "type" : "ExpressionRef"
+               },
+               "then" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "AbnormalCytologyReportsAfterTreatment",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
+                  "value" : "false",
+                  "type" : "Literal"
+               }
+            }
          } ]
       }
    }

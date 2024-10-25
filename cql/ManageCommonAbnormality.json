@@ -903,42 +903,103 @@
                }
             }
          }, {
+            "name" : "Table5Exclusions",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Or",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "type" : "After",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "MostRecentBiopsyReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "name" : "DateOfLastCervicalPrecancerTreatment",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        } ]
+                     } ]
+                  }, {
+                     "name" : "HasAbnormalHpvTestAfterImmediateTreatmentFollowUp",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               }, {
+                  "name" : "HasAbnormalCytologyTestAfterImmediateTreatmentFollowUp",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "LookUpTable5",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetPostTreatmentManagement",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
+               "type" : "If",
+               "condition" : {
+                  "type" : "IsFalse",
+                  "operand" : {
+                     "name" : "Table5Exclusions",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "then" : {
+                  "name" : "GetPostTreatmentManagement",
+                  "libraryName" : "RiskTableLookup",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
                   "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
+               }
             }
          }, {
             "name" : "RowTable5",
@@ -1041,11 +1102,7 @@
                   }
                },
                "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
+                  "type" : "Null"
                }
             }
          }, {
@@ -1392,26 +1449,14 @@
                   "name" : "PostColposcopyManagementRecommendation",
                   "type" : "ExpressionRef"
                }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "ColposcopyResultsManagementRecommendation",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "ColposcopyResultsManagementRecommendation",
+                  "type" : "ExpressionRef"
                }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "SurveillanceManagementRecommendation",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "SurveillanceManagementRecommendation",
+                  "type" : "ExpressionRef"
                }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "GeneralScreeningManagementRecommendation",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "GeneralScreeningManagementRecommendation",
+                  "type" : "ExpressionRef"
                } ]
             }
          }, {
@@ -3815,8 +3860,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "1-year follow-up",
@@ -3885,8 +3934,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "1-year follow-up",
@@ -3976,8 +4029,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "3-year follow-up",
@@ -4046,8 +4103,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "3-year follow-up",
@@ -4137,8 +4198,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "5-year follow-up",
@@ -4210,8 +4275,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "5-year follow-up",
@@ -4283,8 +4352,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy",
@@ -4361,8 +4434,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy/Treatment",
@@ -4422,8 +4499,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Colposcopy/Treatment",
@@ -4501,8 +4582,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Treatment",
@@ -4561,8 +4646,12 @@
                      }, {
                         "type" : "Equal",
                         "operand" : [ {
-                           "name" : "TableRecommendation",
-                           "type" : "ExpressionRef"
+                           "asType" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "As",
+                           "operand" : {
+                              "name" : "TableRecommendation",
+                              "type" : "ExpressionRef"
+                           }
                         }, {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "Treatment",
@@ -4714,7 +4803,7 @@
                      "element" : [ {
                         "name" : "short",
                         "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "name" : "{urn:hl7-org:elm-types:r1}Any",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {

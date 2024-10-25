@@ -511,3 +511,41 @@ define ThirdMostRecentCytologyResultAfterTreatment:
     null
   else
     ThirdMostRecentCytologyCotestResult
+
+// Look for abnormal HPV/pap tests after treatment, to exclude patients from Risk Table 5
+define SortedHpvReportsAfterTreatment:
+  SortedHpvReports H
+  where H.date occurs after DateOfLastCervicalPrecancerTreatment
+
+define AbnormalHpvReportsAfterTreatment:
+  SortedHpvReportsAfterTreatment H
+  where H.riskTableInput != 'HPV-negative'
+
+define SortedCytologyReportsAfterTreatment:
+  SortedCytologyReports C
+  where C.date occurs after DateOfLastCervicalPrecancerTreatment
+
+define AbnormalCytologyReportsAfterTreatment:
+  SortedCytologyReportsAfterTreatment C
+  where not(C.riskTableInput in {'NILM','ALL'})
+
+define HasHadMultipleTestsAfterTreatment:
+  Count(SortedHpvReportsAfterTreatment) > 1 or
+  Count(SortedCytologyReportsAfterTreatment) > 1 or
+  (
+    Count(SortedHpvReportsAfterTreatment) = 1 and
+    Count(SortedCytologyReportsAfterTreatment) = 1 and
+    SortedHpvReportsAfterTreatment[0].date != SortedCytologyReportsAfterTreatment[0].date
+  )
+
+define HasAbnormalHpvTestAfterImmediateTreatmentFollowUp:
+  if HasHadMultipleTestsAfterTreatment then
+    Count(AbnormalHpvReportsAfterTreatment) > 0
+  else
+    false
+
+define HasAbnormalCytologyTestAfterImmediateTreatmentFollowUp:
+  if HasHadMultipleTestsAfterTreatment then
+    Count(AbnormalCytologyReportsAfterTreatment) > 0
+  else
+    false

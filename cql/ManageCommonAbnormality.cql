@@ -233,16 +233,29 @@ define PostColposcopyManagementRecommendation:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #5: Follow-up after treatment for CIN2 or CIN 3
 // Tables 5A and 5B
+
+define Table5Exclusions:
+  (
+    Collate.MostRecentBiopsyReport is not null and
+    Collate.MostRecentBiopsyReport.date occurs after Collate.DateOfLastCervicalPrecancerTreatment
+  ) or
+  Collate.HasAbnormalHpvTestAfterImmediateTreatmentFollowUp or
+  Collate.HasAbnormalCytologyTestAfterImmediateTreatmentFollowUp
+
 define LookUpTable5:
-    RiskTableLookup.GetPostTreatmentManagement(
-      Collate.MostRecentBiopsyResult,
-      Collate.ThirdMostRecentHpvResultAfterTreatment,
-      Collate.ThirdMostRecentCytologyResultAfterTreatment,
-      Collate.SecondMostRecentHpvResultAfterTreatment,
-      Collate.SecondMostRecentCytologyResultAfterTreatment,
-      Collate.MostRecentHpvResultAfterTreatment,
-      Collate.MostRecentCytologyResultAfterTreatment
+    if Table5Exclusions is false then (
+      RiskTableLookup.GetPostTreatmentManagement(
+        Collate.MostRecentBiopsyResult,
+        Collate.ThirdMostRecentHpvResultAfterTreatment,
+        Collate.ThirdMostRecentCytologyResultAfterTreatment,
+        Collate.SecondMostRecentHpvResultAfterTreatment,
+        Collate.SecondMostRecentCytologyResultAfterTreatment,
+        Collate.MostRecentHpvResultAfterTreatment, 
+        Collate.MostRecentCytologyResultAfterTreatment
+      )
     )
+    else
+      DefaultLookupTableReturnValue  
 
 define RowTable5:
   RiskTableLookup.GetRowTable5(
