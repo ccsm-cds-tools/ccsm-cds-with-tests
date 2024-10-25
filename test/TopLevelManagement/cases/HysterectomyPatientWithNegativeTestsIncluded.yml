@@ -1,5 +1,8 @@
 ---
-name: Hysterectomy Patient With Negative Tests Included in Management
+name: Hysterectomy Patient With Negative Tests Included
+
+externalData:
+- resources
 
 data:
 - 
@@ -12,10 +15,7 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 -
-  resourceType: Procedure
-  code: SNOMEDCT#116140006 Total hysterectomy (procedure)
-  status: completed
-  performedDateTime: null
+  $iterate: *AbsenceOrRemovalOfCervix
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
@@ -42,3 +42,5 @@ results:
   IsIncluded: true
   Excluded: false
   IsIncludedAndNotExcluded: true
+  WhichPopulationMadeTheRecommendation: 2
+  HasRecommendation: true

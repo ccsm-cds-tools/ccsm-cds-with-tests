@@ -1,5 +1,8 @@
 ---
-name: Hysterectomy Patient Included in Management
+name: Hysterectomy Patient Included
+
+externalData:
+- resources
 
 data:
 -
@@ -12,12 +15,11 @@ data:
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
 -
-  resourceType: Procedure
-  code: SNOMEDCT#116140006 Total hysterectomy (procedure)
-  status: completed
-  performedDateTime: null
+  $iterate: *AbsenceOrRemovalOfCervix
 
 results:
   IsIncluded: true
   Excluded: false
   IsIncludedAndNotExcluded: true
+  WhichPopulationMadeTheRecommendation: 2
+  HasRecommendation: true
