@@ -112,6 +112,15 @@
                "type" : "ExpressionRef"
             }
          }, {
+            "name" : "HasRecentAbnormalHistology",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "HasRecentAbnormalHistology",
+               "libraryName" : "Dash",
+               "type" : "ExpressionRef"
+            }
+         }, {
             "name" : "HasHighGradePreCancerCervicalLesion",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -156,8 +165,14 @@
                            "operand" : [ {
                               "type" : "Or",
                               "operand" : [ {
-                                 "name" : "HasRecentAbnormalScreening",
-                                 "type" : "ExpressionRef"
+                                 "type" : "Or",
+                                 "operand" : [ {
+                                    "name" : "HasRecentAbnormalScreening",
+                                    "type" : "ExpressionRef"
+                                 }, {
+                                    "name" : "HasRecentAbnormalHistology",
+                                    "type" : "ExpressionRef"
+                                 } ]
                               }, {
                                  "name" : "HasHighGradePreCancerCervicalLesion",
                                  "type" : "ExpressionRef"
