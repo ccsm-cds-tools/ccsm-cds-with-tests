@@ -1,0 +1,64 @@
+---
+name: Test Patient 4
+data:
+-
+  resourceType: Patient
+  name: Nicole Kidman
+  gender: female
+  birthDate: 1982-05-16
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+- # SCC pap
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#1162767002 Squamous cell carcinoma (morphologic abnormality) 
+  effectiveDateTime: 2024-09-17
+- # hpv 16/18
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
+  - SNOMEDCT#708299006 Deoxyribonucleic acid of Human papillomavirus 18 (substance)
+  effectiveDateTime: 2024-09-17
+
+- # hsil pap
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding) 
+  effectiveDateTime: 2024-03-02
+
+- # hpv 16/18
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
+  - SNOMEDCT#708299006 Deoxyribonucleic acid of Human papillomavirus 18 (substance)
+  effectiveDateTime: 2024-03-02
+
+- # leep
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2023-08-22
+  status: completed
+
+- # cin3
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2023-08-06
+
+results:
+  HpvDiagnosticReports: $should have length 2

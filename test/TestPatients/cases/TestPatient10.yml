@@ -1,0 +1,24 @@
+---
+name: Test Patient 10
+data:
+-
+  resourceType: Patient
+  name: Natalie Portman
+  gender: female
+  birthDate: 2003-04-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+- # agc pap
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441219009 Atypical glandular cells on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2024-05-16
+
+
+results:
+  HpvDiagnosticReports: $should have length 0

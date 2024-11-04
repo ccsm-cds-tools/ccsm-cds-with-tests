@@ -1,0 +1,50 @@
+---
+name: Test Patient 6
+data:
+-
+  resourceType: Patient
+  name: Anne Hathaway
+  gender: female
+  birthDate: 1999-09-17
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+- # lsil pap
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding) 
+  effectiveDateTime: 2024-08-08
+
+- # hpv 16/18
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
+  - SNOMEDCT#708299006 Deoxyribonucleic acid of Human papillomavirus 18 (substance)
+  effectiveDateTime: 2024-08-08
+
+
+- # ascus result from pap
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding) 
+  effectiveDateTime: 2021-04-15
+
+- # hpv negative result
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-04-15
+
+results:
+  HpvDiagnosticReports: $should have length 2
