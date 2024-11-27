@@ -160,40 +160,49 @@ context Patient
 // FUNCTIONS
 //------------------------------------------------------------------------------
 
+/**
+ * Takes a list of cytology conclusion codes and maps each to a text value and a numerical
+ * ranking. The text value is used as input to the risk tables and the numerical
+ * ranking is meant to convey precendence so that the most specific conclusion can
+ * be selected from amongst a group of codes. 
+ * Return a label string and grade integer to be used in user interfaces.
+ * @param conclusions - a list of CodeableConcepts
+ * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
+ */
 define function CytologyInterpretation(conclusions List<System.Concept>):
   if conclusions is not null then
     (conclusions) c
     return
       case
-        when c ~ "NILM" then {text: 'NILM', rank: 2}
-        when c ~ "ASC-US" then {text: 'ASC-US', rank: 3}
-        when c ~ "LSIL" then {text: 'LSIL', rank: 4}
-        when c ~ "ASC-H" then {text: 'ASC-H', rank: 5}
-        when c ~ "AGC" then {text: 'AGC', rank: 6}
-        when c in "HSIL" or c ~ "SCC" then {text: 'HSIL+', rank: 7}
+        when c ~ "NILM" then {riskTableInput: 'NILM', label: 'NILM', rank: 2, grade: 1 }
+        when c ~ "ASC-US" then {riskTableInput: 'ASC-US', label: 'ASC-US', rank: 3, grade: 1}
+        when c ~ "LSIL" then {riskTableInput: 'LSIL', label: 'LSIL', rank: 4, grade: 1}
+        when c ~ "ASC-H" then {riskTableInput: 'ASC-H', label: 'ASC-H', rank: 5, grade: 1}
+        when c ~ "AGC" then {riskTableInput: 'AGC', label: 'AGC', rank: 6, grade: 1}
+        when c in "HSIL" or c ~ "SCC" then {riskTableInput: 'HSIL+', label:'HSIL+, R/O Carcinoma', rank: 7, grade: 1}
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
-        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 1}
-        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
-        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
-        when c in "AIS" then {text: 'AIS', rank: 1}
-        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 1}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 1}        
-        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
+        when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: 1}
+        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'Atypical Endocervical Cells', label: 'Atypical Endocervical Cells', rank: 1, grade: 1}
+        when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: 1}
+        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: 1}
+        when c ~ "Endocervical AIS" then {riskTableInput: 'Endocervical AIS', label: 'Endocervical AIS', rank: 1, grade: 1}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'Endocervical Cells Favor Neoplasia', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: 1}
+        when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'Atypical Endometrial Cells', label: 'Atypical Endometrial Cells', rank: 1, grade: 1}
 
-        when c ~ "Histiocytes" then {text: 'Histiocytes', rank: 1}
-        when c ~ "Benign Endometrial Cells" then {text: 'Benign Endometrial Cells', rank: 1}
-        when c ~ "Benign Glandular Cells" then {text: 'Benign Glandular Cells', rank: 1}
-        when c ~ "Endometrial Stromal Cells" then {text: 'Endometrial stromal cells', rank: 1}
-        when c ~ "Unsatisfactory" then {text: 'Unsatisfactory', rank: 1}
-        when c ~ "Absent Transformation Zone" then {text: 'Absent Transformation Zone', rank: 1}
+        when c ~ "Histiocytes" then {riskTableInput: 'Histiocytes', label: 'Histiocytes', rank: 1, grade: 1}
+        when c ~ "Benign Endometrial Cells" then {riskTableInput: 'Benign Endometrial Cells', label: 'Benign Endometrial Cells', rank: 1, grade: 1}
+        when c ~ "Benign Glandular Cells" then {riskTableInput: 'Benign Glandular Cells', label: 'Benign Glandular Cells', rank: 1, grade: 1}
+        when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'Endometrial stromal cells', label: 'Endometrial stromal cells', rank: 1, grade: 1}
+        when c ~ "Unsatisfactory" then {riskTableInput: 'Unsatisfactory', label: 'Unsatisfactory', rank: 1, grade: 1}
+        when c ~ "Absent Transformation Zone" then {riskTableInput: 'Absent Transformation Zone', label: 'Absent Transformation Zone', rank: 1, grade: 1}
 
-        when c is null then {text: 'NULL', rank: -1}
-        else {text: 'UNK', rank: 1}
+        when c is null then {riskTableInput: 'NULL', label: 'None', rank: -1, grade: 0}
+        else {riskTableInput: 'UNK', label: 'Unrecognized', rank: 1, grade: 0}
       end
   else
-    {{text: 'ALL', rank: 0}}
+    {{riskTableInput: 'ALL', label: 'ALL', rank: 0, grade: 0}}
 
 /**
  * Takes a list of HPV conclusion codes and maps each to a text value and a numerical
@@ -202,23 +211,24 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
  * be selected from amongst a group of codes. For instance, an HPV test may come back
  * both as positive and positive for HPV16. We want to be able to select the latter
  * in this case as input to the risk tables.
+ * Return a label string and grade integer to be used in user interfaces.
  * @param conclusions - a list of CodeableConcepts
- * @returns List<Tuple { text System.String, rank System.Integer }>
+ * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
  */
 define function HpvInterpretation(conclusions List<System.Concept>):
   if conclusions is not null then
     (conclusions) c
     return
       case
-        when c ~ "HPV16+" then {text: 'HPV16+', rank: 5}
-        when c ~ "HPV18+" then {text: 'HPV16-, HPV18+', rank: 4}
-        when c in "High Risk HPV Positive Results" then {text: 'HPV-positive', rank: 3}
-        when c in "HPV Negative Results" then {text: 'HPV-negative', rank: 2}
-        when c is null then {text: 'NULL', rank: -1}
-        else {text: 'UNK', rank: 1}
+        when c ~ "HPV16+" then {riskTableInput: 'HPV16+', label: 'HPV (+) 16', rank: 5, grade: 2}
+        when c ~ "HPV18+" then {riskTableInput: 'HPV16-, HPV18+', label: 'HPV (-) 16, HPV (+) 18', rank: 4, grade: 2}
+        when c in "High Risk HPV Positive Results" then {riskTableInput: 'HPV-positive', label: 'HPV (+) Other', rank: 3, grade: 2}
+        when c in "HPV Negative Results" then {riskTableInput: 'HPV-negative', label: 'HPV (-)', rank: 2, grade: 1}
+        when c is null then {riskTableInput: 'NULL', label: 'None', rank: -1, grade: 0}
+        else {riskTableInput: 'UNK', label: 'Unrecognized', rank: 1, grade: 0}
       end
   else
-    {{text: 'ALL', rank: 0}}
+    {{riskTableInput: 'ALL', label: 'ALL', rank: 0, grade: 0}}
 
 /**
  * Takes the output from HpvInterpretation() and returns the text of the
@@ -227,33 +237,69 @@ define function HpvInterpretation(conclusions List<System.Concept>):
  * @param interpretations - a list of tuples
  * @returns System.String the text to be used as input to the risk tables
  */
-define function HighestRankedInterpretation(interpretations List<Tuple { text System.String, rank System.Integer }>):
+define function HighestRankedInterpretation(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
   Last(
     (
       (interpretations) I sort by rank
     ) S
-    return S.text
+    return S.riskTableInput
   )
 
 /**
+ * Set a flag if a result should be highlighted
+ * Takes the output from Interpretation() and returns the grade of the
+ * interpretation with the highest rank. This allows more specific conclusions to
+ * be highlighted in user interfaces.
+ * @param interpretations - a list of tuples
+ * @returns System.Integer the value used to determine the grade (class) of result
+ */
+define function InterpretedResultLabel(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
+  Last(
+    (
+      (interpretations) I sort by rank
+    ) S
+    return S.label
+  )
+  
+/**
+ * Return the label to be used in user interfaces for an interpreted result.
+ * @param interpretations - a list of tuples
+ * @returns System.Integer the value used to determine the grade (class) of result
+ */
+define function InterpretedResultGrade(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
+  Last(
+    (
+      (interpretations) I sort by rank
+    ) S
+    return S.grade
+  )
+
+/**
+ * Takes a list of Biopsy conclusion codes and maps each to a text value and a numerical
+ * ranking. The text value can be used as input to the risk tables and the numerical
+ * ranking is meant to convey precendence so that the most specific conclusion can
+ * be selected from amongst a group of codes.
+ * Return a label string and grade integer to be used in user interfaces.
+ * @param conclusions - a list of CodeableConcepts
+ * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
  */
 define function BiopsyInterpretation(conclusions List<System.Concept>):
   if conclusions is not null then
     (conclusions) c
     return
       case
-        when c in "Normal Histology Finding" then {text: '<CIN1', rank: 2}
-        when c ~ "CIN1" then {text: 'CIN1', rank: 3}
-        when c ~ "CIN2" then {text: 'CIN2', rank: 4}
-        when c ~ "HSIL, Unspecified" then {text: 'HSIL, Unspecified', rank: 5}
-        when c in "Histologic CIN3" then {text: 'CIN3', rank: 6}
-        when c in "AIS" then {text: 'AIS', rank: 7}
-        when c in "Histologic cancer" then {text: 'Cancer', rank: 8}
-        when c is null then {text: 'NULL', rank: -1}
-        else {text: 'UNK', rank: 1}
+        when c in "Normal Histology Finding" then {riskTableInput: '<CIN1', label: 'Negative, <CIN1', rank: 2, grade: 1}
+        when c ~ "CIN1" then {riskTableInput: 'CIN1', label: 'CIN1', rank: 3, grade: 1}
+        when c ~ "CIN2" then {riskTableInput: 'CIN2', label: 'CIN2', rank: 4, grade: 1}
+        when c ~ "HSIL, Unspecified" then {riskTableInput: 'HSIL, Unspecified', label: 'HSIL, Unspecified', rank: 5, grade: 2}
+        when c in "Histologic CIN3" then {riskTableInput: 'CIN3', label: 'CIN3', rank: 6, grade: 2}
+        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 7, grade: 2}
+        when c in "Histologic cancer" then {riskTableInput: 'Cancer', label: 'Cancer', rank: 8, grade: 2}
+        when c is null then {riskTableInput: 'NULL', label: 'None', rank: -1, grade: 0}
+        else {riskTableInput: 'UNK', label: 'Unrecognized', rank: 1, grade: 0}
       end
   else
-    {{text: 'ALL', rank: 0}}
+    {{riskTableInput: 'ALL', label: 'ALL', rank: 0, grade: 0}}
 
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
@@ -942,18 +988,27 @@ define HistologyDiagnosticReports:
       CollateConclusionCodes(B,HistologyObservations, "Biopsy Report")
     ) > 0
 
+
+/* This will need to be refactored to support returning all results for a Diagnostic Report, not
+* just the highest ranked interpretation. The longValue does return the display attribute for
+* all conclusion codes included in the diagnostic report, but the UI will need to see individual
+* values/labels and grades.
+*/
 define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
   (DrList) D
-  let CollatedCodes: CollateConclusionCodes(D,ObsList)
+  let CollatedCodes: CollateConclusionCodes(D,ObsList),
+      ResultInterpretation: Interpretation(CollatedCodes,ReportType)
   return {
     name: ReportType,
     longName: Common.ConceptText(D.code),
-    value: HighestRankedInterpretation(Interpretation(CollatedCodes,ReportType)),
+    value: HighestRankedInterpretation(ResultInterpretation),
     longValue: flatten(
       (CollatedCodes) cC
         return (cC.coding) cCC
           return cCC.display
     ),
+    label: InterpretedResultLabel(ResultInterpretation),
+    grade: InterpretedResultGrade(ResultInterpretation),
     date: Common.DiagnosticReportDateString(D),
     reference: 'DiagnosticReport/' + D.id,
     edited: HasBeenLocallyEdited(D)

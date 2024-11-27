@@ -68,7 +68,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
 define function HpvInterpretation(conclusions List<System.Concept>):
   Dash.HpvInterpretation(conclusions)
 
-define function HighestRankedInterpretation(interpretations List<Tuple { text System.String, rank System.Integer }>):
+define function HighestRankedInterpretation(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
   Dash.HighestRankedInterpretation(interpretations)
 
 define function BiopsyInterpretation(conclusions List<System.Concept>):
