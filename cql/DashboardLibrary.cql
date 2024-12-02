@@ -177,9 +177,9 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "NILM" then {riskTableInput: 'NILM', label: 'NILM', rank: 2, grade: 1 }
         when c ~ "ASC-US" then {riskTableInput: 'ASC-US', label: 'ASC-US', rank: 3, grade: 1}
         when c ~ "LSIL" then {riskTableInput: 'LSIL', label: 'LSIL', rank: 4, grade: 1}
-        when c ~ "ASC-H" then {riskTableInput: 'ASC-H', label: 'ASC-H', rank: 5, grade: 1}
-        when c ~ "AGC" then {riskTableInput: 'AGC', label: 'AGC', rank: 6, grade: 1}
-        when c in "HSIL" or c ~ "SCC" then {riskTableInput: 'HSIL+', label:'HSIL+, R/O Carcinoma', rank: 7, grade: 1}
+        when c ~ "ASC-H" then {riskTableInput: 'ASC-H', label: 'ASC-H', rank: 5, grade: 2}
+        when c ~ "AGC" then {riskTableInput: 'AGC', label: 'AGC', rank: 6, grade: 2}
+        when c in "HSIL" or c ~ "SCC" then {riskTableInput: 'HSIL+', label:'HSIL+, R/O Carcinoma', rank: 7, grade: 2}
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
