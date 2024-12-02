@@ -184,19 +184,19 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
         when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: 1}
-        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'Atypical Endocervical Cells', label: 'Atypical Endocervical Cells', rank: 1, grade: 1}
+        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'AECC', label: 'Atypical Endocervical Cells', rank: 1, grade: 1}
         when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: 1}
         when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: 1}
-        when c ~ "Endocervical AIS" then {riskTableInput: 'Endocervical AIS', label: 'Endocervical AIS', rank: 1, grade: 1}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'Endocervical Cells Favor Neoplasia', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: 1}
-        when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'Atypical Endometrial Cells', label: 'Atypical Endometrial Cells', rank: 1, grade: 1}
+        when c ~ "Endocervical AIS" then {riskTableInput: 'ECAIS', label: 'Endocervical AIS', rank: 1, grade: 1}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'ECFN', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: 1}
+        when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'AEMC', label: 'Atypical Endometrial Cells', rank: 1, grade: 1}
 
-        when c ~ "Histiocytes" then {riskTableInput: 'Histiocytes', label: 'Histiocytes', rank: 1, grade: 1}
-        when c ~ "Benign Endometrial Cells" then {riskTableInput: 'Benign Endometrial Cells', label: 'Benign Endometrial Cells', rank: 1, grade: 1}
-        when c ~ "Benign Glandular Cells" then {riskTableInput: 'Benign Glandular Cells', label: 'Benign Glandular Cells', rank: 1, grade: 1}
-        when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'Endometrial stromal cells', label: 'Endometrial stromal cells', rank: 1, grade: 1}
-        when c ~ "Unsatisfactory" then {riskTableInput: 'Unsatisfactory', label: 'Unsatisfactory', rank: 1, grade: 1}
-        when c ~ "Absent Transformation Zone" then {riskTableInput: 'Absent Transformation Zone', label: 'Absent Transformation Zone', rank: 1, grade: 1}
+        when c ~ "Histiocytes" then {riskTableInput: 'HIST', label: 'Histiocytes', rank: 1, grade: 1}
+        when c ~ "Benign Endometrial Cells" then {riskTableInput: 'BEMC', label: 'Benign Endometrial Cells', rank: 1, grade: 1}
+        when c ~ "Benign Glandular Cells" then {riskTableInput: 'BGC', label: 'Benign Glandular Cells', rank: 1, grade: 1}
+        when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'EMSC', label: 'Endometrial stromal cells', rank: 1, grade: 1}
+        when c ~ "Unsatisfactory" then {riskTableInput: 'UNSAT', label: 'Unsatisfactory', rank: 1, grade: 1}
+        when c ~ "Absent Transformation Zone" then {riskTableInput: 'ATZ', label: 'Absent Transformation Zone', rank: 1, grade: 1}
 
         when c is null then {riskTableInput: 'NULL', label: 'None', rank: -1, grade: 0}
         else {riskTableInput: 'UNK', label: 'Unrecognized', rank: 1, grade: 0}
