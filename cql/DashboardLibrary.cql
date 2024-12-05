@@ -183,12 +183,12 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
-        when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: 1}
-        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'AECC', label: 'Atypical Endocervical Cells', rank: 1, grade: 1}
-        when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: 1}
-        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: 1}
-        when c ~ "Endocervical AIS" then {riskTableInput: 'ECAIS', label: 'Endocervical AIS', rank: 1, grade: 1}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'ECFN', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: 1}
+        when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: 2}
+        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'AECC', label: 'Atypical Endocervical Cells', rank: 1, grade: 2}
+        when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: 2}
+        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: 2}
+        when c ~ "Endocervical AIS" then {riskTableInput: 'ECAIS', label: 'Endocervical AIS', rank: 1, grade: 2}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'ECFN', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: 2}
         when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'AEMC', label: 'Atypical Endometrial Cells', rank: 1, grade: 1}
 
         when c ~ "Histiocytes" then {riskTableInput: 'HIST', label: 'Histiocytes', rank: 1, grade: 1}
@@ -224,7 +224,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
         when c ~ "HPV18+" then {riskTableInput: 'HPV16-, HPV18+', label: 'HPV (-) 16, HPV (+) 18', rank: 4, grade: 2}
         when c in "High Risk HPV Positive Results" then {riskTableInput: 'HPV-positive', label: 'HPV (+) Other', rank: 3, grade: 2}
         when c in "HPV Negative Results" then {riskTableInput: 'HPV-negative', label: 'HPV (-)', rank: 2, grade: 1}
-        when c is null then {riskTableInput: 'NULL', label: 'None', rank: -1, grade: 0}
+        when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: 0}
         else {riskTableInput: 'UNK', label: 'Unrecognized', rank: 1, grade: 0}
       end
   else
@@ -290,7 +290,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
       case
         when c in "Normal Histology Finding" then {riskTableInput: '<CIN1', label: 'Negative, <CIN1', rank: 2, grade: 1}
         when c ~ "CIN1" then {riskTableInput: 'CIN1', label: 'CIN1', rank: 3, grade: 1}
-        when c ~ "CIN2" then {riskTableInput: 'CIN2', label: 'CIN2', rank: 4, grade: 1}
+        when c ~ "CIN2" then {riskTableInput: 'CIN2', label: 'CIN2', rank: 4, grade: 2}
         when c ~ "HSIL, Unspecified" then {riskTableInput: 'HSIL, Unspecified', label: 'HSIL, Unspecified', rank: 5, grade: 2}
         when c in "Histologic CIN3" then {riskTableInput: 'CIN3', label: 'CIN3', rank: 6, grade: 2}
         when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 7, grade: 2}
