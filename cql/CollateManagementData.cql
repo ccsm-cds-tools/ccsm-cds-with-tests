@@ -106,7 +106,7 @@ define SortedHpvReports:
       HpvInterpretation(
         Dash.CollateConclusionCodes(H,HpvObservations)
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(H,HpvObservations),
     date: Common.DiagnosticReportDate(H)
   }
@@ -176,7 +176,7 @@ define SortedCytologyReports:
       CytologyInterpretation(
         Dash.CollateConclusionCodes(C,CytologyObservations)
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(C,CytologyObservations),
     date: Common.DiagnosticReportDate(C)
   }
@@ -295,7 +295,7 @@ define SortedReports:
       BiopsyInterpretation(
         Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report")
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report"),
     date: Common.DiagnosticReportDate(B)
   }
