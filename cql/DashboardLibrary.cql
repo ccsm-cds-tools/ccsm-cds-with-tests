@@ -205,7 +205,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
   else
-    {{riskTableInput: 'ALL', label: 'None', rank: 0, grade: highlightGrades.empty}}
+    {{riskTableInput: 'ALL', label: 'No result found', rank: 0, grade: highlightGrades.empty}}
 
 /**
  * Takes a list of HPV conclusion codes and maps each to:
@@ -229,7 +229,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
   else
-    {{riskTableInput: 'ALL', label: 'None', rank: 0, grade: highlightGrades.empty}}
+    {{riskTableInput: 'ALL', label: 'No result found', rank: 0, grade: highlightGrades.empty}}
 
 /**
  * Takes a list of Biopsy conclusion codes and maps each to:
@@ -256,7 +256,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
   else
-    {{riskTableInput: 'ALL', label: 'None', rank: 0, grade: highlightGrades.empty}}
+    {{riskTableInput: 'ALL', label: 'No result found', rank: 0, grade: highlightGrades.empty}}
 
 //------------------------------------------------------------------------------
 // PERTINENT DEMOGRAPHICS
