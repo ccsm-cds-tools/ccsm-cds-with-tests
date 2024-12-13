@@ -131,6 +131,7 @@ code "Atypical Endometrial Cells": '103646000' from "SNOMED-CT" display 'Atypica
 code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papanicolaou smear unsatisfactory for evaluation (finding)'
 code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
 code "Endocervical AIS": '447760009' from "SNOMED-CT" display 'Endocervical adenocarcinoma in situ (disorder)'
+code "Insufficient": '112631006' from "SNOMED-CT" display 'Specimen unsatisfactory for diagnosis (finding)'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -186,13 +187,13 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
-        when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: highlightGrades.alert}
-        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'AECC', label: 'Atypical Endocervical Cells', rank: 1, grade: highlightGrades.alert}
-        when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: highlightGrades.alert}
-        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: highlightGrades.alert}
-        when c ~ "Endocervical AIS" then {riskTableInput: 'ECAIS', label: 'Endocervical AIS', rank: 1, grade: highlightGrades.alert}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'ECFN', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: highlightGrades.alert}
-        when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'AEMC', label: 'Atypical Endometrial Cells', rank: 1, grade: highlightGrades.normal}
+        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 1}
+        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
+        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
+        when c in "AIS" then {text: 'AIS', rank: 1}
+        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 1}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 1}        
+        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
 
         when c ~ "Histiocytes" then {riskTableInput: 'HIST', label: 'Histiocytes', rank: 1, grade: highlightGrades.normal}
         when c ~ "Benign Endometrial Cells" then {riskTableInput: 'BEMC', label: 'Benign Endometrial Cells', rank: 1, grade: highlightGrades.normal}
@@ -200,6 +201,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'EMSC', label: 'Endometrial stromal cells', rank: 1, grade: highlightGrades.normal}
         when c ~ "Unsatisfactory" then {riskTableInput: 'UNSAT', label: 'Unsatisfactory', rank: 1, grade: highlightGrades.normal}
         when c ~ "Absent Transformation Zone" then {riskTableInput: 'ATZ', label: 'Absent Transformation Zone', rank: 1, grade: highlightGrades.normal}
+        when c ~ "Insufficient" then {text: 'Insufficient/Unsatisfactory', rank: 1}
 
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
@@ -252,6 +254,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         when c in "Histologic CIN3" then {riskTableInput: 'CIN3', label: 'CIN3', rank: 6, grade: highlightGrades.alert}
         when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 7, grade: highlightGrades.alert}
         when c in "Histologic cancer" then {riskTableInput: 'Cancer', label: 'Cancer', rank: 8, grade: highlightGrades.alert}
+        when c ~ "Insufficient" then {text: 'Insufficient/Unsatisfactory', rank: 9}
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
