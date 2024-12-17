@@ -167,7 +167,7 @@ define highlightGrades:
  * Takes a list of cytology conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -211,7 +211,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
  * Takes a list of HPV conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -235,7 +235,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
  * Takes a list of Biopsy conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -946,12 +946,12 @@ define HistologyDiagnosticReports:
     ) > 0
 
 /**
- * Takes the output from HpvInterpretation() and returns the text of the
- * interpretation with the highest rank. This allows more specific conclusions to
- * take precedence over more general ones.
- * @param interpretations - a list of tuples
- * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
- */
+* Takes the output from CytologyInterpretation(), HpvInterpretation() or 
+* BiopsyInterpretation()returns the interpretation with the highest rank.
+* This allows more specific conclusions to take precedence over more general ones.
+* @param interpretations - a list of tuples
+* @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
+*/
 define function HighestRankedInterpretation(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
   Last(
     (
