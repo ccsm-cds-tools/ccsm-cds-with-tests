@@ -254,7 +254,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         when c in "Histologic CIN3" then {riskTableInput: 'CIN3', label: 'CIN3', rank: 6, grade: highlightGrades.alert}
         when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 7, grade: highlightGrades.alert}
         when c in "Histologic cancer" then {riskTableInput: 'Cancer', label: 'Cancer', rank: 8, grade: highlightGrades.alert}
-        when c ~ "Insufficient" then {text: 'Insufficient/Unsatisfactory', rank: 1}
+        when c ~ "Insufficient" then {riskTableInput: 'Insufficient', label: 'Insufficient/Unsatisfactory', rank: 1, grade: highlightGrades.unrecognized}
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
