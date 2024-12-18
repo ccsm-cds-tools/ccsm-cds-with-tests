@@ -201,7 +201,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'EMSC', label: 'Endometrial stromal cells', rank: 1, grade: highlightGrades.normal}
         when c ~ "Unsatisfactory" then {riskTableInput: 'UNSAT', label: 'Unsatisfactory', rank: 1, grade: highlightGrades.normal}
         when c ~ "Absent Transformation Zone" then {riskTableInput: 'ATZ', label: 'Absent Transformation Zone', rank: 1, grade: highlightGrades.normal}
-        when c ~ "Insufficient" then {text: 'Insufficient/Unsatisfactory', rank: 1}
+        when c ~ "Insufficient" then {riskTableInput: 'Insufficient', label: 'Insufficient/Unrecognized', rank: 1, grade: highlightGrades.unrecognized}
 
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
@@ -254,7 +254,7 @@ define function BiopsyInterpretation(conclusions List<System.Concept>):
         when c in "Histologic CIN3" then {riskTableInput: 'CIN3', label: 'CIN3', rank: 6, grade: highlightGrades.alert}
         when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 7, grade: highlightGrades.alert}
         when c in "Histologic cancer" then {riskTableInput: 'Cancer', label: 'Cancer', rank: 8, grade: highlightGrades.alert}
-        when c ~ "Insufficient" then {riskTableInput: 'Insufficient', label: 'Insufficient/Unsatisfactory', rank: 1, grade: highlightGrades.unrecognized}
+        when c ~ "Insufficient" then {riskTableInput: 'Insufficient', label: 'Insufficient/Unrecognized', rank: 1, grade: highlightGrades.unrecognized}
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
       end
