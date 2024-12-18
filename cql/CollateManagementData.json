@@ -321,13 +321,25 @@
                   "elementType" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "text",
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "label",
                         "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "rank",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "grade",
                         "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Integer",
                            "type" : "NamedTypeSpecifier"
@@ -464,46 +476,50 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "BiopsyInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "B",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HistologyObservations",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "name" : "Biopsy Report",
+                                 "name" : "BiopsyInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
                                           "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       } ]
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "B",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "HistologyObservations",
+                                             "type" : "ExpressionRef"
+                                          }, {
+                                             "name" : "Biopsy Report",
+                                             "libraryName" : "Dash",
+                                             "type" : "CodeRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
@@ -897,42 +913,46 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "HpvInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "H",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HpvObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
+                                 "name" : "HpvInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
+                                          "libraryName" : "Dash",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "H",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "HpvObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
@@ -1558,42 +1578,46 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "CytologyInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "C",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "CytologyObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
+                                 "name" : "CytologyInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
+                                          "libraryName" : "Dash",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "C",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "CytologyObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
