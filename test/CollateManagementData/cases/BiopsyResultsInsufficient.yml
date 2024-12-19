@@ -1,0 +1,27 @@
+---
+name: Biopsy Results Diagnostic Report and Observation Have Proper Code
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  effectiveDateTime: 2021-05-14
+- 
+  resourceType: Observation
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  valueCodeableConcept: SNOMEDCT#112631006 Specimen unsatisfactory for diagnosis (finding)
+  effectiveDateTime: 2021-05-14
+
+results:
+  MostRecentBiopsyResult: "Insufficient"
