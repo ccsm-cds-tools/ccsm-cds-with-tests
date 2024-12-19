@@ -201,7 +201,6 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
         when c ~ "Endometrial Stromal Cells" then {riskTableInput: 'EMSC', label: 'Endometrial stromal cells', rank: 1, grade: highlightGrades.normal}
         when c ~ "Unsatisfactory" then {riskTableInput: 'UNSAT', label: 'Unsatisfactory', rank: 1, grade: highlightGrades.normal}
         when c ~ "Absent Transformation Zone" then {riskTableInput: 'ATZ', label: 'Absent Transformation Zone', rank: 1, grade: highlightGrades.normal}
-        when c ~ "Insufficient" then {riskTableInput: 'Insufficient', label: 'Insufficient/Unsatisfactory', rank: 1, grade: highlightGrades.unrecognized}
 
         when c is null then {riskTableInput: 'NULL', label: 'No result found', rank: -1, grade: highlightGrades.empty}
         else {riskTableInput: 'UNK', label: 'Unrecognized Test Result', rank: 1, grade: highlightGrades.unrecognized}
