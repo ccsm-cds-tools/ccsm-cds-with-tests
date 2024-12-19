@@ -645,6 +645,14 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "Insufficient",
+            "id" : "112631006",
+            "display" : "Specimen unsatisfactory for diagnosis (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
             "name" : "Diagnosis of Genital GvHD",
             "id" : "GenitalGvHD",
             "display" : "Diagnosis of Genital GvHD",
@@ -2574,6 +2582,55 @@
                                  "name" : "grade",
                                  "value" : {
                                     "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Insufficient",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Insufficient",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Insufficient/Unsatisfactory",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "unrecognized",
                                     "type" : "Property",
                                     "source" : {
                                        "name" : "highlightGrades",
