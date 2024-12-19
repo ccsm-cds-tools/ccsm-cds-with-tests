@@ -168,7 +168,7 @@ define highlightGrades:
  * Takes a list of cytology conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -187,13 +187,13 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
 
         // Rare cytologies added so they are not interpreted as UNK, but ranked
         // low to avoid competing with existing cytology results
-        when c ~ "AGC Favor Neoplasia" then {text: 'AGC-FN', rank: 1}
-        when c ~ "Atypical Endocervical Cells" then {text: 'Atypical Endocervical Cells', rank: 1}
-        when c ~ "Atypical Glandular Cells Uncertain" then {text: 'AGC-US', rank: 1}
-        when c in "AIS" then {text: 'AIS', rank: 1}
-        when c ~ "Endocervical AIS" then {text: 'Endocervical AIS', rank: 1}
-        when c ~ "Endocervical Cells Favor Neoplasia" then {text: 'Endocervical Cells Favor Neoplasia', rank: 1}        
-        when c ~ "Atypical Endometrial Cells" then {text: 'Atypical Endometrial Cells', rank: 1}
+        when c ~ "AGC Favor Neoplasia" then {riskTableInput: 'AGC-FN', label: 'AGC-FN', rank: 1, grade: highlightGrades.alert}
+        when c ~ "Atypical Endocervical Cells" then {riskTableInput: 'AECC', label: 'Atypical Endocervical Cells', rank: 1, grade: highlightGrades.alert}
+        when c ~ "Atypical Glandular Cells Uncertain" then {riskTableInput: 'AGC-US', label: 'AGC-US', rank: 1, grade: highlightGrades.alert}
+        when c in "AIS" then {riskTableInput: 'AIS', label: 'AIS', rank: 1, grade: highlightGrades.alert}
+        when c ~ "Endocervical AIS" then {riskTableInput: 'ECAIS', label: 'Endocervical AIS', rank: 1, grade: highlightGrades.alert}
+        when c ~ "Endocervical Cells Favor Neoplasia" then {riskTableInput: 'ECFN', label: 'Endocervical Cells Favor Neoplasia', rank: 1, grade: highlightGrades.alert}
+        when c ~ "Atypical Endometrial Cells" then {riskTableInput: 'AEMC', label: 'Atypical Endometrial Cells', rank: 1, grade: highlightGrades.normal}
 
         when c ~ "Histiocytes" then {riskTableInput: 'HIST', label: 'Histiocytes', rank: 1, grade: highlightGrades.normal}
         when c ~ "Benign Endometrial Cells" then {riskTableInput: 'BEMC', label: 'Benign Endometrial Cells', rank: 1, grade: highlightGrades.normal}
@@ -212,7 +212,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
  * Takes a list of HPV conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -236,7 +236,7 @@ define function HpvInterpretation(conclusions List<System.Concept>):
  * Takes a list of Biopsy conclusion codes and maps each to:
  * - a text code used as index to risk tables
  * - a text label used in user interface output
- * - a rank to convey precendence so the conclusion of highest concern can be selected from a group of codes
+ * - a rank to convey precedence so the conclusion of highest concern can be selected from a group of codes
  * - a grade which categorizes the output for possible highlighting in user interfaces
  * @param conclusions - a list of CodeableConcepts
  * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
@@ -948,12 +948,12 @@ define HistologyDiagnosticReports:
     ) > 0
 
 /**
- * Takes the output from HpvInterpretation() and returns the text of the
- * interpretation with the highest rank. This allows more specific conclusions to
- * take precedence over more general ones.
- * @param interpretations - a list of tuples
- * @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
- */
+* Takes the output from CytologyInterpretation(), HpvInterpretation() or 
+* BiopsyInterpretation()returns the interpretation with the highest rank.
+* This allows more specific conclusions to take precedence over more general ones.
+* @param interpretations - a list of tuples
+* @returns List<Tuple { riskTableInput System.String, label System.string, rank System.Integer, grade System.Integer }>
+*/
 define function HighestRankedInterpretation(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
   Last(
     (
