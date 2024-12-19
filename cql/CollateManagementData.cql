@@ -68,7 +68,7 @@ define function CytologyInterpretation(conclusions List<System.Concept>):
 define function HpvInterpretation(conclusions List<System.Concept>):
   Dash.HpvInterpretation(conclusions)
 
-define function HighestRankedInterpretation(interpretations List<Tuple { text System.String, rank System.Integer }>):
+define function HighestRankedInterpretation(interpretations List<Tuple { riskTableInput System.String, label System.String, rank System.Integer, grade System.Integer }>):
   Dash.HighestRankedInterpretation(interpretations)
 
 define function BiopsyInterpretation(conclusions List<System.Concept>):
@@ -106,7 +106,7 @@ define SortedHpvReports:
       HpvInterpretation(
         Dash.CollateConclusionCodes(H,HpvObservations)
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(H,HpvObservations),
     date: Common.DiagnosticReportDate(H)
   }
@@ -176,7 +176,7 @@ define SortedCytologyReports:
       CytologyInterpretation(
         Dash.CollateConclusionCodes(C,CytologyObservations)
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(C,CytologyObservations),
     date: Common.DiagnosticReportDate(C)
   }
@@ -295,7 +295,7 @@ define SortedReports:
       BiopsyInterpretation(
         Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report")
       )
-    ),
+    ).riskTableInput,
     allConclusions: Dash.CollateConclusionCodes(B,HistologyObservations, Dash."Biopsy Report"),
     date: Common.DiagnosticReportDate(B)
   }
