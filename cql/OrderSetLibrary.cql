@@ -15,32 +15,31 @@ code "Surveillance": 'surveillance' from "LOCAL" display 'Surveillance'
 code "Treatment": 'treatment' from "LOCAL" display 'Treatment'
 
 
-define function ToCodeableConcept(code System.Code):
-  Tuple {
-    coding: {
-      {
-        system: code.system,
-        code: code.code,
-        display: code.display
+define function ToFhirCodeableConcept(c System.Code):
+    FHIR.CodeableConcept {
+      coding: {
+        FHIR.Coding {
+          system: FHIR.uri {value: c.system},
+          code: FHIR.code {value: c.code},
+          display: FHIR.string {value: c.display}
+        }
       }
-    },
-    text: code.display
-  }
+    }
 
 define PrimaryHpvCodeableConcept:
-  ToCodeableConcept("Primary HPV")
+  ToFhirCodeableConcept("Primary HPV")
 
 define CytologyCodeableConcept:
-  ToCodeableConcept("Cytology")
+  ToFhirCodeableConcept("Cytology")
 
 define CotestCodeableConcept:
-  ToCodeableConcept("Cotest")
+  ToFhirCodeableConcept("Cotest")
 
 define ColposcopyCodeableConcept:
-  ToCodeableConcept("Colposcopy")
+  ToFhirCodeableConcept("Colposcopy")
 
 define SurveillanceCodeableConcept:
-  ToCodeableConcept("Surveillance")
+  ToFhirCodeableConcept("Surveillance")
 
 define TreatmentCodeableConcept:
-  ToCodeableConcept("Treatment")
+  ToFhirCodeableConcept("Treatment")

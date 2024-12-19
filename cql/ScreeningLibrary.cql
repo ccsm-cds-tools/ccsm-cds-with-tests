@@ -196,7 +196,9 @@ define CotestingOrderCode:
   Orders.CotestCodeableConcept
 
 define ServiceRequestOrderDetail:
-  (ScreeningRecommendation.details) D return { text: D }
+  (ScreeningRecommendation.details) D return FHIR.CodeableConcept {
+    text: FHIR.string { value: D }
+  }
 
 define SuggestedOrders:
   {
@@ -207,7 +209,7 @@ define SuggestedOrders:
   except {null}
 
 define OrderDate:
-  ToString(ScreeningRecommendation.date)
+  ScreeningRecommendation.date
 
 //------------------------------------------------------------------------------
 // CDS OUTPUTS
@@ -223,3 +225,16 @@ define DecisionAids:
     disclaimer: 'An evidence based recommendation is provided based on clinical data available in the patient\'s electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.',
     suggestedOrders: SuggestedOrders
   }
+
+define DecisionAidsString:
+  '{' &
+  '"recommendation": "' & DecisionAids.recommendation & '", ' &
+  '"recommendationGroup": "' & DecisionAids.recommendationGroup & '", ' &
+  '"recommendationDetails": "' & '[' & Combine(DecisionAids.recommendationDetails, ', ') & ']' & '", ' &
+  '"recommendationDate": "' & DecisionAids.recommendationDate & '", ' &
+  '"errors": "' & '[' & Combine(DecisionAids.errors, ', ') & ']' & '", ' &
+  '"disclaimer": "' & DecisionAids.disclaimer & '", ' &
+  '"suggestedOrders": "' & '[' & Combine(DecisionAids.suggestedOrders, ', ') & ']' & '"' &
+  '}'
+
+define TestString: 'This is a test string'

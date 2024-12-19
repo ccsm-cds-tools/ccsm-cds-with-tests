@@ -90,65 +90,78 @@
       },
       "statements" : {
          "def" : [ {
-            "name" : "ToCodeableConcept",
+            "name" : "ToFhirCodeableConcept",
             "context" : "Patient",
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "Tuple",
+               "classType" : "{http://hl7.org/fhir}CodeableConcept",
+               "type" : "Instance",
                "element" : [ {
                   "name" : "coding",
                   "value" : {
                      "type" : "List",
                      "element" : [ {
-                        "type" : "Tuple",
+                        "classType" : "{http://hl7.org/fhir}Coding",
+                        "type" : "Instance",
                         "element" : [ {
                            "name" : "system",
                            "value" : {
-                              "path" : "system",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "code",
-                                 "type" : "OperandRef"
-                              }
+                              "classType" : "{http://hl7.org/fhir}uri",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "system",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
                            }
                         }, {
                            "name" : "code",
                            "value" : {
-                              "path" : "code",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "code",
-                                 "type" : "OperandRef"
-                              }
+                              "classType" : "{http://hl7.org/fhir}code",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "code",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
                            }
                         }, {
                            "name" : "display",
                            "value" : {
-                              "path" : "display",
-                              "type" : "Property",
-                              "source" : {
-                                 "name" : "code",
-                                 "type" : "OperandRef"
-                              }
+                              "classType" : "{http://hl7.org/fhir}string",
+                              "type" : "Instance",
+                              "element" : [ {
+                                 "name" : "value",
+                                 "value" : {
+                                    "path" : "display",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "c",
+                                       "type" : "OperandRef"
+                                    }
+                                 }
+                              } ]
                            }
                         } ]
                      } ]
                   }
-               }, {
-                  "name" : "text",
-                  "value" : {
-                     "path" : "display",
-                     "type" : "Property",
-                     "source" : {
-                        "name" : "code",
-                        "type" : "OperandRef"
-                     }
-                  }
                } ]
             },
             "operand" : [ {
-               "name" : "code",
+               "name" : "c",
                "operandTypeSpecifier" : {
                   "name" : "{urn:hl7-org:elm-types:r1}Code",
                   "type" : "NamedTypeSpecifier"
@@ -159,7 +172,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Primary HPV",
@@ -171,7 +184,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Cytology",
@@ -183,7 +196,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Cotest",
@@ -195,7 +208,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Colposcopy",
@@ -207,7 +220,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Surveillance",
@@ -219,7 +232,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "ToCodeableConcept",
+               "name" : "ToFhirCodeableConcept",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "Treatment",

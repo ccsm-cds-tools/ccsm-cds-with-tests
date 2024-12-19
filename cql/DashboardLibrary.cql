@@ -537,6 +537,27 @@ define PertinentConditionsSummary:
   }
   sort by (date as String) desc
 
+define PertinentConditionsSummaryString:
+  '[' &
+  (
+    Combine(
+      (PertinentConditions) C return
+        '{' &
+        '"name": "' & Coalesce(Common.ConceptText(C.code), '') & '", ' &
+        '"value": "' & Coalesce(C.clinicalStatus.coding[0].code.value, '') & '", ' &
+        '"date": "' & Coalesce(
+          Common.DateTimeText(C.onset as FHIR.dateTime),
+          Common.DateTimeText(C.recordedDate),
+          ''
+        ) & '", ' &
+        '"reference": "' & 'Condition/' & Coalesce(C.id, '') & '", ' &
+        '"edited": "' & ToString(HasBeenLocallyEdited(C)) & '"' &
+        '}',
+      ','
+    )
+  ) &
+  ']'
+
 //------------------------------------------------------------------------------
 // PERTINENT OBSERVATIONS
 //------------------------------------------------------------------------------
@@ -624,6 +645,22 @@ define PertinentObservationsSummary:
   }
   sort by (date as String) desc
 
+define PertinentObservationsSummaryString:
+  '[' &
+  (
+    Combine(
+      (PertinentObservations) Obs return
+        '{' &
+        '"name": "' & Coalesce(Common.ConceptText(Obs.code), '') & '", ' &
+        '"value": "' & Coalesce(Common.ConceptText(Obs.value), '') & '", ' &
+        '"date": "' & Coalesce(Common.ObservationDateString(Obs), '') & '", ' &
+        '"reference": "' & 'Observation/' & Coalesce(Obs.id, '') & '", ' &
+        '"edited": "' & ToString(HasBeenLocallyEdited(Obs)) & '"' &
+        '}',
+      ','
+    )
+  ) &
+  ']'
 //------------------------------------------------------------------------------
 // PERTINENT MEDICATIONS
 //------------------------------------------------------------------------------
@@ -694,7 +731,15 @@ define PertinentMedicationRequestsSummary:
     reference: 'MedicationRequest/' + M.id
   }
   sort by date desc
-
+define PertinentMedicationRequestsSummaryString:
+  (PertinentMedicationRequests) M
+  return
+    '{' +
+    '"name": "' + Coalesce(Common.ConceptText(M.medication as FHIR.CodeableConcept), '') + '", ' +
+    '"value": "' + Coalesce(M.status.value, '') + '", ' +
+    '"date": "' + Coalesce(Common.DateTimeText(M.authoredOn), '') + '", ' +
+    '"reference": "' + 'MedicationRequest/' + Coalesce(M.id, '') + '"' +
+    '}'
 define PertinentMedicationDispensesSummary:
   (PertinentMedicationDispenses) M
   return {
@@ -707,6 +752,19 @@ define PertinentMedicationDispensesSummary:
     reference: 'MedicationDispense/' + M.id
   }
   sort by date desc
+define PertinentMedicationDispensesSummaryString:
+  (PertinentMedicationDispenses) M
+  return
+    '{' +
+    '"name": "' + Common.ConceptText(M.medication as FHIR.CodeableConcept) + '", ' +
+    '"value": "' + Coalesce(M.status.value, '') + '", ' +
+    '"date": "' + Coalesce(
+      Common.DateTimeText(M.whenHandedOver),
+      Common.DateTimeText(M.whenPrepared),
+      ''
+    ) + '", ' +
+    '"reference": "' + 'MedicationDispense/' + Coalesce(M.id, '') + '"' +
+    '}'
 
 define function displayStartDate(startDate String):
   if startDate is not null then
@@ -731,6 +789,18 @@ define PertinentMedicationAdministrationsSummary:
     reference: 'MedicationAdministration/' + M.id
   }
   sort by date desc
+define PertinentMedicationAdministrationsSummaryString:
+  (PertinentMedicationAdministrations) M
+  return
+    '{' +
+    '"name": "' + Coalesce(Common.ConceptText(M.medication as FHIR.CodeableConcept), '') + '", ' +
+    '"value": "' + Coalesce(M.status.value, '') + '", ' +
+    '"date": "' + 
+      Coalesce(displayStartDate(Common.PeriodObject(M.effective as FHIR.Period)."Start"), '') +
+      ' to ' +
+      Coalesce(displayEndDate(Common.PeriodObject(M.effective as FHIR.Period)."End"), '') + '", ' +
+    '"reference": "' + 'MedicationAdministration/' + Coalesce(M.id, '') + '"' +
+    '}'
 
 define PertinentMedicationStatementsSummary:
   (PertinentMedicationStatements) M
@@ -743,6 +813,18 @@ define PertinentMedicationStatementsSummary:
     reference: 'MedicationStatement/' + M.id
   }
   sort by date desc
+define PertinentMedicationStatementsSummaryString:
+  (PertinentMedicationStatements) M
+  return
+    '{' +
+    '"name": "' + Coalesce(Common.ConceptText(M.medication as FHIR.CodeableConcept), '') + '", ' +
+    '"value": "' + Coalesce(M.status.value, '') + '", ' +
+    '"date": "' +
+      Coalesce(displayStartDate(Common.PeriodObject(M.effective as FHIR.Period)."Start"), '') +
+      ' to ' +
+      Coalesce(displayEndDate(Common.PeriodObject(M.effective as FHIR.Period)."End"), '') + '", ' +
+    '"reference": "' + 'MedicationStatement/' + Coalesce(M.id, '') + '"' +
+    '}'
 
 define PertinentMedicationsSummary:
   (PertinentMedicationRequestsSummary union
@@ -750,7 +832,18 @@ define PertinentMedicationsSummary:
   PertinentMedicationAdministrationsSummary union
   PertinentMedicationStatementsSummary) M
   sort by date desc
-
+define PertinentMedicationsSummaryString:
+  '[' &
+  (
+    Combine(
+      PertinentMedicationRequestsSummaryString union
+      PertinentMedicationDispensesSummaryString union
+      PertinentMedicationAdministrationsSummaryString union
+      PertinentMedicationStatementsSummaryString,
+      ','
+    )
+  ) &
+  ']'
 //------------------------------------------------------------------------------
 // PERTINENT PROCEDURES
 //------------------------------------------------------------------------------
@@ -824,6 +917,23 @@ define PertinentProceduresSummary:
     reference: 'Procedure/' + P.id,
     edited: HasBeenLocallyEdited(P)
   } sort by date desc
+
+  define PertinentProceduresSummaryString:
+  '[' &
+  (
+    Combine(
+      (PertinentProcedures) P return
+        '{' &
+        '"name": "' & Coalesce(Common.ConceptText(P.code), '') & '", ' &
+        '"value": "' & Coalesce(P.status.value, '') & '", ' &
+        '"date": "' & Coalesce(Common.ProcedureDateString(P), '') & '", ' &
+        '"reference": "' & 'Procedure/' & Coalesce(P.id, '') & '", ' &
+        '"edited": "' & Coalesce(ToString(HasBeenLocallyEdited(P)), '') & '"' &
+        '}',
+      ','
+    )
+  ) &
+  ']'
 
 //------------------------------------------------------------------------------
 // PERTINENT DIAGNOSTIC REPORTS
@@ -959,6 +1069,33 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     edited: HasBeenLocallyEdited(D)
   }
 
+define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
+  Combine(
+    (DrList) D
+    let CollatedCodes: CollateConclusionCodes(D, ObsList)
+    return
+      '{' +
+      '"name": "' + ReportType + '", ' +
+      '"longName": "' + Common.ConceptText(D.code) + '", ' +
+      '"value": "' + HighestRankedInterpretation(Interpretation(CollatedCodes, ReportType)) + '", ' +
+      '"longValue": [' + 
+        Coalesce(
+          Combine(flatten(
+            (CollatedCodes) cC
+            return
+              flatten(
+                (cC.coding) cCC
+                return cCC.display
+              )
+          ), ', '), ''
+        ) + '], ' +
+      '"date": "' + Common.DiagnosticReportDateString(D) + '", ' +
+      '"reference": "' + 'DiagnosticReport/' + Coalesce(D.id, '') + '", ' +
+      '"edited": ' + ToString(HasBeenLocallyEdited(D)) +
+      '}',
+    ','
+  )
+
 define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
   if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
   else if ReportType = 'Cervical Cytology' then CytologyInterpretation(CollatedCodes)
@@ -985,6 +1122,29 @@ define DiagnosticReportsSummary:
     HistologyDiagnosticReportsSummary
   ) D
   sort by date desc
+
+define HpvDiagnosticReportsSummaryString:
+  FormatReportsString(HpvDiagnosticReports, HpvObservations, 'HPV Test')
+
+define CervicalCytologyReportsSummaryString:
+  FormatReportsString(CervicalCytologyReports, CytologyObservations, 'Cervical Cytology')
+
+define HistologyDiagnosticReportsSummaryString:
+  FormatReportsString(HistologyDiagnosticReports, HistologyObservations, 'Cervical Histology')
+
+define DiagnosticReportsSummaryString:
+    '"' & HpvDiagnosticReportsSummaryString & '", ' &
+    '"' & CervicalCytologyReportsSummaryString & '", ' &
+    '"' & HistologyDiagnosticReportsSummaryString & '"'
+
+define DiagnosticReportsSummaryStringFix:
+  '[' & 
+    (if HpvDiagnosticReportsSummaryString is not null then '"' & HpvDiagnosticReportsSummaryString & '"' else '') &
+    (if HpvDiagnosticReportsSummaryString is not null and (CervicalCytologyReportsSummaryString is not null or HistologyDiagnosticReportsSummaryString is not null) then ', ' else '') &
+    (if CervicalCytologyReportsSummaryString is not null then '"' & CervicalCytologyReportsSummaryString & '"' else '') &
+    (if CervicalCytologyReportsSummaryString is not null and HistologyDiagnosticReportsSummaryString is not null then ', ' else '') &
+    (if HistologyDiagnosticReportsSummaryString is not null then '"' & HistologyDiagnosticReportsSummaryString & '"' else '') &
+  ']'
 
 define HighGradeOrCancerHistologyResults:
   HistologyDiagnosticReports D
@@ -1021,6 +1181,17 @@ define PertinentEncountersSummary:
       Common.DateTimeText((E.period as FHIR.Period)."end"),
     reference: 'Encounter/' + E.id
   }
+define PertinentEncountersSummaryString:
+  (PertinentEncounters) E
+  return
+    '{' +
+    '"name": "' + Common.ConceptText(E.reasonCode[0]) + '", ' +
+    '"value": "' + Coalesce(E.status, '') + '", ' +
+    '"date": "' + Coalesce(
+      Common.DateTimeText((E.period as FHIR.Period)."start"),
+      '') + ' to ' + Coalesce(Common.DateTimeText((E.period as FHIR.Period)."end"), '') + '", ' +
+    '"reference": "' + 'Encounter/' + Coalesce(E.id, '') + '"' +
+    '}'
 
 //------------------------------------------------------------------------------
 // HPV IMMUNIZATIONS
@@ -1049,6 +1220,19 @@ define PertinentImmunizationsSummary:
     reference: 'Immunization/' + I.id,
     edited: HasBeenLocallyEdited(I)
   }
+define PertinentImmunizationsSummaryString:
+  (PertinentImmunizations) I
+  return
+    '{' +
+    '"name": "' + Common.ConceptText(I.vaccineCode) + '", ' +
+    '"value": "' + Coalesce(I.status, '') + '", ' +
+    '"date": "' + Coalesce(
+      Common.DateTimeText(I.occurrence),
+      ''
+    ) + '", ' +
+    '"reference": "' + 'Immunization/' + Coalesce(I.id, '') + '", ' +
+    '"edited": ' + ToString(HasBeenLocallyEdited(I)) +
+    '}'
 
 //------------------------------------------------------------------------------
 // PERTINENT EPISODES OF CARE
@@ -1097,6 +1281,21 @@ define PertinentEpisodesOfCareSummary:
     edited: HasBeenLocallyEdited(E)
   }
   sort by (date as String) desc
+
+define PertinentEpisodesOfCareSummaryString:
+  (PregnancyEpisodesOfCare) E
+  return
+    '{' &
+    '"name": "' & Common.ConceptText(E.type[0]) & '", ' &
+    '"value": "' & Coalesce(E.status.value, '') & '", ' &
+    '"date": "' & Coalesce(
+      displayStartDate(Common.PeriodObject(E.period)."Start") & ' to ' &
+      displayEndDate(Common.PeriodObject(E.period)."End"),
+      ''
+    ) & '", ' &
+    '"reference": "' & 'EpisodeOfCare/' & Coalesce(E.id, '') & '", ' &
+    '"edited": ' & ToString(HasBeenLocallyEdited(E)) &
+    '}'
 
 //------------------------------------------------------------------------------
 // CLINICIAN PROVIDED INFORMATION
@@ -1403,3 +1602,44 @@ define CervicalCancerScreeningAndMedicalHistory:
     episodeOfCares: PertinentEpisodesOfCareSummary
   }
 }
+define PatientIdentifiersAsString:
+  if Patient.identifier is null
+  then '[]'
+  else
+    '[' +
+    Combine(
+      (Patient.identifier) Id
+        return 
+          '{ "system": "' + Coalesce(Id.system, '') + '", "value": "' + Coalesce(Id.value, '') + '" }',
+      ', '
+    ) +
+    ']'
+define RaceAndEthnicityString:
+    (if RaceText is null then '' else RaceText) &
+    (if RaceText is not null and EthnicityText is not null then '; ' else '') &
+    (if EthnicityText is null then '' else EthnicityText)
+
+define CervicalCancerScreeningAndMedicalHistoryString:
+  '{' &
+  '"patientInfo": {' &
+    '"name": "' & PatientName & '", ' &
+    '"id": ' & PatientIdentifiersAsString & ', ' &
+    '"isPregnant": "' & ToString(Pregnant) & '", ' &
+    '"dateOfBirth": "' & ToString(Patient.birthDate) & '", ' &
+    '"sexAtBirth": "' & BirthSexText & '", ' &
+    '"age": "' & ToString(AgeInYears()) & '", ' &
+    '"gender": "' & GenderText & '", ' &
+    '"primaryLanguage": "' & LanguageText & '", ' &
+    '"race": "' & RaceAndEthnicityString & '"' &
+  '}, ' &
+  '"patientHistory": {' &
+    '"conditions": "' & PertinentConditionsSummaryString & '", ' &
+    '"observations": "' & PertinentObservationsSummaryString & '", ' &
+    '"medications": "' & PertinentMedicationsSummaryString & '", ' &
+    '"procedures": "' & PertinentProceduresSummaryString & '", ' &
+    '"diagnosticReports": "' & DiagnosticReportsSummaryStringFix & '", ' &
+    '"encounters": "' & Combine(PertinentEncountersSummaryString, ', ') & '", ' &
+    '"immunizations": "' & Combine(PertinentImmunizationsSummaryString, ', ') & '", ' &
+    '"episodeOfCares": "' & Combine(PertinentEpisodesOfCareSummaryString, ', ') & '"' &
+  '}' &
+  '}'
