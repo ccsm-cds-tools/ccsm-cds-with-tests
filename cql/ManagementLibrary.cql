@@ -226,3 +226,52 @@ define DecisionAids:
     suggestedOrders: SuggestedOrders,
     riskTable: RiskTableSummary
   }
+
+
+define HeaderString:
+  (RiskTableSummary.headers) h
+    return '{ "key": "' & h.key & '", "display": "' & h.display & '"}' 
+define AdjacentString:
+  (RiskTableSummary.adjacent) a
+    return '{"action": "' & a.action & '", ' & 
+    '"preColposcopyResult": "' & a.preColposcopyResult & '", ' &
+    '"postColposcopyPastHistory": "' & a.postColposcopyPastHistory & '", ' & 
+    '"history": "' & a.history & '", ' & 
+    '"prev2": "' & a.prev2 & '", ' & 
+    '"prev1": "' & a.prev1 & '", ' & 
+    '"referral": "' & a.referral & '", ' & 
+    '"biopsy": "' & a.biopsy & '", ' & 
+    '"hpv": "' & a.hpv & '", ' & 
+    '"cyto": "' & a.cyto & '", ' & 
+    '"riskNow": "' & ToString(a.riskNow) & '", ' & 
+    '"risk5yr": "' & ToString(a.risk5yr) & '"}'
+
+define RiskTableString:
+  '{' &
+  '"title": "' & RiskTableSummary.title & '", ' &
+  '"subtitle": "' & RiskTableSummary.subtitle & '", ' &
+  '"headers": [' & Combine(HeaderString, ', ') & '],' &
+  '"relevant": {"action": "' & RiskTableSummary.relevant.action & '", ' & '"preColposcopyResult": "' & RiskTableSummary.relevant.preColposcopyResult & '", ' &
+  '"postColposcopyPastHistory": "' & RiskTableSummary.relevant.postColposcopyPastHistory & '", ' & 
+  '"history": "' & RiskTableSummary.relevant.history & '", ' & 
+  '"prev2": "' & RiskTableSummary.relevant.prev2 & '", ' & 
+  '"prev1": "' & RiskTableSummary.relevant.prev1 & '", ' & 
+  '"referral": "' & RiskTableSummary.relevant.referral & '", ' & 
+  '"biopsy": "' & RiskTableSummary.relevant.biopsy & '", ' & 
+  '"hpv": "' & RiskTableSummary.relevant.hpv & '", ' & 
+  '"cyto": "' & RiskTableSummary.relevant.cyto & '", ' & 
+  '"riskNow": "' & ToString(RiskTableSummary.relevant.riskNow) & '", ' & 
+  '"risk5yr": "' & ToString(RiskTableSummary.relevant.risk5yr) & '"}' &
+  '"adjacent": [' & Combine(AdjacentString, ', ') & '], ' &
+  '}'
+
+define DecisionAidsString:
+  '{' &
+  '"recommendation": "' & DecisionAids.recommendation & '", ' &
+  '"recommendationGroup": "' & DecisionAids.recommendationGroup & '", ' &
+  '"recommendationDetails": [' & Combine(DecisionAids.recommendationDetails, ', ') &
+  '"recommendationDate": "' & ToString(DecisionAids.recommendationDate & '", ' &
+  '"errors": [' Combine(DecisionAids.errors, ', ') & '],' & 
+  '"disclaimer": "' & DecisionAids.disclaimer & '", ' &
+  '"suggestedOrders":' & '[' & Combine(DecisionAids.suggestedOrders, ', ') & ']' & 
+  '"riskTable": ' & RiskTableString & '}'
