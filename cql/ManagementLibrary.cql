@@ -270,8 +270,8 @@ define DecisionAidsString:
   '"recommendation": "' & DecisionAids.recommendation & '", ' &
   '"recommendationGroup": "' & DecisionAids.recommendationGroup & '", ' &
   '"recommendationDetails": [' & Combine(DecisionAids.recommendationDetails, ', ') &
-  '"recommendationDate": "' & ToString(DecisionAids.recommendationDate & '", ' &
-  '"errors": [' Combine(DecisionAids.errors, ', ') & '],' & 
+  '"recommendationDate": "' & DecisionAids.recommendationDate & '", ' &
+  '"errors": [' & Combine(DecisionAids.errors, ', ') & '],' & 
   '"disclaimer": "' & DecisionAids.disclaimer & '", ' &
   '"suggestedOrders":' & '[' & Combine(DecisionAids.suggestedOrders, ', ') & ']' & 
   '"riskTable": ' & RiskTableString & '}'
