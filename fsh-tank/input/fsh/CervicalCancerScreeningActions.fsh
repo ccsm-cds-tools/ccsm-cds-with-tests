@@ -25,9 +25,9 @@ Usage: #definition
 * action[=].description = "Screening Decision Aids"
 * action[=].textEquivalent = "Screening Decision Aids"
 * action[=].definitionCanonical = Canonical(CervicalCancerDecisionAids|1.0.0)
-* action[=].dynamicValue[+].path = "payload[0].content.ofType(string)" // this is the CommunicationRequest.payload element
-* action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* action[=].dynamicValue[=].expression.expression = "DecisionAids"
+* action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
+* action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
+* action[=].dynamicValue[=].expression.expression = "DecisionAidsString"
 * action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * insert ScreeningCitationActionDocumentation
 // -----------------------------------------------------------------------------
@@ -41,11 +41,11 @@ Usage: #definition
 // Primary HPV Testing  --------------------------------------------------------
 * action[=].action[+].title = "Primary HPV"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendPrimaryHpv"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "PrimaryHpvOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)
@@ -53,11 +53,11 @@ Usage: #definition
 // Cytology Alone --------------------------------------------------------------
 * action[=].action[+].title = "Cytology"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendCytology"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "CytologyOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)
@@ -65,11 +65,11 @@ Usage: #definition
 // Cotesting -------------------------------------------------------------------
 * action[=].action[+].title = "Cotesting"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendCotesting"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "CotestingOrderCode"
 * action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActivity|1.0.0)

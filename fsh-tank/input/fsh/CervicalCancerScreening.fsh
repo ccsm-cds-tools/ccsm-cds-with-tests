@@ -32,7 +32,7 @@ Usage: #definition
 * action[=].trigger[+].type = $TTYPE#named-event "Named Event"
 * action[=].trigger[=].name = "encounter-start" // CDS Hook name
 * action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].condition[=].expression.expression = "IsIncludedAndNotExcluded"
 * action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 // -----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ Usage: #definition
 * action[=].action[=].description = "Brief description of the action"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "HasRecommendation"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerScreeningActions|1.0.0)
@@ -60,15 +60,15 @@ Usage: #definition
 * action[=].action[=].description = "Brief description of the action"
 * action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "ErrorsHaveOccurred"
 * action[=].action[=].condition[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].action[+].title = "Communicate Errors"
 * action[=].action[=].action[=].description = "Description"
 * action[=].action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].action[=].action[=].definitionCanonical = Canonical(CommunicateErrors|1.0.0)
-* action[=].action[=].action[=].dynamicValue[+].path = "payload[0].content.ofType(string)" // this is the CommunicationRequest.payload element
-* action[=].action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].action[=].dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
+* action[=].action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * action[=].action[=].action[=].dynamicValue[=].expression.expression = "Errors"
 * action[=].action[=].action[=].dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * action[=].action[=].action[+].title = "Prompt for More Information"

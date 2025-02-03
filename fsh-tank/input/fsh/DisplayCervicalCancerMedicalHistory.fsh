@@ -21,7 +21,7 @@ Usage: #definition
 * kind = $RRTYPE#CommunicationRequest "CommunicationRequest"
 * intent = $RINTENT#proposal "Proposal"
 * priority = $RPRIOR#routine "Routine"
-* dynamicValue[+].path = "payload[0].content.ofType(string)" // this is the CommunicationRequest.payload element
-* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
-* dynamicValue[=].expression.expression = "CervicalCancerScreeningAndMedicalHistory"
+* dynamicValue[+].path = "payload[0].contentString" // this is the CommunicationRequest.payload element
+* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
+* dynamicValue[=].expression.expression = "CervicalCancerScreeningAndMedicalHistoryString"
 * dynamicValue[=].expression.reference = "Library/DashboardLibrary|1.0"

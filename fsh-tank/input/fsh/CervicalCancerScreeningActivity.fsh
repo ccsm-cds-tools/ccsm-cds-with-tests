@@ -21,10 +21,10 @@ Usage: #definition
 * intent = $RINTENT#proposal "Proposal"
 * priority = $RPRIOR#routine "Routine"
 * dynamicValue[+].path = "orderDetail" // this is the ServiceRequest.orderDetail element
-* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * dynamicValue[=].expression.expression = "ServiceRequestOrderDetail"
 * dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
 * dynamicValue[+].path = "occurrenceDateTime" // this is the ServiceRequest.occurrence element
-* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql.identifier "CQL"
 * dynamicValue[=].expression.expression = "OrderDate"
 * dynamicValue[=].expression.reference = "Library/ScreeningLibrary|1.0"
