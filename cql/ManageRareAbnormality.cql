@@ -659,9 +659,27 @@ define HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH:
   LastKnownCytologyInterpretedAsAgc.date is null or
   not (LastKnownCytologyInterpretedAsAgc.date occurs after LastKnownCytologyInterpretedAsAscHInPast10Years.date)
 
+define RecommendationForPreviousColposcopy:
+  case
+    when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date)
+    ) then
+      {
+        short: 'Surveillance 1-year follow-up',
+        date: Today(),
+        group: '?',
+        details: {
+          '???'
+        }
+      }
+    else
+      null
+  end
+
 define RecommendationForExceptionsToColposcopyThreshold:
   case
     when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       LastKnownCytologyInterpretedAsAscHInPast10Years is not null and
       Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
@@ -676,6 +694,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
         }
       }
     when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       MostRecentCytologyReportWasWithinPastFiveYears and
       PositiveHpv16or18Cotest and
       CytologyInterpretedAsNilm and
@@ -690,6 +709,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
         }
       }
     when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
       TwoMostRecentCytologyReportsWithin5yearsApart and
@@ -2023,6 +2043,7 @@ define Recommendation:
     RecommendationForSurveillanceAfterAbnormalities,
     RecommendationForHistologyResults,
     RecommendationForExceptionsToColposcopyThreshold,
+    RecommendationForPreviousColposcopy,
     RecommendationForRareCytology
   )
 

@@ -4709,6 +4709,99 @@
                } ]
             }
          }, {
+            "name" : "RecommendationForPreviousColposcopy",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Case",
+               "caseItem" : [ {
+                  "when" : {
+                     "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                     "libraryName" : "Collate",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance 1-year follow-up",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "?",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "???",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               } ],
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "short",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Date",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "group",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "details",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "RecommendationForExceptionsToColposcopyThreshold",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4722,14 +4815,30 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "type" : "Not",
                                  "operand" : {
-                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
-                                    "type" : "ExpressionRef"
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              } ]
                            }, {
                               "name" : "HasNoBiopsyOrTreatmentAfterDate",
                               "libraryName" : "Collate",
@@ -4801,8 +4910,24 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
                               "name" : "PositiveHpv16or18Cotest",
                               "type" : "ExpressionRef"
@@ -4872,8 +4997,24 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
                               "name" : "CytologyUnsatisfactory",
                               "type" : "ExpressionRef"
@@ -13933,101 +14074,6 @@
                   "name" : "RecommendationForRareCytology",
                   "type" : "ExpressionRef"
                } ]
-            }
-         }, {
-            "name" : "WhichRarityMadeTheRecommendation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Case",
-               "caseItem" : [ {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForAisHistologyResults",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "3",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForSurveillanceAfterAbnormalities",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "4",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForHistologyResults",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "3",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForExceptionsToColposcopyThreshold",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "2",
-                     "type" : "Literal"
-                  }
-               }, {
-                  "when" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
-                           "name" : "RecommendationForRareCytology",
-                           "type" : "ExpressionRef"
-                        }
-                     }
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "1",
-                     "type" : "Literal"
-                  }
-               } ],
-               "else" : {
-                  "asType" : "{urn:hl7-org:elm-types:r1}Integer",
-                  "type" : "As",
-                  "operand" : {
-                     "type" : "Null"
-                  }
-               }
             }
          }, {
             "name" : "Errors",
