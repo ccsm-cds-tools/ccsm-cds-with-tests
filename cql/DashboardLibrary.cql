@@ -1372,11 +1372,13 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
   else
     null
 
+
+// ccsmcds-299-override-UNK
 define ErrorDiagnosticReportWithUnsupportedConclusonCode:
   if (
     Exists(DiagnosticReportsSummary) and
     AnyTrue(
-      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
+      (DiagnosticReportsSummary) DRS return (DRS.value = 'UNK' and (ToDate(DRS.date) < Now() - 5 years))
     )
   ) then
     'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'
