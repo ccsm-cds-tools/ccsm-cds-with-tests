@@ -4722,30 +4722,14 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "And",
-                              "operand" : [ {
-                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
-                                 "libraryName" : "Collate",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "path" : "date",
-                                    "type" : "Property",
-                                    "source" : {
-                                       "name" : "MostRecentCytologyCotest",
-                                       "libraryName" : "Collate",
-                                       "type" : "ExpressionRef"
-                                    }
-                                 } ]
-                              }, {
-                                 "type" : "Not",
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
                                  "operand" : {
-                                    "type" : "IsNull",
-                                    "operand" : {
-                                       "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
-                                       "type" : "ExpressionRef"
-                                    }
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "type" : "ExpressionRef"
                                  }
-                              } ]
+                              }
                            }, {
                               "name" : "HasNoBiopsyOrTreatmentAfterDate",
                               "libraryName" : "Collate",
