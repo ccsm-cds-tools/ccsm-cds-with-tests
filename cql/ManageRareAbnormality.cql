@@ -662,7 +662,6 @@ define HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH:
 define RecommendationForExceptionsToColposcopyThreshold:
   case
     when (
-      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       LastKnownCytologyInterpretedAsAscHInPast10Years is not null and
       Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
