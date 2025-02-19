@@ -31,6 +31,7 @@ codesystem "ICD-9": 'http://hl7.org/fhir/sid/icd-9-cm'
 codesystem "ICD-10": 'http://hl7.org/fhir/sid/icd-10-cm'
 codesystem "GENDER-IDENTITY": 'http://hl7.org/fhir/gender-identity'
 codesystem "LOCAL": 'http://OUR-PLACEHOLDER-URL.com'
+codesystem "CPT": 'http://www.ama-assn.org/go/cpt'
 
 // Symptomatic value sets
 valueset "Abnormal Uterine or Vaginal Bleeding Disorders": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1032.189'
@@ -132,6 +133,7 @@ code "Unsatisfactory": '126481000119106' from "SNOMED-CT" display 'Vaginal Papan
 code "Absent Transformation Zone": '412716005' from "SNOMED-CT" display 'Cervical smear transformation zone cells absent (situation)'
 code "Endocervical AIS": '447760009' from "SNOMED-CT" display 'Endocervical adenocarcinoma in situ (disorder)'
 code "Insufficient": '112631006' from "SNOMED-CT" display 'Specimen unsatisfactory for diagnosis (finding)'
+code "Conization of cervix": '57520' from "CPT" display 'Conization of cervix, knife/laser'
 
 // Non-standard or "local" codes
 code "Diagnosis of Genital GvHD": 'GenitalGvHD' from "LOCAL" display 'Diagnosis of Genital GvHD'
@@ -790,6 +792,9 @@ define ColposcopyProcedures:
 define CervicalExcisionProcedures:
   C3F.Completed(
     [Procedure: "Cervical Excision Procedures"]
+  ) union
+  C3F.Completed(
+    [Procedure: "Conization of cervix"]
   )
 
 define CervicalAblationProcedures:
