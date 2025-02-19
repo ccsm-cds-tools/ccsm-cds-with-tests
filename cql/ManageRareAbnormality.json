@@ -4801,8 +4801,24 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
                               "name" : "PositiveHpv16or18Cotest",
                               "type" : "ExpressionRef"
@@ -4872,8 +4888,24 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                              "type" : "ExpressionRef"
+                              "type" : "And",
+                              "operand" : [ {
+                                 "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                                 "libraryName" : "Collate",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "date",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "MostRecentCytologyCotest",
+                                       "libraryName" : "Collate",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 } ]
+                              }, {
+                                 "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                                 "type" : "ExpressionRef"
+                              } ]
                            }, {
                               "name" : "CytologyUnsatisfactory",
                               "type" : "ExpressionRef"
@@ -13867,6 +13899,110 @@
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
                               "value" : "Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "name" : "HistologyInterpretedAsCin1OrNormal",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "In",
+                              "operand" : [ {
+                                 "path" : "date",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "MostRecentHpvReport",
+                                    "libraryName" : "Collate",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }, {
+                                 "name" : "MostRecentBiopsyReferralPeriod",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              } ]
+                           } ]
+                        }, {
+                           "type" : "In",
+                           "operand" : [ {
+                              "name" : "MostRecentHpvResult",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "List",
+                              "element" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16+",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16-, HPV18+",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV-positive",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "ReferringCytologyResult",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "NILM",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Surveillance 1-year follow-up",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Management Surveillance (J.4)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Add",
+                           "operand" : [ {
+                              "name" : "DateOfMostRecentReport",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "value" : 1,
+                              "unit" : "years",
+                              "type" : "Quantity"
+                           } ]
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.",
                               "type" : "Literal"
                            } ]
                         }

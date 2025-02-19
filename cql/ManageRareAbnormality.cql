@@ -676,6 +676,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
         }
       }
     when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       MostRecentCytologyReportWasWithinPastFiveYears and
       PositiveHpv16or18Cotest and
       CytologyInterpretedAsNilm and
@@ -690,6 +691,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
         }
       }
     when (
+      Collate.HasNoBiopsyOrTreatmentAfterDate(Collate.MostRecentCytologyCotest.date) and
       MostRecentCytologyReportWasWithinPastFiveYears and
       CytologyUnsatisfactory and
       TwoMostRecentCytologyReportsWithin5yearsApart and
@@ -2011,6 +2013,20 @@ define RecommendationForSurveillanceAfterAbnormalities:
         group: 'Management Surveillance (J.3.2)',
         details: {
           'Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
+        }
+      }
+    when ( // J.4 - special case not handled by Table3
+      HistologyInterpretedAsCin1OrNormal and
+      Collate.MostRecentHpvReport.date included in Collate.MostRecentBiopsyReferralPeriod and
+      Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+','HPV-positive'} and
+      Collate.ReferringCytologyResult = 'NILM'
+    ) then
+      {
+        short: 'Surveillance 1-year follow-up',
+        group: 'Management Surveillance (J.4)',
+        date: Collate.DateOfMostRecentReport + 1 years,
+        details: {
+          'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
         }
       }
     else
