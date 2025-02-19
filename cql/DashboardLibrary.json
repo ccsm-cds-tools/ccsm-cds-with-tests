@@ -126,6 +126,10 @@
             "name" : "LOCAL",
             "id" : "http://OUR-PLACEHOLDER-URL.com",
             "accessLevel" : "Public"
+         }, {
+            "name" : "CPT",
+            "id" : "http://www.ama-assn.org/go/cpt",
+            "accessLevel" : "Public"
          } ]
       },
       "valueSets" : {
@@ -651,6 +655,14 @@
             "accessLevel" : "Public",
             "codeSystem" : {
                "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Conization of cervix",
+            "id" : "57520",
+            "display" : "Conization of cervix, knife/laser",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "CPT"
             }
          }, {
             "name" : "Diagnosis of Genital GvHD",
@@ -7791,20 +7803,41 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "Completed",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
+               "type" : "Union",
                "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Procedure",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                  "codeProperty" : "code",
-                  "codeComparator" : "in",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "name" : "Cervical Excision Procedures",
-                     "preserve" : true,
-                     "type" : "ValueSetRef"
-                  }
+                  "name" : "Completed",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Cervical Excision Procedures",
+                        "preserve" : true,
+                        "type" : "ValueSetRef"
+                     }
+                  } ]
+               }, {
+                  "name" : "Completed",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Conization of cervix",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  } ]
                } ]
             }
          }, {
