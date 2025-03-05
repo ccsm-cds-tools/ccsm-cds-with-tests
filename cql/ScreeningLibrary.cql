@@ -209,7 +209,7 @@ define SuggestedOrders:
   except {null}
 
 define OrderDate:
-  ScreeningRecommendation.date
+  ToDateTime(ScreeningRecommendation.date)
 
 //------------------------------------------------------------------------------
 // CDS OUTPUTS

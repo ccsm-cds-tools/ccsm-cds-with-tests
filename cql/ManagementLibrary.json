@@ -616,12 +616,20 @@
                "relationship" : [ ],
                "return" : {
                   "expression" : {
-                     "type" : "Tuple",
+                     "classType" : "{http://hl7.org/fhir}CodeableConcept",
+                     "type" : "Instance",
                      "element" : [ {
                         "name" : "text",
                         "value" : {
-                           "name" : "D",
-                           "type" : "AliasRef"
+                           "classType" : "{http://hl7.org/fhir}string",
+                           "type" : "Instance",
+                           "element" : [ {
+                              "name" : "value",
+                              "value" : {
+                                 "name" : "D",
+                                 "type" : "AliasRef"
+                              }
+                           } ]
                         }
                      } ]
                   }
@@ -719,7 +727,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "ToString",
+               "type" : "ToDateTime",
                "operand" : {
                   "path" : "date",
                   "type" : "Property",
@@ -3080,7 +3088,7 @@
                                                                                                                      },
                                                                                                                      "separator" : {
                                                                                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                        "value" : ", ",
+                                                                                                                        "value" : "], ",
                                                                                                                         "type" : "Literal"
                                                                                                                      }
                                                                                                                   }, {
@@ -3114,11 +3122,14 @@
                                                                                                    }, {
                                                                                                       "type" : "Coalesce",
                                                                                                       "operand" : [ {
-                                                                                                         "path" : "recommendationDate",
-                                                                                                         "type" : "Property",
-                                                                                                         "source" : {
-                                                                                                            "name" : "DecisionAids",
-                                                                                                            "type" : "ExpressionRef"
+                                                                                                         "type" : "ToString",
+                                                                                                         "operand" : {
+                                                                                                            "path" : "recommendationDate",
+                                                                                                            "type" : "Property",
+                                                                                                            "source" : {
+                                                                                                               "name" : "DecisionAids",
+                                                                                                               "type" : "ExpressionRef"
+                                                                                                            }
                                                                                                          }
                                                                                                       }, {
                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
