@@ -269,7 +269,7 @@ define DecisionAidsString:
   '{' &
   '"recommendation": "' & DecisionAids.recommendation & '", ' &
   '"recommendationGroup": "' & DecisionAids.recommendationGroup & '", ' &
-  '"recommendationDetails": [' & Combine(DecisionAids.recommendationDetails, '], ') &
+  '"recommendationDetails": ["' & Combine(DecisionAids.recommendationDetails, '", "') & '"], ' &
   '"recommendationDate": "' & ToString(DecisionAids.recommendationDate) & '", ' &
   '"errors": [' & Combine(DecisionAids.errors, ', ') & '],' & 
   '"disclaimer": "' & DecisionAids.disclaimer & '", ' &
