@@ -1,0 +1,756 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "CervicalCancerScreeningAndManagementFlat",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
+    ]
+  },
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
+      "valueCode": "executable"
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeRepresentationLevel",
+      "valueCode": "structured"
+    }
+  ],
+  "version": "1.0.0",
+  "date": "2021-09-14",
+  "status": "draft",
+  "experimental": true,
+  "publisher": "The Health FFRDC, operated by The MITRE Corporation, in support of the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention.",
+  "copyright": "(C) 2021 The MITRE Corporation. All Rights Reserved. Approved for Public Release: 21-1556. Distribution Unlimited. Unless otherwise noted, this work is available under an Apache 2.0 license. It was produced by the MITRE Corporation for the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention in accordance with the Statement of Work, contract number 75FCMC18D0047, task order number 75D30120F09743.",
+  "approvalDate": "2021-09-14",
+  "lastReviewDate": "2021-09-14",
+  "author": [
+    {
+      "name": "The Health FFRDC, operated by The MITRE Corporation, in support of the Division of Cancer Prevention and Control, Centers for Disease Control and Prevention."
+    }
+  ],
+  "editor": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "reviewer": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "endorser": [
+    {
+      "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
+    }
+  ],
+  "name": "CervicalCancerScreeningAndManagementClinicalDecisionSupport",
+  "title": "Cervical Cancer Screening And Management Clinical Decision Support",
+  "type": {
+    "coding": [
+      {
+        "code": "eca-rule",
+        "system": "http://terminology.hl7.org/CodeSystem/plan-definition-type",
+        "display": "ECA Rule"
+      }
+    ]
+  },
+  "description": "This CDS tool provides care cervical cancer screening recommendations to a diverse population of individuals (i.e., those experiencing abnormal uterine or vaginal bleeding, have in utero exposure to diethylstilbestrol [DES], are immunocompromised, or are at “average risk” for cervical cancer). The evidence sources that inspired this tool are listed in the relatedArtifact metadata field.",
+  "useContext": [
+    {
+      "code": {
+        "code": "gender",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
+        "display": "Gender"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "F",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-AdministrativeGender",
+            "display": "Female"
+          }
+        ]
+      }
+    }
+  ],
+  "purpose": "This CDS identifies individuals for whom cervical cancer screening is indicated. It delivers patient-specific evidence-based screening recommendations based on information in the patient’s health record. It also gathers relevant information in the patient record to display to the clinician as a dashboard in support of care decisions. The dashboard includes information such as evidence of previous pre-cancer or cancerous lesions, previous colposcopies and biopsy results, previous surgeries, etc. The CDS integrates tightly with a companion CDS component (i.e., “Management CDS”), which provides evidence-based care recommendations if screening results are “abnormal”.",
+  "usage": "This artifact is intended for use by healthcare personnel working in primary healthcare settings who care for adolescent and adult patients (i.e., physicians, general practitioners, nurse practitioners, physician assistants, and obstetricians).",
+  "topic": [
+    {
+      "text": "Preventive Medicine"
+    },
+    {
+      "text": "Public Health"
+    },
+    {
+      "text": "Cervical Cancer"
+    },
+    {
+      "text": "Cancer Screening"
+    }
+  ],
+  "library": [
+    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0",
+    "http://OUR-PLACEHOLDER-URL.com/Library/ManagementLibrary|1.0.0"
+  ],
+  "action": [
+    {
+      "title": "Screening",
+      "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
+      "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+      "documentation": [
+        {
+          "type": "documentation",
+          "label": "Inclusions",
+          "display": "Appropriate for individuals whose sex at birth is recorded as Female or whose gender identity is recorded as Transgender Male."
+        }
+      ],
+      "trigger": [
+        {
+          "type": "named-event",
+          "name": "encounter-start"
+        }
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "language": "text/cql.identifier",
+            "expression": "IsIncludedAndNotExcluded",
+            "reference": "Library/ScreeningLibrary|1.0"
+          }
+        }
+      ],
+      "action": [
+        {
+          "title": "Cervical Cancer Screening Actions",
+          "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
+          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "documentation": [
+            {
+              "type": "documentation",
+              "label": "Inclusions",
+              "display": "Appropriate for individuals whose sex at birth is recorded as Female or whose gender identity is recorded as Transgender Male."
+            }
+          ],
+          "trigger": [
+            {
+              "type": "named-event",
+              "name": "encounter-start"
+            }
+          ],
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql.identifier",
+                "expression": "IsIncludedAndNotExcluded",
+                "reference": "Library/ScreeningLibrary|1.0"
+              }
+            }
+          ],
+          "action": [
+            {
+              "title": "Display pertinent medical history",
+              "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory|1.0.0"
+            },
+            {
+              "title": "Screening Recommendations",
+              "description": "Brief description of the action",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "condition": [
+                {
+                  "kind": "applicability",
+                  "expression": {
+                    "language": "text/cql.identifier",
+                    "expression": "HasRecommendation",
+                    "reference": "Library/ScreeningLibrary|1.0"
+                  }
+                }
+              ],
+              "action": [
+                {
+                  "title": "Screening Decision Aids",
+                  "description": "Screening Decision Aids",
+                  "textEquivalent": "Screening Decision Aids",
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids|1.0.0",
+                  "dynamicValue": [
+                    {
+                      "path": "payload[0].contentString",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "DecisionAidsString",
+                        "reference": "Library/ScreeningLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "documentation": [
+                    {
+                      "type": "citation",
+                      "label": "Screening: Average Risk",
+                      "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+                      "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+                      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+                    },
+                    {
+                      "type": "citation",
+                      "label": "Screening: Symptomatic",
+                      "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+                      "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+                      "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+                    },
+                    {
+                      "type": "citation",
+                      "label": "Screening: DES Exposure",
+                      "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+                      "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+                      "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+                    },
+                    {
+                      "type": "citation",
+                      "label": "Screening: DES Exposure",
+                      "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+                      "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+                      "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+                    },
+                    {
+                      "type": "citation",
+                      "label": "Screening: Immunocompromised",
+                      "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+                      "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+                      "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+                    },
+                    {
+                      "type": "citation",
+                      "label": "Screening: Immunocompromised",
+                      "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+                      "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+                      "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+                    }
+                  ]
+                },
+                {
+                  "title": "Recommended Screening Activities",
+                  "description": "Recommended Screening Activities",
+                  "textEquivalent": "Recommended Screening Activities",
+                  "groupingBehavior": "visual-group",
+                  "selectionBehavior": "at-most-one",
+                  "action": [
+                    {
+                      "title": "Primary HPV",
+                      "condition": [
+                        {
+                          "kind": "applicability",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "RecommendPrimaryHpv",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "dynamicValue": [
+                        {
+                          "path": "code",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "PrimaryHpvOrderCode",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+                      "documentation": [
+                        {
+                          "type": "citation",
+                          "label": "Screening: Average Risk",
+                          "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+                          "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+                          "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Symptomatic",
+                          "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+                          "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+                          "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+                          "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+                          "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+                          "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+                          "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+                          "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Cytology",
+                      "condition": [
+                        {
+                          "kind": "applicability",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "RecommendCytology",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "dynamicValue": [
+                        {
+                          "path": "code",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "CytologyOrderCode",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+                      "documentation": [
+                        {
+                          "type": "citation",
+                          "label": "Screening: Average Risk",
+                          "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+                          "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+                          "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Symptomatic",
+                          "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+                          "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+                          "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+                          "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+                          "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+                          "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+                          "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+                          "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Cotesting",
+                      "condition": [
+                        {
+                          "kind": "applicability",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "RecommendCotesting",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "dynamicValue": [
+                        {
+                          "path": "code",
+                          "expression": {
+                            "language": "text/cql.identifier",
+                            "expression": "CotestingOrderCode",
+                            "reference": "Library/ScreeningLibrary|1.0"
+                          }
+                        }
+                      ],
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerScreeningActivity|1.0.0",
+                      "documentation": [
+                        {
+                          "type": "citation",
+                          "label": "Screening: Average Risk",
+                          "display": "2018 USPSTF Cervical Cancer Screening Recommendations",
+                          "citation": "United States Preventive Services Task Force, \"Final Recommendation Statement: Cervical Cancer Screening,\" 21 August 2018.",
+                          "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Symptomatic",
+                          "display": "Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding",
+                          "citation": "ASCCP Clinical Practice Statement, \"Evaluation of the Cervix in Patients with Abnormal Vaginal Bleeding,\" 7 February 2017.",
+                          "url": "https://www.asccp.org/Assets/9d92e617-858f-43f3-af62-44adf76cfc67/636220616039000000/vaginal-bleeding-statement-final-02-06-17-pdf"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Practice Bulletin No. 168: Cervical Cancer Screening and Prevention",
+                          "citation": "\"Practice Bulletin No. 168: Cervical Cancer Screening and Prevention,\" Obstetrics and Gynecology, vol. 1284, no. 4, pp. e111-e130, 2016.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/27661651/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: DES Exposure",
+                          "display": "Antenatal exposure to DES: Lessons Learned...Future Concerns",
+                          "citation": "M. Rubin, \"Antenatal exposure to DES: Lessons Learned...Future Concerns,\" Obstetrical & Gynecological Survey, vol. 62, no. 8, pp. 548-555, 2007.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/17634156/"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV",
+                          "citation": "Panel on Opportunistic Infections in Adults and Adolescents with HIV, \"Guidelines for the prevention and treatment of opportunistic infections in adults and adolescents with HIV: Recommendations from the CDC, the NIH, and the HIV Medicine Association of the Infectious Diseases Society of America,\" 29 November 2018.",
+                          "url": "https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/human-papillomavirus-disease"
+                        },
+                        {
+                          "type": "citation",
+                          "label": "Screening: Immunocompromised",
+                          "display": "Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection",
+                          "citation": "A.-B. Moscicki, L. Flowers, M. J. Huchko, M. E. Long, K. L. MacLaughlin, J. Murphy, L. B. Spiryda and M. A. Gold, \"Guidelines for Cervical Cancer Screening in Immunosuppressed Women Without HIV Infection,\" Journal of Lower Genital Tract Disease, vol. 23, no. 2, pp. 87-101, 2019.",
+                          "url": "https://pubmed.ncbi.nlm.nih.gov/30907775/"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Handle Errors",
+              "description": "Brief description of the action",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "condition": [
+                {
+                  "kind": "applicability",
+                  "expression": {
+                    "language": "text/cql.identifier",
+                    "expression": "ErrorsHaveOccurred",
+                    "reference": "Library/ScreeningLibrary|1.0"
+                  }
+                }
+              ],
+              "action": [
+                {
+                  "title": "Communicate Errors",
+                  "description": "Description",
+                  "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors|1.0.0",
+                  "dynamicValue": [
+                    {
+                      "path": "payload[0].contentString",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "Errors",
+                        "reference": "Library/ScreeningLibrary|1.0"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": "Prompt for More Information",
+                  "description": "Description",
+                  "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+                  "groupingBehavior": "visual-group",
+                  "selectionBehavior": "at-most-one",
+                  "action": [
+                    {
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentConditionQuestionnaire|1.0.0"
+                    },
+                    {
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentObservationQuestionnaire|1.0.0"
+                    },
+                    {
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentProcedureQuestionnaire|1.0.0"
+                    },
+                    {
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ScreeningAndManagementHistoryQuestionnaire|1.0.0"
+                    },
+                    {
+                      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentVaccinationQuestionnaire|1.0.0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cervical Cancer Management Actions",
+      "description": "Brief description of the action",
+      "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+      "documentation": [
+        {
+          "type": "citation",
+          "label": "ASCCP Recommendation",
+          "display": "ASCCP recommendation statement on cervical management (TODO: INSERT DATE HERE)"
+        }
+      ],
+      "trigger": [
+        {
+          "type": "named-event",
+          "name": "encounter-start"
+        }
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "language": "text/cql.identifier",
+            "expression": "IsIncludedAndNotExcluded",
+            "reference": "Library/ManagementLibrary|1.0"
+          }
+        }
+      ],
+      "action": [
+        {
+          "title": "Display pertinent medical history",
+          "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
+          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/DisplayCervicalCancerMedicalHistory|1.0.0"
+        },
+        {
+          "title": "Management Recommendations",
+          "description": "Brief description of the action",
+          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql.identifier",
+                "expression": "HasRecommendation",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
+            }
+          ],
+          "action": [
+            {
+              "title": "Management Decision Aids",
+              "description": "Management Decision Aids",
+              "textEquivalent": "Management Decision Aids",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerDecisionAids|1.0.0",
+              "dynamicValue": [
+                {
+                  "path": "payload[0].contentString",
+                  "expression": {
+                    "language": "text/cql.identifier",
+                    "expression": "DecisionAidsString",
+                    "reference": "Library/ManagementLibrary|1.0"
+                  }
+                }
+              ],
+              "documentation": [
+                {
+                  "type": "citation",
+                  "label": "Management",
+                  "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                  "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                  "url": "https://www.asccp.org/management-guidelines"
+                }
+              ]
+            },
+            {
+              "title": "Recommended Management Activities",
+              "description": "Recommended Management Activities",
+              "textEquivalent": "Recommended Management Activities",
+              "groupingBehavior": "visual-group",
+              "selectionBehavior": "at-most-one",
+              "action": [
+                {
+                  "title": "Colposcopy",
+                  "condition": [
+                    {
+                      "kind": "applicability",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "RecommendColposcopy",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "dynamicValue": [
+                    {
+                      "path": "code",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "ColposcopyOrderCode",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0",
+                  "documentation": [
+                    {
+                      "type": "citation",
+                      "label": "Management",
+                      "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                      "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                      "url": "https://www.asccp.org/management-guidelines"
+                    }
+                  ]
+                },
+                {
+                  "title": "Surveillance",
+                  "condition": [
+                    {
+                      "kind": "applicability",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "RecommendSurveillance",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "dynamicValue": [
+                    {
+                      "path": "code",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "SurveillanceOrderCode",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0",
+                  "documentation": [
+                    {
+                      "type": "citation",
+                      "label": "Management",
+                      "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                      "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                      "url": "https://www.asccp.org/management-guidelines"
+                    }
+                  ]
+                },
+                {
+                  "title": "Treatment",
+                  "condition": [
+                    {
+                      "kind": "applicability",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "RecommendTreatment",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "dynamicValue": [
+                    {
+                      "path": "code",
+                      "expression": {
+                        "language": "text/cql.identifier",
+                        "expression": "TreatmentOrderCode",
+                        "reference": "Library/ManagementLibrary|1.0"
+                      }
+                    }
+                  ],
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CervicalCancerManagementActivity|1.0.0",
+                  "documentation": [
+                    {
+                      "type": "citation",
+                      "label": "Management",
+                      "display": "2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors",
+                      "citation": "Perkins, Rebecca B. MD, MSc; Guido, Richard S. MD; Castle, Philip E. PhD; Chelmow, David MD; Einstein, Mark H. MD, MS; Garcia, Francisco MD, MPH; Huh, Warner K. MD; Kim, Jane J. PhD, MSc; Moscicki, Anna-Barbara MD; Nayar, Ritu MD; Saraiya, Mona MD, MPH; Sawaya, George F. MD; Wentzensen, Nicolas MD, PhD, MS; Schiffman, Mark MD, MPH; for the 2019 ASCCP Risk-Based Management Consensus Guidelines Committee. 2019 ASCCP Risk-Based Management Consensus Guidelines for Abnormal Cervical Cancer Screening Tests and Cancer Precursors. Journal of Lower Genital Tract Disease 24(2):p 102-131, April 2020. | DOI: 10.1097/LGT.0000000000000525",
+                      "url": "https://www.asccp.org/management-guidelines"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Handle Errors",
+          "description": "Brief description of the action",
+          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "condition": [
+            {
+              "kind": "applicability",
+              "expression": {
+                "language": "text/cql.identifier",
+                "expression": "ErrorsHaveOccurred",
+                "reference": "Library/ManagementLibrary|1.0"
+              }
+            }
+          ],
+          "action": [
+            {
+              "title": "Communicate Errors",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/CommunicateErrors|1.0.0",
+              "dynamicValue": [
+                {
+                  "path": "payload[0].contentString",
+                  "expression": {
+                    "language": "text/cql.identifier",
+                    "expression": "Errors",
+                    "reference": "Library/ManagementLibrary|1.0"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Prompt for More Information",
+              "description": "Description",
+              "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+              "groupingBehavior": "visual-group",
+              "selectionBehavior": "at-most-one",
+              "action": [
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentConditionQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentObservationQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentProcedureQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/ScreeningAndManagementHistoryQuestionnaire|1.0.0"
+                },
+                {
+                  "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/Questionnaire/PertinentVaccinationQuestionnaire|1.0.0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
