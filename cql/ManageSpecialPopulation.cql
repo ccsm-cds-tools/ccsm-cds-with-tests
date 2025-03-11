@@ -248,7 +248,7 @@ define RecommendationForPatientsYoungerThan25:
       Rare.MostRecentCytologyReport.date less than 3 years after Collate.MostRecentBiopsyReport.date
     ) then
       {
-        short: 'See Details',
+        short: 'Diagnostic Excisional Procedure',
         date: Today(),
         group: 'Younger Than 25 (K.1.3)',
         details: {
@@ -286,7 +286,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Observation is recommended with colposcopy and cytology in 1 year.',
+          'Observation is recommended with colposcopy and cytology in 1 year from date of most recent test.',
           'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
           '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
@@ -302,7 +302,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.3)',
         details: {
-          'Observation is recommended with cytology in 1 year.',
+          'Observation is recommended with cytology in 1 year from date of most recent test.',
           'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
           '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
         }
@@ -342,7 +342,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.4)',
         details: {
-          'Colposcopy and cervical cytology should be performed in 1 year.'
+          'Colposcopy and cervical cytology should be performed in 1 year from date of most recent test.'
         }
       }
     when ( // Heading4.1
@@ -365,7 +365,7 @@ define RecommendationForPatientsYoungerThan25:
       Collate.HasNoTreatmentAfterDate(Collate.LastKnownCin2Biopsy.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance 6-month follow-up',
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
@@ -380,7 +380,7 @@ define RecommendationForPatientsYoungerThan25:
      Collate.HasNoTreatmentAfterDate(Collate.LastKnownHsilUnspecifiedBiopsy.date)
     ) then
       {
-        short: 'See Details',
+        short: 'Surveillance or Treatment',
         date: Today(),
         group: 'Younger Than 25 (K.1.4)',
         details: {
@@ -418,7 +418,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Repeat testing is indicated in 3 years. This should be cytology (Pap) if patient is < 25 and HPV testing or cotesting if patient is age 25 or older at the time of repeat testing.'
+          'Repeat testing is indicated in 3 years from date of most recent test. This should be cytology (Pap) if patient is < 25 and HPV testing or cotesting if patient is age 25 or older at the time of repeat testing.'
         }
       }
     when ( // 5a
@@ -430,7 +430,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
+          'Cervical cytology is recommended in 1 year from date of most recent test. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
         }
       }
     when ( // #5b
@@ -466,7 +466,7 @@ define RecommendationForPatientsYoungerThan25:
         date: Collate.DateOfMostRecentReport + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
-          'Cervical cytology is recommended in 1 year. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
+          'Cervical cytology is recommended in 1 year from date of most recent test. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
         }
       }
     else
@@ -534,7 +534,7 @@ define RecommendationForPregnantPatients:
       HistologicAisDuringPregnancy
     ) then
       {
-        short: 'See Details',
+        short: 'Referral',
         date: Today(),
         group: 'Pregnant (K.2)',
         details: {
@@ -617,7 +617,7 @@ define RecommendationForImmunosuppressedPatients:
         date: Collate.DateOfMostRecentReport + 6 months,
         group: 'Immunosuppressed (K.3)',
         details: {
-          'Cervical cytology is recommended in 6 to 12 months in this immunocompromised patient.'
+          'Cervical cytology is recommended in 6 to 12 months from date of most recent test in this immunocompromised patient.'
         }
       }   
     else
@@ -728,14 +728,16 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         date: Collate.DateOfMostRecentReport + 3 years,
         group: 'Hysterectomy (K.4)',
         details: {
-          'Primary hrHPV testing or cotesting is recommended every 3 years for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
+          'Primary hrHPV testing or cotesting is recommended in 3 years from date of most recent test.',
+          'Testing should continue for 25 years after hysterectomy is performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.',
+          'Future testing is recommended at 3-year intervals.'
         }
       }
     when ( // no hysterectomy date
       Rare.AbsenceOrRemovalOfCervix
     ) then 
       {
-        short: 'See Details',
+        short: 'Surveillance',
         date: Today(),
         group: 'Hysterectomy (K.4)',
         details: {

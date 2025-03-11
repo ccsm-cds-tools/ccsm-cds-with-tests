@@ -1,0 +1,37 @@
+---
+name: J2.3 Recurrent HSIL After Treatment Max Duration
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *HistologicHSIL12YearsAgo
+- 
+  $iterate: *HasTreatment7YearsAgo
+
+# Presence of histology < CIN2 should NOT affect the logic for J.2.3
+-
+  $iterate: *LessThanCin2ThisYear    
+
+-
+  $iterate: *HistologicHSILThisYear
+  
+results:
+  Recommendation: 
+    short: 'Repeat Excision'
+    date: '2021-06-02'
+    group: 'Management Surveillance (J.2.3)'
+    details:
+    - 'Repeat excision is acceptable if recurrent histologic HSIL (CIN 2+) develops after excisional treatment.'
+    - 'If repeat excision is not feasible or not desired, hysterectomy is recommended.'
+  WhichRarityMadeTheRecommendation: 4

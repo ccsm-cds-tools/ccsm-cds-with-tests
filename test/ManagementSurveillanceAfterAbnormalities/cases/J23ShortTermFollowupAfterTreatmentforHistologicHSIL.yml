@@ -1,5 +1,5 @@
 ---
-name: J2.3 Short-Term Follow-up After Treatment for Histologic HSIL 
+name: J2.3 Short-Term Follow-up After Treatment for Histologic HSIL
 
 externalData:
 - resources
@@ -16,21 +16,19 @@ data:
     valueCode: F
 -
   $iterate: *HistologicHSIL2YearsAgo
-- 
-  $iterate: *HasTreatment2YearsAgo
-- 
-  resourceType: DiagnosticReport
-  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
-  status: final
-  conclusionCode:
-  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
-  effectiveDateTime: 2020-05-01
+
+# Presence of histology < CIN2 should NOT affect the logic for J.2.3
+-
+  $iterate: *LessThanCin2ThisYear    
+
+-
+  $iterate: *HasTreatmentThisYearBeforeHsil
 -
   $iterate: *HistologicHSILThisYear
-
+  
 results:
   Recommendation: 
-    short: 'See Details'
+    short: 'Repeat Excision'
     date: '2021-06-02'
     group: 'Management Surveillance (J.2.3)'
     details:

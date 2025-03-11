@@ -1023,6 +1023,10 @@ reusable_resources:
     code: SNOMED#120038005 Cervix excision (procedure)
     performedDateTime: 2018-06-01
     status: completed
+  - resourceType: Procedure
+    code: CPT#57520 PR CONIZATION CERVIX,KNIFE/LASER
+    performedDateTime: 2018-06-01
+    status: completed    
 - &Cin2orCin3TwoYearsAgo
   - resourceType: DiagnosticReport
     code: LOINC#65753-6 Cervix Pathology biopsy report
@@ -1041,6 +1045,10 @@ reusable_resources:
     code: SNOMED#120038005 Cervix excision (procedure)
     performedDateTime: 2019-06-01
     status: completed
+  - resourceType: Procedure
+    code: CPT#57520 PR CONIZATION CERVIX,KNIFE/LASER
+    performedDateTime: 2019-06-01
+    status: completed
 - &Cin2orCin3LastYear
   - resourceType: DiagnosticReport
     code: LOINC#65753-6 Cervix Pathology biopsy report
@@ -1057,6 +1065,10 @@ reusable_resources:
 - &CervicalPrecancerTreatmentLastYear
   - resourceType: Procedure
     code: SNOMED#120038005 Cervix excision (procedure)
+    performedDateTime: 2020-06-01
+    status: completed
+  - resourceType: Procedure
+    code: CPT#57520 PR CONIZATION CERVIX,KNIFE/LASER
     performedDateTime: 2020-06-01
     status: completed
 - &CurrentPapNilmAscusLsilOrAll
@@ -1084,3 +1096,36 @@ reusable_resources:
     conclusionCode:
     - SNOMEDCT#373067005 No (qualifier value)
     effectiveDateTime: 2021-05-01
+- &AbsenceOrRemovalOfCervix
+  -
+    resourceType: Procedure
+    code: SNOMEDCT#116140006 Total hysterectomy (procedure)
+    status: completed
+    performedDateTime: null
+  -
+    resourceType: Procedure
+    code: SNOMEDCT#116140006 Total hysterectomy (procedure)
+    status: completed
+    performedDateTime: 2017-05-01
+  -
+    resourceType: Condition
+    clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+    verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+    code: ICD10CM#Q51.5 Agenesis and aplasia of cervix
+    onsetDateTime: null
+  -
+    resourceType: Condition
+    clinicalStatus: http://terminology.hl7.org/CodeSystem/condition-clinical#active Active
+    verificationStatus: http://terminology.hl7.org/CodeSystem/condition-ver-status#confirmed Confirmed
+    code: ICD10CM#Q51.5 Agenesis and aplasia of cervix
+    onsetDateTime: 2017-05-01
+  -
+    resourceType: Observation
+    code: SNOMEDCT#248911005 Uterine cervix absent (finding)
+    status: final
+    effectiveDateTime: 2017-05-01
+  -
+    resourceType: Observation
+    code: SNOMEDCT#248911005 Uterine cervix absent (finding)
+    status: final
+    effectiveDateTime: null

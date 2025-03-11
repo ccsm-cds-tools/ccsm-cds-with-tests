@@ -157,11 +157,14 @@ define SurveillanceManagementRecommendation:
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
 // Table 3
 define LookUpTable3: // NOTE: Review whether we need to look at history going further back
-  RiskTableLookup.GetColposcopyResultsManagement(
-    Collate.ReferringHpvResult,
-    Collate.ReferringCytologyResult,
-    Collate.MostRecentBiopsyResult
-  )
+  if IsMostRecentTest(Collate.MostRecentBiopsyReport.date) then
+    RiskTableLookup.GetColposcopyResultsManagement(
+      Collate.ReferringHpvResult,
+      Collate.ReferringCytologyResult,
+      Collate.MostRecentBiopsyResult
+    )
+  else
+    DefaultLookupTableReturnValue
 
 define RowTable3:
   RiskTableLookup.GetRowTable3(
@@ -430,12 +433,11 @@ define AscusHpvPositiveBeforeMostRecentHpvReport:
 define LastKnownAscusHpvPositiveBeforeMostRecentHpvReport:
   First(AscusHpvPositiveBeforeMostRecentHpvReport)
 
-define AnyCytologyInterpretedAsAscusOrAbove:
-  Collate.SortedCytologyReports C
-    where C.riskTableInput in {'ASC-US','LSIL','ASC-H','AGC','HSIL+'}
-
 define LastKnownCytologyInterpretedAsAscusOrAbove:
-  First(AnyCytologyInterpretedAsAscusOrAbove)
+  First(Collate.AnyCytologyInterpretedAsAscusOrAbove)
+
+define function IsMostRecentTest(d System.DateTime):
+  Collate.MostRecentReport = d
 
 define ErrataRecommendation:
   case
@@ -482,20 +484,20 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.1: ASC-US Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsAscus and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
         short: 'Reflex HPV',
         date: Today(),
         details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year.'
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.'
         }
       }
     when ( // Errata Recommendation 3.1.2: LSIL Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsLsil and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
@@ -508,7 +510,7 @@ define ErrataRecommendation:
     when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsHsil and
-      Collate.MostRecentReport = MostRecentCytologyAlone.date and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
       Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
     ) then
       {
@@ -566,10 +568,10 @@ define ErrataRecommendation:
       )
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 years,
         details: {
-          'Primary HPV testing or cotesting is recommended in one year.'
+          'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
         }
       }
     else
@@ -580,25 +582,28 @@ define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
 
 define Pap6MonthIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test.'
   
 define Pap1YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals from date of most recent test.'
  
 define Pap3YearIntervalText:
-  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals.'
+  'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 3-year intervals from date of most recent test.'
   
 define TreatmentWithPregnancyConcernsRecommendationText:
   'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
 
 define OneYearSurveillanceRecommendationText:
-  'Repeat testing in 1 year with primary HPV testing or cotesting is recommended.'
-
+  'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
+  
 define ThreeYearSurveillanceRecommendationText:
-  'Repeat testing in 3 years with primary HPV testing or cotesting is recommended.'
+  'Primary HPV testing or cotesting is recommended in 3 years from date of most recent test.'
   
 define FiveYearSurveillanceRecommendationText:
-  'Routine screening at 5-year intervals using primary HPV testing or cotesting is recommended.'
+  'Primary HPV testing or cotesting is recommended in 5 years from date of most recent test.'
+
+define FiveYearSurveillanceIntervalText:
+  'Future testing is recommended at 5-year intervals.'  
 
 define ColposcopyRecommendationText:
   'Colposcopy is recommended.'
@@ -720,7 +725,7 @@ define Action:
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
@@ -732,7 +737,7 @@ define Action:
       TableRecommendation = '1-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 1-year follow-up',
         date: Collate.DateOfMostRecentReport + 1 year,
         details: {
           OneYearSurveillanceRecommendationText,
@@ -744,7 +749,7 @@ define Action:
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 3-year follow-up',
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
@@ -756,7 +761,7 @@ define Action:
       TableRecommendation = '3-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 3-year follow-up',
         date: Collate.DateOfMostRecentReport + 3 years,
         details: {
           ThreeYearSurveillanceRecommendationText,
@@ -768,10 +773,11 @@ define Action:
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 5-year follow-up',
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
+          FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
         }
       }
@@ -780,10 +786,11 @@ define Action:
       TableRecommendation = '5-year follow-up'
     ) then
       {
-        short: 'Surveillance',
+        short: 'Surveillance 5-year follow-up',
         date: Collate.DateOfMostRecentReport + 5 years,
         details: {
           FiveYearSurveillanceRecommendationText,
+          FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
         }
       }
@@ -856,7 +863,7 @@ define Action:
       CCF.CoincidentDiagnosticReports(Dash.MostRecentNilmCytology, Dash.MostRecentPositiveHpv)
     ) then
       {
-        short: 'See Details',
+        short: 'Use Clinical Judgement',
         date: Today(),
         details: {
           'There is no specific recommendation for a NILM cytology and HPV + in a patient < 25 years of age. Use clinical judgement.'
