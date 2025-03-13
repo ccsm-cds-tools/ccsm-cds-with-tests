@@ -214,6 +214,9 @@ define ProposedDateOfNextCotest:
   else
     Now()
 
+define WillBeAge65OrLessAtNextScreening:
+  (Patient.birthDate as FHIR.date) less than 66 years before ToDate(ProposedScreeningDate) 
+    
 // define RecentScreenings:
 //   {
 //     MostRecentNilmCytology,
@@ -391,7 +394,7 @@ define RecommendationText:
             }
         else if Age21Through29 then
           { 'Cervical cancer screening using cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.' }
-        else
+        else if WillBeAge65OrLessAtNextScreening then
             {
               'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.',
               'The screening can be performed using one of the following screening approaches:',
@@ -399,6 +402,13 @@ define RecommendationText:
               '2. Cotesting with cervical cytology and hrHPV testing',
               '3. Cervical cytology testing alone'
             }
+        else 
+            {
+              'No cervical cancer screening is recommended.',
+              'Per USPSTF guidelines, this patient will be older than 65 by the time of their next screening, and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.',
+              'Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
+            }
+
   else
     null
 
