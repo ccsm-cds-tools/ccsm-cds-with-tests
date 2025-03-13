@@ -279,17 +279,11 @@ define BiopsyReports:
     BiopsyLookbackPeriod
   )
 
-define LookbackReports:
-  Common.LookBack(
-    Dash.AllCompletedDiagnosticReport,
-    BiopsyLookbackPeriod
-  )
-
 define HistologyObservations:
   Dash.HistologyObservations
 
-define SortedReports:
-  (LookbackReports) B
+define SortedBiopsyReports:
+  (BiopsyReports) B
   return {
     riskTableInput: HighestRankedInterpretation(
       BiopsyInterpretation(
@@ -300,10 +294,6 @@ define SortedReports:
     date: Common.DiagnosticReportDate(B)
   }
   sort by date desc
-
-define SortedBiopsyReports:
-  (SortedReports) B
-  where B.riskTableInput is not null
 
 define MostRecentBiopsyReport:
   if Count(SortedBiopsyReports) > 0 then
