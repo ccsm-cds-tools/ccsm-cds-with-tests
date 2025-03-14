@@ -1,12 +1,12 @@
 {
   "resourceType": "PlanDefinition",
-  "id": "CervicalCancerScreeningAndManagementClinicalDecisionSupport",
+  "id": "CervicalCancerAnalytics",
   "meta": {
     "profile": [
       "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-computableplandefinition"
     ]
   },
-  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreeningAndManagementClinicalDecisionSupport",
+  "url": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerAnalytics",
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-knowledgeCapability",
@@ -45,8 +45,8 @@
       "name": "Division of Cancer Prevention and Control, Centers for Disease Control and Prevention"
     }
   ],
-  "name": "CervicalCancerScreeningAndManagementClinicalDecisionSupport",
-  "title": "Cervical Cancer Screening And Management Clinical Decision Support",
+  "name": "CervicalCancerAnalytics",
+  "title": "Cervical Cancer Analytics",
   "type": {
     "coding": [
       {
@@ -56,7 +56,7 @@
       }
     ]
   },
-  "description": "This CDS tool provides care cervical cancer screening recommendations to a diverse population of individuals (i.e., those experiencing abnormal uterine or vaginal bleeding, have in utero exposure to diethylstilbestrol [DES], are immunocompromised, or are at “average risk” for cervical cancer). The evidence sources that inspired this tool are listed in the relatedArtifact metadata field.",
+  "description": "Provides analytics from running cervical cancer CDS .",
   "useContext": [
     {
       "code": {
@@ -92,26 +92,44 @@
     }
   ],
   "library": [
-    "http://OUR-PLACEHOLDER-URL.com/Library/ScreeningLibrary|1.0.0"
+    "http://OUR-PLACEHOLDER-URL.com/Library/AnalyticsLibrary|1.0.0"
   ],
   "action": [
     {
-      "title": "Screening",
+      "title": "Cervical Cancer Analytics Actions",
       "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
       "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreening|1.0.0"
-    },
-    {
-      "title": "Management",
-      "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
-      "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerManagement|1.0.0"
-    },
-    {
-      "title": "Analytics",
-      "description": "Top level action that runs analytics.",
-      "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
-      "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerAnalytics|1.0.0"
+      "documentation": [
+        {
+          "type": "documentation",
+          "label": "Inclusions",
+          "display": "This PlanDefinition applies if RunAnalytics is set to true."
+        }
+      ],
+      "trigger": [
+        {
+          "type": "named-event",
+          "name": "encounter-start"
+        }
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "language": "text/cql",
+            "expression": "RunAnalytics",
+            "reference": "Library/AnalyticsLibrary|1.0"
+          }
+        }
+      ],
+      "action": [
+        {
+          "title": "Output Analytics",
+          "description": "Output analytics used in the Cervical Cancer Screening and Management CDS",
+          "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+          "definitionCanonical": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/OutputAnalytics|1.0.0"
+        }
+      ]
     }
   ]
 }
