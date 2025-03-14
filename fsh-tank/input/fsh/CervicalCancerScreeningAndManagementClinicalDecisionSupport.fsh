@@ -34,3 +34,10 @@ Usage: #definition
 * action[=].description = "Top level action that defines trigger and criteria for inclusion and exclusion."
 * action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
 * action[=].definitionCanonical = Canonical(CervicalCancerManagement|1.0.0)
+// -----------------------------------------------------------------------------
+// Action #3: Analytics
+// -----------------------------------------------------------------------------
+* action[+].title = "Analytics"
+* action[=].description = "Top level action that runs analytics."
+* action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
+* action[=].definitionCanonical = Canonical(CervicalCancerAnalytics|1.0.0)
