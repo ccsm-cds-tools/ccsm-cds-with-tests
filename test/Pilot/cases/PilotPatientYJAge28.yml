@@ -1,0 +1,127 @@
+---
+name: Pilot Patient YJ Age 28
+
+data:
+- 
+  resourceType: Patient
+  name: Yennifer48 Jetrin21
+  gender: female
+  birthDate: 1995-06-01
+  id: Yennifer48Jetrin21
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# CIN2, LEEP, ECC LSIL
+# DiagnosticReport references Observation
+-
+  resourceType: DiagnosticReport
+  code: LOINC#1234 Dummy LOINC code
+  status: final
+  effectiveDateTime: 2023-06-15T00:00:00Z
+  issued: 2023-06-15T00:00:00Z
+  result:
+  -
+    reference: Observation/1234
+- 
+  resourceType: Observation
+  id: 1234
+  status: final
+  valueCodeableConcept: SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2023-06-15
+  status: completed  
+    
+# ECC LSIL
+-
+  resourceType: Procedure
+  code: SNOMEDCT#52889002 Endocervical curettage (procedure)
+  performedDateTime: 2023-06-15
+  status: completed
+  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-06-15
+
+
+# Colposcopy Procedure
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-06-03
+  status: completed
+
+# CIN1
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  effectiveDateTime: 2023-06-03
+
+# ECC LSIL
+-
+  resourceType: Procedure
+  code: SNOMEDCT#52889002 Endocervical curettage (procedure)
+  performedDateTime: 2023-06-03
+  status: completed
+
+# HSIL, Other (aka HSIL, Unspecified)
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#22725004 High-grade squamous intraepithelial lesion (morphologic abnormality)
+  effectiveDateTime: 2023-06-03
+
+# HPV MRNA E6E7
+-
+  resourceType: DiagnosticReport
+  code: LOINC#82354-2 Human papilloma virus 16 and 18+45 E6+E7 mRNA [Identifier] in Cervix by NAA with probe detection
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-05-09
+
+# ASC-US Pap, HRHPV 16+, 18+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-05-09  
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  - SNOMEDCT#708298003 Deoxyribonucleic acid of Human papillomavirus 16 (substance)
+  - SNOMEDCT#708299006 Deoxyribonucleic acid of Human papillomavirus 18 (substance)
+  effectiveDateTime: 2023-05-09
+  
+
+# Due date is 'now()' because > 6 months from last treatment  
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Surveillance'
+    date: '2023-12-30'
+    group: 'Management Surveillance (J.3.1)'
+    details:
+    - 'Primary HPV testing or cotesting is recommended at 6, 18, and 30 months following treatment.'
+    - 'After 3 consecutive negative tests have been obtained, surveillance can continue at 3-year intervals for at least 25 years, even if this is past age 65, and may continue for as long as the patient remains in good health.'
+    
