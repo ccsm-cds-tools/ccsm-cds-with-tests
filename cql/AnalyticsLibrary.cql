@@ -36,7 +36,7 @@ define DashboardLibraryAnalytics:
 // Analytics Output
 //------------------------------------------------------------------------------
 
-define RunAnaltyics:
+define RunAnalytics:
   Analtyics
 
 define AnalyticsOutput:
