@@ -115,7 +115,11 @@ In order to execute CDS logic, the FHIR Clinical Guidelines Implementation guide
 
 ### Run CQL Tests
 
-To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a UMLS account and VSAC API key; please see the section below, [Setting Up VSAC](#setting-up-vsac), for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
+To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a Unified Medical Language System (UMLS) account and Value Set Authority Center (VSAC) API key to download value set needed for CQL execution; please see the section below, [Setting Up VSAC](#setting-up-vsac), for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
+
+Once you've run the tests the first time and downloaded the value sets, they'll be stored in a VSAC cache folder (defaulted to /.vscache in the same folder as the cqlt.yaml file). After that, you do not need your VSAC credentials anymore since the CQL Testing Framework will just use the cache.
+
+For more information on setting up and running cql tests, see the [CQL Testing Framework README](https://github.com/AHRQ-CDS/CQL-Testing-Framework?tab=readme-ov-file#cql-testing-framework).
 
 ### Setting Up VSAC
 
@@ -140,7 +144,9 @@ To use the VSAC API, you must set the `UMLS_API_KEY` environment variable on you
 4. Save the file and exit the editor.
 5. Run `source ~/.bash_profile` or `source ~/.zshrc` to apply the changes.
 
-After setting the environment variable, you will be able to retrieve valuesets from VSAC.
+After setting the environment variable, you will be able to retrieve value sets from VSAC.
+
+Alternatively, you may achieve the same effect by adding the API key to each individual `cqlt.yaml` file by adding the `options->vsac->apikey` property and setting it to your API key.  
 
 ## Feedback
 
