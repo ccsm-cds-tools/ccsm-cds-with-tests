@@ -1368,9 +1368,9 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
       )
     ) or
     (
-      Exists(HistologyDiagnosticReports) and
+      Exists(AllCompletedDiagnosticReport) and
       AnyTrue(
-        (HistologyDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HistologyObservations))
+        (AllCompletedDiagnosticReport) D return not Exists(CollateConclusionCodes(D,HistologyObservations))
       )
     ) then
       'A laboratory test was found without a result. Please review patient record to resolve.'
@@ -1381,7 +1381,7 @@ define ErrorDiagnosticReportWithUnsupportedConclusonCode:
   if (
     Exists(DiagnosticReportsSummary) and
     AnyTrue(
-      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
+      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK' 
     )
   ) then
     'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'

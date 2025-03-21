@@ -254,6 +254,12 @@ define MostRecentCytologyReport:
   else
     null
 
+define MostRecentCytologyReportDate:
+  if (MostRecentCytologyReport is not null) then
+    MostRecentCytologyReport.date
+  else
+    null
+    
 define SecondMostRecentCytologyReport:
   if Count(SortedCytologyReports) > 1 then
     SortedCytologyReports[1]
@@ -298,6 +304,12 @@ define SortedBiopsyReports:
 define MostRecentBiopsyReport:
   if Count(SortedBiopsyReports) > 0 then
       SortedBiopsyReports[0]
+  else
+    null
+
+define MostRecentBiopsyReportDate:
+  if (MostRecentBiopsyReport is not null) then
+    MostRecentBiopsyReport.date
   else
     null
 
