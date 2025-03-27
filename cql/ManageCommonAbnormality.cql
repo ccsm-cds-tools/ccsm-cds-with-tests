@@ -462,7 +462,8 @@ define ErrataRecommendation:
         short: 'Colposcopy',
         date: Today(),
         details: {
-          'Colposcopy is recommended.'
+          'Colposcopy is recommended.',
+          'If a patient has a negative HPV test or co-test following a low-grade result for which colposcopy was previously recommended but not performed, repeating an HPV test or cotest in 1 year is acceptable. (Perkins 2019 Erratum)'
         }
       }
   
