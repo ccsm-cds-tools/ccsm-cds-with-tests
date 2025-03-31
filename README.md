@@ -115,7 +115,7 @@ In order to execute CDS logic, the FHIR Clinical Guidelines Implementation guide
 
 ### Run CQL Tests
 
-To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a Unified Medical Language System (UMLS) account and Value Set Authority Center (VSAC) API key to download value set needed for CQL execution; please see the section below, [Setting Up VSAC](#setting-up-vsac), for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
+To run the 1000+ tests to verify functionality of the CCSM CDS, type `npm run test-cql` into a command prompt from within the same directory as this README file. Note that this will require a Unified Medical Language System (UMLS) account and Value Set Authority Center (VSAC) API key to download value sets needed for CQL execution; please see the section below, [Setting Up VSAC](#setting-up-vsac), for further instructions. The results from running the tests against the current CQL definitions can be found in [test-results.txt](./test-results.txt).
 
 Once you've run the tests the first time and downloaded the value sets, they'll be stored in a VSAC cache folder (defaulted to /.vscache in the same folder as the cqlt.yaml file). After that, you do not need your VSAC credentials anymore since the CQL Testing Framework will just use the cache.
 
