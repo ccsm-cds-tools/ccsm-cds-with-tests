@@ -10,7 +10,7 @@ Usage: #definition
 * name = "CervicalCancerAnalytics"
 * title = "Cervical Cancer Analytics"
 * type = $PDTYPE#eca-rule "ECA Rule"
-* description = "Provides analytics from running cervical cancer CDS ."
+* description = "Provides analytics from running cervical cancer CDS."
 * useContext[+].code = $UCTYPE#gender "Gender"
 * useContext[=].valueCodeableConcept.coding = $V3AG#F "Female"
 * purpose = "This CDS identifies individuals for whom cervical cancer screening is indicated. It delivers patient-specific evidence-based screening recommendations based on information in the patient’s health record. It also gathers relevant information in the patient record to display to the clinician as a dashboard in support of care decisions. The dashboard includes information such as evidence of previous pre-cancer or cancerous lesions, previous colposcopies and biopsy results, previous surgeries, etc. The CDS integrates tightly with a companion CDS component (i.e., “Management CDS”), which provides evidence-based care recommendations if screening results are “abnormal”."
