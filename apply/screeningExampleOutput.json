@@ -3,7 +3,7 @@
     "resourceType": "RequestGroup",
     "id": "2",
     "subject": {
-      "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+      "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
       "display": "Joanne Smith"
     },
     "instantiatesCanonical": "http://OUR-PLACEHOLDER-URL.com/PlanDefinition/CervicalCancerScreening",
@@ -29,11 +29,11 @@
             "description": "DISPLAY data elements used in the Cervical Cancer Screening and Management Dashboard",
             "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
             "resource": {
-              "reference": "CommunicationRequest/7"
+              "reference": "CommunicationRequest/8"
             }
           },
           {
-            "id": "10",
+            "id": "14",
             "title": "Screening Decision Aids",
             "description": "Screening Decision Aids",
             "documentation": [
@@ -82,11 +82,11 @@
             ],
             "textEquivalent": "Screening Decision Aids",
             "resource": {
-              "reference": "CommunicationRequest/15"
+              "reference": "CommunicationRequest/19"
             }
           },
           {
-            "id": "11",
+            "id": "15",
             "title": "Recommended Screening Activities",
             "description": "Recommended Screening Activities",
             "textEquivalent": "Recommended Screening Activities",
@@ -94,7 +94,7 @@
             "selectionBehavior": "at-most-one",
             "action": [
               {
-                "id": "12",
+                "id": "16",
                 "title": "Primary HPV",
                 "documentation": [
                   {
@@ -141,12 +141,12 @@
                   }
                 ],
                 "resource": {
-                  "reference": "ServiceRequest/16"
+                  "reference": "ServiceRequest/22"
                 },
                 "description": "Natural language description of the activity definition"
               },
               {
-                "id": "13",
+                "id": "17",
                 "title": "Cytology",
                 "documentation": [
                   {
@@ -193,12 +193,12 @@
                   }
                 ],
                 "resource": {
-                  "reference": "ServiceRequest/17"
+                  "reference": "ServiceRequest/23"
                 },
                 "description": "Natural language description of the activity definition"
               },
               {
-                "id": "14",
+                "id": "18",
                 "title": "Cotesting",
                 "documentation": [
                   {
@@ -245,9 +245,33 @@
                   }
                 ],
                 "resource": {
-                  "reference": "ServiceRequest/18"
+                  "reference": "ServiceRequest/24"
                 },
                 "description": "Natural language description of the activity definition"
+              }
+            ]
+          },
+          {
+            "id": "11",
+            "title": "Cervical Cancer Analytics Actions",
+            "description": "Top level action that defines trigger and criteria for inclusion and exclusion.",
+            "documentation": [
+              {
+                "type": "documentation",
+                "label": "Inclusions",
+                "display": "This PlanDefinition applies if RunAnalytics is set to true."
+              }
+            ],
+            "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+            "action": [
+              {
+                "id": "20",
+                "title": "Output Analytics",
+                "description": "Output analytics used in the Cervical Cancer Screening and Management CDS",
+                "textEquivalent": "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system",
+                "resource": {
+                  "reference": "CommunicationRequest/21"
+                }
               }
             ]
           }
@@ -257,7 +281,7 @@
   },
   [
     {
-      "id": "7",
+      "id": "8",
       "resourceType": "CommunicationRequest",
       "status": "option",
       "basedOn": [
@@ -266,17 +290,17 @@
         }
       ],
       "subject": {
-        "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
         "display": "Joanne Smith"
       },
       "payload": [
         {
-          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1986,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Unknown\",\"age\":37,\"gender\":\"Unknown\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"NILM\",\"longValue\":[{\"value\":\"Negative for intraepithelial lesion or malignancy (finding)\"}],\"date\":\"2018-05-01\",\"reference\":\"DiagnosticReport/ca3a865c-089b-442f-a537-01eeec45f8ef\",\"edited\":false}],\"encounters\":[],\"immunizations\":[]}}"
+          "contentString": "{\"patientInfo\":{\"name\":\"Joanne Smith\",\"id\":null,\"isPregnant\":false,\"dateOfBirth\":{\"value\":{\"year\":1986,\"month\":1,\"day\":1}},\"sexAtBirth\":\"Female\",\"age\":39,\"gender\":\"female\",\"primaryLanguage\":\"Unknown\",\"race\":null},\"patientHistory\":{\"conditions\":[],\"observations\":[],\"medications\":[],\"procedures\":[],\"diagnosticReports\":[{\"name\":\"Cervical Cytology\",\"longName\":\"Microscopic observation [Identifier] in Cervix by Cyto stain\",\"value\":\"NILM\",\"longValue\":[{\"value\":\"Negative for intraepithelial lesion or malignancy (finding)\"}],\"label\":\"NILM\",\"grade\":1,\"date\":\"2018-05-01\",\"reference\":\"DiagnosticReport/fd811472-f7b5-466d-acce-717db8e1a4ea\",\"edited\":false}],\"encounters\":[],\"immunizations\":[],\"episodeOfCares\":[]}}"
         }
       ]
     },
     {
-      "id": "15",
+      "id": "19",
       "resourceType": "CommunicationRequest",
       "status": "option",
       "basedOn": [
@@ -285,17 +309,17 @@
         }
       ],
       "subject": {
-        "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
         "display": "Joanne Smith"
       },
       "payload": [
         {
-          "contentString": "{\"recommendation\":\"Cervical Screening Due Now\",\"recommendationGroup\":\"Screening: Average Risk\",\"recommendationDetails\":[\"Cervical cancer screening is recommended.\",\"The screening can be performed using one of the following screening approaches:\",\"1. hrHPV testing alone\",\"2. Cotesting with cervical cytology and hrHPV testing\",\"3. Cervical cytology testing alone\"],\"recommendationDate\":\"2023-05-25\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[\"Primary HPV\",\"Cytology\",\"Cotest\"]}"
+          "contentString": "{\"recommendation\":\"Cervical Screening Due Now\",\"recommendationGroup\":\"Screening: Average Risk\",\"recommendationDetails\":[\"Cervical cancer screening is recommended.\",\"The screening can be performed using one of the following screening approaches:\",\"1. hrHPV testing alone\",\"2. Cotesting with cervical cytology and hrHPV testing\",\"3. Cervical cytology testing alone\"],\"recommendationDate\":\"2025-03-31\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[\"Primary HPV\",\"Cytology\",\"Cotest\"]}"
         }
       ]
     },
     {
-      "id": "16",
+      "id": "22",
       "resourceType": "ServiceRequest",
       "status": "option",
       "basedOn": [
@@ -304,7 +328,7 @@
         }
       ],
       "subject": {
-        "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
         "display": "Joanne Smith"
       },
       "intent": "proposal",
@@ -325,7 +349,7 @@
           "text": "3. Cervical cytology testing alone"
         }
       ],
-      "occurrenceDateTime": "2023-05-25",
+      "occurrenceDateTime": "2025-03-31",
       "code": {
         "coding": [
           {
@@ -338,7 +362,7 @@
       }
     },
     {
-      "id": "17",
+      "id": "23",
       "resourceType": "ServiceRequest",
       "status": "option",
       "basedOn": [
@@ -347,7 +371,7 @@
         }
       ],
       "subject": {
-        "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
         "display": "Joanne Smith"
       },
       "intent": "proposal",
@@ -368,7 +392,7 @@
           "text": "3. Cervical cytology testing alone"
         }
       ],
-      "occurrenceDateTime": "2023-05-25",
+      "occurrenceDateTime": "2025-03-31",
       "code": {
         "coding": [
           {
@@ -381,7 +405,7 @@
       }
     },
     {
-      "id": "18",
+      "id": "24",
       "resourceType": "ServiceRequest",
       "status": "option",
       "basedOn": [
@@ -390,7 +414,7 @@
         }
       ],
       "subject": {
-        "reference": "Patient/e277836a-4481-4171-836c-847b866a508e",
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
         "display": "Joanne Smith"
       },
       "intent": "proposal",
@@ -411,7 +435,7 @@
           "text": "3. Cervical cytology testing alone"
         }
       ],
-      "occurrenceDateTime": "2023-05-25",
+      "occurrenceDateTime": "2025-03-31",
       "code": {
         "coding": [
           {
@@ -422,6 +446,25 @@
         ],
         "text": "Cotest"
       }
+    },
+    {
+      "id": "21",
+      "resourceType": "CommunicationRequest",
+      "status": "option",
+      "basedOn": [
+        {
+          "reference": "http://OUR-PLACEHOLDER-URL.com/ActivityDefinition/OutputAnalytics"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/cc376798-ce92-4f50-aa3c-16587f221766",
+        "display": "Joanne Smith"
+      },
+      "payload": [
+        {
+          "contentString": "{\"DashboardLibrary\":{\"PatientAge\":39,\"TransgenderMale\":false,\"HasRecentPositiveHpv\":false,\"HasRecentAbnormalCytologyResults\":false,\"HasRecentRareCytologyResults\":false,\"HasRecentAbnormalScreening\":false,\"HasRecentAbnormalHistology\":false,\"Immunocompromised\":false,\"MostRecentDistinctImmunocompromisedEvent\":null,\"MostRecentDistinctImmunocompromisedEventDate\":null},\"CollateManagementData\":{\"MostRecentHpvResult\":null,\"SecondMostRecentHpvResult\":null,\"ThirdMostRecentHpvResult\":null,\"FourthMostRecentHpvResult\":null,\"MostRecentCytologyCotestResult\":null,\"SecondMostRecentCytologyCotestResult\":null,\"ThirdMostRecentCytologyCotestResult\":null,\"FourthMostRecentCytologyCotestResult\":null,\"MostRecentCytologyReportWasWithinPastFiveYears\":false,\"CytologyInterpretedAsAscusOrAbove\":false,\"AnyCytologyInterpretedAsAscusOrAbove\":[],\"MostRecentBiopsyResult\":null,\"ReferringHpvResult\":\"ALL\",\"MostRecentCytologyBeforeBiopsy\":null,\"ReferringCytologyResult\":\"ALL\",\"DateOfLastCervicalPrecancerTreatment\":null},\"ManageCommonAbnormality\":{\"HpvDates\":[],\"CytologyAloneInRecentHistory\":true,\"AbnormalCytologyAloneInRecentHistory\":false,\"RarelyScreenedTreatmentRecommendation\":false,\"TableRecommendation\":null,\"WhichTableMadeTheRecommendation\":null,\"MostRecentCytologyIsNotACotest\":true,\"HpvInterpretedAsPositive\":null,\"SecondMostRecentHpvInterpretedAsPositive\":null,\"DateOfMostRecentPositiveScreeningResult\":null,\"DateOfMostRecentHpvReport\":null,\"PositivePrimaryHpv\":false,\"HighRiskHPVPositiveResults\":false,\"PreviousCytologyOrSurveillanceIsOldOrAbsent\":true,\"IsRarelyScreenedPatient\":false,\"RelevantRow\":null},\"ManagementLibrary\":{\"HasHighGradePreCancerCervicalLesion\":false,\"HasCervicalCancerDiagnoses\":false,\"WhichRarityMadeTheRecommendation\":null,\"ManagementRecommendation\":{\"short\":null,\"date\":null,\"details\":null,\"group\":\"N/A\"},\"HasRecommendation\":false,\"DecisionAids\":{\"recommendation\":null,\"recommendationGroup\":\"N/A\",\"recommendationDetails\":null,\"recommendationDate\":null,\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[],\"riskTable\":{\"title\":\"Risk Estimates\",\"subtitle\":\"N/A\",\"headers\":null,\"relevant\":null,\"adjacent\":null}}},\"ManageRareAbnormality\":{\"HasPositiveHpvAfterTreatmentForHighGradeResult\":false,\"HasPremenopausalObservationOrCondition\":false,\"HasPostmenopausalObservationOrCondition\":false,\"AbsenceOrRemovalOfCervix\":false,\"CervixRemovalDate\":null,\"HasColposcopyProcedureAfterMostRecentBiopsy\":false,\"HasColposcopyProcedureAfterMostRecentTreatment\":false,\"RecentlyRespondedYesToFuturePregnancyConcernsQuestion\":false,\"MostRecentTreatmentDate\":null,\"HasTreatmentInLastYear\":false,\"HasTreatmentAfterMostRecentBiopsy\":false,\"HasSurveillanceAfterMostRecentBiopsy\":false,\"HasPositiveSurveillanceAfterMostRecentBiopsy\":false,\"HasHistologicHsilWithin12MonthsBeforeTreatment\":false,\"HasTreatmentForHighGradeHistologyOrCytology\":false,\"TreatmentForHighGradeHistologyOrCytologyDate\":null,\"HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy\":false,\"HasHistologyAfterTreatmentForHighGradeResult\":false,\"WhichRarityMadeTheRecommendation\":null},\"ManageSpecialPopulation\":{\"BiopsySinceMostRecentCytology\":false,\"PregnancyOnset\":null,\"HistologicAisDuringPregnancy\":false,\"TwoMostRecentCytologyReportsWithin18MonthsApart\":null,\"HighGradePreCancerCervicalLesionDate\":null,\"CervicalCancerDiagnosisDate\":null,\"HighGradeOrCancerHistologyResultsDate\":null,\"HysterectomyPerformedForTreatment\":false,\"InitialIntensiveSurveillancePeriodPostHysterectomy\":false,\"WhichPopulationMadeTheRecommendation\":null},\"ScreeningLibrary\":{\"HasHighGradePreCancerCervicalLesion\":false,\"HasCervicalCancerDiagnoses\":false,\"HasRecentAbnormalScreening\":false,\"HasRecentAbnormalHistology\":false,\"IsIncludedAndNotExcluded\":true,\"HasRecommendation\":true,\"SuggestedOrders\":[\"Primary HPV\",\"Cytology\",\"Cotest\"],\"DecisionAids\":{\"recommendation\":\"Cervical Screening Due Now\",\"recommendationGroup\":\"Screening: Average Risk\",\"recommendationDetails\":[\"Cervical cancer screening is recommended.\",\"The screening can be performed using one of the following screening approaches:\",\"1. hrHPV testing alone\",\"2. Cotesting with cervical cytology and hrHPV testing\",\"3. Cervical cytology testing alone\"],\"recommendationDate\":\"2025-03-31\",\"errors\":[],\"disclaimer\":\"An evidence based recommendation is provided based on clinical data available in the patient's electronic medical record. Please validate with patient and document any additional relevant history and cervical cancer screening related procedures, and lab testing with documented written evidence.\",\"suggestedOrders\":[\"Primary HPV\",\"Cytology\",\"Cotest\"]}},\"ScreeningSymptomaticLibrary\":{\"IsSymptomatic\":false,\"HasNilmCytologyWithinLast12Months\":false,\"HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years\":false,\"HasVisibleCervicalOrVaginalLesion\":false}}"
+        }
+      ]
     }
   ]
 ]
