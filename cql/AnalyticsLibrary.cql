@@ -23,7 +23,7 @@ include ScreeningSymptomaticLibrary version '1.0.0' called SSL
 //------------------------------------------------------------------------------
 // PARAMETERS
 //------------------------------------------------------------------------------
-parameter Analtyics default true // Turn analytics generation on or off.
+parameter Analytics default true // Turn analytics generation on or off.
 
 context Patient
 
@@ -187,7 +187,7 @@ define ScreeningSymptomaticLibraryAnalytics:
 //------------------------------------------------------------------------------
 
 define RunAnalytics:
-  Analtyics
+  Analytics
 
 define AnalyticsOutput:
   {
