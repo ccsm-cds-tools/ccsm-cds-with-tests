@@ -198,5 +198,8 @@ define AnalyticsOutput:
     ManageRareAbnormality: ManageRareAbnormalityAnalytics,
     ManageSpecialPopulation: ManageSpecialPopulationAnalytics,
     ScreeningLibrary: ScreeningLibraryAnalytics,
+    ScreeningAverageRiskLibrary: ScreeningAverageRiskLibraryAnalytics,
+    ScreeningDesExposureLibrary: ScreeningDesExposureLibraryAnalytics,
+    ScreeningImmunocompromisedLibrary: ScreeningImmunocompromisedLibraryAnalytics,
     ScreeningSymptomaticLibrary: ScreeningSymptomaticLibraryAnalytics
   }
