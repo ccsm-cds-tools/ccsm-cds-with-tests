@@ -1,0 +1,43 @@
+---
+name: Histology Date Observation Missing Result
+
+# A DiagnosticReport has Observation with the same date but missing result
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# DiagnosticReport and Observation have same date
+-
+  resourceType: DiagnosticReport
+  code: LOINC#1234 Dummy LOINC code
+  status: final
+  effectiveDateTime: 2021-05-08T19:46:00Z
+  issued: 2021-05-10T16:42:59Z
+- 
+  resourceType: Observation
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  effectiveDateTime: 2021-05-08T19:46:00Z
+  issued: 2021-05-10T16:42:59Z
+
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#309162003 Normal histology findings (finding)
+  effectiveDateTime: 2020-12-01  
+  
+results:
+  HistologyDiagnosticReports: $should have length 1
+  PertinentObservationsSummary: $should have length 0
+  HistologyDiagnosticReportsSummary: $should have length 1
+  DiagnosticReportsSummary: $should have length 1
+  ErrorDiagnosticReportWithNoConclusonCodes: 'A laboratory test was found without a result. Please review patient record to resolve.'
