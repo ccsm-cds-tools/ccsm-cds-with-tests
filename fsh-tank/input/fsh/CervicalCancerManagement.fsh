@@ -79,10 +79,3 @@ Usage: #definition
 * action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentProcedureQuestionnaire|1.0.0)
 * action[=].action[=].action[=].action[+].definitionCanonical = Canonical(ScreeningAndManagementHistoryQuestionnaire|1.0.0)
 * action[=].action[=].action[=].action[+].definitionCanonical = Canonical(PertinentVaccinationQuestionnaire|1.0.0)
-// -----------------------------------------------------------------------------
-// Action #4: Analytics
-// -----------------------------------------------------------------------------
-* action[=].action[+].title = "Analytics"
-* action[=].action[=].description = "Top level action that runs analytics."
-* action[=].action[=].textEquivalent = "Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system"
-* action[=].action[=].definitionCanonical = Canonical(CervicalCancerAnalytics|1.0.0)
