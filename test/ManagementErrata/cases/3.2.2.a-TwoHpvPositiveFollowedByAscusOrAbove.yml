@@ -1,5 +1,5 @@
 ---
-name: 3.2.2.a - ASC-US HPV Positive Followed by HPV Positive NILM
+name: 3.2.2.a - Two HPV Positive ASC-US Followed by ASC-US HPV Negative 
 
 externalData:
 - resources
@@ -14,29 +14,44 @@ data:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
     valueCode: F
+-
+  $iterate: *MostRecentCytologyAloneAscusOrAbove
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-05-01
+  
 - 
   resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
   status: final
   conclusionCode:
   - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding) 
-  effectiveDateTime: 2020-05-01
-- 
+  effectiveDateTime: 2019-06-01
+-
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
   - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
-  effectiveDateTime: 2020-05-01
--
-  $iterate: *MostRecentHpvPositive
+  effectiveDateTime: 2019-06-01
 - 
   resourceType: DiagnosticReport
   code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
-  status: amended
+  status: final
   conclusionCode:
-  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
-  effectiveDateTime: 2021-05-01
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding) 
+  effectiveDateTime: 2018-05-30
+-
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2018-05-30
 
 
 results:
