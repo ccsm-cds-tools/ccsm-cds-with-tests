@@ -189,6 +189,16 @@
                      "type" : "ExpressionRef"
                   }
                }, {
+                  "name" : "MostRecentBiopsyReportDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentBiopsyReportDate",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
                   "name" : "ReferringHpvResult",
                   "value" : {
                      "name" : "ReferringHpvResult",
@@ -212,9 +222,22 @@
                }, {
                   "name" : "DateOfLastCervicalPrecancerTreatment",
                   "value" : {
-                     "name" : "DateOfLastCervicalPrecancerTreatment",
-                     "libraryName" : "CDM",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "MostRecentCytologyReportDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentCytologyReportDate",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
                   }
                } ]
             }
@@ -290,9 +313,12 @@
                }, {
                   "name" : "MostRecentDistinctImmunocompromisedEventDate",
                   "value" : {
-                     "name" : "MostRecentDistinctImmunocompromisedEventDate",
-                     "libraryName" : "Dash",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentDistinctImmunocompromisedEventDate",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
+                     }
                   }
                } ]
             }
@@ -305,9 +331,25 @@
                "element" : [ {
                   "name" : "HpvDates",
                   "value" : {
-                     "name" : "HpvDates",
-                     "libraryName" : "MCA",
-                     "type" : "ExpressionRef"
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "H",
+                        "expression" : {
+                           "name" : "HpvDates",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "ToString",
+                           "operand" : {
+                              "name" : "H",
+                              "type" : "AliasRef"
+                           }
+                        }
+                     }
                   }
                }, {
                   "name" : "CytologyAloneInRecentHistory",
@@ -368,16 +410,22 @@
                }, {
                   "name" : "DateOfMostRecentPositiveScreeningResult",
                   "value" : {
-                     "name" : "DateOfMostRecentPositiveScreeningResult",
-                     "libraryName" : "MCA",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentPositiveScreeningResult",
+                        "libraryName" : "MCA",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "DateOfMostRecentHpvReport",
                   "value" : {
-                     "name" : "DateOfMostRecentHpvReport",
-                     "libraryName" : "MCA",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentHpvReport",
+                        "libraryName" : "MCA",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "PositivePrimaryHpv",
@@ -503,9 +551,12 @@
                }, {
                   "name" : "CervixRemovalDate",
                   "value" : {
-                     "name" : "CervixRemovalDate",
-                     "libraryName" : "MRA",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "CervixRemovalDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "HasColposcopyProcedureAfterMostRecentBiopsy",
@@ -531,9 +582,12 @@
                }, {
                   "name" : "MostRecentTreatmentDate",
                   "value" : {
-                     "name" : "MostRecentTreatmentDate",
-                     "libraryName" : "MRA",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentTreatmentDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "HasTreatmentInLastYear",
@@ -580,9 +634,12 @@
                }, {
                   "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
                   "value" : {
-                     "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
-                     "libraryName" : "MRA",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
@@ -644,23 +701,44 @@
                }, {
                   "name" : "HighGradePreCancerCervicalLesionDate",
                   "value" : {
-                     "name" : "HighGradePreCancerCervicalLesionDate",
-                     "libraryName" : "MSP",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "HighGradePreCancerCervicalLesionDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
                   }
                }, {
                   "name" : "CervicalCancerDiagnosisDate",
                   "value" : {
-                     "name" : "CervicalCancerDiagnosisDate",
-                     "libraryName" : "MSP",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "CervicalCancerDiagnosisDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
                   }
                }, {
                   "name" : "HighGradeOrCancerHistologyResultsDate",
                   "value" : {
-                     "name" : "HighGradeOrCancerHistologyResultsDate",
-                     "libraryName" : "MSP",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "HighGradeOrCancerHistologyResultsDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
                   }
                }, {
                   "name" : "HysterectomyPerformedForTreatment",
@@ -758,23 +836,32 @@
                "element" : [ {
                   "name" : "DateOfMostRecentNilmCytology",
                   "value" : {
-                     "name" : "DateOfMostRecentNilmCytology",
-                     "libraryName" : "SAR",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNilmCytology",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "DateOfMostRecentNegativeHpv",
                   "value" : {
-                     "name" : "DateOfMostRecentNegativeHpv",
-                     "libraryName" : "SAR",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNegativeHpv",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "DateOfMostRecentNegativeCotest",
                   "value" : {
-                     "name" : "DateOfMostRecentNegativeCotest",
-                     "libraryName" : "SAR",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNegativeCotest",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "LastScreeningType",
@@ -786,9 +873,12 @@
                }, {
                   "name" : "ProposedScreeningDate",
                   "value" : {
-                     "name" : "ProposedScreeningDate",
-                     "libraryName" : "SAR",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "ProposedScreeningDate",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "RecommendImmediateCervicalCytology",
@@ -886,9 +976,12 @@
                }, {
                   "name" : "DateOfLastCytology",
                   "value" : {
-                     "name" : "DateOfLastCytology",
-                     "libraryName" : "SIC",
-                     "type" : "ExpressionRef"
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfLastCytology",
+                        "libraryName" : "SIC",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "LastCytologyWasCotest",
