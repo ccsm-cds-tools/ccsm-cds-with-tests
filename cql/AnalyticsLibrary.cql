@@ -43,10 +43,12 @@ define CollateManagementDataAnalytics:
   CytologyInterpretedAsAscusOrAbove: CDM.CytologyInterpretedAsAscusOrAbove,
   AnyCytologyInterpretedAsAscusOrAbove: CDM.AnyCytologyInterpretedAsAscusOrAbove,
   MostRecentBiopsyResult: CDM.MostRecentBiopsyResult,
+  MostRecentBiopsyReportDate: ToString(CDM.MostRecentBiopsyReportDate),
   ReferringHpvResult: CDM.ReferringHpvResult,
   MostRecentCytologyBeforeBiopsy: CDM.MostRecentCytologyBeforeBiopsy,
   ReferringCytologyResult: CDM.ReferringCytologyResult,
-  DateOfLastCervicalPrecancerTreatment: CDM.DateOfLastCervicalPrecancerTreatment
+  DateOfLastCervicalPrecancerTreatment: ToString(CDM.DateOfLastCervicalPrecancerTreatment),
+  MostRecentCytologyReportDate: ToString(CDM.MostRecentCytologyReportDate)
 }
 
 define DashboardLibraryAnalytics:
@@ -60,12 +62,12 @@ define DashboardLibraryAnalytics:
   HasRecentAbnormalHistology: Dash.HasRecentAbnormalHistology,
   Immunocompromised: Dash.Immunocompromised,
   MostRecentDistinctImmunocompromisedEvent: Dash.MostRecentDistinctImmunocompromisedEvent,
-  MostRecentDistinctImmunocompromisedEventDate: Dash.MostRecentDistinctImmunocompromisedEventDate
+  MostRecentDistinctImmunocompromisedEventDate: ToString(Dash.MostRecentDistinctImmunocompromisedEventDate)
 }
 
 define ManageCommonAbnormalityAnalytics:
 {
-  HpvDates: MCA.HpvDates,
+  HpvDates: MCA.HpvDates H return ToString(H),
   CytologyAloneInRecentHistory: MCA.CytologyAloneInRecentHistory,
   AbnormalCytologyAloneInRecentHistory: MCA.AbnormalCytologyAloneInRecentHistory,
   RarelyScreenedTreatmentRecommendation: MCA.RarelyScreenedTreatmentRecommendation,
@@ -74,8 +76,8 @@ define ManageCommonAbnormalityAnalytics:
   MostRecentCytologyIsNotACotest: MCA.MostRecentCytologyIsNotACotest,
   HpvInterpretedAsPositive: MCA.HpvInterpretedAsPositive,
   SecondMostRecentHpvInterpretedAsPositive: MCA.SecondMostRecentHpvInterpretedAsPositive,
-  DateOfMostRecentPositiveScreeningResult: MCA.DateOfMostRecentPositiveScreeningResult,
-  DateOfMostRecentHpvReport: MCA.DateOfMostRecentHpvReport,
+  DateOfMostRecentPositiveScreeningResult: ToString(MCA.DateOfMostRecentPositiveScreeningResult),
+  DateOfMostRecentHpvReport: ToString(MCA.DateOfMostRecentHpvReport),
   PositivePrimaryHpv: MCA.PositivePrimaryHpv,
   HighRiskHPVPositiveResults: MCA.HighRiskHPVPositiveResults,
   PreviousCytologyOrSurveillanceIsOldOrAbsent: MCA.PreviousCytologyOrSurveillanceIsOldOrAbsent,
@@ -99,18 +101,18 @@ define ManageRareAbnormalityAnalytics:
   HasPremenopausalObservationOrCondition: MRA.HasPremenopausalObservationOrCondition,
   HasPostmenopausalObservationOrCondition: MRA.HasPostmenopausalObservationOrCondition,
   AbsenceOrRemovalOfCervix: MRA.AbsenceOrRemovalOfCervix,
-  CervixRemovalDate: MRA.CervixRemovalDate,
+  CervixRemovalDate: ToString(MRA.CervixRemovalDate),
   HasColposcopyProcedureAfterMostRecentBiopsy: MRA.HasColposcopyProcedureAfterMostRecentBiopsy,
   HasColposcopyProcedureAfterMostRecentTreatment: MRA.HasColposcopyProcedureAfterMostRecentTreatment,
   RecentlyRespondedYesToFuturePregnancyConcernsQuestion: MRA.RecentlyRespondedYesToFuturePregnancyConcernsQuestion,
-  MostRecentTreatmentDate: MRA.MostRecentTreatmentDate,
+  MostRecentTreatmentDate: ToString(MRA.MostRecentTreatmentDate),
   HasTreatmentInLastYear: MRA.HasTreatmentInLastYear,
   HasTreatmentAfterMostRecentBiopsy: MRA.HasTreatmentAfterMostRecentBiopsy,
   HasSurveillanceAfterMostRecentBiopsy: MRA.HasSurveillanceAfterMostRecentBiopsy,
   HasPositiveSurveillanceAfterMostRecentBiopsy: MRA.HasPositiveSurveillanceAfterMostRecentBiopsy,
   HasHistologicHsilWithin12MonthsBeforeTreatment: MRA.HasHistologicHsilWithin12MonthsBeforeTreatment,
   HasTreatmentForHighGradeHistologyOrCytology: MRA.HasTreatmentForHighGradeHistologyOrCytology,
-  TreatmentForHighGradeHistologyOrCytologyDate: MRA.TreatmentForHighGradeHistologyOrCytologyDate,
+  TreatmentForHighGradeHistologyOrCytologyDate: ToString(MRA.TreatmentForHighGradeHistologyOrCytologyDate),
   HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy: MRA.HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy,
   HasHistologyAfterTreatmentForHighGradeResult: MRA.HasHistologyAfterTreatmentForHighGradeResult,
   WhichRarityMadeTheRecommendation: MRA.WhichRarityMadeTheRecommendation
@@ -121,9 +123,9 @@ define ManageSpecialPopulationAnalytics:
   PregnancyOnset: MSP.PregnancyOnset,
   HistologicAisDuringPregnancy: MSP.HistologicAisDuringPregnancy,
   TwoMostRecentCytologyReportsWithin18MonthsApart: MSP.TwoMostRecentCytologyReportsWithin18MonthsApart,
-  HighGradePreCancerCervicalLesionDate: MSP.HighGradePreCancerCervicalLesionDate,
-  CervicalCancerDiagnosisDate: MSP.CervicalCancerDiagnosisDate,
-  HighGradeOrCancerHistologyResultsDate: MSP.HighGradeOrCancerHistologyResultsDate,
+  HighGradePreCancerCervicalLesionDate: ToString(MSP.HighGradePreCancerCervicalLesionDate.date),
+  CervicalCancerDiagnosisDate: ToString(MSP.CervicalCancerDiagnosisDate.date),
+  HighGradeOrCancerHistologyResultsDate: ToString(MSP.HighGradeOrCancerHistologyResultsDate.date),
   HysterectomyPerformedForTreatment: MSP.HysterectomyPerformedForTreatment,
   InitialIntensiveSurveillancePeriodPostHysterectomy: MSP.InitialIntensiveSurveillancePeriodPostHysterectomy,
   WhichPopulationMadeTheRecommendation: MSP.WhichPopulationMadeTheRecommendation
@@ -143,11 +145,11 @@ define ScreeningLibraryAnalytics:
 
 define ScreeningAverageRiskLibraryAnalytics:
 {
-  DateOfMostRecentNilmCytology: SAR.DateOfMostRecentNilmCytology,
-  DateOfMostRecentNegativeHpv: SAR.DateOfMostRecentNegativeHpv,
-  DateOfMostRecentNegativeCotest: SAR.DateOfMostRecentNegativeCotest,
+  DateOfMostRecentNilmCytology: ToString(SAR.DateOfMostRecentNilmCytology),
+  DateOfMostRecentNegativeHpv: ToString(SAR.DateOfMostRecentNegativeHpv),
+  DateOfMostRecentNegativeCotest: ToString(SAR.DateOfMostRecentNegativeCotest),
   LastScreeningType: SAR.LastScreeningType,
-  ProposedScreeningDate: SAR.ProposedScreeningDate,
+  ProposedScreeningDate: ToString(SAR.ProposedScreeningDate),
   RecommendImmediateCervicalCytology: SAR.RecommendImmediateCervicalCytology,
   RecommendImmediatePrimaryHpv: SAR.RecommendImmediatePrimaryHpv,
   RecommendImmediateCotesting: SAR.RecommendImmediateCotesting,
@@ -167,7 +169,7 @@ define ScreeningDesExposureLibraryAnalytics:
 define ScreeningImmunocompromisedLibraryAnalytics:
 {
   CompletedAnnualCytologyTestSequence: SIC.CompletedAnnualCytologyTestSequence,
-  DateOfLastCytology: SIC.DateOfLastCytology,
+  DateOfLastCytology: ToString(SIC.DateOfLastCytology),
   LastCytologyWasCotest: SIC.LastCytologyWasCotest
 }
 
