@@ -4,7 +4,6 @@
 
 library AnalyticsLibrary version '1.0.0'
 
-
 using FHIR version '4.0.1'
 
 // Libraries that we will perform analytics on
@@ -27,11 +26,9 @@ parameter Analtyics default true // Turn analytics generation on or off.
 
 context Patient
 
-
 //------------------------------------------------------------------------------
 // Analytics Data Elements from Libraries
 //------------------------------------------------------------------------------
-// CollateManagementData.cql----------------------------------------------------|
 define CollateManagementDataAnalytics:
 {
   MostRecentHpvResult: CDM.MostRecentHpvResult,
@@ -52,7 +49,6 @@ define CollateManagementDataAnalytics:
   DateOfLastCervicalPrecancerTreatment: CDM.DateOfLastCervicalPrecancerTreatment
 }
 
-// DashboardLibrary.cql---------------------------------------------------------|
 define DashboardLibraryAnalytics:
 {
   PatientAge: Dash.PatientAge,
