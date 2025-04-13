@@ -8895,36 +8895,159 @@
             "expression" : {
                "type" : "Query",
                "source" : [ {
-                  "alias" : "B",
+                  "alias" : "D",
                   "expression" : {
                      "name" : "AllCompletedDiagnosticReport",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "alias" : "O",
+                  "expression" : {
+                     "name" : "HistologyObservations",
                      "type" : "ExpressionRef"
                   }
                } ],
                "relationship" : [ ],
                "where" : {
-                  "type" : "Greater",
+                  "type" : "Or",
                   "operand" : [ {
-                     "type" : "Count",
-                     "source" : {
-                        "name" : "CollateConclusionCodes",
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Equivalent",
+                           "operand" : [ {
+                              "name" : "ToConcept",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "code",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
+                           }, {
+                              "type" : "ToConcept",
+                              "operand" : {
+                                 "name" : "Biopsy Report",
+                                 "type" : "CodeRef"
+                              }
+                           } ]
+                        }, {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "R",
+                                 "expression" : {
+                                    "path" : "result",
+                                    "scope" : "D",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "Equal",
+                                 "operand" : [ {
+                                    "type" : "Last",
+                                    "source" : {
+                                       "type" : "Split",
+                                       "stringToSplit" : {
+                                          "name" : "ToString",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "path" : "reference",
+                                             "scope" : "R",
+                                             "type" : "Property"
+                                          } ]
+                                       },
+                                       "separator" : {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "/",
+                                          "type" : "Literal"
+                                       }
+                                    }
+                                 }, {
+                                    "name" : "ToString",
+                                    "libraryName" : "FHIRHelpers",
+                                    "type" : "FunctionRef",
+                                    "operand" : [ {
+                                       "path" : "id",
+                                       "scope" : "O",
+                                       "type" : "Property"
+                                    } ]
+                                 } ]
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "Exists",
+                        "operand" : {
+                           "type" : "Query",
+                           "source" : [ {
+                              "alias" : "oB",
+                              "expression" : {
+                                 "path" : "basedOn",
+                                 "scope" : "O",
+                                 "type" : "Property"
+                              }
+                           } ],
+                           "relationship" : [ ],
+                           "where" : {
+                              "type" : "AnyTrue",
+                              "source" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "dB",
+                                    "expression" : {
+                                       "path" : "basedOn",
+                                       "scope" : "D",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "relationship" : [ ],
+                                 "return" : {
+                                    "expression" : {
+                                       "type" : "Equal",
+                                       "operand" : [ {
+                                          "name" : "dB",
+                                          "type" : "AliasRef"
+                                       }, {
+                                          "name" : "oB",
+                                          "type" : "AliasRef"
+                                       } ]
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     } ]
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "FindDate",
+                        "libraryName" : "C3F",
                         "type" : "FunctionRef",
                         "operand" : [ {
-                           "name" : "B",
+                           "name" : "O",
                            "type" : "AliasRef"
-                        }, {
-                           "name" : "HistologyObservations",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "Biopsy Report",
-                           "type" : "CodeRef"
                         } ]
-                     }
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
-                     "value" : "0",
-                     "type" : "Literal"
+                     }, {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "Common",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "D",
+                           "type" : "AliasRef"
+                        } ]
+                     } ]
                   } ]
+               },
+               "return" : {
+                  "expression" : {
+                     "name" : "D",
+                     "type" : "AliasRef"
+                  }
                }
             }
          }, {
@@ -9592,6 +9715,224 @@
                }
             } ]
          }, {
+            "name" : "FormatBiopsyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "D",
+                  "expression" : {
+                     "name" : "DrList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "let" : [ {
+                  "identifier" : "CollatedCodes",
+                  "expression" : {
+                     "name" : "CollateConclusionCodes",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }, {
+                        "name" : "ObsList",
+                        "type" : "OperandRef"
+                     }, {
+                        "name" : "code",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "ResultInterpretation",
+                  "expression" : {
+                     "name" : "Interpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "CollatedCodes",
+                        "type" : "QueryLetRef"
+                     }, {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "HighestRanked",
+                  "expression" : {
+                     "name" : "HighestRankedInterpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ResultInterpretation",
+                        "type" : "QueryLetRef"
+                     } ]
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "name",
+                        "value" : {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "code",
+                              "scope" : "D",
+                              "type" : "Property"
+                           } ]
+                        }
+                     }, {
+                        "name" : "value",
+                        "value" : {
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "name" : "CollatedCodes",
+                                    "type" : "QueryLetRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "path" : "label",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "grade",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDateString",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "edited",
+                        "value" : {
+                           "name" : "HasBeenLocallyEdited",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "DrList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ObsList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Observation",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ReportType",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "code",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Code",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "HpvDiagnosticReportsSummary",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -9634,7 +9975,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "FormatReports",
+               "name" : "FormatBiopsyReports",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "HistologyDiagnosticReports",
@@ -9646,6 +9987,9 @@
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
                   "value" : "Cervical Histology",
                   "type" : "Literal"
+               }, {
+                  "name" : "Biopsy Report",
+                  "type" : "CodeRef"
                } ]
             }
          }, {
@@ -11633,7 +11977,7 @@
                      "operand" : [ {
                         "type" : "Exists",
                         "operand" : {
-                           "name" : "AllCompletedDiagnosticReport",
+                           "name" : "HistologyDiagnosticReports",
                            "type" : "ExpressionRef"
                         }
                      }, {
@@ -11643,7 +11987,7 @@
                            "source" : [ {
                               "alias" : "D",
                               "expression" : {
-                                 "name" : "AllCompletedDiagnosticReport",
+                                 "name" : "HistologyDiagnosticReports",
                                  "type" : "ExpressionRef"
                               }
                            } ],
@@ -11662,6 +12006,9 @@
                                        }, {
                                           "name" : "HistologyObservations",
                                           "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "Biopsy Report",
+                                          "type" : "CodeRef"
                                        } ]
                                     }
                                  }
