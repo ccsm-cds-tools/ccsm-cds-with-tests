@@ -15,9 +15,13 @@ data:
     valueCode: F
 
 # DiagnosticReport references Observation
+# The diagnostic report needs to be coded as a biopsy report
+# The missing observation should cause this report to be recognized
+# as missing a result
+
 -
   resourceType: DiagnosticReport
-  code: LOINC#1234 Dummy LOINC code
+  code: LOINC#65753-6 Cervix Pathology biopsy report
   status: final
   effectiveDateTime: 2020-05-08T19:46:00Z
   issued: 2020-05-10T16:42:59Z
@@ -35,8 +39,8 @@ data:
   effectiveDateTime: 2020-12-01  
   
 results:
-  HistologyDiagnosticReports: $should have length 1
+  HistologyDiagnosticReports: $should have length 2
   PertinentObservationsSummary: $should have length 0
-  HistologyDiagnosticReportsSummary: $should have length 1
-  DiagnosticReportsSummary: $should have length 1
+  HistologyDiagnosticReportsSummary: $should have length 2
+  DiagnosticReportsSummary: $should have length 2
   ErrorDiagnosticReportWithNoConclusonCodes: 'A laboratory test was found without a result. Please review patient record to resolve.'
