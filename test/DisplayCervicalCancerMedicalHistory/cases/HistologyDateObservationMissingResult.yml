@@ -15,6 +15,10 @@ data:
     valueCode: F
 
 # DiagnosticReport and Observation have same date
+# The diagnostic report is a 'biopsy report' by virtue of having a
+# biopsy observation. This should be recognized as a biopsy report 
+# without a result.
+
 -
   resourceType: DiagnosticReport
   code: LOINC#1234 Dummy LOINC code
@@ -36,8 +40,8 @@ data:
   effectiveDateTime: 2020-12-01  
   
 results:
-  HistologyDiagnosticReports: $should have length 1
+  HistologyDiagnosticReports: $should have length 2
   PertinentObservationsSummary: $should have length 0
-  HistologyDiagnosticReportsSummary: $should have length 1
-  DiagnosticReportsSummary: $should have length 1
+  HistologyDiagnosticReportsSummary: $should have length 2
+  DiagnosticReportsSummary: $should have length 2
   ErrorDiagnosticReportWithNoConclusonCodes: 'A laboratory test was found without a result. Please review patient record to resolve.'

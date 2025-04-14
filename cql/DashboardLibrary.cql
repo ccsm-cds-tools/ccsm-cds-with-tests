@@ -947,14 +947,18 @@ define AllCompletedDiagnosticReport:
   Common.CompletedDiagnosticReport([DiagnosticReport])
 
 define HistologyDiagnosticReports:
-  from AllCompletedDiagnosticReport D, HistologyObservations O
-    where
-      FHIRHelpers.ToConcept(D.code) ~ "Biopsy Report" or
-      Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
-      Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
-      C3F.FindDate(O) = Common.DiagnosticReportDate(D)
-    return D
-
+  if Count(HistologyObservations) > 0 then
+    from AllCompletedDiagnosticReport D, HistologyObservations O
+      where
+        FHIRHelpers.ToConcept(D.code) ~ "Biopsy Report" or
+        Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+        Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+        C3F.FindDate(O) = Common.DiagnosticReportDate(D)
+      return D
+  else
+     AllCompletedDiagnosticReport D 
+       where FHIRHelpers.ToConcept(D.code) ~ "Biopsy Report"
+    
 /**
 * Takes the output from CytologyInterpretation(), HpvInterpretation() or 
 * BiopsyInterpretation()returns the interpretation with the highest rank.
