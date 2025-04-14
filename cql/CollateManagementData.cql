@@ -259,7 +259,7 @@ define MostRecentCytologyReportDate:
     MostRecentCytologyReport.date
   else
     null
-    
+
 define SecondMostRecentCytologyReport:
   if Count(SortedCytologyReports) > 1 then
     SortedCytologyReports[1]

@@ -841,7 +841,6 @@ define PertinentProceduresSummary:
 // Diagnostic reports relevant to cervical cancer
 //    Status of (final, amended, corrected, appended).
 
-// CollateConclusionCodes
 define function CollateConclusionCodes(D DiagnosticReport, ObsList List<Observation>):
   D.conclusionCode union
   ValuesFromObservation(D, ObsList)
@@ -1000,10 +999,9 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     edited: HasBeenLocallyEdited(D)
   }
 
-/* This will need to be refactored to support returning all results for a Diagnostic Report, not
-* just the highest ranked interpretation. The longValue does return the display attribute for
-* all conclusion codes included in the diagnostic report, but the UI will need to see individual
-* values/labels and grades.
+/* The FormatBiopsyReports function has the same structure as the FormatReports function above,
+* but allows for a code to passed in so that DiagnosticReports can be recognized as
+* biopsy reports if their associated observation(s) have a biopsy code
 */
 define function FormatBiopsyReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String, code System.Code):
   (DrList) D
