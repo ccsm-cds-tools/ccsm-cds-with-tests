@@ -28,11 +28,51 @@
             "localIdentifier" : "Dash",
             "path" : "DashboardLibrary",
             "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "CDM",
+            "path" : "CollateManagementData",
+            "version" : "1.1.0"
+         }, {
+            "localIdentifier" : "MCA",
+            "path" : "ManageCommonAbnormality",
+            "version" : "1.1.0"
+         }, {
+            "localIdentifier" : "Management",
+            "path" : "ManagementLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "MRA",
+            "path" : "ManageRareAbnormality",
+            "version" : "1.1.0"
+         }, {
+            "localIdentifier" : "MSP",
+            "path" : "ManageSpecialPopulation",
+            "version" : "1.1.0"
+         }, {
+            "localIdentifier" : "Screening",
+            "path" : "ScreeningLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "SAR",
+            "path" : "ScreeningAverageRiskLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "SDE",
+            "path" : "ScreeningDesExposureLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "SIC",
+            "path" : "ScreeningImmunocompromisedLibrary",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "SSL",
+            "path" : "ScreeningSymptomaticLibrary",
+            "version" : "1.0.0"
          } ]
       },
       "parameters" : {
          "def" : [ {
-            "name" : "Analtyics",
+            "name" : "Analytics",
             "accessLevel" : "Public",
             "default" : {
                "valueType" : "{urn:hl7-org:elm-types:r1}Boolean",
@@ -59,446 +99,932 @@
                }
             }
          }, {
-            "name" : "CervicalCancerScreeningAndMedicalHistory",
+            "name" : "CollateManagementDataAnalytics",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "CervicalCancerScreeningAndMedicalHistory",
-               "libraryName" : "Dash",
-               "type" : "ExpressionRef"
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "MostRecentHpvResult",
+                  "value" : {
+                     "name" : "MostRecentHpvResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentHpvResult",
+                  "value" : {
+                     "name" : "SecondMostRecentHpvResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentHpvResult",
+                  "value" : {
+                     "name" : "ThirdMostRecentHpvResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "FourthMostRecentHpvResult",
+                  "value" : {
+                     "name" : "FourthMostRecentHpvResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "value" : {
+                     "name" : "MostRecentCytologyCotestResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "value" : {
+                     "name" : "SecondMostRecentCytologyCotestResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentCytologyCotestResult",
+                  "value" : {
+                     "name" : "ThirdMostRecentCytologyCotestResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "FourthMostRecentCytologyCotestResult",
+                  "value" : {
+                     "name" : "FourthMostRecentCytologyCotestResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                  "value" : {
+                     "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsAscusOrAbove",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsAscusOrAbove",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                  "value" : {
+                     "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentBiopsyResult",
+                  "value" : {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentBiopsyReportDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentBiopsyReportDate",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "ReferringHpvResult",
+                  "value" : {
+                     "name" : "ReferringHpvResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyBeforeBiopsy",
+                  "value" : {
+                     "name" : "MostRecentCytologyBeforeBiopsy",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ReferringCytologyResult",
+                  "value" : {
+                     "name" : "ReferringCytologyResult",
+                     "libraryName" : "CDM",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfLastCervicalPrecancerTreatment",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfLastCervicalPrecancerTreatment",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "MostRecentCytologyReportDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentCytologyReportDate",
+                        "libraryName" : "CDM",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ]
             }
          }, {
             "name" : "DashboardLibraryAnalytics",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Except",
-               "operand" : [ {
-                  "type" : "List",
-                  "element" : [ {
-                     "name" : "CervicalCancerScreeningAndMedicalHistory",
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "PatientAge",
+                  "value" : {
+                     "name" : "PatientAge",
+                     "libraryName" : "Dash",
                      "type" : "ExpressionRef"
-                  } ]
+                  }
                }, {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "X",
-                     "expression" : {
-                        "type" : "List",
-                        "element" : [ {
-                           "type" : "Null"
-                        } ]
+                  "name" : "TransgenderMale",
+                  "value" : {
+                     "name" : "TransgenderMale",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentPositiveHpv",
+                  "value" : {
+                     "name" : "HasRecentPositiveHpv",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentAbnormalCytologyResults",
+                  "value" : {
+                     "name" : "HasRecentAbnormalCytologyResults",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentRareCytologyResults",
+                  "value" : {
+                     "name" : "HasRecentRareCytologyResults",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentAbnormalScreening",
+                  "value" : {
+                     "name" : "HasRecentAbnormalScreening",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentAbnormalHistology",
+                  "value" : {
+                     "name" : "HasRecentAbnormalHistology",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "Immunocompromised",
+                  "value" : {
+                     "name" : "Immunocompromised",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentDistinctImmunocompromisedEvent",
+                  "value" : {
+                     "name" : "MostRecentDistinctImmunocompromisedEvent",
+                     "libraryName" : "Dash",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentDistinctImmunocompromisedEventDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentDistinctImmunocompromisedEventDate",
+                        "libraryName" : "Dash",
+                        "type" : "ExpressionRef"
                      }
-                  } ],
-                  "return" : {
-                     "distinct" : false,
-                     "expression" : {
-                        "type" : "As",
-                        "operand" : {
-                           "name" : "X",
-                           "type" : "AliasRef"
-                        },
-                        "asTypeSpecifier" : {
-                           "type" : "TupleTypeSpecifier",
-                           "element" : [ {
-                              "name" : "patientInfo",
-                              "elementType" : {
-                                 "type" : "TupleTypeSpecifier",
-                                 "element" : [ {
-                                    "name" : "name",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}String",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "id",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "name" : "{http://hl7.org/fhir}Identifier",
-                                          "type" : "NamedTypeSpecifier"
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "isPregnant",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "dateOfBirth",
-                                    "elementType" : {
-                                       "name" : "{http://hl7.org/fhir}date",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "sexAtBirth",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}String",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "age",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}Integer",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "gender",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}String",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "primaryLanguage",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}String",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 }, {
-                                    "name" : "race",
-                                    "elementType" : {
-                                       "name" : "{urn:hl7-org:elm-types:r1}String",
-                                       "type" : "NamedTypeSpecifier"
-                                    }
-                                 } ]
-                              }
-                           }, {
-                              "name" : "patientHistory",
-                              "elementType" : {
-                                 "type" : "TupleTypeSpecifier",
-                                 "element" : [ {
-                                    "name" : "conditions",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "observations",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "medications",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "procedures",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "diagnosticReports",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "longName",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "longValue",
-                                             "elementType" : {
-                                                "type" : "ListTypeSpecifier",
-                                                "elementType" : {
-                                                   "name" : "{http://hl7.org/fhir}string",
-                                                   "type" : "NamedTypeSpecifier"
-                                                }
-                                             }
-                                          }, {
-                                             "name" : "label",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "grade",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Integer",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "encounters",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{http://hl7.org/fhir}EncounterStatus",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "immunizations",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{http://hl7.org/fhir}ImmunizationStatus",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 }, {
-                                    "name" : "episodeOfCares",
-                                    "elementType" : {
-                                       "type" : "ListTypeSpecifier",
-                                       "elementType" : {
-                                          "type" : "TupleTypeSpecifier",
-                                          "element" : [ {
-                                             "name" : "name",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "value",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "date",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "reference",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}String",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          }, {
-                                             "name" : "edited",
-                                             "elementType" : {
-                                                "name" : "{urn:hl7-org:elm-types:r1}Boolean",
-                                                "type" : "NamedTypeSpecifier"
-                                             }
-                                          } ]
-                                       }
-                                    }
-                                 } ]
-                              }
-                           } ]
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ManageCommonAbnormalityAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "HpvDates",
+                  "value" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "H",
+                        "expression" : {
+                           "name" : "HpvDates",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "ToString",
+                           "operand" : {
+                              "name" : "H",
+                              "type" : "AliasRef"
+                           }
                         }
                      }
+                  }
+               }, {
+                  "name" : "CytologyAloneInRecentHistory",
+                  "value" : {
+                     "name" : "CytologyAloneInRecentHistory",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AbnormalCytologyAloneInRecentHistory",
+                  "value" : {
+                     "name" : "AbnormalCytologyAloneInRecentHistory",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "RarelyScreenedTreatmentRecommendation",
+                  "value" : {
+                     "name" : "RarelyScreenedTreatmentRecommendation",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "TableRecommendation",
+                  "value" : {
+                     "name" : "TableRecommendation",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "WhichTableMadeTheRecommendation",
+                  "value" : {
+                     "name" : "WhichTableMadeTheRecommendation",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyIsNotACotest",
+                  "value" : {
+                     "name" : "MostRecentCytologyIsNotACotest",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HpvInterpretedAsPositive",
+                  "value" : {
+                     "name" : "HpvInterpretedAsPositive",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentHpvInterpretedAsPositive",
+                  "value" : {
+                     "name" : "SecondMostRecentHpvInterpretedAsPositive",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfMostRecentPositiveScreeningResult",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentPositiveScreeningResult",
+                        "libraryName" : "MCA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfMostRecentHpvReport",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentHpvReport",
+                        "libraryName" : "MCA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "PositivePrimaryHpv",
+                  "value" : {
+                     "name" : "PositivePrimaryHpv",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HighRiskHPVPositiveResults",
+                  "value" : {
+                     "name" : "HighRiskHPVPositiveResults",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "PreviousCytologyOrSurveillanceIsOldOrAbsent",
+                  "value" : {
+                     "name" : "PreviousCytologyOrSurveillanceIsOldOrAbsent",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "IsRarelyScreenedPatient",
+                  "value" : {
+                     "name" : "IsRarelyScreenedPatient",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "RelevantRow",
+                  "value" : {
+                     "name" : "RelevantRow",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ManagementLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "HasHighGradePreCancerCervicalLesion",
+                  "value" : {
+                     "name" : "HasHighGradePreCancerCervicalLesion",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasCervicalCancerDiagnoses",
+                  "value" : {
+                     "name" : "HasCervicalCancerDiagnoses",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "WhichRarityMadeTheRecommendation",
+                  "value" : {
+                     "name" : "WhichRarityMadeTheRecommendation",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ManagementRecommendation",
+                  "value" : {
+                     "name" : "ManagementRecommendation",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecommendation",
+                  "value" : {
+                     "name" : "HasRecommendation",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DecisionAids",
+                  "value" : {
+                     "name" : "DecisionAids",
+                     "libraryName" : "Management",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ManageRareAbnormalityAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "HasPositiveHpvAfterTreatmentForHighGradeResult",
+                  "value" : {
+                     "name" : "HasPositiveHpvAfterTreatmentForHighGradeResult",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasPremenopausalObservationOrCondition",
+                  "value" : {
+                     "name" : "HasPremenopausalObservationOrCondition",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasPostmenopausalObservationOrCondition",
+                  "value" : {
+                     "name" : "HasPostmenopausalObservationOrCondition",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AbsenceOrRemovalOfCervix",
+                  "value" : {
+                     "name" : "AbsenceOrRemovalOfCervix",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CervixRemovalDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "CervixRemovalDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "HasColposcopyProcedureAfterMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasColposcopyProcedureAfterMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasColposcopyProcedureAfterMostRecentTreatment",
+                  "value" : {
+                     "name" : "HasColposcopyProcedureAfterMostRecentTreatment",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                  "value" : {
+                     "name" : "RecentlyRespondedYesToFuturePregnancyConcernsQuestion",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentTreatmentDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentTreatmentDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "HasTreatmentInLastYear",
+                  "value" : {
+                     "name" : "HasTreatmentInLastYear",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasTreatmentAfterMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasTreatmentAfterMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasSurveillanceAfterMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasSurveillanceAfterMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasPositiveSurveillanceAfterMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasPositiveSurveillanceAfterMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasHistologicHsilWithin12MonthsBeforeTreatment",
+                  "value" : {
+                     "name" : "HasHistologicHsilWithin12MonthsBeforeTreatment",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasTreatmentForHighGradeHistologyOrCytology",
+                  "value" : {
+                     "name" : "HasTreatmentForHighGradeHistologyOrCytology",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "TreatmentForHighGradeHistologyOrCytologyDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasHistologyAfterTreatmentForHighGradeResult",
+                  "value" : {
+                     "name" : "HasHistologyAfterTreatmentForHighGradeResult",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "WhichRarityMadeTheRecommendation",
+                  "value" : {
+                     "name" : "WhichRarityMadeTheRecommendation",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ManageSpecialPopulationAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "BiopsySinceMostRecentCytology",
+                  "value" : {
+                     "name" : "BiopsySinceMostRecentCytology",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "PregnancyOnset",
+                  "value" : {
+                     "name" : "PregnancyOnset",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologicAisDuringPregnancy",
+                  "value" : {
+                     "name" : "HistologicAisDuringPregnancy",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "TwoMostRecentCytologyReportsWithin18MonthsApart",
+                  "value" : {
+                     "name" : "TwoMostRecentCytologyReportsWithin18MonthsApart",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HighGradePreCancerCervicalLesionDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "HighGradePreCancerCervicalLesionDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "CervicalCancerDiagnosisDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "CervicalCancerDiagnosisDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "HighGradeOrCancerHistologyResultsDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "HighGradeOrCancerHistologyResultsDate",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "HysterectomyPerformedForTreatment",
+                  "value" : {
+                     "name" : "HysterectomyPerformedForTreatment",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "InitialIntensiveSurveillancePeriodPostHysterectomy",
+                  "value" : {
+                     "name" : "InitialIntensiveSurveillancePeriodPostHysterectomy",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "WhichPopulationMadeTheRecommendation",
+                  "value" : {
+                     "name" : "WhichPopulationMadeTheRecommendation",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ScreeningLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "HasHighGradePreCancerCervicalLesion",
+                  "value" : {
+                     "name" : "HasHighGradePreCancerCervicalLesion",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasCervicalCancerDiagnoses",
+                  "value" : {
+                     "name" : "HasCervicalCancerDiagnoses",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentAbnormalScreening",
+                  "value" : {
+                     "name" : "HasRecentAbnormalScreening",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecentAbnormalHistology",
+                  "value" : {
+                     "name" : "HasRecentAbnormalHistology",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "IsIncludedAndNotExcluded",
+                  "value" : {
+                     "name" : "IsIncludedAndNotExcluded",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasRecommendation",
+                  "value" : {
+                     "name" : "HasRecommendation",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SuggestedOrders",
+                  "value" : {
+                     "name" : "SuggestedOrders",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DecisionAids",
+                  "value" : {
+                     "name" : "DecisionAids",
+                     "libraryName" : "Screening",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ScreeningAverageRiskLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "DateOfMostRecentNilmCytology",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNilmCytology",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfMostRecentNegativeHpv",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNegativeHpv",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfMostRecentNegativeCotest",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNegativeCotest",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "LastScreeningType",
+                  "value" : {
+                     "name" : "LastScreeningType",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ProposedScreeningDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "ProposedScreeningDate",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "RecommendImmediateCervicalCytology",
+                  "value" : {
+                     "name" : "RecommendImmediateCervicalCytology",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "RecommendImmediatePrimaryHpv",
+                  "value" : {
+                     "name" : "RecommendImmediatePrimaryHpv",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "RecommendImmediateCotesting",
+                  "value" : {
+                     "name" : "RecommendImmediateCotesting",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AbnormalResultInRecord",
+                  "value" : {
+                     "name" : "AbnormalResultInRecord",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AbsenceOrRemovalOfCervix",
+                  "value" : {
+                     "name" : "AbsenceOrRemovalOfCervix",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
+                  "value" : {
+                     "name" : "AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AdequatelyScreened",
+                  "value" : {
+                     "name" : "AdequatelyScreened",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasTwoNegativeHpvTestsForGradeD",
+                  "value" : {
+                     "name" : "HasTwoNegativeHpvTestsForGradeD",
+                     "libraryName" : "SAR",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ScreeningDesExposureLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "WasExposedToDesInUtero",
+                  "value" : {
+                     "name" : "WasExposedToDesInUtero",
+                     "libraryName" : "SDE",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ActionShort",
+                  "value" : {
+                     "name" : "ActionShort",
+                     "libraryName" : "SDE",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ScreeningImmunocompromisedLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "CompletedAnnualCytologyTestSequence",
+                  "value" : {
+                     "name" : "CompletedAnnualCytologyTestSequence",
+                     "libraryName" : "SIC",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfLastCytology",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfLastCytology",
+                        "libraryName" : "SIC",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "LastCytologyWasCotest",
+                  "value" : {
+                     "name" : "LastCytologyWasCotest",
+                     "libraryName" : "SIC",
+                     "type" : "ExpressionRef"
+                  }
+               } ]
+            }
+         }, {
+            "name" : "ScreeningSymptomaticLibraryAnalytics",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "IsSymptomatic",
+                  "value" : {
+                     "name" : "IsSymptomatic",
+                     "libraryName" : "SSL",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasNilmCytologyWithinLast12Months",
+                  "value" : {
+                     "name" : "HasNilmCytologyWithinLast12Months",
+                     "libraryName" : "SSL",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years",
+                  "value" : {
+                     "name" : "HasCoincidentNilmCytologyAndNegativeHpvWitinLast3Years",
+                     "libraryName" : "SSL",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasVisibleCervicalOrVaginalLesion",
+                  "value" : {
+                     "name" : "HasVisibleCervicalOrVaginalLesion",
+                     "libraryName" : "SSL",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }
@@ -507,7 +1033,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "Analtyics",
+               "name" : "Analytics",
                "type" : "ParameterRef"
             }
          }, {
@@ -515,10 +1041,73 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "List",
+               "type" : "Tuple",
                "element" : [ {
-                  "name" : "DashboardLibraryAnalytics",
-                  "type" : "ExpressionRef"
+                  "name" : "DashboardLibrary",
+                  "value" : {
+                     "name" : "DashboardLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CollateManagementData",
+                  "value" : {
+                     "name" : "CollateManagementDataAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ManageCommonAbnormality",
+                  "value" : {
+                     "name" : "ManageCommonAbnormalityAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ManagementLibrary",
+                  "value" : {
+                     "name" : "ManagementLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ManageRareAbnormality",
+                  "value" : {
+                     "name" : "ManageRareAbnormalityAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ManageSpecialPopulation",
+                  "value" : {
+                     "name" : "ManageSpecialPopulationAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ScreeningLibrary",
+                  "value" : {
+                     "name" : "ScreeningLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ScreeningAverageRiskLibrary",
+                  "value" : {
+                     "name" : "ScreeningAverageRiskLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ScreeningDesExposureLibrary",
+                  "value" : {
+                     "name" : "ScreeningDesExposureLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ScreeningImmunocompromisedLibrary",
+                  "value" : {
+                     "name" : "ScreeningImmunocompromisedLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ScreeningSymptomaticLibrary",
+                  "value" : {
+                     "name" : "ScreeningSymptomaticLibraryAnalytics",
+                     "type" : "ExpressionRef"
+                  }
                } ]
             }
          } ]
