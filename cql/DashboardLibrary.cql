@@ -946,12 +946,18 @@ define AllCompletedDiagnosticReport:
   Common.CompletedDiagnosticReport([DiagnosticReport])
 
 define HistologyDiagnosticReports:
-  AllCompletedDiagnosticReport B
-  where 
-    Count(
-      CollateConclusionCodes(B,HistologyObservations, "Biopsy Report")
-    ) > 0
-
+  if Count(HistologyObservations) > 0 then
+    from AllCompletedDiagnosticReport D, HistologyObservations O
+      where
+        FHIRHelpers.ToConcept(D.code) ~ "Biopsy Report" or
+        Exists( (D.result ) R where Last(Split(R.reference,'/')) =  O.id ) or
+        Exists( (O.basedOn) oB where AnyTrue((D.basedOn) dB return dB = oB ) ) or
+        C3F.FindDate(O) = Common.DiagnosticReportDate(D)
+      return D
+  else
+     AllCompletedDiagnosticReport D 
+       where FHIRHelpers.ToConcept(D.code) ~ "Biopsy Report"
+    
 /**
 * Takes the output from CytologyInterpretation(), HpvInterpretation() or 
 * BiopsyInterpretation()returns the interpretation with the highest rank.
@@ -993,6 +999,31 @@ define function FormatReports(DrList List<DiagnosticReport>, ObsList List<Observ
     edited: HasBeenLocallyEdited(D)
   }
 
+/* The FormatBiopsyReports function has the same structure as the FormatReports function above,
+* but allows for a code to passed in so that DiagnosticReports can be recognized as
+* biopsy reports if their associated observation(s) have a biopsy code
+*/
+define function FormatBiopsyReports(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String, code System.Code):
+  (DrList) D
+  let CollatedCodes: CollateConclusionCodes(D,ObsList, code),
+      ResultInterpretation: Interpretation(CollatedCodes,ReportType),
+      HighestRanked: HighestRankedInterpretation(ResultInterpretation)
+  return {
+    name: ReportType,
+    longName: Common.ConceptText(D.code),
+    value: HighestRanked.riskTableInput,
+    longValue: flatten(
+      (CollatedCodes) cC
+        return (cC.coding) cCC
+          return cCC.display
+    ),
+    label: HighestRanked.label,
+    grade: HighestRanked.grade,
+    date: Common.DiagnosticReportDateString(D),
+    reference: 'DiagnosticReport/' + D.id,
+    edited: HasBeenLocallyEdited(D)
+  }
+
 define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
   if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
   else if ReportType = 'Cervical Cytology' then CytologyInterpretation(CollatedCodes)
@@ -1010,7 +1041,7 @@ define CervicalCytologyReportsSummary:
   FormatReports(CervicalCytologyReports, CytologyObservations, 'Cervical Cytology')
 
 define HistologyDiagnosticReportsSummary:
-  FormatReports(HistologyDiagnosticReports, HistologyObservations, 'Cervical Histology')
+  FormatBiopsyReports(HistologyDiagnosticReports, HistologyObservations, 'Cervical Histology', "Biopsy Report")
 
 define DiagnosticReportsSummary:
   (
@@ -1370,7 +1401,7 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
     (
       Exists(HistologyDiagnosticReports) and
       AnyTrue(
-        (HistologyDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HistologyObservations))
+        (HistologyDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HistologyObservations, "Biopsy Report"))
       )
     ) then
       'A laboratory test was found without a result. Please review patient record to resolve.'
@@ -1381,7 +1412,7 @@ define ErrorDiagnosticReportWithUnsupportedConclusonCode:
   if (
     Exists(DiagnosticReportsSummary) and
     AnyTrue(
-      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK'
+      (DiagnosticReportsSummary) DRS return DRS.value = 'UNK' 
     )
   ) then
     'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'
