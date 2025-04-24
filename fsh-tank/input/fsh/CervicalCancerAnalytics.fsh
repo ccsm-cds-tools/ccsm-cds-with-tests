@@ -32,9 +32,8 @@ Usage: #definition
 * action[=].trigger[+].type = $TTYPE#named-event "Named Event"
 * action[=].trigger[=].name = "encounter-start" // CDS Hook name
 * action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].condition[=].expression.expression = "RunAnalytics"
-* action[=].condition[=].expression.reference = "Library/AnalyticsLibrary|1.0"
 // -----------------------------------------------------------------------------
 // Action #1: Display pertinent medical and screening history
 // -----------------------------------------------------------------------------
