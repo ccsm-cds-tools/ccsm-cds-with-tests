@@ -26,9 +26,8 @@ Usage: #definition
 * action[=].textEquivalent = "Management Decision Aids"
 * action[=].definitionCanonical = Canonical(CervicalCancerDecisionAids|1.0.0)
 * action[=].dynamicValue[+].path = "payload[0].content.ofType(string)" // this is the CommunicationRequest.payload element
-* action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].dynamicValue[=].expression.expression = "DecisionAids"
-* action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * insert ManagementCitationActionDocumentation
 // -----------------------------------------------------------------------------
 // Action #2: Recommended Management Activities
@@ -41,36 +40,30 @@ Usage: #definition
 // Colposcopy ------------------------------------------------------------------
 * action[=].action[+].title = "Colposcopy"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendColposcopy"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "ColposcopyOrderCode"
-* action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
 * insert ManagementCitationActionActionDocumentation
 // Surveillance ----------------------------------------------------------------
 * action[=].action[+].title = "Surveillance"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendSurveillance"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "SurveillanceOrderCode"
-* action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
 * insert ManagementCitationActionActionDocumentation
 // Treatment -------------------------------------------------------------------
 * action[=].action[+].title = "Treatment"
 * action[=].action[=].condition[+].kind = $ACKIND#applicability "Applicability"
-* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].condition[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].condition[=].expression.expression = "RecommendTreatment"
-* action[=].action[=].condition[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].dynamicValue[+].path = "code" // this is the ServiceRequest.code element
-* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql "CQL"
+* action[=].action[=].dynamicValue[=].expression.language = $EXLANG|4.0.1#text/cql-identifier "CQL"
 * action[=].action[=].dynamicValue[=].expression.expression = "TreatmentOrderCode"
-* action[=].action[=].dynamicValue[=].expression.reference = "Library/ManagementLibrary|1.0"
 * action[=].action[=].definitionCanonical = Canonical(CervicalCancerManagementActivity|1.0.0)
 * insert ManagementCitationActionActionDocumentation
