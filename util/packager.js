@@ -16,9 +16,12 @@ console.log("Running packager");
 const inputPath = "cql";
 const fshPath = join("fsh-tank", "input", "fsh");
 const fhirPath = join("fsh-tank", "fsh-generated", "resources");
+const bundlePath = join("util", "resources");
+
 let exportBase = join("dist", "cql");
 if (!existsSync(exportBase)) mkdirSync(exportBase, { recursive: true });
 let files = readdirSync(inputPath);
+
 for (const file of files) {
   if (/(\.json)$/.test(file)) {
     const contentString = readFileSync(inputPath + sep + file);
@@ -92,14 +95,24 @@ for (const file of files) {
 // Loop over all generated FHIR resources and convert them to js files.
 files = readdirSync(fhirPath);
 exportBase = join("dist", "fhir");
+const bundleFilepath = bundlePath + sep + "transactionBundle.json";
+let bundleFile = JSON.parse(readFileSync(bundleFilepath));
+bundleFile.entry = []; // reset the bundle entries
 if (!existsSync(exportBase)) mkdirSync(exportBase, { recursive: true });
 for (const file of files) {
   if (/(\.json)$/.test(file)) {
     const contentString = readFileSync(fhirPath + sep + file);
+    const resource = JSON.parse(contentString);
+    bundleFile.entry.push({
+      resource: resource,
+      request: {
+        method: 'PUT',
+        url: resource.resourceType + '/' + resource.id
+      }
+    });
     // Create a .js version of the ELM .json file
     try {
       // Organize files by their resource type
-      const resource = JSON.parse(contentString);
       const resourceType = resource.resourceType;
       const exportPath = join(exportBase, resourceType);
       if (!existsSync(exportPath)) mkdirSync(exportPath, { recursive: true });
@@ -112,3 +125,5 @@ for (const file of files) {
     }
   }
 }
+
+writeFileSync(bundleFilepath, JSON.stringify(bundleFile, null, 2));
