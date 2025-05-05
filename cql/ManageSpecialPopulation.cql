@@ -254,7 +254,8 @@ define RecommendationForPatientsYoungerThan25:
         details: {
           'A diagnostic excisional procedure is recommended for patients under 25 years, unless the patient is pregnant.',
           'A diagnostic excisional procedure is recommended in patients when the squamocolumnar junction or the upper limit of all lesions are not fully visualized.'
-        }
+        },
+        id: '5.K1.3.3.a'
       }    
     when ( // Heading 3.2
       AgeInYears() >= 21 and AgeInYears() < 25 and
@@ -273,7 +274,8 @@ define RecommendationForPatientsYoungerThan25:
         group: 'Younger Than 25 (K.1.3)',
         details: {
           'Colposcopy is recommended.'
-        }
+        },
+        id: '5.K1.3.2.a'
       }    
     when ( // Heading 3.1b
       AgeInYears() < 25 and
@@ -289,7 +291,8 @@ define RecommendationForPatientsYoungerThan25:
           'Observation is recommended with colposcopy and cytology in 1 year from date of most recent test.',
           'Diagnostic excisional procedures are not recommended for patients younger than 25 with some exceptions.*',
           '*Refer to ASCCP Consensus Guideline 2019 Section K.1'
-        }
+        },
+        id: '5.K1.3.1.b'
       }
     when ( // Heading 3.1c
       AgeInYears() < 25 and
@@ -716,7 +719,8 @@ define RecommendationForManagingPatientsAfterHysterectomy:
         group: 'Hysterectomy (K.4)',
         details: {
           'Primary hrHPV testing or cotesting is recommended annually for 3 years after hysterectomy performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS.'
-        }
+        },
+        id: '5.K4.1.1.a'
       }
     when ( // K4.2
       Rare.CervixRemovalDate >= Now() - 25 years and

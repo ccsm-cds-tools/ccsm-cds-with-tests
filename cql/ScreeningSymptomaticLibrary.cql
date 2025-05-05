@@ -159,9 +159,12 @@ define HasVisibleCervicalOrVaginalLesion:
   Exists(RecentYesResponsesToVisibleLesionQuestion)
 
 define Age21YearsAndYoungerRecommendation:
-  {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women under the age of 21, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+  { recommendation:
+      {
+        'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+        'Cervical cancer is unlikely in women under the age of 21, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+      }
+    id: '1.Y.0.0.0'
   }
 
 define NilmCytologyWithinLast12MonthsRecommendation:

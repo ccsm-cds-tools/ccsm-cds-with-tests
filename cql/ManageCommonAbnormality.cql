@@ -464,7 +464,8 @@ define ErrataRecommendation:
         details: {
           'Colposcopy is recommended.',
           'If the previous cytology result was not high grade, and the patient undergoes repeat testing with HPV testing or cotesting instead of colposcopy: colposcopy is recommended if the result on repeat testing indicates a second consecutive HPV-positive result and/or persistent cytologic abnormality (ASC-US or a more severe cytologic interpretation); repeat HPV testing or cotesting in 1 year is acceptable if the result on repeat testing is HPV negative or cotest negative.'
-        }
+        },
+        id: '5.E3.2.2.a'
       }
   
     when ( // Errata Recommendation 3.2.2.b: Positive HPV followed by persistent abnormality
@@ -697,7 +698,8 @@ define Action:
           TreatmentRecommendationText,
           RarelyScreenedRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
-        }
+        },
+        id: '5.O.R.Y.1'
       }
     when (
       AgeInYears() > 50 and
@@ -709,7 +711,8 @@ define Action:
         details: {
           TreatmentRecommendationText,
           RarelyScreenedRecommendationText
-        }
+        },
+        id: '5.O.R.O.1'
       }  
     when (
       MostRecentPrimaryHpvPositive
@@ -794,7 +797,9 @@ define Action:
           FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
         }
-      }
+      },
+      // We konw a 5-year rec would have to come from Table 1. In reality, this will need to be set elsewhere
+      id: '5.T.1.5.O'
     when (
       AgeInYears() >= 25 and
       TableRecommendation = 'Colposcopy'

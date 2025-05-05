@@ -405,7 +405,8 @@ define RecommendationForRareCytology:
           'Cotesting at 1 and 2 years from date of most recent test is recommended.',
           'If both cotests are negative, repeat cotesting at 3 years is recommended.',
           'If any test is abnormal, then colposcopy is recommended.'
-        }
+        },
+        id: '5.G.1.4.a'
       }
     when ( // G1.5
       MostRecentCytologyReportWasWithinPastFiveYears and
@@ -1145,7 +1146,8 @@ define RecommendationForAisHistologyResults:
           'A diagnostic excisional procedure is recommended for all patients with a diagnosis of AIS on cervical biopsy to rule out invasive adenocarcinoma.',
           'If negative margins on the excisional specimen, a hysterectomy is preferred.',
           'For patients with positive margins on the excisional specimen, re-excision to achieve negative margins is preferred, even if hysterectomy is planned.'
-        }
+        },
+        id: '5.I.6.1.b'
       }
     // Age 25 to 50
     when (
@@ -1163,7 +1165,8 @@ define RecommendationForAisHistologyResults:
           'If negative margins on the excisional specimen, a hysterectomy is preferred although fertility-sparing management for appropriately selected patients is acceptable.',
           'For patients who undergo fertility-sparing management, surveillance with cotesting and endocervical sampling is recommended every 6 months for at least 3 years, then annually for at least 2 years, or until hysterectomy is performed.',
           'If an abnormal result is returned during surveillance, manage using the 2019 ASCCP guidelines.'
-        }
+        },
+        id: '5.I.6.1.a'
       }
       
     // I.6 part 2 had treatment after AIS
