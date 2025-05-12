@@ -335,12 +335,12 @@ define RecommendationText:
       AbsenceOrRemovalOfCervixWithoutHistoryOfHighGradePrecancerOrCancer
     ) then
       {
-        id: '4.H.D.0.0'
-        recommendation: {
+        // id: '4.H.D.0.0'
+        // recommendation: {
           'This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS, patients should have 3 consecutive annual primary HPV tests or cotests before entering long term surveillance. Long term surveillance involves primary HPV testing or cotesting at 3-year intervals for 25 years.',
           'Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.',
           'Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL, CIN 2, CIN 3 or AIS, or completed the 25 year long term surveillance.'
-        }
+        // }
       }
     else
       if AgeOver65 then
@@ -389,14 +389,14 @@ define RecommendationText:
           { 'Screening is recommended using cervical cytology testing alone.' }
         else if RecommendImmediateScreening then
           {
-            id: '4.M.I.0.0'
-            recommendation: {
+            // id: '4.M.I.0.0'
+            // recommendation: {
               'Cervical cancer screening is recommended.',
               'The screening can be performed using one of the following screening approaches:',
               '1. hrHPV testing alone',
               '2. Cotesting with cervical cytology and hrHPV testing',
               '3. Cervical cytology testing alone'
-            }
+            // }
           }
         else if Age21Through29 then
           { 'Cervical cancer screening using cervical cytology testing alone is next due on ' + ToString(ToDate(ProposedScreeningDate)) + '.' }

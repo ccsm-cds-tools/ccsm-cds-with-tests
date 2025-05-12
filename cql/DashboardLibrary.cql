@@ -1404,10 +1404,11 @@ define ErrorDiagnosticReportWithNoConclusonCodes:
         (HistologyDiagnosticReports) D return not Exists(CollateConclusionCodes(D,HistologyObservations, "Biopsy Report"))
       )
     ) then
-    {
-      id: 'E.D.1.0.0'
-      msg: 'A laboratory test was found without a result. Please review patient record to resolve.'
-    }
+      'A laboratory test was found without a result. Please review patient record to resolve.'
+    // {
+    //   id: 'E.D.1.0.0'
+    //   msg: 'A laboratory test was found without a result. Please review patient record to resolve.'
+    // }
 
   else
     null

@@ -293,14 +293,14 @@ define WhichTableMadeTheRecommendation:
   end
 
 define TableIdentifier:
-  WhichTableMadeTheRecommendation T
-    case
-      when T = 5 then '5.T.5.'
-      when T = 4 then '5.T.4.'
-      when T = 3 then '5.T.3.'
-      when T = 2 then '5.T.2.'
-      when T = 1 then '5.T.1.'
+  case
+    when WhichTableMadeTheRecommendation = 5 then '5.T.5.'
+    when WhichTableMadeTheRecommendation = 4 then '5.T.4.'
+    when WhichTableMadeTheRecommendation = 3 then '5.T.3.'
+    when WhichTableMadeTheRecommendation = 2 then '5.T.2.'
+    when WhichTableMadeTheRecommendation = 1 then '5.T.1.'
     else '5.T.U'
+  end
 
 define CommonAbnormalityGroup:
   case
@@ -752,8 +752,8 @@ define Action:
         details: {
           OneYearSurveillanceRecommendationText,
           Pap6MonthIntervalText
-      },
-      id: TableIdentifier + '1.Y'
+        },
+        id: TableIdentifier + '1.Y'
       }
     when (
       AgeInYears() > 65 and
@@ -765,8 +765,8 @@ define Action:
         details: {
           OneYearSurveillanceRecommendationText,
           Pap6MonthIntervalText
-      },
-      id: TableIdentifier + '1.O'
+        },
+        id: TableIdentifier + '1.O'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
@@ -819,9 +819,9 @@ define Action:
           FiveYearSurveillanceRecommendationText,
           FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
-        }
-      },
-      id: TableIdentifier + '5.O'
+        },
+        id: TableIdentifier + '5.O'
+      }
     when (
       AgeInYears() >= 25 and
       TableRecommendation = 'Colposcopy'
@@ -911,7 +911,7 @@ define Recommendation: {
   short: Action.short,
   date: Action.date,
   details: Action.details,
-  group: CommonAbnormalityGroup
+  group: CommonAbnormalityGroup,
   id: Action.id
 }
 

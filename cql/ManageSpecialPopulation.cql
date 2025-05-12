@@ -69,7 +69,8 @@ define RecommendationForPatientsWithHistologicCancer:
         group: 'Histologic Cancer',
         details: {
           'Refer to Gynecologic Oncology.'
-        }
+        },
+        id: '5.O.C.1.1'
       } 
     else
       null
