@@ -1132,7 +1132,61 @@
                }
             } ]
          }, {
-            "name" : "GetRowTable2",
+            "name" : "AnyHpv",
+            "context" : "Unfiltered",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Equal",
+                  "operand" : [ {
+                     "name" : "hpvVal",
+                     "type" : "OperandRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV16+",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "HPV-positive",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "If",
+                  "condition" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "hpvVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HPV16-, HPV18+",
+                        "type" : "Literal"
+                     } ]
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "HPV-positive",
+                     "type" : "Literal"
+                  },
+                  "else" : {
+                     "name" : "hpvVal",
+                     "type" : "OperandRef"
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "hpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "_GetRowTable2",
             "context" : "Unfiltered",
             "accessLevel" : "Public",
             "type" : "FunctionDef",
@@ -1975,6 +2029,79 @@
                }
             } ]
          }, {
+            "name" : "GetRowTable2",
+            "context" : "Unfiltered",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "name" : "_GetRowTable2",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "AnyHpv",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "prev2HpvVal",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "name" : "prev2PapVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "AnyHpv",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "prevHpvVal",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "name" : "prevPapVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "currHpvVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "currPapVal",
+                  "type" : "OperandRef"
+               } ]
+            },
+            "operand" : [ {
+               "name" : "prev2HpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prev2PapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "GetSurveillanceManagement",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2310,60 +2437,6 @@
                }
             }, {
                "name" : "currPapVal",
-               "operandTypeSpecifier" : {
-                  "name" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "NamedTypeSpecifier"
-               }
-            } ]
-         }, {
-            "name" : "AnyHpv",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "type" : "FunctionDef",
-            "expression" : {
-               "type" : "If",
-               "condition" : {
-                  "type" : "Equal",
-                  "operand" : [ {
-                     "name" : "hpvVal",
-                     "type" : "OperandRef"
-                  }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "HPV16+",
-                     "type" : "Literal"
-                  } ]
-               },
-               "then" : {
-                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                  "value" : "HPV-positive",
-                  "type" : "Literal"
-               },
-               "else" : {
-                  "type" : "If",
-                  "condition" : {
-                     "type" : "Equal",
-                     "operand" : [ {
-                        "name" : "hpvVal",
-                        "type" : "OperandRef"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "HPV16-, HPV18+",
-                        "type" : "Literal"
-                     } ]
-                  },
-                  "then" : {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "HPV-positive",
-                     "type" : "Literal"
-                  },
-                  "else" : {
-                     "name" : "hpvVal",
-                     "type" : "OperandRef"
-                  }
-               }
-            },
-            "operand" : [ {
-               "name" : "hpvVal",
                "operandTypeSpecifier" : {
                   "name" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "NamedTypeSpecifier"
@@ -3633,7 +3706,7 @@
                }
             } ]
          }, {
-            "name" : "GetRowTable4",
+            "name" : "_GetRowTable4",
             "context" : "Unfiltered",
             "accessLevel" : "Public",
             "type" : "FunctionDef",
@@ -4542,6 +4615,106 @@
                }
             } ]
          }, {
+            "name" : "GetRowTable4",
+            "context" : "Unfiltered",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "name" : "_GetRowTable4",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "AnyHpv",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "preBiopsyHpvVal",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "name" : "preBiopsyPapVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "biopsyVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "prev2HpvVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "prev2PapVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "prevHpvVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "prevPapVal",
+                  "type" : "OperandRef"
+               }, {
+                  "name" : "AnyHpv",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "currHpvVal",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "name" : "currPapVal",
+                  "type" : "OperandRef"
+               } ]
+            },
+            "operand" : [ {
+               "name" : "preBiopsyHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "preBiopsyPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "biopsyVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prev2HpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prev2PapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "GetPostColposcopyManagement",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -4698,8 +4871,12 @@
                               "name" : "HighOrLowGradeResults",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "preBiopsyHpvVal",
-                                 "type" : "OperandRef"
+                                 "name" : "AnyHpv",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "preBiopsyHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
                               }, {
                                  "name" : "preBiopsyPapVal",
                                  "type" : "OperandRef"
@@ -4736,8 +4913,12 @@
                            "scope" : "T",
                            "type" : "Property"
                         }, {
-                           "name" : "currHpvVal",
-                           "type" : "OperandRef"
+                           "name" : "AnyHpv",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "currHpvVal",
+                              "type" : "OperandRef"
+                           } ]
                         } ]
                      } ]
                   }, {
@@ -5554,8 +5735,12 @@
                                  "scope" : "T",
                                  "type" : "Property"
                               }, {
-                                 "name" : "currHpvVal",
-                                 "type" : "OperandRef"
+                                 "name" : "AnyHpv",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "currHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
                               } ]
                            } ]
                         }, {
@@ -5706,8 +5891,12 @@
                                  "scope" : "T",
                                  "type" : "Property"
                               }, {
-                                 "name" : "currHpvVal",
-                                 "type" : "OperandRef"
+                                 "name" : "AnyHpv",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "currHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
                               } ]
                            } ]
                         }, {
@@ -5865,8 +6054,12 @@
                                  "scope" : "T",
                                  "type" : "Property"
                               }, {
-                                 "name" : "currHpvVal",
-                                 "type" : "OperandRef"
+                                 "name" : "AnyHpv",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "currHpvVal",
+                                    "type" : "OperandRef"
+                                 } ]
                               } ]
                            } ]
                         }, {
