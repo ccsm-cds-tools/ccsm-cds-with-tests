@@ -312,20 +312,26 @@ define UnknownDateOfImmunosuppression:
   Exists(Dash.ImmunocompromisedObservations) and
   DateOfImmunosuppressionOnset is null
 
-define RecommendationText:
+define WhichRecommendationApplies:
   if UnknownDateOfImmunosuppression then
     case
       when Age21Through29 then
         {
-          'For immunosuppressed individuals age 21 to 29, cervical cytology screening is recommended at the time of initial diagnosis, and should occur annually for 3 consecutive normal tests.',
-          'If the results of 3 consecutive cytology tests are normal, follow-up cytology screening should occur every 3 years until the age of 30 (given normal results).',
-          'After 30, continue screening with cytology alone or cotesting every 3 years and continue throughout the patient\'s lifetime.'
+          recommendation: {
+            'For immunosuppressed individuals age 21 to 29, cervical cytology screening is recommended at the time of initial diagnosis, and should occur annually for 3 consecutive normal tests.',
+            'If the results of 3 consecutive cytology tests are normal, follow-up cytology screening should occur every 3 years until the age of 30 (given normal results).',
+            'After 30, continue screening with cytology alone or cotesting every 3 years and continue throughout the patient\'s lifetime.'
+          },
+          id: '3.ND.Y.0.0'
         }
       when Age30AndOlder then
         {
-          'For immunosuppressed individuals age 30 or older, cervical cancer screening is recommended at the time of initial diagnosis using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone.',
-          'Cotesting should continue every 3 years throughout the patient\'s lifetime (given normal results).',
-          'If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient\'s lifetime.'
+          recommendation: {
+            'For immunosuppressed individuals age 30 or older, cervical cancer screening is recommended at the time of initial diagnosis using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone.',
+            'Cotesting should continue every 3 years throughout the patient\'s lifetime (given normal results).',
+            'If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient\'s lifetime.'
+          },
+          id: '3.ND.O.0.0'
         }
       else // No recommendation for Age < 21
         null
@@ -333,14 +339,22 @@ define RecommendationText:
   else if ProposeImmediateTesting then
     case
       when Age21Through29 then 
-        { 'Cervical cytology screening is recommended.' }
+        {
+          recommendation: {
+            'Cervical cytology screening is recommended.'
+          },
+          id: '3.I.Y.0.0'
+        }
       when Age30AndOlder then
         {
-          'Cervical cancer screening is recommended.',
-          'The screening can be performed using one of the following screening approaches:',
-          '1. Primary HPV testing',
-          '2. Cotesting with cervical cytology and hrHPV testing',
-          '3. Cervical cytology testing alone'
+          recommendation: {
+            'Cervical cancer screening is recommended.',
+            'The screening can be performed using one of the following screening approaches:',
+            '1. Primary HPV testing',
+            '2. Cotesting with cervical cytology and hrHPV testing',
+            '3. Cervical cytology testing alone'
+          },
+          id: '3.I.O.0.0'
         }
       else // No recommendation for Age < 21
         null
@@ -348,21 +362,46 @@ define RecommendationText:
   else // Propose Future Testing
     case 
       when Age21Through29 then 
-        { 'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
+        {
+          recommendation: {
+            'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+          },
+          id: '3.F.Y.0.0'
+        }
       when Age30AndOlder then
         if LastCytologyWasCotest then
-          { 'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.' }
+          {
+            recommendation: {
+              'Cervical cancer screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
+            },
+            id: '3.F.O.C.0'
+          }
         else
           {
-            'Cervical cancer screening is recommended and next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.',
-            'The screening can be performed using one of the following screening approaches:',
-            '1. Primary HPV testing',
-            '2. Cotesting with cervical cytology and hrHPV testing',
-            '3. Cervical cytology testing alone'
+            recommendation: {
+              'Cervical cancer screening is recommended and next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.',
+              'The screening can be performed using one of the following screening approaches:',
+              '1. Primary HPV testing',
+              '2. Cotesting with cervical cytology and hrHPV testing',
+              '3. Cervical cytology testing alone'
+            },
+            id: '3.F.O.G.0'
           }
       else // No recommendation for Age < 21
         null
     end
+
+define RecommendationText:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.recommendation
+  else
+    null
+
+define RecommendationId:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.id
+  else
+    null
 
 define RecommendImmediateCervicalCytology:
   IsIncludedAndNotExcluded and 
@@ -383,6 +422,7 @@ define Recommendation:
     short: ActionShort,
     date: ToDate(ProposedDateOfNextScreening),
     details: RecommendationText,
+    id: RecommendationId,
     group: 'Screening: Immunocompromised'
   }
   else null

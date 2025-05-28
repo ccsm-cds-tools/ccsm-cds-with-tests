@@ -216,6 +216,7 @@ define OrderDate:
 define DecisionAids:
   {
     recommendation: ScreeningRecommendation.short,
+    recommendationId: ScreeningRecommendation.id,
     recommendationGroup: ScreeningRecommendation.group,
     recommendationDetails: ScreeningRecommendation.details,
     recommendationDate: OrderDate,
