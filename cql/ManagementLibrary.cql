@@ -215,6 +215,7 @@ define RiskTableSummary:
 define DecisionAids:
   {
     recommendation: ManagementRecommendation.short,
+    recommendationId: ManagementRecommendation.id,
     recommendationGroup: ManagementRecommendation.group,
     recommendationDetails: ManagementRecommendation.details,
     recommendationDate: OrderDate,

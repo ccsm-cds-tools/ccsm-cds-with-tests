@@ -292,6 +292,16 @@ define WhichTableMadeTheRecommendation:
     else null
   end
 
+define TableIdentifier:
+  case
+    when WhichTableMadeTheRecommendation = 5 then '5.T.5.'
+    when WhichTableMadeTheRecommendation = 4 then '5.T.4.'
+    when WhichTableMadeTheRecommendation = 3 then '5.T.3.'
+    when WhichTableMadeTheRecommendation = 2 then '5.T.2.'
+    when WhichTableMadeTheRecommendation = 1 then '5.T.1.'
+    else '5.T.U'
+  end
+
 define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
@@ -464,7 +474,8 @@ define ErrataRecommendation:
         details: {
           'Colposcopy is recommended.',
           'If the previous cytology result was not high grade, and the patient undergoes repeat testing with HPV testing or cotesting instead of colposcopy: colposcopy is recommended if the result on repeat testing indicates a second consecutive HPV-positive result and/or persistent cytologic abnormality (ASC-US or a more severe cytologic interpretation); repeat HPV testing or cotesting in 1 year is acceptable if the result on repeat testing is HPV negative or cotest negative.'
-        }
+        },
+        id: '5.E3.2.2.a'
       }
   
     when ( // Errata Recommendation 3.2.2.b: Positive HPV followed by persistent abnormality
@@ -478,7 +489,8 @@ define ErrataRecommendation:
         date: Today(),
         details: {
           'Colposcopy is recommended.'
-        }
+        },
+        id: '5.E3.2.2.b'
       }
 
     // Managing abnormal cervical cytology alone
@@ -493,7 +505,8 @@ define ErrataRecommendation:
         date: Today(),
         details: {
           'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.'
-        }
+        },
+        id: '5.E3.1.1.a'
       }
     when ( // Errata Recommendation 3.1.2: LSIL Alone
       AgeInYears() >= 25 and
@@ -506,7 +519,8 @@ define ErrataRecommendation:
         date: Today(),
         details: {
           'Colposcopy is recommended.'
-        }
+        },
+        id: '5.E3.1.2.a'
       }
     when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
@@ -520,7 +534,8 @@ define ErrataRecommendation:
         details: {
           'Treatment using an excisional procedure without previous biopsy confirmation OR colposcopy and biopsy are both acceptable.',
           'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
-        }
+        },
+        id: '5.E3.1.3.a'
       }
 
     // The following 3.2.x logic phrases come directly from the JLGTD article:
@@ -534,7 +549,8 @@ define ErrataRecommendation:
         date: Today(),
         details: {
           'Colposcopy is recommended.'
-        }
+        },
+        id: '5.E3.2.1.a'
       }
 
     when ( // Errata Recommendation 3.2.3: Low grade cytology followed by a negative HPV-based test
@@ -573,7 +589,8 @@ define ErrataRecommendation:
         date: Collate.DateOfMostRecentReport + 1 years,
         details: {
           'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
-        }
+        },
+        id: '5.E3.2.3.a'
       }
     else
       null
@@ -697,7 +714,8 @@ define Action:
           TreatmentRecommendationText,
           RarelyScreenedRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
-        }
+        },
+        id: '5.O.R.Y.1'
       }
     when (
       AgeInYears() > 50 and
@@ -709,7 +727,8 @@ define Action:
         details: {
           TreatmentRecommendationText,
           RarelyScreenedRecommendationText
-        }
+        },
+        id: '5.O.R.O.1'
       }  
     when (
       MostRecentPrimaryHpvPositive
@@ -719,8 +738,10 @@ define Action:
         date: Today(),
         details: {
           ReflexTestingRecommendationText
-        }
+        },
+        id: '5.O.H.1.1'
       }
+    // Risk Table Recommendations
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
       TableRecommendation = '1-year follow-up'
@@ -731,7 +752,8 @@ define Action:
         details: {
           OneYearSurveillanceRecommendationText,
           Pap6MonthIntervalText
-        }
+        },
+        id: TableIdentifier + '1.Y'
       }
     when (
       AgeInYears() > 65 and
@@ -743,7 +765,8 @@ define Action:
         details: {
           OneYearSurveillanceRecommendationText,
           Pap6MonthIntervalText
-        }
+        },
+        id: TableIdentifier + '1.O'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
@@ -755,7 +778,8 @@ define Action:
         details: {
           ThreeYearSurveillanceRecommendationText,
           Pap1YearIntervalText
-        }
+        },
+        id: TableIdentifier + '3.Y'
       }
     when (
       AgeInYears() > 65 and
@@ -767,7 +791,8 @@ define Action:
         details: {
           ThreeYearSurveillanceRecommendationText,
           Pap1YearIntervalText
-        }
+        },
+        id: TableIdentifier + '3.O'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
@@ -780,7 +805,8 @@ define Action:
           FiveYearSurveillanceRecommendationText,
           FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
-        }
+        },
+        id: TableIdentifier + '5.Y'
       }
     when (
       AgeInYears() > 65 and
@@ -793,7 +819,8 @@ define Action:
           FiveYearSurveillanceRecommendationText,
           FiveYearSurveillanceIntervalText,
           Pap3YearIntervalText
-        }
+        },
+        id: TableIdentifier + '5.O'
       }
     when (
       AgeInYears() >= 25 and
@@ -804,7 +831,8 @@ define Action:
         date: Today(),
         details: {
           ColposcopyRecommendationText
-        }
+        },
+        id: TableIdentifier + 'C.U'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -816,7 +844,8 @@ define Action:
         details: {
           ColposcopyOrTreatmentRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
-        }
+        },
+        id: TableIdentifier + 'CT.Y'
       }
     when (
       AgeInYears() > 50 and
@@ -827,7 +856,8 @@ define Action:
         date: Today(),
         details: {
           ColposcopyOrTreatmentRecommendationText
-        }
+        },
+        id: TableIdentifier + 'CT.O'
       }
     when (
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -839,7 +869,8 @@ define Action:
         details: {
           TreatmentRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
-        }
+        },
+        id: TableIdentifier + 'T.Y'
       }
     when (
       AgeInYears() > 50 and
@@ -850,7 +881,8 @@ define Action:
         date: Today(),
         details: {
           TreatmentRecommendationText
-        }
+        },
+        id: TableIdentifier + 'T.O'
       }
     when (
       ErrataRecommendation is not null
@@ -868,7 +900,8 @@ define Action:
         date: Today(),
         details: {
           'There is no specific recommendation for a NILM cytology and HPV + in a patient < 25 years of age. Use clinical judgement.'
-        }
+        },
+        id: '5.O.UNH.1.1'
       }
     else
       null
@@ -878,7 +911,8 @@ define Recommendation: {
   short: Action.short,
   date: Action.date,
   details: Action.details,
-  group: CommonAbnormalityGroup
+  group: CommonAbnormalityGroup,
+  id: Action.id
 }
 
 //------------------------------------------------------------------------------
