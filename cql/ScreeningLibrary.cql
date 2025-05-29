@@ -230,6 +230,7 @@ define DecisionAids:
 define DecisionAidsString:
   '{' +
   '"recommendation": "' + DecisionAids.recommendation + '", ' +
+  '"recommendationId": "' & DecisionAids.recommendationId & '", ' &
   '"recommendationGroup": "' + DecisionAids.recommendationGroup + '", ' +
   '"recommendationDetails": "' + '[' + Combine(DecisionAids.recommendationDetails, ', ') + ']' + '", ' +
   '"recommendationDate": "' + ToString(DecisionAids.recommendationDate) + '", ' +
