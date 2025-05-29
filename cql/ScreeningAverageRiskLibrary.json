@@ -1330,6 +1330,59 @@
                }
             }
          }, {
+            "name" : "WillBeAge65OrLessAtNextScreening",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "In",
+               "operand" : [ {
+                  "name" : "ToDate",
+                  "libraryName" : "FHIRHelpers",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "strict" : false,
+                     "type" : "As",
+                     "operand" : {
+                        "path" : "birthDate",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "Patient",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "asTypeSpecifier" : {
+                        "name" : "{http://hl7.org/fhir}date",
+                        "type" : "NamedTypeSpecifier"
+                     }
+                  } ]
+               }, {
+                  "lowClosed" : false,
+                  "highClosed" : false,
+                  "type" : "Interval",
+                  "low" : {
+                     "type" : "Subtract",
+                     "operand" : [ {
+                        "type" : "ToDate",
+                        "operand" : {
+                           "name" : "ProposedScreeningDate",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "value" : 66,
+                        "unit" : "years",
+                        "type" : "Quantity"
+                     } ]
+                  },
+                  "high" : {
+                     "type" : "ToDate",
+                     "operand" : {
+                        "name" : "ProposedScreeningDate",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               } ]
+            }
+         }, {
             "name" : "CervicalCytologyTestsForGradeDUnfiltered",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2076,7 +2129,7 @@
                } ]
             }
          }, {
-            "name" : "RecommendationText",
+            "name" : "WhichRecommendationApplies",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -2098,19 +2151,32 @@
                      } ]
                   },
                   "then" : {
-                     "type" : "List",
+                     "type" : "Tuple",
                      "element" : [ {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS, patients should have 3 consecutive annual primary HPV tests or cotests before entering long term surveillance. Long term surveillance involves primary HPV testing or cotesting at 3-year intervals for 25 years.",
-                        "type" : "Literal"
+                        "name" : "recommendation",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "This patient has documentation of a hysterectomy. If hysterectomy was performed for treatment of histologic HSIL, CIN 2, CIN 3 or AIS, patients should have 3 consecutive annual primary HPV tests or cotests before entering long term surveillance. Long term surveillance involves primary HPV testing or cotesting at 3-year intervals for 25 years.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL, CIN 2, CIN 3 or AIS, or completed the 25 year long term surveillance.",
+                              "type" : "Literal"
+                           } ]
+                        }
                      }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Screening is generally not recommended after hysterectomy if no previous diagnosis of CIN2 or greater in the preceding 25 years and the cervix was removed at the time of hysterectomy.",
-                        "type" : "Literal"
-                     }, {
-                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                        "value" : "Cancer screening is not recommended for patients who have undergone hysterectomy but have no previous diagnosis of histologic HSIL, CIN 2, CIN 3 or AIS, or completed the 25 year long term surveillance.",
-                        "type" : "Literal"
+                        "name" : "id",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "4.H.D.0.0",
+                           "type" : "Literal"
+                        }
                      } ]
                   },
                   "else" : {
@@ -2148,93 +2214,16 @@
                                  }
                               },
                               "then" : {
-                                 "type" : "List",
+                                 "type" : "Tuple",
                                  "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Cervical cancer screening is recommended.",
-                                    "type" : "Literal"
-                                 }, {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "type" : "Concatenate",
-                                          "operand" : [ {
-                                             "type" : "Concatenate",
-                                             "operand" : [ {
-                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                "value" : "It appears this patient is on a screening regimen that includes ",
-                                                "type" : "Literal"
-                                             }, {
-                                                "name" : "LastScreeningType",
-                                                "type" : "ExpressionRef"
-                                             } ]
-                                          }, {
-                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                             "value" : ". To meet adequate testing criteria to exit cervical cancer screening, ",
-                                             "type" : "Literal"
-                                          } ]
+                                    "name" : "recommendation",
+                                    "value" : {
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Cervical cancer screening is recommended.",
+                                          "type" : "Literal"
                                        }, {
-                                          "name" : "LastScreeningType",
-                                          "type" : "ExpressionRef"
-                                       } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : " is recommended.",
-                                       "type" : "Literal"
-                                    } ]
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
-                                    "type" : "Literal"
-                                 } ]
-                              },
-                              "else" : {
-                                 "type" : "List",
-                                 "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Cervical cancer screening is recommended.",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "The screening can be performed using one of the following screening approaches:",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "1. hrHPV testing alone",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "3. Cervical cytology testing alone",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
-                                    "type" : "Literal"
-                                 } ]
-                              }
-                           },
-                           "else" : {
-                              "type" : "If",
-                              "condition" : {
-                                 "name" : "NotAdequatelyScreened",
-                                 "type" : "ExpressionRef"
-                              },
-                              "then" : {
-                                 "type" : "List",
-                                 "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Cervical cancer screening is recommended.",
-                                    "type" : "Literal"
-                                 }, {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
                                           "type" : "Concatenate",
                                           "operand" : [ {
                                              "type" : "Concatenate",
@@ -2261,44 +2250,173 @@
                                              } ]
                                           }, {
                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                             "value" : " is recommended on ",
+                                             "value" : " is recommended.",
                                              "type" : "Literal"
                                           } ]
                                        }, {
-                                          "type" : "ToString",
-                                          "operand" : {
-                                             "type" : "ToDate",
-                                             "operand" : {
-                                                "name" : "ProposedScreeningDate",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
+                                          "type" : "Literal"
                                        } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : ".",
-                                       "type" : "Literal"
-                                    } ]
+                                    }
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
-                                    "type" : "Literal"
+                                    "name" : "id",
+                                    "value" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "4.O.I.L.0",
+                                       "type" : "Literal"
+                                    }
                                  } ]
                               },
                               "else" : {
-                                 "type" : "List",
+                                 "type" : "Tuple",
                                  "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "No cervical cancer screening is recommended.",
-                                    "type" : "Literal"
+                                    "name" : "recommendation",
+                                    "value" : {
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Cervical cancer screening is recommended.",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "The screening can be performed using one of the following screening approaches:",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "1. hrHPV testing alone",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "3. Cervical cytology testing alone",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
+                                          "type" : "Literal"
+                                       } ]
+                                    }
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Per USPSTF guidelines, this patient is over 65 years of age and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.",
-                                    "type" : "Literal"
+                                    "name" : "id",
+                                    "value" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "4.O.I.U.0",
+                                       "type" : "Literal"
+                                    }
+                                 } ]
+                              }
+                           },
+                           "else" : {
+                              "type" : "If",
+                              "condition" : {
+                                 "name" : "NotAdequatelyScreened",
+                                 "type" : "ExpressionRef"
+                              },
+                              "then" : {
+                                 "type" : "Tuple",
+                                 "element" : [ {
+                                    "name" : "recommendation",
+                                    "value" : {
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Cervical cancer screening is recommended.",
+                                          "type" : "Literal"
+                                       }, {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "type" : "Concatenate",
+                                             "operand" : [ {
+                                                "type" : "Concatenate",
+                                                "operand" : [ {
+                                                   "type" : "Concatenate",
+                                                   "operand" : [ {
+                                                      "type" : "Concatenate",
+                                                      "operand" : [ {
+                                                         "type" : "Concatenate",
+                                                         "operand" : [ {
+                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                            "value" : "It appears this patient is on a screening regimen that includes ",
+                                                            "type" : "Literal"
+                                                         }, {
+                                                            "name" : "LastScreeningType",
+                                                            "type" : "ExpressionRef"
+                                                         } ]
+                                                      }, {
+                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                         "value" : ". To meet adequate testing criteria to exit cervical cancer screening, ",
+                                                         "type" : "Literal"
+                                                      } ]
+                                                   }, {
+                                                      "name" : "LastScreeningType",
+                                                      "type" : "ExpressionRef"
+                                                   } ]
+                                                }, {
+                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                   "value" : " is recommended on ",
+                                                   "type" : "Literal"
+                                                } ]
+                                             }, {
+                                                "type" : "ToString",
+                                                "operand" : {
+                                                   "type" : "ToDate",
+                                                   "operand" : {
+                                                      "name" : "ProposedScreeningDate",
+                                                      "type" : "ExpressionRef"
+                                                   }
+                                                }
+                                             } ]
+                                          }, {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : ".",
+                                             "type" : "Literal"
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
+                                          "type" : "Literal"
+                                       } ]
+                                    }
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
-                                    "type" : "Literal"
+                                    "name" : "id",
+                                    "value" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "4.O.F.0.0",
+                                       "type" : "Literal"
+                                    }
+                                 } ]
+                              },
+                              "else" : {
+                                 "type" : "Tuple",
+                                 "element" : [ {
+                                    "name" : "recommendation",
+                                    "value" : {
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "No cervical cancer screening is recommended.",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Per USPSTF guidelines, this patient is over 65 years of age and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
+                                          "type" : "Literal"
+                                       } ]
+                                    }
+                                 }, {
+                                    "name" : "id",
+                                    "value" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "4.O.N.0.0",
+                                       "type" : "Literal"
+                                    }
                                  } ]
                               }
                            }
@@ -2309,11 +2427,23 @@
                               "type" : "Null"
                            },
                            "asTypeSpecifier" : {
-                              "type" : "ListTypeSpecifier",
-                              "elementType" : {
-                                 "name" : "{urn:hl7-org:elm-types:r1}String",
-                                 "type" : "NamedTypeSpecifier"
-                              }
+                              "type" : "TupleTypeSpecifier",
+                              "element" : [ {
+                                 "name" : "recommendation",
+                                 "elementType" : {
+                                    "type" : "ListTypeSpecifier",
+                                    "elementType" : {
+                                       "name" : "{urn:hl7-org:elm-types:r1}String",
+                                       "type" : "NamedTypeSpecifier"
+                                    }
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              } ]
                            }
                         }
                      },
@@ -2330,11 +2460,24 @@
                               "type" : "ParameterRef"
                            },
                            "then" : {
-                              "type" : "List",
+                              "type" : "Tuple",
                               "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for average-risk, asymptomatic individuals < 21 years of age.",
-                                 "type" : "Literal"
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "Per the USPSTF Grade D Recommendation, cervical cancer screening is not recommended for average-risk, asymptomatic individuals < 21 years of age.",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "4.Y.0.0.0",
+                                    "type" : "Literal"
+                                 }
                               } ]
                            },
                            "else" : {
@@ -2343,11 +2486,23 @@
                                  "type" : "Null"
                               },
                               "asTypeSpecifier" : {
-                                 "type" : "ListTypeSpecifier",
-                                 "elementType" : {
-                                    "name" : "{urn:hl7-org:elm-types:r1}String",
-                                    "type" : "NamedTypeSpecifier"
-                                 }
+                                 "type" : "TupleTypeSpecifier",
+                                 "element" : [ {
+                                    "name" : "recommendation",
+                                    "elementType" : {
+                                       "type" : "ListTypeSpecifier",
+                                       "elementType" : {
+                                          "name" : "{urn:hl7-org:elm-types:r1}String",
+                                          "type" : "NamedTypeSpecifier"
+                                       }
+                                    }
+                                 }, {
+                                    "name" : "id",
+                                    "elementType" : {
+                                       "name" : "{urn:hl7-org:elm-types:r1}String",
+                                       "type" : "NamedTypeSpecifier"
+                                    }
+                                 } ]
                               }
                            }
                         },
@@ -2364,11 +2519,24 @@
                               } ]
                            },
                            "then" : {
-                              "type" : "List",
+                              "type" : "Tuple",
                               "element" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "Screening is recommended using cervical cytology testing alone.",
-                                 "type" : "Literal"
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "Screening is recommended using cervical cytology testing alone.",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "4.21.I.0.0",
+                                    "type" : "Literal"
+                                 }
                               } ]
                            },
                            "else" : {
@@ -2378,27 +2546,40 @@
                                  "type" : "ExpressionRef"
                               },
                               "then" : {
-                                 "type" : "List",
+                                 "type" : "Tuple",
                                  "element" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Cervical cancer screening is recommended.",
-                                    "type" : "Literal"
+                                    "name" : "recommendation",
+                                    "value" : {
+                                       "type" : "List",
+                                       "element" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Cervical cancer screening is recommended.",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "The screening can be performed using one of the following screening approaches:",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "1. hrHPV testing alone",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                          "type" : "Literal"
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "3. Cervical cytology testing alone",
+                                          "type" : "Literal"
+                                       } ]
+                                    }
                                  }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "The screening can be performed using one of the following screening approaches:",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "1. hrHPV testing alone",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "3. Cervical cytology testing alone",
-                                    "type" : "Literal"
+                                    "name" : "id",
+                                    "value" : {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "4.30.I.0.0",
+                                       "type" : "Literal"
+                                    }
                                  } ]
                               },
                               "else" : {
@@ -2408,74 +2589,136 @@
                                     "type" : "ExpressionRef"
                                  },
                                  "then" : {
-                                    "type" : "List",
+                                    "type" : "Tuple",
                                     "element" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "type" : "Concatenate",
-                                          "operand" : [ {
-                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                             "value" : "Cervical cancer screening using cervical cytology testing alone is next due on ",
-                                             "type" : "Literal"
-                                          }, {
-                                             "type" : "ToString",
-                                             "operand" : {
-                                                "type" : "ToDate",
-                                                "operand" : {
-                                                   "name" : "ProposedScreeningDate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
+                                       "name" : "recommendation",
+                                       "value" : {
+                                          "type" : "List",
+                                          "element" : [ {
+                                             "type" : "Concatenate",
+                                             "operand" : [ {
+                                                "type" : "Concatenate",
+                                                "operand" : [ {
+                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                   "value" : "Cervical cancer screening using cervical cytology testing alone is next due on ",
+                                                   "type" : "Literal"
+                                                }, {
+                                                   "type" : "ToString",
+                                                   "operand" : {
+                                                      "type" : "ToDate",
+                                                      "operand" : {
+                                                         "name" : "ProposedScreeningDate",
+                                                         "type" : "ExpressionRef"
+                                                      }
+                                                   }
+                                                } ]
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : ".",
+                                                "type" : "Literal"
+                                             } ]
                                           } ]
-                                       }, {
+                                       }
+                                    }, {
+                                       "name" : "id",
+                                       "value" : {
                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : ".",
+                                          "value" : "4.21.F.0.0",
                                           "type" : "Literal"
-                                       } ]
+                                       }
                                     } ]
                                  },
                                  "else" : {
-                                    "type" : "List",
-                                    "element" : [ {
-                                       "type" : "Concatenate",
-                                       "operand" : [ {
-                                          "type" : "Concatenate",
-                                          "operand" : [ {
-                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                             "value" : "Cervical cancer screening is next due on ",
-                                             "type" : "Literal"
-                                          }, {
-                                             "type" : "ToString",
-                                             "operand" : {
-                                                "type" : "ToDate",
-                                                "operand" : {
-                                                   "name" : "ProposedScreeningDate",
-                                                   "type" : "ExpressionRef"
-                                                }
-                                             }
-                                          } ]
+                                    "type" : "If",
+                                    "condition" : {
+                                       "name" : "WillBeAge65OrLessAtNextScreening",
+                                       "type" : "ExpressionRef"
+                                    },
+                                    "then" : {
+                                       "type" : "Tuple",
+                                       "element" : [ {
+                                          "name" : "recommendation",
+                                          "value" : {
+                                             "type" : "List",
+                                             "element" : [ {
+                                                "type" : "Concatenate",
+                                                "operand" : [ {
+                                                   "type" : "Concatenate",
+                                                   "operand" : [ {
+                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                      "value" : "Cervical cancer screening is next due on ",
+                                                      "type" : "Literal"
+                                                   }, {
+                                                      "type" : "ToString",
+                                                      "operand" : {
+                                                         "type" : "ToDate",
+                                                         "operand" : {
+                                                            "name" : "ProposedScreeningDate",
+                                                            "type" : "ExpressionRef"
+                                                         }
+                                                      }
+                                                   } ]
+                                                }, {
+                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                   "value" : ".",
+                                                   "type" : "Literal"
+                                                } ]
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "The screening can be performed using one of the following screening approaches:",
+                                                "type" : "Literal"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "1. hrHPV testing alone",
+                                                "type" : "Literal"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                                "type" : "Literal"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "3. Cervical cytology testing alone",
+                                                "type" : "Literal"
+                                             } ]
+                                          }
                                        }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : ".",
-                                          "type" : "Literal"
+                                          "name" : "id",
+                                          "value" : {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "4.30.F.0.0",
+                                             "type" : "Literal"
+                                          }
                                        } ]
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "The screening can be performed using one of the following screening approaches:",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "1. hrHPV testing alone",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                                       "type" : "Literal"
-                                    }, {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "3. Cervical cytology testing alone",
-                                       "type" : "Literal"
-                                    } ]
+                                    },
+                                    "else" : {
+                                       "type" : "Tuple",
+                                       "element" : [ {
+                                          "name" : "recommendation",
+                                          "value" : {
+                                             "type" : "List",
+                                             "element" : [ {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "No cervical cancer screening is recommended.",
+                                                "type" : "Literal"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "Per USPSTF guidelines, this patient will be older than 65 by the time of their next screening, and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.",
+                                                "type" : "Literal"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.",
+                                                "type" : "Literal"
+                                             } ]
+                                          }
+                                       }, {
+                                          "name" : "id",
+                                          "value" : {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "4.30.N.0.0",
+                                             "type" : "Literal"
+                                          }
+                                       } ]
+                                    }
                                  }
                               }
                            }
@@ -2489,11 +2732,93 @@
                      "type" : "Null"
                   },
                   "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "recommendation",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "id",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "recommendation",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
                      "type" : "ListTypeSpecifier",
                      "elementType" : {
                         "name" : "{urn:hl7-org:elm-types:r1}String",
                         "type" : "NamedTypeSpecifier"
                      }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationId",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "id",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
                   }
                }
             }
@@ -2552,6 +2877,12 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
+                     "name" : "id",
+                     "value" : {
+                        "name" : "RecommendationId",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
                      "name" : "group",
                      "value" : {
                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -2587,6 +2918,12 @@
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
+                        }
+                     }, {
+                        "name" : "id",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",

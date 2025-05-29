@@ -1,0 +1,50 @@
+---
+name: Histology Service Request Observation Missing
+
+# A DiagnosticReport and Observation are based on same ServiceRequest but the Observation is missing
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# Diagnostic Report and Observation are 'based on' the same ServiceRequest
+# The diagnostic report needs to be coded as a biopsy result because
+# it references an Observation which is missing
+-
+  resourceType: ServiceRequest
+  id: 5678
+  status: active
+  intent: plan
+  code: SNOMEDCT#176786003 Colposcopy of cervix (procedure)
+-
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  effectiveDateTime: 2019-05-08T19:46:00Z
+  issued: 2019-05-10T16:42:59Z
+  basedOn:
+  -
+    reference: ServiceRequest/5678
+
+# Observation which references ServiceRequest/5678 is Missing
+
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#309162003 Normal histology findings (finding)
+  effectiveDateTime: 2020-12-01  
+  
+results:
+  HistologyDiagnosticReports: $should have length 2
+  PertinentObservationsSummary: $should have length 0
+  HistologyDiagnosticReportsSummary: $should have length 2
+  DiagnosticReportsSummary: $should have length 2
+  ErrorDiagnosticReportWithNoConclusonCodes: 'A laboratory test was found without a result. Please review patient record to resolve.'
