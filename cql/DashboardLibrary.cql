@@ -1137,12 +1137,14 @@ define function FormatBiopsyReports(DrList List<DiagnosticReport>, ObsList List<
 define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<Observation>, ReportType String):
   Combine(
     (DrList) D
-    let CollatedCodes: CollateConclusionCodes(D, ObsList)
+    let CollatedCodes: CollateConclusionCodes(D, ObsList),
+    ResultInterpretation: Interpretation(CollatedCodes,ReportType),
+    HighestRanked: HighestRankedInterpretation(ResultInterpretation)
     return
       '{' +
       '"name": "' + ReportType + '", ' +
       '"longName": "' + Common.ConceptText(D.code) + '", ' +
-      '"value": "' + HighestRankedInterpretation(Interpretation(CollatedCodes, ReportType)) + '", ' +
+      '"value": "' + HighestRanked.riskTableInput + '", ' +
       '"longValue": [' + 
         Coalesce(
           Combine(flatten(

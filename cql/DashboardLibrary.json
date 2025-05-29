@@ -12144,6 +12144,224 @@
                }
             } ]
          }, {
+            "name" : "FormatBiopsyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "D",
+                  "expression" : {
+                     "name" : "DrList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "let" : [ {
+                  "identifier" : "CollatedCodes",
+                  "expression" : {
+                     "name" : "CollateConclusionCodes",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }, {
+                        "name" : "ObsList",
+                        "type" : "OperandRef"
+                     }, {
+                        "name" : "code",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "ResultInterpretation",
+                  "expression" : {
+                     "name" : "Interpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "CollatedCodes",
+                        "type" : "QueryLetRef"
+                     }, {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "HighestRanked",
+                  "expression" : {
+                     "name" : "HighestRankedInterpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ResultInterpretation",
+                        "type" : "QueryLetRef"
+                     } ]
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "name",
+                        "value" : {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "code",
+                              "scope" : "D",
+                              "type" : "Property"
+                           } ]
+                        }
+                     }, {
+                        "name" : "value",
+                        "value" : {
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "name" : "CollatedCodes",
+                                    "type" : "QueryLetRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "path" : "label",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "grade",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDateString",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "edited",
+                        "value" : {
+                           "name" : "HasBeenLocallyEdited",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "DrList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ObsList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Observation",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ReportType",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "code",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Code",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "FormatReportsString",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -12170,6 +12388,29 @@
                         }, {
                            "name" : "ObsList",
                            "type" : "OperandRef"
+                        } ]
+                     }
+                  }, {
+                     "identifier" : "ResultInterpretation",
+                     "expression" : {
+                        "name" : "Interpretation",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "CollatedCodes",
+                           "type" : "QueryLetRef"
+                        }, {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        } ]
+                     }
+                  }, {
+                     "identifier" : "HighestRanked",
+                     "expression" : {
+                        "name" : "HighestRankedInterpretation",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "ResultInterpretation",
+                           "type" : "QueryLetRef"
                         } ]
                      }
                   } ],
@@ -12263,19 +12504,12 @@
                                                                         "type" : "Literal"
                                                                      } ]
                                                                   }, {
-                                                                     "name" : "HighestRankedInterpretation",
-                                                                     "type" : "FunctionRef",
-                                                                     "operand" : [ {
-                                                                        "name" : "Interpretation",
-                                                                        "type" : "FunctionRef",
-                                                                        "operand" : [ {
-                                                                           "name" : "CollatedCodes",
-                                                                           "type" : "QueryLetRef"
-                                                                        }, {
-                                                                           "name" : "ReportType",
-                                                                           "type" : "OperandRef"
-                                                                        } ]
-                                                                     } ]
+                                                                     "path" : "riskTableInput",
+                                                                     "type" : "Property",
+                                                                     "source" : {
+                                                                        "name" : "HighestRanked",
+                                                                        "type" : "QueryLetRef"
+                                                                     }
                                                                   } ]
                                                                }, {
                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
