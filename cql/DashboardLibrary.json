@@ -126,6 +126,10 @@
             "name" : "LOCAL",
             "id" : "http://OUR-PLACEHOLDER-URL.com",
             "accessLevel" : "Public"
+         }, {
+            "name" : "CPT",
+            "id" : "http://www.ama-assn.org/go/cpt",
+            "accessLevel" : "Public"
          } ]
       },
       "valueSets" : {
@@ -645,6 +649,22 @@
                "name" : "SNOMED-CT"
             }
          }, {
+            "name" : "Insufficient",
+            "id" : "112631006",
+            "display" : "Specimen unsatisfactory for diagnosis (finding)",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "SNOMED-CT"
+            }
+         }, {
+            "name" : "Conization of cervix",
+            "id" : "57520",
+            "display" : "Conization of cervix, knife/laser",
+            "accessLevel" : "Public",
+            "codeSystem" : {
+               "name" : "CPT"
+            }
+         }, {
             "name" : "Diagnosis of Genital GvHD",
             "id" : "GenitalGvHD",
             "display" : "Diagnosis of Genital GvHD",
@@ -720,6 +740,42 @@
                }
             }
          }, {
+            "name" : "highlightGrades",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "unrecognized",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "0",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "normal",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "1",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "alert",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "empty",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "3",
+                     "type" : "Literal"
+                  }
+               } ]
+            }
+         }, {
             "name" : "CytologyInterpretation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -727,13 +783,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "conclusions",
-                        "type" : "OperandRef"
-                     }
+                     "name" : "conclusions",
+                     "type" : "OperandRef"
                   }
                },
                "then" : {
@@ -766,7 +819,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "NILM",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "NILM",
@@ -778,6 +838,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "2",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -798,7 +868,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ASC-US",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "ASC-US",
@@ -810,6 +887,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "3",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -830,7 +917,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "LSIL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "LSIL",
@@ -842,6 +936,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "4",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -862,7 +966,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ASC-H",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "ASC-H",
@@ -874,6 +985,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "5",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -894,7 +1015,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "AGC",
@@ -906,6 +1034,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "6",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -939,10 +1077,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HSIL+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HSIL+, R/O Carcinoma",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -951,6 +1096,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "7",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -971,7 +1126,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC-FN",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "AGC-FN",
@@ -983,6 +1145,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1003,7 +1175,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AECC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Atypical Endocervical Cells",
@@ -1015,6 +1194,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1035,7 +1224,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AGC-US",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "AGC-US",
@@ -1047,6 +1243,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1065,7 +1271,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "AIS",
@@ -1077,6 +1290,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1097,7 +1320,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ECAIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Endocervical AIS",
@@ -1109,6 +1339,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1129,7 +1369,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ECFN",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Endocervical Cells Favor Neoplasia",
@@ -1141,6 +1388,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1161,7 +1418,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AEMC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Atypical Endometrial Cells",
@@ -1173,6 +1437,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1193,7 +1467,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HIST",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Histiocytes",
@@ -1205,6 +1486,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1225,7 +1516,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "BEMC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Benign Endometrial Cells",
@@ -1237,6 +1535,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1257,7 +1565,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "BGC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Benign Glandular Cells",
@@ -1269,6 +1584,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1289,7 +1614,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "EMSC",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Endometrial stromal cells",
@@ -1301,6 +1633,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1321,7 +1663,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "UNSAT",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Unsatisfactory",
@@ -1333,6 +1682,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1353,7 +1712,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "ATZ",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Absent Transformation Zone",
@@ -1365,6 +1731,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "1",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1379,10 +1755,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "No result found",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1395,16 +1778,33 @@
                                        "type" : "Literal"
                                     }
                                  }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "empty",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }
                         } ],
                         "else" : {
                            "type" : "Tuple",
                            "element" : [ {
-                              "name" : "text",
+                              "name" : "riskTableInput",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                  "value" : "UNK",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "label",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Unrecognized Test Result",
                                  "type" : "Literal"
                               }
                            }, {
@@ -1414,20 +1814,37 @@
                                  "value" : "1",
                                  "type" : "Literal"
                               }
+                           }, {
+                              "name" : "grade",
+                              "value" : {
+                                 "path" : "unrecognized",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "highlightGrades",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         }
                      }
                   }
                },
                "else" : {
-                  "type" : "List",
-                  "element" : [ {
+                  "type" : "ToList",
+                  "operand" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "text",
+                        "name" : "riskTableInput",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "No result found",
                            "type" : "Literal"
                         }
                      }, {
@@ -1437,8 +1854,18 @@
                            "value" : "0",
                            "type" : "Literal"
                         }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "empty",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "highlightGrades",
+                              "type" : "ExpressionRef"
+                           }
+                        }
                      } ]
-                  } ]
+                  }
                }
             },
             "operand" : [ {
@@ -1459,13 +1886,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "conclusions",
-                        "type" : "OperandRef"
-                     }
+                     "name" : "conclusions",
+                     "type" : "OperandRef"
                   }
                },
                "then" : {
@@ -1498,10 +1922,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HPV16+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV (+) 16",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1510,6 +1941,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "5",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1530,10 +1971,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HPV16-, HPV18+",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV (-) 16, HPV (+) 18",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1542,6 +1990,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "4",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1560,10 +2018,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HPV-positive",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV (+) Other",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1572,6 +2037,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "3",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1590,10 +2065,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HPV-negative",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HPV (-)",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1602,6 +2084,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "2",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1616,10 +2108,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "No result found",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1632,16 +2131,33 @@
                                        "type" : "Literal"
                                     }
                                  }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "empty",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }
                         } ],
                         "else" : {
                            "type" : "Tuple",
                            "element" : [ {
-                              "name" : "text",
+                              "name" : "riskTableInput",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                  "value" : "UNK",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "label",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Unrecognized Test Result",
                                  "type" : "Literal"
                               }
                            }, {
@@ -1651,20 +2167,37 @@
                                  "value" : "1",
                                  "type" : "Literal"
                               }
+                           }, {
+                              "name" : "grade",
+                              "value" : {
+                                 "path" : "unrecognized",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "highlightGrades",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         }
                      }
                   }
                },
                "else" : {
-                  "type" : "List",
-                  "element" : [ {
+                  "type" : "ToList",
+                  "operand" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "text",
+                        "name" : "riskTableInput",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "No result found",
                            "type" : "Literal"
                         }
                      }, {
@@ -1674,8 +2207,18 @@
                            "value" : "0",
                            "type" : "Literal"
                         }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "empty",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "highlightGrades",
+                              "type" : "ExpressionRef"
+                           }
+                        }
                      } ]
-                  } ]
+                  }
                }
             },
             "operand" : [ {
@@ -1689,68 +2232,6 @@
                }
             } ]
          }, {
-            "name" : "HighestRankedInterpretation",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "type" : "FunctionDef",
-            "expression" : {
-               "type" : "Last",
-               "source" : {
-                  "type" : "Query",
-                  "source" : [ {
-                     "alias" : "S",
-                     "expression" : {
-                        "type" : "Query",
-                        "source" : [ {
-                           "alias" : "I",
-                           "expression" : {
-                              "name" : "interpretations",
-                              "type" : "OperandRef"
-                           }
-                        } ],
-                        "relationship" : [ ],
-                        "sort" : {
-                           "by" : [ {
-                              "direction" : "asc",
-                              "path" : "rank",
-                              "type" : "ByColumn"
-                           } ]
-                        }
-                     }
-                  } ],
-                  "relationship" : [ ],
-                  "return" : {
-                     "expression" : {
-                        "path" : "text",
-                        "scope" : "S",
-                        "type" : "Property"
-                     }
-                  }
-               }
-            },
-            "operand" : [ {
-               "name" : "interpretations",
-               "operandTypeSpecifier" : {
-                  "type" : "ListTypeSpecifier",
-                  "elementType" : {
-                     "type" : "TupleTypeSpecifier",
-                     "element" : [ {
-                        "name" : "text",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     }, {
-                        "name" : "rank",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
-                           "type" : "NamedTypeSpecifier"
-                        }
-                     } ]
-                  }
-               }
-            } ]
-         }, {
             "name" : "BiopsyInterpretation",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1758,13 +2239,10 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
+                  "type" : "Exists",
                   "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "conclusions",
-                        "type" : "OperandRef"
-                     }
+                     "name" : "conclusions",
+                     "type" : "OperandRef"
                   }
                },
                "then" : {
@@ -1795,10 +2273,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "<CIN1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Negative, <CIN1",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -1807,6 +2292,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "2",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1827,7 +2322,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "CIN1",
@@ -1839,6 +2341,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "3",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "normal",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1859,7 +2371,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN2",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "CIN2",
@@ -1871,6 +2390,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "4",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1891,7 +2420,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "HSIL, Unspecified",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "HSIL, Unspecified",
@@ -1903,6 +2439,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "5",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1921,7 +2467,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "CIN3",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "CIN3",
@@ -1933,6 +2486,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "6",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1951,7 +2514,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "AIS",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "AIS",
@@ -1963,6 +2533,16 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "7",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -1981,7 +2561,14 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cancer",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "Cancer",
@@ -1993,6 +2580,65 @@
                                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "value" : "8",
                                     "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "alert",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              } ]
+                           }
+                        }, {
+                           "when" : {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "c",
+                                 "type" : "AliasRef"
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Insufficient",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "riskTableInput",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Insufficient",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Insufficient/Unsatisfactory",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "rank",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "1",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "unrecognized",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
                               } ]
                            }
@@ -2007,10 +2653,17 @@
                            "then" : {
                               "type" : "Tuple",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
                                  "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "NULL",
+                                    "type" : "Literal"
+                                 }
+                              }, {
+                                 "name" : "label",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "No result found",
                                     "type" : "Literal"
                                  }
                               }, {
@@ -2023,16 +2676,33 @@
                                        "type" : "Literal"
                                     }
                                  }
+                              }, {
+                                 "name" : "grade",
+                                 "value" : {
+                                    "path" : "empty",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "highlightGrades",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
                               } ]
                            }
                         } ],
                         "else" : {
                            "type" : "Tuple",
                            "element" : [ {
-                              "name" : "text",
+                              "name" : "riskTableInput",
                               "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                  "value" : "UNK",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "name" : "label",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Unrecognized Test Result",
                                  "type" : "Literal"
                               }
                            }, {
@@ -2042,20 +2712,37 @@
                                  "value" : "1",
                                  "type" : "Literal"
                               }
+                           }, {
+                              "name" : "grade",
+                              "value" : {
+                                 "path" : "unrecognized",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "highlightGrades",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
                            } ]
                         }
                      }
                   }
                },
                "else" : {
-                  "type" : "List",
-                  "element" : [ {
+                  "type" : "ToList",
+                  "operand" : {
                      "type" : "Tuple",
                      "element" : [ {
-                        "name" : "text",
+                        "name" : "riskTableInput",
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "ALL",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "No result found",
                            "type" : "Literal"
                         }
                      }, {
@@ -2065,8 +2752,18 @@
                            "value" : "0",
                            "type" : "Literal"
                         }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "empty",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "highlightGrades",
+                              "type" : "ExpressionRef"
+                           }
+                        }
                      } ]
-                  } ]
+                  }
                }
             },
             "operand" : [ {
@@ -8991,20 +9688,41 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "Completed",
-               "libraryName" : "C3F",
-               "type" : "FunctionRef",
+               "type" : "Union",
                "operand" : [ {
-                  "dataType" : "{http://hl7.org/fhir}Procedure",
-                  "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
-                  "codeProperty" : "code",
-                  "codeComparator" : "in",
-                  "type" : "Retrieve",
-                  "codes" : {
-                     "name" : "Cervical Excision Procedures",
-                     "preserve" : true,
-                     "type" : "ValueSetRef"
-                  }
+                  "name" : "Completed",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "in",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "name" : "Cervical Excision Procedures",
+                        "preserve" : true,
+                        "type" : "ValueSetRef"
+                     }
+                  } ]
+               }, {
+                  "name" : "Completed",
+                  "libraryName" : "C3F",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "dataType" : "{http://hl7.org/fhir}Procedure",
+                     "templateId" : "http://hl7.org/fhir/StructureDefinition/Procedure",
+                     "codeProperty" : "code",
+                     "codeComparator" : "~",
+                     "type" : "Retrieve",
+                     "codes" : {
+                        "type" : "ToList",
+                        "operand" : {
+                           "name" : "Conization of cervix",
+                           "type" : "CodeRef"
+                        }
+                     }
+                  } ]
                } ]
             }
          }, {
@@ -10557,40 +11275,283 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "B",
-                  "expression" : {
-                     "name" : "AllCompletedDiagnosticReport",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
+               "type" : "If",
+               "condition" : {
                   "type" : "Greater",
                   "operand" : [ {
                      "type" : "Count",
                      "source" : {
-                        "name" : "CollateConclusionCodes",
-                        "type" : "FunctionRef",
-                        "operand" : [ {
-                           "name" : "B",
-                           "type" : "AliasRef"
-                        }, {
-                           "name" : "HistologyObservations",
-                           "type" : "ExpressionRef"
-                        }, {
-                           "name" : "Biopsy Report",
-                           "type" : "CodeRef"
-                        } ]
+                        "name" : "HistologyObservations",
+                        "type" : "ExpressionRef"
                      }
                   }, {
                      "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
                      "value" : "0",
                      "type" : "Literal"
                   } ]
+               },
+               "then" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "D",
+                     "expression" : {
+                        "name" : "AllCompletedDiagnosticReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "alias" : "O",
+                     "expression" : {
+                        "name" : "HistologyObservations",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Or",
+                        "operand" : [ {
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Equivalent",
+                              "operand" : [ {
+                                 "name" : "ToConcept",
+                                 "libraryName" : "FHIRHelpers",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "path" : "code",
+                                    "scope" : "D",
+                                    "type" : "Property"
+                                 } ]
+                              }, {
+                                 "type" : "ToConcept",
+                                 "operand" : {
+                                    "name" : "Biopsy Report",
+                                    "type" : "CodeRef"
+                                 }
+                              } ]
+                           }, {
+                              "type" : "Exists",
+                              "operand" : {
+                                 "type" : "Query",
+                                 "source" : [ {
+                                    "alias" : "R",
+                                    "expression" : {
+                                       "path" : "result",
+                                       "scope" : "D",
+                                       "type" : "Property"
+                                    }
+                                 } ],
+                                 "relationship" : [ ],
+                                 "where" : {
+                                    "type" : "Equal",
+                                    "operand" : [ {
+                                       "type" : "Last",
+                                       "source" : {
+                                          "type" : "Split",
+                                          "stringToSplit" : {
+                                             "name" : "ToString",
+                                             "libraryName" : "FHIRHelpers",
+                                             "type" : "FunctionRef",
+                                             "operand" : [ {
+                                                "path" : "reference",
+                                                "scope" : "R",
+                                                "type" : "Property"
+                                             } ]
+                                          },
+                                          "separator" : {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "/",
+                                             "type" : "Literal"
+                                          }
+                                       }
+                                    }, {
+                                       "name" : "ToString",
+                                       "libraryName" : "FHIRHelpers",
+                                       "type" : "FunctionRef",
+                                       "operand" : [ {
+                                          "path" : "id",
+                                          "scope" : "O",
+                                          "type" : "Property"
+                                       } ]
+                                    } ]
+                                 }
+                              }
+                           } ]
+                        }, {
+                           "type" : "Exists",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "oB",
+                                 "expression" : {
+                                    "path" : "basedOn",
+                                    "scope" : "O",
+                                    "type" : "Property"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "where" : {
+                                 "type" : "AnyTrue",
+                                 "source" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "dB",
+                                       "expression" : {
+                                          "path" : "basedOn",
+                                          "scope" : "D",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "name" : "dB",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "oB",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "FindDate",
+                           "libraryName" : "C3F",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "O",
+                              "type" : "AliasRef"
+                           } ]
+                        }, {
+                           "name" : "DiagnosticReportDate",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "return" : {
+                     "expression" : {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }
+                  }
+               },
+               "else" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "D",
+                     "expression" : {
+                        "name" : "AllCompletedDiagnosticReport",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Equivalent",
+                     "operand" : [ {
+                        "name" : "ToConcept",
+                        "libraryName" : "FHIRHelpers",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "code",
+                           "scope" : "D",
+                           "type" : "Property"
+                        } ]
+                     }, {
+                        "type" : "ToConcept",
+                        "operand" : {
+                           "name" : "Biopsy Report",
+                           "type" : "CodeRef"
+                        }
+                     } ]
+                  }
                }
             }
+         }, {
+            "name" : "HighestRankedInterpretation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "S",
+                     "expression" : {
+                        "type" : "Query",
+                        "source" : [ {
+                           "alias" : "I",
+                           "expression" : {
+                              "name" : "interpretations",
+                              "type" : "OperandRef"
+                           }
+                        } ],
+                        "relationship" : [ ],
+                        "sort" : {
+                           "by" : [ {
+                              "direction" : "asc",
+                              "path" : "rank",
+                              "type" : "ByColumn"
+                           } ]
+                        }
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "return" : {
+                     "expression" : {
+                        "name" : "S",
+                        "type" : "AliasRef"
+                     }
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "interpretations",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "label",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "rank",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "grade",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            } ]
          }, {
             "name" : "Interpretation",
             "context" : "Patient",
@@ -10723,13 +11684,25 @@
                            "elementType" : {
                               "type" : "TupleTypeSpecifier",
                               "element" : [ {
-                                 "name" : "text",
+                                 "name" : "riskTableInput",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }, {
+                                 "name" : "label",
                                  "elementType" : {
                                     "name" : "{urn:hl7-org:elm-types:r1}String",
                                     "type" : "NamedTypeSpecifier"
                                  }
                               }, {
                                  "name" : "rank",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }, {
+                                 "name" : "grade",
                                  "elementType" : {
                                     "name" : "{urn:hl7-org:elm-types:r1}Integer",
                                     "type" : "NamedTypeSpecifier"
@@ -10988,6 +11961,29 @@
                         "type" : "OperandRef"
                      } ]
                   }
+               }, {
+                  "identifier" : "ResultInterpretation",
+                  "expression" : {
+                     "name" : "Interpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "CollatedCodes",
+                        "type" : "QueryLetRef"
+                     }, {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "HighestRanked",
+                  "expression" : {
+                     "name" : "HighestRankedInterpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ResultInterpretation",
+                        "type" : "QueryLetRef"
+                     } ]
+                  }
                } ],
                "relationship" : [ ],
                "return" : {
@@ -11014,19 +12010,12 @@
                      }, {
                         "name" : "value",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "Interpretation",
-                              "type" : "FunctionRef",
-                              "operand" : [ {
-                                 "name" : "CollatedCodes",
-                                 "type" : "QueryLetRef"
-                              }, {
-                                 "name" : "ReportType",
-                                 "type" : "OperandRef"
-                              } ]
-                           } ]
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
                         }
                      }, {
                         "name" : "longValue",
@@ -11063,6 +12052,26 @@
                                     }
                                  }
                               }
+                           }
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "path" : "label",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "grade",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
                            }
                         }
                      }, {
@@ -11135,6 +12144,224 @@
                }
             } ]
          }, {
+            "name" : "FormatBiopsyReports",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "D",
+                  "expression" : {
+                     "name" : "DrList",
+                     "type" : "OperandRef"
+                  }
+               } ],
+               "let" : [ {
+                  "identifier" : "CollatedCodes",
+                  "expression" : {
+                     "name" : "CollateConclusionCodes",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "D",
+                        "type" : "AliasRef"
+                     }, {
+                        "name" : "ObsList",
+                        "type" : "OperandRef"
+                     }, {
+                        "name" : "code",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "ResultInterpretation",
+                  "expression" : {
+                     "name" : "Interpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "CollatedCodes",
+                        "type" : "QueryLetRef"
+                     }, {
+                        "name" : "ReportType",
+                        "type" : "OperandRef"
+                     } ]
+                  }
+               }, {
+                  "identifier" : "HighestRanked",
+                  "expression" : {
+                     "name" : "HighestRankedInterpretation",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ResultInterpretation",
+                        "type" : "QueryLetRef"
+                     } ]
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "name",
+                        "value" : {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        }
+                     }, {
+                        "name" : "longName",
+                        "value" : {
+                           "name" : "ConceptText",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "code",
+                              "scope" : "D",
+                              "type" : "Property"
+                           } ]
+                        }
+                     }, {
+                        "name" : "value",
+                        "value" : {
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "longValue",
+                        "value" : {
+                           "type" : "Flatten",
+                           "operand" : {
+                              "type" : "Query",
+                              "source" : [ {
+                                 "alias" : "cC",
+                                 "expression" : {
+                                    "name" : "CollatedCodes",
+                                    "type" : "QueryLetRef"
+                                 }
+                              } ],
+                              "relationship" : [ ],
+                              "return" : {
+                                 "expression" : {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "cCC",
+                                       "expression" : {
+                                          "path" : "coding",
+                                          "scope" : "cC",
+                                          "type" : "Property"
+                                       }
+                                    } ],
+                                    "relationship" : [ ],
+                                    "return" : {
+                                       "expression" : {
+                                          "path" : "display",
+                                          "scope" : "cCC",
+                                          "type" : "Property"
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }, {
+                        "name" : "label",
+                        "value" : {
+                           "path" : "label",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "grade",
+                        "value" : {
+                           "path" : "grade",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRanked",
+                              "type" : "QueryLetRef"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "name" : "DiagnosticReportDateString",
+                           "libraryName" : "Common",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     }, {
+                        "name" : "reference",
+                        "value" : {
+                           "type" : "Concatenate",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "DiagnosticReport/",
+                              "type" : "Literal"
+                           }, {
+                              "name" : "ToString",
+                              "libraryName" : "FHIRHelpers",
+                              "type" : "FunctionRef",
+                              "operand" : [ {
+                                 "path" : "id",
+                                 "scope" : "D",
+                                 "type" : "Property"
+                              } ]
+                           } ]
+                        }
+                     }, {
+                        "name" : "edited",
+                        "value" : {
+                           "name" : "HasBeenLocallyEdited",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "D",
+                              "type" : "AliasRef"
+                           } ]
+                        }
+                     } ]
+                  }
+               }
+            },
+            "operand" : [ {
+               "name" : "DrList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}DiagnosticReport",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ObsList",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{http://hl7.org/fhir}Observation",
+                     "type" : "NamedTypeSpecifier"
+                  }
+               }
+            }, {
+               "name" : "ReportType",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "code",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}Code",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "FormatReportsString",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -11161,6 +12388,29 @@
                         }, {
                            "name" : "ObsList",
                            "type" : "OperandRef"
+                        } ]
+                     }
+                  }, {
+                     "identifier" : "ResultInterpretation",
+                     "expression" : {
+                        "name" : "Interpretation",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "CollatedCodes",
+                           "type" : "QueryLetRef"
+                        }, {
+                           "name" : "ReportType",
+                           "type" : "OperandRef"
+                        } ]
+                     }
+                  }, {
+                     "identifier" : "HighestRanked",
+                     "expression" : {
+                        "name" : "HighestRankedInterpretation",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "ResultInterpretation",
+                           "type" : "QueryLetRef"
                         } ]
                      }
                   } ],
@@ -11254,19 +12504,12 @@
                                                                         "type" : "Literal"
                                                                      } ]
                                                                   }, {
-                                                                     "name" : "HighestRankedInterpretation",
-                                                                     "type" : "FunctionRef",
-                                                                     "operand" : [ {
-                                                                        "name" : "Interpretation",
-                                                                        "type" : "FunctionRef",
-                                                                        "operand" : [ {
-                                                                           "name" : "CollatedCodes",
-                                                                           "type" : "QueryLetRef"
-                                                                        }, {
-                                                                           "name" : "ReportType",
-                                                                           "type" : "OperandRef"
-                                                                        } ]
-                                                                     } ]
+                                                                     "path" : "riskTableInput",
+                                                                     "type" : "Property",
+                                                                     "source" : {
+                                                                        "name" : "HighestRanked",
+                                                                        "type" : "QueryLetRef"
+                                                                     }
                                                                   } ]
                                                                }, {
                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -11519,7 +12762,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "FormatReports",
+               "name" : "FormatBiopsyReports",
                "type" : "FunctionRef",
                "operand" : [ {
                   "name" : "HistologyDiagnosticReports",
@@ -11531,6 +12774,9 @@
                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
                   "value" : "Cervical Histology",
                   "type" : "Literal"
+               }, {
+                  "name" : "Biopsy Report",
+                  "type" : "CodeRef"
                } ]
             }
          }, {
@@ -15039,6 +16285,9 @@
                                        }, {
                                           "name" : "HistologyObservations",
                                           "type" : "ExpressionRef"
+                                       }, {
+                                          "name" : "Biopsy Report",
+                                          "type" : "CodeRef"
                                        } ]
                                     }
                                  }
