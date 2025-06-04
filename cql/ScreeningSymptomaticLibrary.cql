@@ -160,36 +160,51 @@ define HasVisibleCervicalOrVaginalLesion:
 
 define Age21YearsAndYoungerRecommendation:
   {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women under the age of 21, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    recommendation: {
+      'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+      'Cervical cancer is unlikely in women under the age of 21, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    },
+    id: '1.Y.0.0.0'
   }
 
 define NilmCytologyWithinLast12MonthsRecommendation:
   {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    recommendation: {
+      'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+      'Cervical cancer is unlikely in women with negative cervical cytology in the past year, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    },
+    id: '1.1.0.0.0'
   }
 
 define NilmCytologyAndNegativeHpvWithinLast3YearsRecommendation:
   {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    recommendation: {
+      'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+      'Cervical cancer is unlikely in women with negative cervical cytology/HPV cotesting in the past 3 years, therefore Pap testing may be deferred unless the exam is highly suspicious for cervical cancer.'
+    },
+    id: '1.3.0.0.0'
   }
   
 define VisibleLesionRecommendation:
   {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
+    recommendation: {
+      'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+      'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
+    },
+    id: '1.L.0.0.0'
   }
 
 define DefaultRecommendation:
   {
-    'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
-    'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
+    recommendation: {
+      'A diagnostic pelvic exam is recommended for patients with abnormal uterine bleeding.',
+      'If a cervical lesion is seen, a cytology, cotest and/or cervical biopsy should be considered. If there is concern for endometrial cancer or other endometrial pathology, an endometrial biopsy should be considered.'
+    },
+    id: '1.D.0.0.0'
   }
 
 
-define RecommendationText:
+define WhichRecommendationApplies:
   if IsIncludedAndNotExcluded then
     case
       when IsAge21YearsOrYounger then Age21YearsAndYoungerRecommendation
@@ -199,6 +214,18 @@ define RecommendationText:
       else DefaultRecommendation
     end
   else null
+
+define RecommendationText:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.recommendation
+  else
+    null
+
+define RecommendationId:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.id
+  else
+    null
 
 define Citation:
   if RecommendationText is not null then
@@ -214,6 +241,7 @@ define Recommendation:
     short: ActionShort,
     date: Today(),
     details: RecommendationText,
+    id: RecommendationId,
     group: 'Screening: Symptomatic'
   }
   else null
