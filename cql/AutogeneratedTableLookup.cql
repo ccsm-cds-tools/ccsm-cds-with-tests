@@ -185,13 +185,13 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
 
 define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
-  
+
 define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
     Coalesce( // Case 1: Current cytology is fully specified
       SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
+      where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+        and T.history = historyLeadingSpace(ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = currPapVal
         return {
@@ -211,8 +211,8 @@ define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal
     ),
     Coalesce( // Case 2: 'ASC-US, LSIL' or 'High Grade'
       SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
+      where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+        and T.history = historyLeadingSpace(ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = HighGradeOrAscusLsilPap(currPapVal)
         return {
@@ -232,8 +232,8 @@ define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal
     ),
     Coalesce( // Case 3: No recent cytology result
       SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
+      where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+        and T.history = historyLeadingSpace(ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none'))
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = 'ALL'
         return {
@@ -253,8 +253,8 @@ define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal
     ),
       Coalesce( // Case 4: Current cytology is fully specified, no leading space
       SurveillanceTable T
-      where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-        and T.history = ScreeningText(prevHpvVal, prevPapVal, '/', 'none')
+      where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+        and T.history = ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none')
         and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
         and T.pap = currPapVal
         return {
@@ -276,8 +276,8 @@ define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal
 
 define function GetAdjacentRowsTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   SurveillanceTable T
-  where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-    and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
+  where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+    and T.history = historyLeadingSpace(ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none'))
     and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
     and T.pap != currPapVal
     return {
