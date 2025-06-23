@@ -1,0 +1,135 @@
+---
+name: Erica94 Castellanos87
+
+# Scenario: Surveillance minimally abnormal result with no prior abnormal
+data:
+- 
+  resourceType: Patient
+  name: Erica94 Castellanos87
+  gender: female
+  birthDate: 1981-10-25
+  id: Erica94Castellanos87
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "White or Caucasian"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Hispanic or Latino"
+  communication:
+  -
+    language:
+      coding:
+        -
+          system: urn:ietf:bcp:47
+          code: en
+          display: English
+      text: English
+    preferred: true
+  
+  identifier:
+  - 
+    use: usual
+    type:
+      coding:
+      -
+        system: http://terminology.hl7.org/CodeSystem/v2-0203
+        code: MR
+        display: Medical Record Number
+      text: Medical Record Number
+    system: http://hospital.smarthealthit.org
+    value: "MR-3742-2278"
+    
+# HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2025-01-19
+
+# LSIL
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62051000119105 Low grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2025-01-19
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2020-01-02
+  
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2020-01-02
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2016-10-12
+  
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2016-10-12
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2011-08-10
+  
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2011-08-10
+
+results:
+  HasRecentAbnormalScreening: true
+  ManagementRecommendation: 
+    short: 'Surveillance 1-year follow-up'
+    date: '2026-01-19'
+    group: 'General Screening (Table 1)'
+    id: "5.T.1.1.Y"
+    details:
+    - "Primary HPV testing or cotesting is recommended in 1 year from date of most recent test."
+    - "If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test."
+  
+  

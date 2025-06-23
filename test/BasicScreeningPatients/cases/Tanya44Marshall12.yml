@@ -1,0 +1,89 @@
+---
+name: Tanya44 Marshall12
+
+# Scenario: Individual older than 65 who is not adequately screened
+data:
+- 
+  resourceType: Patient
+  name: Tanya44 Marshall12
+  gender: female
+  birthDate: 1959-03-15
+  id: Tanya44Marshall12
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "White or Caucasian"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Not Hispanic or Latino"
+  communication:
+  -
+    language:
+      coding:
+        -
+          system: urn:ietf:bcp:47
+          code: en
+          display: English
+      text: English
+    preferred: true
+  
+  identifier:
+  - 
+    use: usual
+    type:
+      coding:
+      -
+        system: http://terminology.hl7.org/CodeSystem/v2-0203
+        code: MR
+        display: Medical Record Number
+      text: Medical Record Number
+    system: http://hospital.smarthealthit.org
+    value: "MR-8269-6277"
+
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2025-04-18
+  
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2022-04-16
+
+# NILM Pap
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2012-07-05    
+
+results:
+  ScreeningRecommendation: 
+    short: 'Cervical Screening Up To Date'
+    date: '2028-04-18'
+    group: 'Screening: Average Risk'
+    details:
+    - "Cervical cancer screening is recommended."
+    - "It appears this patient is on a screening regimen that includes Cervical Cytology. To meet adequate testing criteria to exit cervical cancer screening, Cervical Cytology is recommended on 2028-04-18."
+    - "Per USPSTF guidelines for individuals older than 65, this patient is due for cervical cancer screening because they have not been adequately screened in the past. Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening."
+    id: "4.O.F.0.0"
+

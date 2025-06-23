@@ -1,0 +1,181 @@
+---
+name: Lisa02 Danvers12
+
+# Scenario: CIN3 with Treatment
+data:
+- 
+  resourceType: Patient
+  name: Lisa02 Danvers12
+  gender: female
+  birthDate: 1990-08-19
+  id: Lisa02Danvers12
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "Black or African American"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Not Hispanic or Latino"
+  communication:
+  -
+    language:
+      coding:
+        -
+          system: urn:ietf:bcp:47
+          code: en
+          display: English
+      text: English
+    preferred: true
+  
+  identifier:
+  - 
+    use: usual
+    type:
+      coding:
+      -
+        system: http://terminology.hl7.org/CodeSystem/v2-0203
+        code: MR
+        display: Medical Record Number
+      text: Medical Record Number
+    system: http://hospital.smarthealthit.org
+    value: "MR-5478-3268"
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2025-05-12
+  status: completed    
+
+# CIN3 Histology
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2025-04-29
+  
+# Colposcopy Procedure
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2025-04-29
+  status: completed
+
+# HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2025-04-08
+
+# ASC-US  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2025-04-08
+
+# LEEP excision
+-
+  resourceType: Procedure
+  code: SNOMED#23140002 Loop electrosurgical excision procedure of cervix (procedure)
+  performedDateTime: 2024-08-11
+  status: completed    
+
+# # CIN3 Histology
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#20365006 Squamous intraepithelial neoplasia, grade III (morphologic abnormality)
+  effectiveDateTime: 2024-07-04
+   
+# Colposcopy Procedure
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2024-07-03
+  status: completed
+
+# HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2025-06-21
+
+# ASC-US  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2024-06-21
+  
+# Ablation Procedure
+-
+  resourceType: Procedure
+  code: SNOMEDCT#78203001 Cryosurgery of lesion of cervix (procedure)
+  performedDateTime: 2023-12-19
+  status: completed    
+
+# CIN2
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285838002 Cervical intraepithelial neoplasia grade 2 (disorder)
+  effectiveDateTime: 2023-12-13
+
+# Colposcopy Procedure
+-
+  resourceType: Procedure
+  code: CPT#57455 Colposcopy of the cervix including upper/adjacent vagina; with biopsy(s) of the cervix
+  performedDateTime: 2023-11-12
+  status: completed    
+      
+# HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2023-11-01
+
+# ASC-US  
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2023-11-01  
+  
+
+results:
+  ManagementRecommendation: 
+    short: 'Cytology'
+    date: '2025-06-23'
+    group: 'Reflex Cytology'
+    details:
+    - "Reflex testing with cervical cytology is indicated."
+    id: "5.O.H.1.1"
+
