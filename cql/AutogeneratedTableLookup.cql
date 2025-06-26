@@ -184,6 +184,9 @@ define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String
     }
 
 define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+  _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
+
+define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
     Coalesce( // Case 1: Current cytology is fully specified
       SurveillanceTable T
@@ -474,6 +477,9 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
     }
 
 define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+  _GetRowTable4(AnyHpv(preBiopsyHpvVal), preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, AnyHpv(currHpvVal), currPapVal)
+
+define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   if biopsyVal = '<CIN1' or biopsyVal = 'CIN1' then
     Coalesce(
       Coalesce( // Case 1: Explicit current cytology
@@ -566,9 +572,9 @@ define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, bio
 
 define function GetAdjacentRowsTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   PostColposcopyTable T
-    where T.preColposcopyResult = HighOrLowGradeResults(preBiopsyHpvVal, preBiopsyPapVal)
+    where T.preColposcopyResult = HighOrLowGradeResults(AnyHpv(preBiopsyHpvVal), preBiopsyPapVal)
       and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
-      and T.hpv = currHpvVal
+      and T.hpv = AnyHpv(currHpvVal)
       and T.pap != currPapVal
       return {
         action: T.management,
@@ -667,7 +673,7 @@ define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal S
     Coalesce( // Case 2: Explicit current cytology
       PostTreatmentTable T
         where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
-          and T.hpv = currHpvVal
+          and T.hpv = AnyHpv(currHpvVal)
           and T.pap = currPapVal
           return {
             action: T.management,
@@ -687,7 +693,7 @@ define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal S
     Coalesce( // Case 3: Current cytology might be specified as 'High Grade'
       PostTreatmentTable T
         where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
-          and T.hpv = currHpvVal
+          and T.hpv = AnyHpv(currHpvVal)
           and T.pap = HighOrLowGradeResults(currHpvVal, currPapVal)
           return {
             action: T.management,
@@ -707,7 +713,7 @@ define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal S
     Coalesce( // Case 4: Current cytology might be specified as 'ASC-US/LSIL'
       PostTreatmentTable T
         where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
-          and T.hpv = currHpvVal
+          and T.hpv = AnyHpv(currHpvVal)
           and T.pap = AscusLsilPap(currPapVal)
           return {
             action: T.management,
