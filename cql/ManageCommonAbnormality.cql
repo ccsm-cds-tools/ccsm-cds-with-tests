@@ -38,8 +38,7 @@ context Patient
 // RECOMMENDATIONS FOR COMMON ABNORMALITIES
 //------------------------------------------------------------------------------
 define HpvDates:
-  Collate.SortedHpvReports H
-  return H.date
+  Collate.HpvDates
 
 define CytologyAloneReports:
   if Exists(HpvDates) then
