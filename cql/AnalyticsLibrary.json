@@ -225,11 +225,21 @@
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                  "name" : "HasAnyCytologyInterpretedAsAscusOrAbove",
                   "value" : {
-                     "name" : "AnyCytologyInterpretedAsAscusOrAbove",
-                     "libraryName" : "CMD",
-                     "type" : "ExpressionRef"
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
                   }
                }, {
                   "name" : "MostRecentBiopsyResult",
@@ -293,9 +303,9 @@
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "name" : "MostRecentCytologyBeforeBiopsy",
+                  "name" : "MostRecentCytologyResultBeforeBiopsy",
                   "value" : {
-                     "name" : "MostRecentCytologyBeforeBiopsy",
+                     "name" : "MostRecentCytologyResultBeforeBiopsy",
                      "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
