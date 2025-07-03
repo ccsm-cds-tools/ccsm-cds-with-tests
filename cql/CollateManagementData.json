@@ -965,6 +965,28 @@
                }
             }
          }, {
+            "name" : "HpvDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedHpvReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "H",
+                     "type" : "Property"
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentHpvReport",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1627,6 +1649,28 @@
                      "path" : "date",
                      "type" : "ByColumn"
                   } ]
+               }
+            }
+         }, {
+            "name" : "CytologyDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "C",
+                     "type" : "Property"
+                  }
                }
             }
          }, {
@@ -2376,6 +2420,28 @@
                }
             }
          }, {
+            "name" : "BiopsyDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "SortedBiopsyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "B",
+                     "type" : "Property"
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentBiopsyReportDate",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2447,6 +2513,39 @@
                   "source" : {
                      "name" : "MostRecentBiopsyReport",
                      "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "FirstBiopsyAfterMostRecentHpvReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "B",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "B",
+                        "type" : "Property"
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentHpvReport",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
                   }
                }
             }

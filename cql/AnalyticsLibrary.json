@@ -29,7 +29,11 @@
             "path" : "DashboardLibrary",
             "version" : "1.0.0"
          }, {
-            "localIdentifier" : "CDM",
+            "localIdentifier" : "CCF",
+            "path" : "CCSMCommonFunctions",
+            "version" : "1.0.0"
+         }, {
+            "localIdentifier" : "CMD",
             "path" : "CollateManagementData",
             "version" : "1.1.0"
          }, {
@@ -108,84 +112,140 @@
                   "name" : "MostRecentHpvResult",
                   "value" : {
                      "name" : "MostRecentHpvResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "SecondMostRecentHpvResult",
                   "value" : {
                      "name" : "SecondMostRecentHpvResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "ThirdMostRecentHpvResult",
                   "value" : {
                      "name" : "ThirdMostRecentHpvResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "FourthMostRecentHpvResult",
                   "value" : {
                      "name" : "FourthMostRecentHpvResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HpvDates",
+                  "value" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "H",
+                        "expression" : {
+                           "name" : "HpvDates",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "ToString",
+                           "operand" : {
+                              "name" : "H",
+                              "type" : "AliasRef"
+                           }
+                        }
+                     }
                   }
                }, {
                   "name" : "MostRecentCytologyCotestResult",
                   "value" : {
                      "name" : "MostRecentCytologyCotestResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "SecondMostRecentCytologyCotestResult",
                   "value" : {
                      "name" : "SecondMostRecentCytologyCotestResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "ThirdMostRecentCytologyCotestResult",
                   "value" : {
                      "name" : "ThirdMostRecentCytologyCotestResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "FourthMostRecentCytologyCotestResult",
                   "value" : {
                      "name" : "FourthMostRecentCytologyCotestResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyDates",
+                  "value" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "C",
+                        "expression" : {
+                           "name" : "CytologyDates",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "ToString",
+                           "operand" : {
+                              "name" : "C",
+                              "type" : "AliasRef"
+                           }
+                        }
+                     }
                   }
                }, {
                   "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
                   "value" : {
                      "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
                   "name" : "CytologyInterpretedAsAscusOrAbove",
                   "value" : {
                      "name" : "CytologyInterpretedAsAscusOrAbove",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                  "name" : "HasAnyCytologyInterpretedAsAscusOrAbove",
                   "value" : {
-                     "name" : "AnyCytologyInterpretedAsAscusOrAbove",
-                     "libraryName" : "CDM",
-                     "type" : "ExpressionRef"
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "AnyCytologyInterpretedAsAscusOrAbove",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
                   }
                }, {
                   "name" : "MostRecentBiopsyResult",
                   "value" : {
                      "name" : "MostRecentBiopsyResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
@@ -194,30 +254,91 @@
                      "type" : "ToString",
                      "operand" : {
                         "name" : "MostRecentBiopsyReportDate",
-                        "libraryName" : "CDM",
+                        "libraryName" : "CMD",
                         "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfFirstBiopsyAfterMostRecentHpvReport",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "FirstBiopsyAfterMostRecentHpvReport",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "BiopsyDates",
+                  "value" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "B",
+                        "expression" : {
+                           "name" : "BiopsyDates",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "return" : {
+                        "expression" : {
+                           "type" : "ToString",
+                           "operand" : {
+                              "name" : "B",
+                              "type" : "AliasRef"
+                           }
+                        }
                      }
                   }
                }, {
                   "name" : "ReferringHpvResult",
                   "value" : {
                      "name" : "ReferringHpvResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "name" : "MostRecentCytologyBeforeBiopsy",
+                  "name" : "MostRecentCytologyResultBeforeBiopsy",
                   "value" : {
-                     "name" : "MostRecentCytologyBeforeBiopsy",
-                     "libraryName" : "CDM",
+                     "name" : "MostRecentCytologyResultBeforeBiopsy",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfMostRecentCytologyBeforeBiopsy",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCytologyBeforeBiopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
                   }
                }, {
                   "name" : "ReferringCytologyResult",
                   "value" : {
                      "name" : "ReferringCytologyResult",
-                     "libraryName" : "CDM",
+                     "libraryName" : "CMD",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfMostRecentReport",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentReport",
+                        "libraryName" : "CMD",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
                   "name" : "DateOfLastCervicalPrecancerTreatment",
@@ -225,7 +346,7 @@
                      "type" : "ToString",
                      "operand" : {
                         "name" : "DateOfLastCervicalPrecancerTreatment",
-                        "libraryName" : "CDM",
+                        "libraryName" : "CMD",
                         "type" : "ExpressionRef"
                      }
                   }
@@ -235,9 +356,174 @@
                      "type" : "ToString",
                      "operand" : {
                         "name" : "MostRecentCytologyReportDate",
-                        "libraryName" : "CDM",
+                        "libraryName" : "CMD",
                         "type" : "ExpressionRef"
                      }
+                  }
+               }, {
+                  "name" : "MostRecentHpvResultPostBiopsy",
+                  "value" : {
+                     "name" : "MostRecentHpvResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentHpvResultPostBiopsy",
+                  "value" : {
+                     "name" : "SecondMostRecentHpvResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentHpvResultPostBiopsy",
+                  "value" : {
+                     "name" : "ThirdMostRecentHpvResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyResultPostBiopsy",
+                  "value" : {
+                     "name" : "MostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentCytologyResultPostBiopsy",
+                  "value" : {
+                     "name" : "SecondMostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentCytologyResultPostBiopsy",
+                  "value" : {
+                     "name" : "ThirdMostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCin2orCin3BiopsyResult",
+                  "value" : {
+                     "path" : "riskTableInput",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCin2orCin3Biopsy",
+                        "libraryName" : "CMD",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "MostRecentCin2orCin3BiopsyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentCin2orCin3Biopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "LastKnownCin3BiopsyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCin3Biopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "LastKnownCin2BiopsyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCin2Biopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "LastKnownAisBiopsyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownAisBiopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "LastKnownHsilUnspecifiedBiopsyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownHsilUnspecifiedBiopsy",
+                           "libraryName" : "CMD",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "MostRecentHpvResultAfterTreatment",
+                  "value" : {
+                     "name" : "MostRecentHpvResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentHpvResultAfterTreatment",
+                  "value" : {
+                     "name" : "SecondMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                  "value" : {
+                     "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentCytologyResultAfterTreatment",
+                  "value" : {
+                     "name" : "MostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                  "value" : {
+                     "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                  "value" : {
+                     "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "CMD",
+                     "type" : "ExpressionRef"
                   }
                } ]
             }
@@ -320,6 +606,31 @@
                         "type" : "ExpressionRef"
                      }
                   }
+               }, {
+                  "name" : "DateOfMostRecentPositiveHpv",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DiagnosticReportDate",
+                        "libraryName" : "CCF",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "MostRecentPositiveHpv",
+                           "libraryName" : "Dash",
+                           "type" : "ExpressionRef"
+                        } ]
+                     }
+                  }
+               }, {
+                  "name" : "DateOfMostRecentNegativeHpv",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfMostRecentNegativeHpv",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                } ]
             }
          }, {
@@ -329,29 +640,6 @@
             "expression" : {
                "type" : "Tuple",
                "element" : [ {
-                  "name" : "HpvDates",
-                  "value" : {
-                     "type" : "Query",
-                     "source" : [ {
-                        "alias" : "H",
-                        "expression" : {
-                           "name" : "HpvDates",
-                           "libraryName" : "MCA",
-                           "type" : "ExpressionRef"
-                        }
-                     } ],
-                     "relationship" : [ ],
-                     "return" : {
-                        "expression" : {
-                           "type" : "ToString",
-                           "operand" : {
-                              "name" : "H",
-                              "type" : "AliasRef"
-                           }
-                        }
-                     }
-                  }
-               }, {
                   "name" : "CytologyAloneInRecentHistory",
                   "value" : {
                      "name" : "CytologyAloneInRecentHistory",
@@ -397,6 +685,13 @@
                   "name" : "HpvInterpretedAsPositive",
                   "value" : {
                      "name" : "HpvInterpretedAsPositive",
+                     "libraryName" : "MCA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentScreeningResultIsPositive",
+                  "value" : {
+                     "name" : "MostRecentScreeningResultIsPositive",
                      "libraryName" : "MCA",
                      "type" : "ExpressionRef"
                   }
@@ -462,6 +757,75 @@
                      "libraryName" : "MCA",
                      "type" : "ExpressionRef"
                   }
+               }, {
+                  "name" : "LastKnownHsilCytologyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownHsilCytology",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "HasAnyAscusHpvPositiveCotest",
+                  "value" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "AnyAscusHpvPositiveCotest",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "DateOfLastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "DateOfLastKnownLsilBeforeMostRecentMostRecentHpvReport",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownLsilBeforeMostRecentMostRecentHpvReport",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "DateOfLastKnownCytologyInterpretedAsAscusOrAbove",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAscusOrAbove",
+                           "libraryName" : "MCA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
                } ]
             }
          }, {
@@ -521,11 +885,284 @@
             "expression" : {
                "type" : "Tuple",
                "element" : [ {
+                  "name" : "DateOfLastKnownCytologyInterpretedAsAgc",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAgc",
+                           "libraryName" : "MRA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
                   "name" : "HasPositiveHpvAfterTreatmentForHighGradeResult",
                   "value" : {
                      "name" : "HasPositiveHpvAfterTreatmentForHighGradeResult",
                      "libraryName" : "MRA",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult",
+                  "value" : {
+                     "name" : "AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologyInterpretedAsCin1OrNormal",
+                  "value" : {
+                     "name" : "HistologyInterpretedAsCin1OrNormal",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfLastKnownCytologyInterpretedAsAscHInPast5Years",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsAscHInPast5Years",
+                           "libraryName" : "MRA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }
+               }, {
+                  "name" : "HasPersistentAscHBeforeTreatment",
+                  "value" : {
+                     "name" : "HasPersistentAscHBeforeTreatment",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsAgcFavorNeoplasia",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsAgcFavorNeoplasia",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsAis",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsAis",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsHsil",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsHsil",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsAtypicalEndocervicalCells",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsAtypicalEndocervicalCells",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsEndocervicalAis",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsEndocervicalAis",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsEndocervicalCellsFavorNeoplasia",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsAscus",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsAscus",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsLsil",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsLsil",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyUnsatisfactory",
+                  "value" : {
+                     "name" : "CytologyUnsatisfactory",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyAbsentTransformationZone",
+                  "value" : {
+                     "name" : "CytologyAbsentTransformationZone",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsNilm",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsNilm",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentCytologyInterpretedAsNilm",
+                  "value" : {
+                     "name" : "SecondMostRecentCytologyInterpretedAsNilm",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsBenignEndometrialCells",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsBenignEndometrialCells",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsBenignGlandularCells",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsBenignGlandularCells",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsEndometrialStromalCells",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsEndometrialStromalCells",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "CytologyInterpretedAsHistiocytes",
+                  "value" : {
+                     "name" : "CytologyInterpretedAsHistiocytes",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "PositiveHpv16or18Cotest",
+                  "value" : {
+                     "name" : "PositiveHpv16or18Cotest",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologyInterpretedAsCin2",
+                  "value" : {
+                     "name" : "HistologyInterpretedAsCin2",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologyInterpretedAsCin3",
+                  "value" : {
+                     "name" : "HistologyInterpretedAsCin3",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologyInterpretedAsAis",
+                  "value" : {
+                     "name" : "HistologyInterpretedAsAis",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                  "value" : {
+                     "name" : "HistologyInterpretedAsUnspecifiedHsil",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentBiopsyResult",
+                  "value" : {
+                     "path" : "riskTableInput",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "SecondMostRecentBiopsyReport",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "AnyHistologyInterpretedAsCin2",
+                  "value" : {
+                     "name" : "AnyHistologyInterpretedAsCin2",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "AnyHistologyInterpretedAsCin3",
+                  "value" : {
+                     "name" : "AnyHistologyInterpretedAsCin3",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                  "value" : {
+                     "name" : "SecondMostRecentHistologyInterpretedAsCin1OrNormal",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                  "value" : {
+                     "name" : "HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentSurveillanceTestNegative",
+                  "value" : {
+                     "name" : "MostRecentSurveillanceTestNegative",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "HasTwoNegativeHsilSurveillanceTests",
+                  "value" : {
+                     "name" : "HasTwoNegativeHsilSurveillanceTests",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "SecondNegativeHsilSurveillanceTestDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "SecondNegativeHsilSurveillanceTestDate",
+                        "libraryName" : "MRA",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfLastKnownCytologyInterpretedAsHsil",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsHsil",
+                           "libraryName" : "MRA",
+                           "type" : "ExpressionRef"
+                        }
+                     }
                   }
                }, {
                   "name" : "HasPremenopausalObservationOrCondition",
@@ -649,6 +1286,13 @@
                      "type" : "ExpressionRef"
                   }
                }, {
+                  "name" : "InitialIntensiveSurveillancePeriod",
+                  "value" : {
+                     "name" : "InitialIntensiveSurveillancePeriod",
+                     "libraryName" : "MRA",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
                   "name" : "HasHistologyAfterTreatmentForHighGradeResult",
                   "value" : {
                      "name" : "HasHistologyAfterTreatmentForHighGradeResult",
@@ -671,6 +1315,47 @@
             "expression" : {
                "type" : "Tuple",
                "element" : [ {
+                  "name" : "HasSubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology",
+                  "value" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               }, {
+                  "name" : "HasSubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology",
+                  "value" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology",
+                           "libraryName" : "MSP",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  }
+               }, {
+                  "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
+                  "value" : {
+                     "name" : "SecondMostRecentCytologyInterpretedAsAscHOrHsil",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
                   "name" : "BiopsySinceMostRecentCytology",
                   "value" : {
                      "name" : "BiopsySinceMostRecentCytology",
@@ -741,6 +1426,16 @@
                      }
                   }
                }, {
+                  "name" : "MostRecentCauseForHysterectomyDate",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "MostRecentCauseForHysterectomyDate",
+                        "libraryName" : "MSP",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
                   "name" : "HysterectomyPerformedForTreatment",
                   "value" : {
                      "name" : "HysterectomyPerformedForTreatment",
@@ -758,6 +1453,13 @@
                   "name" : "WhichPopulationMadeTheRecommendation",
                   "value" : {
                      "name" : "WhichPopulationMadeTheRecommendation",
+                     "libraryName" : "MSP",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "MostRecentHpvReportWasWithinPastFiveYears",
+                  "value" : {
+                     "name" : "MostRecentHpvReportWasWithinPastFiveYears",
                      "libraryName" : "MSP",
                      "type" : "ExpressionRef"
                   }
@@ -859,6 +1561,36 @@
                      "type" : "ToString",
                      "operand" : {
                         "name" : "DateOfMostRecentNegativeCotest",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "ProposedDateOfNextCytology",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "ProposedDateOfNextCytology",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "ProposedDateOfNextHpvTest",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "ProposedDateOfNextHpvTest",
+                        "libraryName" : "SAR",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "ProposedDateOfNextCotest",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "ProposedDateOfNextCotest",
                         "libraryName" : "SAR",
                         "type" : "ExpressionRef"
                      }
@@ -989,6 +1721,57 @@
                      "name" : "LastCytologyWasCotest",
                      "libraryName" : "SIC",
                      "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "OneNilmCytologySinceImmunosuppressionOnset",
+                  "value" : {
+                     "name" : "OneNilmCytologySinceImmunosuppressionOnset",
+                     "libraryName" : "SIC",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "TwoNilmCytologiesSinceImmunosuppressionOnset",
+                  "value" : {
+                     "name" : "TwoNilmCytologiesSinceImmunosuppressionOnset",
+                     "libraryName" : "SIC",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "ThreeNilmCytologiesSinceImmunosuppressionOnset",
+                  "value" : {
+                     "name" : "ThreeNilmCytologiesSinceImmunosuppressionOnset",
+                     "libraryName" : "SIC",
+                     "type" : "ExpressionRef"
+                  }
+               }, {
+                  "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfFirstNilmCytologyAfterImmunosuppressionOnset",
+                        "libraryName" : "SIC",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfSecondNilmCytologyAfterImmunosuppressionOnset",
+                        "libraryName" : "SIC",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                  "value" : {
+                     "type" : "ToString",
+                     "operand" : {
+                        "name" : "DateOfThirdNilmCytologyAfterImmunosuppressionOnset",
+                        "libraryName" : "SIC",
+                        "type" : "ExpressionRef"
+                     }
                   }
                } ]
             }

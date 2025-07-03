@@ -112,6 +112,10 @@ define SortedHpvReports:
   }
   sort by date desc
 
+define HpvDates:
+  SortedHpvReports H
+  return H.date
+
 define MostRecentHpvReport:
   if Count(SortedHpvReports) > 0 then
     if SortedHpvReports[0].date included in HPVTestingIntervalLookBack(Today()) then
@@ -181,6 +185,11 @@ define SortedCytologyReports:
     date: Common.DiagnosticReportDate(C)
   }
   sort by date desc
+
+define CytologyDates:
+  SortedCytologyReports C
+  return C.date
+    
 
 // Edge Cases:
 // DONE: 1. HPV but no cytology (solution: just use HPV, unless most recent result is primary HPV in which case reflex cytology testing is recommended)
@@ -301,6 +310,10 @@ define SortedBiopsyReports:
   }
   sort by date desc
 
+define BiopsyDates:
+  SortedBiopsyReports B
+  return B.date
+  
 define MostRecentBiopsyReport:
   if Count(SortedBiopsyReports) > 0 then
       SortedBiopsyReports[0]
@@ -319,6 +332,13 @@ define MostRecentBiopsyResult:
 define MostRecentBiopsyReferralPeriod:
   Interval[MostRecentBiopsyReport.date - BiopsyReferralPeriod, MostRecentBiopsyReport.date)
 
+define FirstBiopsyAfterMostRecentHpvReport:
+  Last(  
+    (SortedBiopsyReports) B 
+    where B.date after MostRecentHpvReport.date
+  )
+  
+  
 define ReferringHpvResult:
   if MostRecentHpvReport.date included in MostRecentBiopsyReferralPeriod then
     MostRecentHpvResult

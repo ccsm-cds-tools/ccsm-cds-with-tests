@@ -8,7 +8,8 @@ using FHIR version '4.0.1'
 
 // Libraries that we will perform analytics on
 include DashboardLibrary version '1.0.0' called Dash
-include CollateManagementData version '1.1.0' called CDM
+include CCSMCommonFunctions version '1.0.0' called CCF
+include CollateManagementData version '1.1.0' called CMD
 include ManageCommonAbnormality version '1.1.0' called MCA
 include ManagementLibrary version '1.0.0' called Management
 include ManageRareAbnormality version '1.1.0' called MRA
@@ -31,24 +32,49 @@ context Patient
 //------------------------------------------------------------------------------
 define CollateManagementDataAnalytics:
 {
-  MostRecentHpvResult: CDM.MostRecentHpvResult,
-  SecondMostRecentHpvResult: CDM.SecondMostRecentHpvResult,
-  ThirdMostRecentHpvResult: CDM.ThirdMostRecentHpvResult,
-  FourthMostRecentHpvResult: CDM.FourthMostRecentHpvResult,
-  MostRecentCytologyCotestResult: CDM.MostRecentCytologyCotestResult,
-  SecondMostRecentCytologyCotestResult: CDM.SecondMostRecentCytologyCotestResult,
-  ThirdMostRecentCytologyCotestResult: CDM.ThirdMostRecentCytologyCotestResult,
-  FourthMostRecentCytologyCotestResult: CDM.FourthMostRecentCytologyCotestResult,
-  MostRecentCytologyReportWasWithinPastFiveYears: CDM.MostRecentCytologyReportWasWithinPastFiveYears,
-  CytologyInterpretedAsAscusOrAbove: CDM.CytologyInterpretedAsAscusOrAbove,
-  AnyCytologyInterpretedAsAscusOrAbove: CDM.AnyCytologyInterpretedAsAscusOrAbove,
-  MostRecentBiopsyResult: CDM.MostRecentBiopsyResult,
-  MostRecentBiopsyReportDate: ToString(CDM.MostRecentBiopsyReportDate),
-  ReferringHpvResult: CDM.ReferringHpvResult,
-  MostRecentCytologyBeforeBiopsy: CDM.MostRecentCytologyBeforeBiopsy,
-  ReferringCytologyResult: CDM.ReferringCytologyResult,
-  DateOfLastCervicalPrecancerTreatment: ToString(CDM.DateOfLastCervicalPrecancerTreatment),
-  MostRecentCytologyReportDate: ToString(CDM.MostRecentCytologyReportDate)
+  MostRecentHpvResult: CMD.MostRecentHpvResult,
+  SecondMostRecentHpvResult: CMD.SecondMostRecentHpvResult,
+  ThirdMostRecentHpvResult: CMD.ThirdMostRecentHpvResult,
+  FourthMostRecentHpvResult: CMD.FourthMostRecentHpvResult,
+  HpvDates: CMD.HpvDates H return ToString(H),
+  MostRecentCytologyCotestResult: CMD.MostRecentCytologyCotestResult,
+  SecondMostRecentCytologyCotestResult: CMD.SecondMostRecentCytologyCotestResult,
+  ThirdMostRecentCytologyCotestResult: CMD.ThirdMostRecentCytologyCotestResult,
+  FourthMostRecentCytologyCotestResult: CMD.FourthMostRecentCytologyCotestResult,
+  CytologyDates: CMD.CytologyDates C return ToString(C),
+  MostRecentCytologyReportWasWithinPastFiveYears: CMD.MostRecentCytologyReportWasWithinPastFiveYears,
+  CytologyInterpretedAsAscusOrAbove: CMD.CytologyInterpretedAsAscusOrAbove,
+  HasAnyCytologyInterpretedAsAscusOrAbove: Count(CMD.AnyCytologyInterpretedAsAscusOrAbove) > 0,
+  MostRecentBiopsyResult: CMD.MostRecentBiopsyResult,
+  MostRecentBiopsyReportDate: ToString(CMD.MostRecentBiopsyReportDate),
+  DateOfFirstBiopsyAfterMostRecentHpvReport: ToString(CMD.FirstBiopsyAfterMostRecentHpvReport.date),
+  BiopsyDates: CMD.BiopsyDates B return ToString(B),
+  ReferringHpvResult: CMD.ReferringHpvResult,
+  MostRecentCytologyResultBeforeBiopsy: CMD.MostRecentCytologyResultBeforeBiopsy,
+  DateOfMostRecentCytologyBeforeBiopsy: ToString(CMD.MostRecentCytologyBeforeBiopsy.date),
+  ReferringCytologyResult: CMD.ReferringCytologyResult,
+  DateOfMostRecentReport: ToString(CMD.DateOfMostRecentReport),
+  DateOfLastCervicalPrecancerTreatment: ToString(CMD.DateOfLastCervicalPrecancerTreatment),
+  MostRecentCytologyReportDate: ToString(CMD.MostRecentCytologyReportDate),
+  MostRecentHpvResultPostBiopsy: CMD.MostRecentHpvResultPostBiopsy,
+  SecondMostRecentHpvResultPostBiopsy: CMD.SecondMostRecentHpvResultPostBiopsy,
+  ThirdMostRecentHpvResultPostBiopsy: CMD.ThirdMostRecentHpvResultPostBiopsy,
+  MostRecentCytologyResultPostBiopsy: CMD.MostRecentCytologyResultPostBiopsy,
+  SecondMostRecentCytologyResultPostBiopsy: CMD.SecondMostRecentCytologyResultPostBiopsy,
+  ThirdMostRecentCytologyResultPostBiopsy: CMD.ThirdMostRecentCytologyResultPostBiopsy,
+  MostRecentCin2orCin3BiopsyResult: CMD.MostRecentCin2orCin3Biopsy.riskTableInput,
+  MostRecentCin2orCin3BiopsyDate: ToString(CMD.MostRecentCin2orCin3Biopsy.date),
+  LastKnownCin3BiopsyDate: ToString(CMD.LastKnownCin3Biopsy.date),
+  LastKnownCin2BiopsyDate: ToString(CMD.LastKnownCin2Biopsy.date),
+  LastKnownAisBiopsyDate: ToString(CMD.LastKnownAisBiopsy.date),
+  LastKnownHsilUnspecifiedBiopsyDate: ToString(CMD.LastKnownHsilUnspecifiedBiopsy.date),
+  MostRecentHpvResultAfterTreatment: CMD.MostRecentHpvResultAfterTreatment,
+  SecondMostRecentHpvResultAfterTreatment: CMD.SecondMostRecentHpvResultAfterTreatment,
+  ThirdMostRecentHpvResultAfterTreatment: CMD.ThirdMostRecentHpvResultAfterTreatment,
+  MostRecentCytologyResultAfterTreatment: CMD.MostRecentCytologyResultAfterTreatment,
+  SecondMostRecentCytologyResultAfterTreatment: CMD.SecondMostRecentCytologyResultAfterTreatment,
+  ThirdMostRecentCytologyResultAfterTreatment: CMD.ThirdMostRecentCytologyResultAfterTreatment
+  
 }
 
 define DashboardLibraryAnalytics:
@@ -62,12 +88,13 @@ define DashboardLibraryAnalytics:
   HasRecentAbnormalHistology: Dash.HasRecentAbnormalHistology,
   Immunocompromised: Dash.Immunocompromised,
   MostRecentDistinctImmunocompromisedEvent: Dash.MostRecentDistinctImmunocompromisedEvent,
-  MostRecentDistinctImmunocompromisedEventDate: ToString(Dash.MostRecentDistinctImmunocompromisedEventDate)
+  MostRecentDistinctImmunocompromisedEventDate: ToString(Dash.MostRecentDistinctImmunocompromisedEventDate),
+  DateOfMostRecentPositiveHpv: ToString(CCF.DiagnosticReportDate(Dash.MostRecentPositiveHpv)),
+  DateOfMostRecentNegativeHpv: ToString(SAR.DateOfMostRecentNegativeHpv)
 }
 
 define ManageCommonAbnormalityAnalytics:
 {
-  HpvDates: MCA.HpvDates H return ToString(H),
   CytologyAloneInRecentHistory: MCA.CytologyAloneInRecentHistory,
   AbnormalCytologyAloneInRecentHistory: MCA.AbnormalCytologyAloneInRecentHistory,
   RarelyScreenedTreatmentRecommendation: MCA.RarelyScreenedTreatmentRecommendation,
@@ -75,6 +102,7 @@ define ManageCommonAbnormalityAnalytics:
   WhichTableMadeTheRecommendation: MCA.WhichTableMadeTheRecommendation,
   MostRecentCytologyIsNotACotest: MCA.MostRecentCytologyIsNotACotest,
   HpvInterpretedAsPositive: MCA.HpvInterpretedAsPositive,
+  MostRecentScreeningResultIsPositive: MCA.MostRecentScreeningResultIsPositive,
   SecondMostRecentHpvInterpretedAsPositive: MCA.SecondMostRecentHpvInterpretedAsPositive,
   DateOfMostRecentPositiveScreeningResult: ToString(MCA.DateOfMostRecentPositiveScreeningResult),
   DateOfMostRecentHpvReport: ToString(MCA.DateOfMostRecentHpvReport),
@@ -82,7 +110,12 @@ define ManageCommonAbnormalityAnalytics:
   HighRiskHPVPositiveResults: MCA.HighRiskHPVPositiveResults,
   PreviousCytologyOrSurveillanceIsOldOrAbsent: MCA.PreviousCytologyOrSurveillanceIsOldOrAbsent,
   IsRarelyScreenedPatient: MCA.IsRarelyScreenedPatient,
-  RelevantRow: MCA.RelevantRow
+  RelevantRow: MCA.RelevantRow,
+  LastKnownHsilCytologyDate: ToString(MCA.LastKnownHsilCytology.date),
+  HasAnyAscusHpvPositiveCotest: MCA.AnyAscusHpvPositiveCotest is not null,
+  DateOfLastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult: ToString(MCA.LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date),
+  DateOfLastKnownLsilBeforeMostRecentMostRecentHpvReport: ToString(MCA.LastKnownLsilBeforeMostRecentMostRecentHpvReport.date),
+  DateOfLastKnownCytologyInterpretedAsAscusOrAbove: ToString(MCA.LastKnownCytologyInterpretedAsAscusOrAbove.date)
 }
 
 define ManagementLibraryAnalytics:
@@ -97,7 +130,42 @@ define ManagementLibraryAnalytics:
 
 define ManageRareAbnormalityAnalytics:
 {
+  DateOfLastKnownCytologyInterpretedAsAgc: ToString(MRA.LastKnownCytologyInterpretedAsAgc.date),
   HasPositiveHpvAfterTreatmentForHighGradeResult: MRA.HasPositiveHpvAfterTreatmentForHighGradeResult,
+  AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult: MRA.AnyCytologyInterpretedAsAscusOrAboveAfterTreatmentForHighGradeResult,
+  HistologyInterpretedAsCin1OrNormal: MRA.HistologyInterpretedAsCin1OrNormal,
+  DateOfLastKnownCytologyInterpretedAsAscHInPast5Years: ToString(MRA.LastKnownCytologyInterpretedAsAscHInPast5Years.date),
+  HasPersistentAscHBeforeTreatment: MRA.HasPersistentAscHBeforeTreatment,
+  CytologyInterpretedAsAgcFavorNeoplasia: MRA.CytologyInterpretedAsAgcFavorNeoplasia,
+  CytologyInterpretedAsAis: MRA.CytologyInterpretedAsAis,
+  CytologyInterpretedAsHsil: MRA.CytologyInterpretedAsHsil,
+  CytologyInterpretedAsAtypicalEndocervicalCells: MRA.CytologyInterpretedAsAtypicalEndocervicalCells,
+  CytologyInterpretedAsEndocervicalAis: MRA.CytologyInterpretedAsEndocervicalAis,
+  CytologyInterpretedAsEndocervicalCellsFavorNeoplasia: MRA.CytologyInterpretedAsEndocervicalCellsFavorNeoplasia,
+  CytologyInterpretedAsAscus: MRA.CytologyInterpretedAsAscus,
+  CytologyInterpretedAsLsil: MRA.CytologyInterpretedAsLsil,
+  CytologyUnsatisfactory: MRA.CytologyUnsatisfactory,
+  CytologyAbsentTransformationZone: MRA.CytologyAbsentTransformationZone,
+  CytologyInterpretedAsNilm: MRA.CytologyInterpretedAsNilm,
+  SecondMostRecentCytologyInterpretedAsNilm: MRA.SecondMostRecentCytologyInterpretedAsNilm,
+  CytologyInterpretedAsBenignEndometrialCells: MRA.CytologyInterpretedAsBenignEndometrialCells,
+  CytologyInterpretedAsBenignGlandularCells: MRA.CytologyInterpretedAsBenignGlandularCells,
+  CytologyInterpretedAsEndometrialStromalCells: MRA.CytologyInterpretedAsEndometrialStromalCells,
+  CytologyInterpretedAsHistiocytes: MRA.CytologyInterpretedAsHistiocytes,
+  PositiveHpv16or18Cotest: MRA.PositiveHpv16or18Cotest,
+  HistologyInterpretedAsCin2: MRA.HistologyInterpretedAsCin2,
+  HistologyInterpretedAsCin3: MRA.HistologyInterpretedAsCin3,
+  HistologyInterpretedAsAis: MRA.HistologyInterpretedAsAis,
+  HistologyInterpretedAsUnspecifiedHsil: MRA.HistologyInterpretedAsUnspecifiedHsil,
+  SecondMostRecentBiopsyResult: MRA.SecondMostRecentBiopsyReport.riskTableInput,
+  AnyHistologyInterpretedAsCin2: MRA.AnyHistologyInterpretedAsCin2,
+  AnyHistologyInterpretedAsCin3: MRA.AnyHistologyInterpretedAsCin3,
+  SecondMostRecentHistologyInterpretedAsCin1OrNormal: MRA.SecondMostRecentHistologyInterpretedAsCin1OrNormal,
+  HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy: MRA.HasHistologyInterpretedAsUnspecifiedHsilOrCin2BeforeMostRecentBiopsy,
+  MostRecentSurveillanceTestNegative: MRA.MostRecentSurveillanceTestNegative,
+  HasTwoNegativeHsilSurveillanceTests: MRA.HasTwoNegativeHsilSurveillanceTests,
+  SecondNegativeHsilSurveillanceTestDate: ToString(MRA.SecondNegativeHsilSurveillanceTestDate),
+  DateOfLastKnownCytologyInterpretedAsHsil: ToString(MRA.LastKnownCytologyInterpretedAsHsil.date),
   HasPremenopausalObservationOrCondition: MRA.HasPremenopausalObservationOrCondition,
   HasPostmenopausalObservationOrCondition: MRA.HasPostmenopausalObservationOrCondition,
   AbsenceOrRemovalOfCervix: MRA.AbsenceOrRemovalOfCervix,
@@ -114,11 +182,15 @@ define ManageRareAbnormalityAnalytics:
   HasTreatmentForHighGradeHistologyOrCytology: MRA.HasTreatmentForHighGradeHistologyOrCytology,
   TreatmentForHighGradeHistologyOrCytologyDate: ToString(MRA.TreatmentForHighGradeHistologyOrCytologyDate),
   HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy: MRA.HasFirstNegativeSurveillanceTestAfterMostRecentBiopsy,
+  InitialIntensiveSurveillancePeriod: MRA.InitialIntensiveSurveillancePeriod,
   HasHistologyAfterTreatmentForHighGradeResult: MRA.HasHistologyAfterTreatmentForHighGradeResult,
   WhichRarityMadeTheRecommendation: MRA.WhichRarityMadeTheRecommendation
 }
 define ManageSpecialPopulationAnalytics:
 {
+  HasSubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology: Count(MSP.SubsequentLowGradeHistologyReportsSinceMostRecentHsilHistology) > 0,
+  HasSubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology: Count(MSP.SubsequentLowGradeCytologyReportsSinceMostRecentHsilHistology) > 0,
+  SecondMostRecentCytologyInterpretedAsAscHOrHsil: MSP.SecondMostRecentCytologyInterpretedAsAscHOrHsil,
   BiopsySinceMostRecentCytology: MSP.BiopsySinceMostRecentCytology,
   PregnancyOnset: MSP.PregnancyOnset,
   HistologicAisDuringPregnancy: MSP.HistologicAisDuringPregnancy,
@@ -126,9 +198,11 @@ define ManageSpecialPopulationAnalytics:
   HighGradePreCancerCervicalLesionDate: ToString(MSP.HighGradePreCancerCervicalLesionDate.date),
   CervicalCancerDiagnosisDate: ToString(MSP.CervicalCancerDiagnosisDate.date),
   HighGradeOrCancerHistologyResultsDate: ToString(MSP.HighGradeOrCancerHistologyResultsDate.date),
+  MostRecentCauseForHysterectomyDate: ToString(MSP.MostRecentCauseForHysterectomyDate),
   HysterectomyPerformedForTreatment: MSP.HysterectomyPerformedForTreatment,
   InitialIntensiveSurveillancePeriodPostHysterectomy: MSP.InitialIntensiveSurveillancePeriodPostHysterectomy,
-  WhichPopulationMadeTheRecommendation: MSP.WhichPopulationMadeTheRecommendation
+  WhichPopulationMadeTheRecommendation: MSP.WhichPopulationMadeTheRecommendation,
+  MostRecentHpvReportWasWithinPastFiveYears: MSP.MostRecentHpvReportWasWithinPastFiveYears
 }
 
 define ScreeningLibraryAnalytics:
@@ -148,6 +222,9 @@ define ScreeningAverageRiskLibraryAnalytics:
   DateOfMostRecentNilmCytology: ToString(SAR.DateOfMostRecentNilmCytology),
   DateOfMostRecentNegativeHpv: ToString(SAR.DateOfMostRecentNegativeHpv),
   DateOfMostRecentNegativeCotest: ToString(SAR.DateOfMostRecentNegativeCotest),
+  ProposedDateOfNextCytology: ToString(SAR.ProposedDateOfNextCytology),
+  ProposedDateOfNextHpvTest: ToString(SAR.ProposedDateOfNextHpvTest),
+  ProposedDateOfNextCotest: ToString(SAR.ProposedDateOfNextCotest),
   LastScreeningType: SAR.LastScreeningType,
   ProposedScreeningDate: ToString(SAR.ProposedScreeningDate),
   RecommendImmediateCervicalCytology: SAR.RecommendImmediateCervicalCytology,
@@ -170,7 +247,13 @@ define ScreeningImmunocompromisedLibraryAnalytics:
 {
   CompletedAnnualCytologyTestSequence: SIC.CompletedAnnualCytologyTestSequence,
   DateOfLastCytology: ToString(SIC.DateOfLastCytology),
-  LastCytologyWasCotest: SIC.LastCytologyWasCotest
+  LastCytologyWasCotest: SIC.LastCytologyWasCotest,
+  OneNilmCytologySinceImmunosuppressionOnset: SIC.OneNilmCytologySinceImmunosuppressionOnset,
+  TwoNilmCytologiesSinceImmunosuppressionOnset: SIC.TwoNilmCytologiesSinceImmunosuppressionOnset,
+  ThreeNilmCytologiesSinceImmunosuppressionOnset: SIC.ThreeNilmCytologiesSinceImmunosuppressionOnset,
+  DateOfFirstNilmCytologyAfterImmunosuppressionOnset: ToString(SIC.DateOfFirstNilmCytologyAfterImmunosuppressionOnset),
+  DateOfSecondNilmCytologyAfterImmunosuppressionOnset: ToString(SIC.DateOfSecondNilmCytologyAfterImmunosuppressionOnset),
+  DateOfThirdNilmCytologyAfterImmunosuppressionOnset: ToString(SIC.DateOfThirdNilmCytologyAfterImmunosuppressionOnset)
 }
 
 define ScreeningSymptomaticLibraryAnalytics:
