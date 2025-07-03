@@ -276,8 +276,8 @@ define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal
 
 define function GetAdjacentRowsTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   SurveillanceTable T
-  where T.history_prev_2 = ScreeningText(prev2HpvVal, prev2PapVal, '/', 'none')
-    and T.history = historyLeadingSpace(ScreeningText(prevHpvVal, prevPapVal, '/', 'none'))
+  where T.history_prev_2 = ScreeningText(AnyHpv(prev2HpvVal), prev2PapVal, '/', 'none')
+    and T.history = historyLeadingSpace(ScreeningText(AnyHpv(prevHpvVal), prevPapVal, '/', 'none'))
     and T.hpv = hpv18PlusAlternativeSpelling(currHpvVal)
     and T.pap != currPapVal
     return {
