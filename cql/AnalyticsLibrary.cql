@@ -97,6 +97,8 @@ define ManageCommonAbnormalityAnalytics:
 {
   CytologyAloneInRecentHistory: MCA.CytologyAloneInRecentHistory,
   AbnormalCytologyAloneInRecentHistory: MCA.AbnormalCytologyAloneInRecentHistory,
+  LastKnownCytologyAloneResult: MCA.LastKnownCytologyAloneReport.riskTableInput,
+  DateOfLastKnownCytologyAloneReport: ToString(MCA.LastKnownCytologyAloneReport.date),
   RarelyScreenedTreatmentRecommendation: MCA.RarelyScreenedTreatmentRecommendation,
   TableRecommendation: MCA.TableRecommendation,
   WhichTableMadeTheRecommendation: MCA.WhichTableMadeTheRecommendation,
