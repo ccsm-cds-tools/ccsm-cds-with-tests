@@ -111,12 +111,27 @@ define Excluded:
 define IsIncludedAndNotExcluded:
   IsIncluded and not Excluded
 
-define RecommendationText:
+define WhichRecommendationApplies:
   if IsIncludedAndNotExcluded then
     { 
-      'Consider individualized care for this patient.',
-      'ACOG guidelines recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
+      recommendation: {
+        'Consider individualized care for this patient.',
+        'ACOG guidelines recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.'
+      },
+      id: '2.S.0.0.0'
     }
+  else
+    null
+
+define RecommendationText:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.recommendation
+  else
+    null
+
+define RecommendationId:
+  if (WhichRecommendationApplies is not null) then
+    WhichRecommendationApplies.id
   else
     null
 
@@ -134,6 +149,7 @@ define Recommendation:
     short: ActionShort,
     date: Today(),
     details: RecommendationText,
+    id: RecommendationId,
     group: 'Screening: DES Exposure'
   }
   else null

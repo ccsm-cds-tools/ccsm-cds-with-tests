@@ -218,6 +218,7 @@ define OrderDate:
 define DecisionAids:
   {
     recommendation: ScreeningRecommendation.short,
+    recommendationId: ScreeningRecommendation.id,
     recommendationGroup: ScreeningRecommendation.group,
     recommendationDetails: ScreeningRecommendation.details,
     recommendationDate: OrderDate,
@@ -229,6 +230,7 @@ define DecisionAids:
 define DecisionAidsString:
   '{' +
   '"recommendation": "' + DecisionAids.recommendation + '", ' +
+  '"recommendationId": "' & DecisionAids.recommendationId & '", ' &
   '"recommendationGroup": "' + DecisionAids.recommendationGroup + '", ' +
   '"recommendationDetails": "' + '[' + Combine(DecisionAids.recommendationDetails, ', ') + ']' + '", ' +
   '"recommendationDate": "' + ToString(DecisionAids.recommendationDate) + '", ' +
