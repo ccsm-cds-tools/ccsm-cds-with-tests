@@ -1,0 +1,32 @@
+---
+name: Histology Unknown Result Code
+
+# Histology DiagnosticReport with UNK result
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# DiagnosticReport with unknown conclusionCode
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - NULL FLAVOR#UNK Unknown
+  effectiveDateTime: 2021-05-01
+  
+results:
+  HistologyDiagnosticReports: $should have length 1
+  PertinentObservationsSummary: $should have length 0
+  HistologyDiagnosticReportsSummary: $should have length 1
+  DiagnosticReportsSummary: $should have length 1
+  ErrorDiagnosticReportWithNoConclusonCodes: null
+  ErrorDiagnosticReportWithUnsupportedConclusonCode: 'A laboratory test was found with an unexpected result code. Please review patient record to resolve.'

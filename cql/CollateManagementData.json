@@ -321,13 +321,25 @@
                   "elementType" : {
                      "type" : "TupleTypeSpecifier",
                      "element" : [ {
-                        "name" : "text",
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "label",
                         "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}String",
                            "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "rank",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "grade",
                         "elementType" : {
                            "name" : "{urn:hl7-org:elm-types:r1}Integer",
                            "type" : "NamedTypeSpecifier"
@@ -419,7 +431,7 @@
                }
             }
          }, {
-            "name" : "LookbackReports",
+            "name" : "BiopsyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -427,7 +439,7 @@
                "libraryName" : "Common",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "AllCompletedDiagnosticReport",
+                  "name" : "HistologyDiagnosticReports",
                   "libraryName" : "Dash",
                   "type" : "ExpressionRef"
                }, {
@@ -445,7 +457,7 @@
                "type" : "ExpressionRef"
             }
          }, {
-            "name" : "SortedReports",
+            "name" : "SortedBiopsyReports",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -453,7 +465,7 @@
                "source" : [ {
                   "alias" : "B",
                   "expression" : {
-                     "name" : "LookbackReports",
+                     "name" : "BiopsyReports",
                      "type" : "ExpressionRef"
                   }
                } ],
@@ -464,46 +476,50 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "BiopsyInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "B",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HistologyObservations",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "name" : "Biopsy Report",
+                                 "name" : "BiopsyInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
                                           "libraryName" : "Dash",
-                                          "type" : "CodeRef"
-                                       } ]
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "B",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "HistologyObservations",
+                                             "type" : "ExpressionRef"
+                                          }, {
+                                             "name" : "Biopsy Report",
+                                             "libraryName" : "Dash",
+                                             "type" : "CodeRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
@@ -543,32 +559,6 @@
                      "path" : "date",
                      "type" : "ByColumn"
                   } ]
-               }
-            }
-         }, {
-            "name" : "SortedBiopsyReports",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "B",
-                  "expression" : {
-                     "name" : "SortedReports",
-                     "type" : "ExpressionRef"
-                  }
-               } ],
-               "relationship" : [ ],
-               "where" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "path" : "riskTableInput",
-                        "scope" : "B",
-                        "type" : "Property"
-                     }
-                  }
                }
             }
          }, {
@@ -897,42 +887,46 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "HpvInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "H",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "HpvObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
+                                 "name" : "HpvInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
+                                          "libraryName" : "Dash",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "H",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "HpvObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
@@ -1558,42 +1552,46 @@
                      "element" : [ {
                         "name" : "riskTableInput",
                         "value" : {
-                           "name" : "HighestRankedInterpretation",
-                           "type" : "FunctionRef",
-                           "operand" : [ {
-                              "name" : "CytologyInterpretation",
+                           "path" : "riskTableInput",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "HighestRankedInterpretation",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "type" : "Query",
-                                 "source" : [ {
-                                    "alias" : "X",
-                                    "expression" : {
-                                       "name" : "CollateConclusionCodes",
-                                       "libraryName" : "Dash",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "C",
-                                          "type" : "AliasRef"
-                                       }, {
-                                          "name" : "CytologyObservations",
-                                          "type" : "ExpressionRef"
-                                       } ]
+                                 "name" : "CytologyInterpretation",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "type" : "Query",
+                                    "source" : [ {
+                                       "alias" : "X",
+                                       "expression" : {
+                                          "name" : "CollateConclusionCodes",
+                                          "libraryName" : "Dash",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "C",
+                                             "type" : "AliasRef"
+                                          }, {
+                                             "name" : "CytologyObservations",
+                                             "type" : "ExpressionRef"
+                                          } ]
+                                       }
+                                    } ],
+                                    "return" : {
+                                       "distinct" : false,
+                                       "expression" : {
+                                          "name" : "ToConcept",
+                                          "libraryName" : "FHIRHelpers",
+                                          "type" : "FunctionRef",
+                                          "operand" : [ {
+                                             "name" : "X",
+                                             "type" : "AliasRef"
+                                          } ]
+                                       }
                                     }
-                                 } ],
-                                 "return" : {
-                                    "distinct" : false,
-                                    "expression" : {
-                                       "name" : "ToConcept",
-                                       "libraryName" : "FHIRHelpers",
-                                       "type" : "FunctionRef",
-                                       "operand" : [ {
-                                          "name" : "X",
-                                          "type" : "AliasRef"
-                                       } ]
-                                    }
-                                 }
+                                 } ]
                               } ]
-                           } ]
+                           }
                         }
                      }, {
                         "name" : "allConclusions",
@@ -2175,6 +2173,38 @@
                }
             }
          }, {
+            "name" : "MostRecentCytologyReportDate",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "MostRecentCytologyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentCytologyReport",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
+            }
+         }, {
             "name" : "SecondMostRecentCytologyReport",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2346,21 +2376,36 @@
                }
             }
          }, {
-            "name" : "BiopsyReports",
+            "name" : "MostRecentBiopsyReportDate",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "LookBack",
-               "libraryName" : "Common",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "HistologyDiagnosticReports",
-                  "libraryName" : "Dash",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "BiopsyLookbackPeriod",
-                  "type" : "ParameterRef"
-               } ]
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "MostRecentBiopsyReport",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "date",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "MostRecentBiopsyReport",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}DateTime",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  }
+               }
             }
          }, {
             "name" : "MostRecentBiopsyResult",

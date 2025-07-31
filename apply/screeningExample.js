@@ -24,6 +24,9 @@ const PertinentObservationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-
 const PertinentProcedureQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentProcedureQuestionnaire.json'));
 const PertinentVaccinationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentVaccinationQuestionnaire.json'));
 const ScreeningAndManagementHistoryQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ScreeningAndManagementHistoryQuestionnaire.json'));
+const CervicalCancerAnalytics = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerAnalytics.json'));
+const OutputAnalytics = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-OutputAnalytics.json'));
+const AnalyticsLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-AnalyticsLibrary.json'));
 
 // Bring in an example patient bundle from the test folder
 const examplePatientBundle = JSON.parse(readFileSync('test/ScreeningAverageRisk/test_results/ScreeningAverageRiskLibrary_v1.0.0/bundles/Age_between_30_and_65_and_have_NOT_had_recent_cytology_test.json'));
@@ -47,7 +50,8 @@ const elmJsonDependencyArray = [
   JSON.parse(readFileSync('cql/ScreeningDesExposureLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningImmunocompromisedLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json'))
+  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json')),
+  JSON.parse(readFileSync('cql/AnalyticsLibrary.json'))
 ];
 
 // Reformat ELM JSON value set references to match what is expected by the 
@@ -108,6 +112,9 @@ let fhirJsonArray = [
   PertinentProcedureQuestionnaire,
   PertinentVaccinationQuestionnaire,
   ScreeningAndManagementHistoryQuestionnaire,
+  CervicalCancerAnalytics,
+  OutputAnalytics,
+  AnalyticsLibrary,
   ...examplePatientResources
 ];
 
