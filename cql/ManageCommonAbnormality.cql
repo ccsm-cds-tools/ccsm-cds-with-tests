@@ -305,6 +305,7 @@ define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
     when MostRecentPrimaryHpvPositive then 'Reflex Cytology'
+    when PositiveHighRiskHPVGenotypesAfterBiopsy is not null then 'Management of HPV16 and HPV18 Positive Results'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
@@ -595,8 +596,79 @@ define ErrataRecommendation:
       null
   end
 
+// TODO: Add supplement for Table 1 and Table 2 fallthrough
+// TODO: Remove old comments
+// TODO: Hook up recommendations into CommonAbnormality recs.
+
+// Handling positive HPV16 and HPV18 results after biopsy
+// These scenarios are not covered by tables 4 and 5
+define PositiveHighRiskHPVGenotypesAfterBiopsy:
+  case
+    when ( // HPV 16+ HSIL with Pregnancy Concerns
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      (
+        Collate.MostRecentHpvResultPostBiopsy is not null and
+        Collate.MostRecentHpvResultPostBiopsy = 'HPV16+' and
+        Collate.MostRecentCytologyResultPostBiopsy is not null and
+        Collate.MostRecentCytologyResultPostBiopsy = 'HSIL+'
+      )
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          'Expedited treatment is recommended.',
+          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          TreatmentRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        },
+        id: '5.O.G.1.1'
+      }
+
+    when ( // HPV 16+ HSIL too old for Pregrnancy Concerns
+      AgeInYears() > 50 and
+      (
+        Collate.MostRecentHpvResultPostBiopsy is not null and
+        Collate.MostRecentHpvResultPostBiopsy = 'HPV16+' and
+        Collate.MostRecentCytologyResultPostBiopsy is not null and
+        Collate.MostRecentCytologyResultPostBiopsy = 'HSIL+'
+      )
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          'Expedited treatment is recommended.',
+          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          TreatmentRecommendationText
+        },
+        id: '5.O.G.1.2'
+      }
+    when ( // HPV 16+ or HPV18+ 
+      AgeInYears() >= 25 and
+      (
+        Collate.MostRecentHpvResultPostBiopsy is not null and
+        Collate.MostRecentHpvResultPostBiopsy in {'HPV16+','HPV16-, HPV18+'}
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.',
+          'HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.'
+        },
+        id: '5.O.G.1.3'
+      }
+    else
+      null
+  end
+
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
+
+define ColposocpyAcceptableForPositiveGenotypedPrimaryHpvText:
+  'If primary HPV screening test genotyping results are HPV 16 or HPV 18 positive and reflex triage testing from the same laboratory specimen is not feasible, referral for colposcopy before obtaining additional testing is acceptable.'
 
 define Pap6MonthIntervalText:
   'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test.'
@@ -702,6 +774,7 @@ define IsRarelyScreenedPatient:
     
 define Action:
   case
+    // Rarely Screened Individuals
     when (
       AgeInYears() >= 27 and AgeInYears() <= 50 and
       IsRarelyScreenedPatient
@@ -729,6 +802,7 @@ define Action:
         },
         id: '5.O.R.O.1'
       }  
+    // HPV Only: Reflex Cytology
     when (
       MostRecentPrimaryHpvPositive
     ) then
@@ -736,10 +810,16 @@ define Action:
         short: 'Cytology',
         date: Today(),
         details: {
-          ReflexTestingRecommendationText
+          ReflexTestingRecommendationText,
+          ColposocpyAcceptableForPositiveGenotypedPrimaryHpvText
         },
         id: '5.O.H.1.1'
       }
+    // Positive HPV16 and HPV18 results after biopsy
+    when (
+      PositiveHighRiskHPVGenotypesAfterBiopsy is not null
+    ) then
+      PositiveHighRiskHPVGenotypesAfterBiopsy
     // Risk Table Recommendations
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
