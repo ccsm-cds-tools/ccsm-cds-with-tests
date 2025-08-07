@@ -305,7 +305,10 @@ define CommonAbnormalityGroup:
   case
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
     when MostRecentPrimaryHpvPositive then 'Reflex Cytology'
-    when PositiveHighRiskHPVGenotypesAfterBiopsy is not null then 'Management of HPV16 and HPV18 Positive Results'
+    when
+      PositiveHighRiskHPVGenotypesAfterBiopsy is not null and
+      PostTreatmentManagementRecommendation is null
+      then 'Management of HPV16 and HPV18 Positive Results'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
     when PostColposcopyManagementRecommendation is not null then 'Post Colposcopy (Table 4)'
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
@@ -817,7 +820,8 @@ define Action:
       }
     // Positive HPV16 and HPV18 results after biopsy
     when (
-      PositiveHighRiskHPVGenotypesAfterBiopsy is not null
+      PositiveHighRiskHPVGenotypesAfterBiopsy is not null and
+      PostTreatmentManagementRecommendation is null // This recommendation should not apply if a Table 5 recommendation exists
     ) then
       PositiveHighRiskHPVGenotypesAfterBiopsy
     // Risk Table Recommendations
