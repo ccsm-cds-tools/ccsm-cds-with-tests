@@ -314,6 +314,7 @@ define CommonAbnormalityGroup:
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
+    when PositiveHighRiskHPVGenotypes is not null then 'Management of HPV16 and HPV18 Positive Results'
     when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     else 'N/A'
   end
@@ -667,6 +668,79 @@ define PositiveHighRiskHPVGenotypesAfterBiopsy:
       null
   end
 
+// Handling positive HPV16 and HPV18 results if not covered by risk tables
+// These scenarios are not covered by tables 1 and 2
+define PositiveHighRiskHPVGenotypes:
+  case
+    when ( // HPV 16+ HSIL with Pregnancy Concerns
+      AgeInYears() >= 25 and AgeInYears() <= 50 and
+      (
+        Collate.MostRecentHpvResult is not null and
+        Collate.MostRecentHpvResult = 'HPV16+' and
+        Collate.MostRecentCytologyCotestResult is not null and
+        Collate.MostRecentCytologyCotestResult = 'HSIL+'
+      )
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          'Expedited treatment is recommended.',
+          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          TreatmentRecommendationText,
+          TreatmentWithPregnancyConcernsRecommendationText
+        },
+        id: '5.O.G.2.1'
+      }
+
+    when ( // HPV 16+ HSIL too old for Pregrnancy Concerns
+      AgeInYears() > 50 and
+      (
+        Collate.MostRecentHpvResult is not null and
+        Collate.MostRecentHpvResult = 'HPV16+' and
+        Collate.MostRecentCytologyCotestResult is not null and
+        Collate.MostRecentCytologyCotestResult = 'HSIL+'
+      )
+    ) then
+      {
+        short: 'Treatment',
+        date: Today(),
+        details: {
+          'Expedited treatment is recommended.',
+          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          TreatmentRecommendationText
+        },
+        id: '5.O.G.2.2'
+      }
+    when ( // HPV 16+ or HPV18+ 
+      AgeInYears() >= 25 and
+      (
+        Collate.MostRecentHpvResult is not null and
+        Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+'}
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.',
+          'HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.'
+        },
+        id: '5.O.G.2.3'
+      }
+    else
+      null
+  end
+
+
+// define RowTable1:
+//   RiskTableLookup.GetRowTable1(
+//     Collate.SecondMostRecentHpvResult,
+//     Collate.SecondMostRecentCytologyCotestResult,
+//     Collate.MostRecentHpvResult,
+//     Collate.MostRecentCytologyCotestResult
+//   )
+
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
 
@@ -967,6 +1041,12 @@ define Action:
         },
         id: TableIdentifier + 'T.O'
       }
+    // Send Positive High-risk HPV Genotypes to colposcopy if scenario is not caught by risk tables
+    when (
+      PositiveHighRiskHPVGenotypes is not null
+    ) then
+      PositiveHighRiskHPVGenotypes
+    // Errata Recommendation
     when (
       ErrataRecommendation is not null
     ) then
