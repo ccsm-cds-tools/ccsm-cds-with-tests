@@ -306,7 +306,7 @@ define CommonAbnormalityGroup:
     when RarelyScreenedTreatmentRecommendation then 'Guidance for Expedited Treatment'
     when MostRecentPrimaryHpvPositive then 'Reflex Cytology'
     when
-      PositiveHighRiskHPVGenotypesAfterBiopsy is not null and
+      PositiveHighRiskHpvGenotypesAfterBiopsy is not null and
       PostTreatmentManagementRecommendation is null
       then 'Management of HPV16 and HPV18 Positive Results'
     when PostTreatmentManagementRecommendation is not null then 'Post Treatment (Table 5)'
@@ -314,7 +314,7 @@ define CommonAbnormalityGroup:
     when ColposcopyResultsManagementRecommendation is not null then 'Colposcopy Results (Table 3)'
     when SurveillanceManagementRecommendation is not null then 'Surveillance (Table 2)'
     when GeneralScreeningManagementRecommendation is not null then 'General Screening (Table 1)'
-    when PositiveHighRiskHPVGenotypes is not null then 'Management of HPV16 and HPV18 Positive Results'
+    when PositiveHighRiskHpvGenotypes is not null then 'Management of HPV16 and HPV18 Positive Results'
     when ErrataRecommendation is not null then '2023 JLGTD Addendum to the 2019 ASCCP Guidelines'
     else 'N/A'
   end
@@ -600,13 +600,9 @@ define ErrataRecommendation:
       null
   end
 
-// TODO: Add supplement for Table 1 and Table 2 fallthrough
-// TODO: Remove old comments
-// TODO: Hook up recommendations into CommonAbnormality recs.
-
 // Handling positive HPV16 and HPV18 results after biopsy
-// These scenarios are not covered by tables 4 and 5
-define PositiveHighRiskHPVGenotypesAfterBiopsy:
+// These scenarios are not covered by table 4
+define PositiveHighRiskHpvGenotypesAfterBiopsy:
   case
     when ( // HPV 16+ HSIL with Pregnancy Concerns
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -622,14 +618,14 @@ define PositiveHighRiskHPVGenotypesAfterBiopsy:
         date: Today(),
         details: {
           'Expedited treatment is recommended.',
-          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          'Those with HPV-16 positive and HSIL cytology qualify for expedited treatment.',
           TreatmentRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
         },
         id: '5.O.G.1.1'
       }
 
-    when ( // HPV 16+ HSIL too old for Pregrnancy Concerns
+    when ( // HPV 16+ HSIL too old for Pregnancy Concerns
       AgeInYears() > 50 and
       (
         Collate.MostRecentHpvResultPostBiopsy is not null and
@@ -643,12 +639,12 @@ define PositiveHighRiskHPVGenotypesAfterBiopsy:
         date: Today(),
         details: {
           'Expedited treatment is recommended.',
-          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          'Those with HPV-16 positive and HSIL cytology qualify for expedited treatment.',
           TreatmentRecommendationText
         },
         id: '5.O.G.1.2'
       }
-    when ( // HPV 16+ or HPV18+ 
+    when ( // HPV16+ or HPV18+ 
       AgeInYears() >= 25 and
       (
         Collate.MostRecentHpvResultPostBiopsy is not null and
@@ -670,7 +666,7 @@ define PositiveHighRiskHPVGenotypesAfterBiopsy:
 
 // Handling positive HPV16 and HPV18 results if not covered by risk tables
 // These scenarios are not covered by tables 1 and 2
-define PositiveHighRiskHPVGenotypes:
+define PositiveHighRiskHpvGenotypes:
   case
     when ( // HPV 16+ HSIL with Pregnancy Concerns
       AgeInYears() >= 25 and AgeInYears() <= 50 and
@@ -686,14 +682,14 @@ define PositiveHighRiskHPVGenotypes:
         date: Today(),
         details: {
           'Expedited treatment is recommended.',
-          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          'Those with HPV-16 positive and HSIL cytology qualify for expedited treatment.',
           TreatmentRecommendationText,
           TreatmentWithPregnancyConcernsRecommendationText
         },
         id: '5.O.G.2.1'
       }
 
-    when ( // HPV 16+ HSIL too old for Pregrnancy Concerns
+    when ( // HPV 16+ HSIL too old for Pregnancy Concerns
       AgeInYears() > 50 and
       (
         Collate.MostRecentHpvResult is not null and
@@ -707,12 +703,12 @@ define PositiveHighRiskHPVGenotypes:
         date: Today(),
         details: {
           'Expedited treatment is recommended.',
-          'Those HPV-16 positive HSIL cytology qualify for expedited treatment.',
+          'Those with HPV-16 positive and HSIL cytology qualify for expedited treatment.',
           TreatmentRecommendationText
         },
         id: '5.O.G.2.2'
       }
-    when ( // HPV 16+ or HPV18+ 
+    when ( // HPV16+ or HPV18+ 
       AgeInYears() >= 25 and
       (
         Collate.MostRecentHpvResult is not null and
@@ -731,15 +727,6 @@ define PositiveHighRiskHPVGenotypes:
     else
       null
   end
-
-
-// define RowTable1:
-//   RiskTableLookup.GetRowTable1(
-//     Collate.SecondMostRecentHpvResult,
-//     Collate.SecondMostRecentCytologyCotestResult,
-//     Collate.MostRecentHpvResult,
-//     Collate.MostRecentCytologyCotestResult
-//   )
 
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
@@ -894,10 +881,10 @@ define Action:
       }
     // Positive HPV16 and HPV18 results after biopsy
     when (
-      PositiveHighRiskHPVGenotypesAfterBiopsy is not null and
+      PositiveHighRiskHpvGenotypesAfterBiopsy is not null and
       PostTreatmentManagementRecommendation is null // This recommendation should not apply if a Table 5 recommendation exists
     ) then
-      PositiveHighRiskHPVGenotypesAfterBiopsy
+      PositiveHighRiskHpvGenotypesAfterBiopsy
     // Risk Table Recommendations
     when (
       AgeInYears() >= 25 and AgeInYears() <= 65 and
@@ -1041,11 +1028,11 @@ define Action:
         },
         id: TableIdentifier + 'T.O'
       }
-    // Send Positive High-risk HPV Genotypes to colposcopy if scenario is not caught by risk tables
+    // Send positive high-risk HPV Genotypes to colposcopy if scenario is not caught by risk tables
     when (
-      PositiveHighRiskHPVGenotypes is not null
+      PositiveHighRiskHpvGenotypes is not null
     ) then
-      PositiveHighRiskHPVGenotypes
+      PositiveHighRiskHpvGenotypes
     // Errata Recommendation
     when (
       ErrataRecommendation is not null
