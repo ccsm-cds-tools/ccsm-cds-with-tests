@@ -1,0 +1,32 @@
+---
+name: Biopsy Followed By HPV16 Non-HSIL Cytology
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $import: *BiopsyLessThanCin2
+- 
+  $import: *MostRecentHpv16Positive
+- 
+  $iterate: *AllCervicalCytologyResultsExceptHsil
+
+results:
+  Recommendation:
+    short: 'Colposcopy'
+    date: '2021-06-02'
+    group: 'Management of HPV16 and HPV18 Positive Results'
+    details:
+    - 'Colposcopy is recommended.'
+    - 'HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.'
+    id: '5.O.G.1.3'
