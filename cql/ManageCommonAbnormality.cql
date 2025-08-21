@@ -731,7 +731,7 @@ define PositiveHighRiskHpvGenotypes:
 define ReflexTestingRecommendationText:
   'Reflex testing with cervical cytology is indicated.'
 
-define ColposocpyAcceptableForPositiveGenotypedPrimaryHpvText:
+define ColposcopyAcceptableForPositiveGenotypedPrimaryHpvText:
   'If primary HPV screening test genotyping results are HPV 16 or HPV 18 positive and reflex triage testing from the same laboratory specimen is not feasible, referral for colposcopy before obtaining additional testing is acceptable.'
 
 define Pap6MonthIntervalText:
@@ -875,7 +875,7 @@ define Action:
         date: Today(),
         details: {
           ReflexTestingRecommendationText,
-          ColposocpyAcceptableForPositiveGenotypedPrimaryHpvText
+          ColposcopyAcceptableForPositiveGenotypedPrimaryHpvText
         },
         id: '5.O.H.1.1'
       }
