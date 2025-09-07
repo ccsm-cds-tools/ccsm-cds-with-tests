@@ -401,6 +401,10 @@ define function GetAdjacentRowsTable3(preBiopsyHpvVal String, preBiopsyPapVal St
 define function HighOrLowGradeResults(hpvVal String, papVal String):
   case
     when (
+      hpvVal = 'HPV16+' or
+      hpvVal = 'HPV16-, HPV18+'
+    ) then 'High Grade'
+    when (
       hpvVal = 'HPV-positive' and
       papVal = 'NILM'
     ) then 'Low Grade'
@@ -477,7 +481,7 @@ define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPap
     }
 
 define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  _GetRowTable4(AnyHpv(preBiopsyHpvVal), preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, AnyHpv(currHpvVal), currPapVal)
+  _GetRowTable4(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, AnyHpv(currHpvVal), currPapVal)
 
 define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   if biopsyVal = '<CIN1' or biopsyVal = 'CIN1' then
@@ -508,7 +512,7 @@ define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, bi
           where T.preColposcopyResult = HighOrLowGradeResults(preBiopsyHpvVal, preBiopsyPapVal)
             and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
             and T.hpv = currHpvVal
-            and T.pap = HighOrLowGradeResults(currHpvVal, currPapVal)
+            and T.pap = HighOrLowGradeResults('N/A', currPapVal)
             return {
               action: T.management,
               preColposcopyResult: T.preColposcopyResult,
@@ -572,7 +576,7 @@ define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, bi
 
 define function GetAdjacentRowsTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   PostColposcopyTable T
-    where T.preColposcopyResult = HighOrLowGradeResults(AnyHpv(preBiopsyHpvVal), preBiopsyPapVal)
+    where T.preColposcopyResult = HighOrLowGradeResults(preBiopsyHpvVal, preBiopsyPapVal)
       and T.postColposcopyPastHistory = PostColposcopyPastHistory(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal)
       and T.hpv = AnyHpv(currHpvVal)
       and T.pap != currPapVal
@@ -694,7 +698,7 @@ define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal S
       PostTreatmentTable T
         where T.biopsy = TreatCin2AndCin3TheSame(biopsyVal)
           and T.hpv = AnyHpv(currHpvVal)
-          and T.pap = HighOrLowGradeResults(currHpvVal, currPapVal)
+          and T.pap = HighOrLowGradeResults('N/A', currPapVal)
           return {
             action: T.management,
             history: '',
