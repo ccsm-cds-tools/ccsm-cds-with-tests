@@ -90,7 +90,8 @@ define DashboardLibraryAnalytics:
   MostRecentDistinctImmunocompromisedEvent: Dash.MostRecentDistinctImmunocompromisedEvent,
   MostRecentDistinctImmunocompromisedEventDate: ToString(Dash.MostRecentDistinctImmunocompromisedEventDate),
   DateOfMostRecentPositiveHpv: ToString(CCF.DiagnosticReportDate(Dash.MostRecentPositiveHpv)),
-  DateOfMostRecentNegativeHpv: ToString(SAR.DateOfMostRecentNegativeHpv)
+  DateOfMostRecentNegativeHpv: ToString(SAR.DateOfMostRecentNegativeHpv),
+  PertinentImmunizationsSummary: Dash.PertinentImmunizationsSummary
 }
 
 define ManageCommonAbnormalityAnalytics:

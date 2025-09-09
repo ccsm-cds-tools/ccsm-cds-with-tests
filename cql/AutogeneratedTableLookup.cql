@@ -327,8 +327,8 @@ define function GetRowTable3(preBiopsyHpvVal String, preBiopsyPapVal String, bio
             biopsy: T.biopsy,
             preColposcopyResult: '',
             postColposcopyPastHistory: '',
-            hpv: '',
-            cyto: '',
+            hpv: preBiopsyHpvVal,
+            cyto: preBiopsyPapVal,
             riskNow: convert T.value.immediate to Decimal,
             risk5yr: convert T.value.five_year to Decimal
           }
@@ -346,8 +346,8 @@ define function GetRowTable3(preBiopsyHpvVal String, preBiopsyPapVal String, bio
             biopsy: T.biopsy,
             preColposcopyResult: '',
             postColposcopyPastHistory: '',
-            hpv: '',
-            cyto: '',
+            hpv: preBiopsyHpvVal,
+            cyto: preBiopsyPapVal,
             riskNow: convert T.value.immediate to Decimal,
             risk5yr: convert T.value.five_year to Decimal
           }
@@ -365,8 +365,8 @@ define function GetRowTable3(preBiopsyHpvVal String, preBiopsyPapVal String, bio
             biopsy: T.biopsy,
             preColposcopyResult: '',
             postColposcopyPastHistory: '',
-            hpv: '',
-            cyto: '',
+            hpv: preBiopsyHpvVal,
+            cyto: preBiopsyPapVal,
             riskNow: convert T.value.immediate to Decimal,
             risk5yr: convert T.value.five_year to Decimal
           }
