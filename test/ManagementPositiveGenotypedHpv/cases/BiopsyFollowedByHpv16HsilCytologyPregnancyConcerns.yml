@@ -1,0 +1,34 @@
+---
+name: Biopsy Followed By HPV16 HSIL Cytology with Pregnancy Concerns
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $import: *BiopsyLessThanCin2
+- 
+  $import: *MostRecentHpv16Positive
+- 
+  $import: *HsilCytologyResult
+
+results:
+  Recommendation:
+    short: 'Treatment'
+    date: '2021-06-02'
+    group: 'Management of HPV16 and HPV18 Positive Results'
+    details:
+    - 'Expedited treatment is recommended.'
+    - 'Those with HPV-16 positive and HSIL cytology qualify for expedited treatment.'
+    - 'Treatment using an excisional procedure without previous biopsy confirmation is preferred, but colposcopy with biopsy is acceptable.'
+    - 'If the patient is currently pregnant, endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable.'
+    id: '5.O.G.1.1'
