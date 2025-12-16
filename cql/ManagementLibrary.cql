@@ -225,40 +225,30 @@ define DecisionAids:
     riskTable: RiskTableSummary
   }
 
-
 define HeaderString:
-  Coalesce(
-    '[' & Combine(
-      RiskTableSummary.headers H return
-        '{ "key": "' & Coalesce(H.key, '') & '", "display": "' & Coalesce(H.display, '') & '" }',
-      ', '
-    ) & ']',
-    '[]'
+  Dash.JsonArrayOrEmpty(
+    RiskTableSummary.headers H return
+      '{ "key": "' & Coalesce(H.key, '') & '", "display": "' & Coalesce(H.display, '') & '" }'
   )
 
 define AdjacentString:
-  Coalesce(
-    '[' & Combine(
-      RiskTableSummary.adjacent A return
-        '{' &
-          '"action": "' & Coalesce(A.action, '') & '", ' &
-          '"preColposcopyResult": "' & Coalesce(A.preColposcopyResult, '') & '", ' &
-          '"postColposcopyPastHistory": "' & Coalesce(A.postColposcopyPastHistory, '') & '", ' &
-          '"history": "' & Coalesce(A.history, '') & '", ' &
-          '"prev2": "' & Coalesce(A.prev2, '') & '", ' &
-          '"prev1": "' & Coalesce(A.prev1, '') & '", ' &
-          '"referral": "' & Coalesce(A.referral, '') & '", ' &
-          '"biopsy": "' & Coalesce(A.biopsy, '') & '", ' &
-          '"hpv": "' & Coalesce(A.hpv, '') & '", ' &
-          '"cyto": "' & Coalesce(A.cyto, '') & '", ' &
-          '"riskNow": "' & Coalesce(ToString(A.riskNow), '') & '", ' &
-          '"risk5yr": "' & Coalesce(ToString(A.risk5yr), '') & '"' &
-        '}',
-      ', '
-    ) & ']',
-    '[]'
+  Dash.JsonArrayOrEmpty(
+    RiskTableSummary.adjacent A return
+      '{' &
+        '"action": "' & Coalesce(A.action, '') & '", ' &
+        '"preColposcopyResult": "' & Coalesce(A.preColposcopyResult, '') & '", ' &
+        '"postColposcopyPastHistory": "' & Coalesce(A.postColposcopyPastHistory, '') & '", ' &
+        '"history": "' & Coalesce(A.history, '') & '", ' &
+        '"prev2": "' & Coalesce(A.prev2, '') & '", ' &
+        '"prev1": "' & Coalesce(A.prev1, '') & '", ' &
+        '"referral": "' & Coalesce(A.referral, '') & '", ' &
+        '"biopsy": "' & Coalesce(A.biopsy, '') & '", ' &
+        '"hpv": "' & Coalesce(A.hpv, '') & '", ' &
+        '"cyto": "' & Coalesce(A.cyto, '') & '", ' &
+        '"riskNow": "' & Coalesce(ToString(A.riskNow), '') & '", ' &
+        '"risk5yr": "' & Coalesce(ToString(A.risk5yr), '') & '"' &
+      '}'
   )
-
 define RiskTableString:
   '{' &
   '"title": "' & Coalesce(RiskTableSummary.title, '') & '", ' &
@@ -296,10 +286,8 @@ define DecisionAidsString:
       '[]'
     ) & ', ' &
   '"recommendationDate": "' & Coalesce(ToString(DecisionAids.recommendationDate), '') & '", ' &
-  '"errors": ' &
-    Coalesce(
-      '[' & Combine(DecisionAids.errors, ', ') & ']',
-      '[]'
+  '"errors": ' & Dash.JsonArrayOrEmpty(
+    DecisionAids.errors E return '"' & E & '"'
     ) & ', ' &
   '"disclaimer": "' & Coalesce(DecisionAids.disclaimer, '') & '", ' &
   '"suggestedOrders": ' &
@@ -310,5 +298,5 @@ define DecisionAidsString:
       ) & ']',
       '[]'
     ) & ', ' &
-  '"riskTable": ' & Coalesce(RiskTableString, '{}') &
+  '"riskTable": ' & (if RiskTableSummary is null then '{}' else RiskTableString) &
 '}'

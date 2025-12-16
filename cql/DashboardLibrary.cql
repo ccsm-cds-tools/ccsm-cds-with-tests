@@ -1144,7 +1144,7 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
       '{' +
       '"name": "' + ReportType + '", ' +
       '"longName": "' + Common.ConceptText(D.code) + '", ' +
-      '"value": "' + HighestRanked.riskTableInput + '", ' +
+      '"value": "' + Coalesce(HighestRanked.riskTableInput, '') + '", ' +
       '"longValue": [' + 
         Coalesce(
           Combine(flatten(
@@ -1162,6 +1162,12 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
       '}',
     ','
   )
+
+define function JsonArrayOrEmpty(items List<String>):
+  if items is null or Count(items) = 0 then
+    '[]'
+  else
+    '[' & Combine(items, ', ') & ']'
 
 define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
   if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
@@ -1714,8 +1720,8 @@ define CervicalCancerScreeningAndMedicalHistoryString:
     '"medications": ' & PertinentMedicationsSummaryString & ', ' &
     '"procedures": ' & PertinentProceduresSummaryString & ', ' &
     '"diagnosticReports": ' & DiagnosticReportsSummaryStringFix & ', ' &
-    '"encounters": ' & Coalesce(Combine(PertinentEncountersSummaryString, ', '), '[]') & ', ' &
-    '"immunizations": ' & Coalesce(Combine(PertinentImmunizationsSummaryString, ', '), '[]') & ', ' &
-    '"episodeOfCares": ' & Coalesce(Combine(PertinentEpisodesOfCareSummaryString, ', '), '[]') &
+    '"encounters": ' & JsonArrayOrEmpty(PertinentEncountersSummaryString) & ', ' &
+    '"immunizations": ' & JsonArrayOrEmpty(PertinentImmunizationsSummaryString) & ', ' &
+    '"episodeOfCares": ' & JsonArrayOrEmpty(PertinentEpisodesOfCareSummaryString) &
   '}' &
   '}'

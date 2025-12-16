@@ -12504,12 +12504,19 @@
                                                                         "type" : "Literal"
                                                                      } ]
                                                                   }, {
-                                                                     "path" : "riskTableInput",
-                                                                     "type" : "Property",
-                                                                     "source" : {
-                                                                        "name" : "HighestRanked",
-                                                                        "type" : "QueryLetRef"
-                                                                     }
+                                                                     "type" : "Coalesce",
+                                                                     "operand" : [ {
+                                                                        "path" : "riskTableInput",
+                                                                        "type" : "Property",
+                                                                        "source" : {
+                                                                           "name" : "HighestRanked",
+                                                                           "type" : "QueryLetRef"
+                                                                        }
+                                                                     }, {
+                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                        "value" : "",
+                                                                        "type" : "Literal"
+                                                                     } ]
                                                                   } ]
                                                                }, {
                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -12718,6 +12725,106 @@
                "operandTypeSpecifier" : {
                   "name" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "JsonArrayOrEmpty",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "items",
+                        "type" : "OperandRef"
+                     }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "items",
+                           "type" : "OperandRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "[]",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "Concatenate",
+                  "operand" : [ {
+                     "type" : "Coalesce",
+                     "operand" : [ {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "[",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "type" : "Combine",
+                              "source" : {
+                                 "name" : "items",
+                                 "type" : "OperandRef"
+                              },
+                              "separator" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : ", ",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Coalesce",
+                     "operand" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "]",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "items",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{urn:hl7-org:elm-types:r1}String",
+                     "type" : "NamedTypeSpecifier"
+                  }
                }
             } ]
          }, {
@@ -17821,22 +17928,11 @@
                                                                }, {
                                                                   "type" : "Coalesce",
                                                                   "operand" : [ {
-                                                                     "type" : "Coalesce",
+                                                                     "name" : "JsonArrayOrEmpty",
+                                                                     "type" : "FunctionRef",
                                                                      "operand" : [ {
-                                                                        "type" : "Combine",
-                                                                        "source" : {
-                                                                           "name" : "PertinentEncountersSummaryString",
-                                                                           "type" : "ExpressionRef"
-                                                                        },
-                                                                        "separator" : {
-                                                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                           "value" : ", ",
-                                                                           "type" : "Literal"
-                                                                        }
-                                                                     }, {
-                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                        "value" : "[]",
-                                                                        "type" : "Literal"
+                                                                        "name" : "PertinentEncountersSummaryString",
+                                                                        "type" : "ExpressionRef"
                                                                      } ]
                                                                   }, {
                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17886,22 +17982,11 @@
                                              }, {
                                                 "type" : "Coalesce",
                                                 "operand" : [ {
-                                                   "type" : "Coalesce",
+                                                   "name" : "JsonArrayOrEmpty",
+                                                   "type" : "FunctionRef",
                                                    "operand" : [ {
-                                                      "type" : "Combine",
-                                                      "source" : {
-                                                         "name" : "PertinentImmunizationsSummaryString",
-                                                         "type" : "ExpressionRef"
-                                                      },
-                                                      "separator" : {
-                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                         "value" : ", ",
-                                                         "type" : "Literal"
-                                                      }
-                                                   }, {
-                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                      "value" : "[]",
-                                                      "type" : "Literal"
+                                                      "name" : "PertinentImmunizationsSummaryString",
+                                                      "type" : "ExpressionRef"
                                                    } ]
                                                 }, {
                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17951,22 +18036,11 @@
                            }, {
                               "type" : "Coalesce",
                               "operand" : [ {
-                                 "type" : "Coalesce",
+                                 "name" : "JsonArrayOrEmpty",
+                                 "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "type" : "Combine",
-                                    "source" : {
-                                       "name" : "PertinentEpisodesOfCareSummaryString",
-                                       "type" : "ExpressionRef"
-                                    },
-                                    "separator" : {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : ", ",
-                                       "type" : "Literal"
-                                    }
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "[]",
-                                    "type" : "Literal"
+                                    "name" : "PertinentEpisodesOfCareSummaryString",
+                                    "type" : "ExpressionRef"
                                  } ]
                               }, {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
