@@ -227,50 +227,88 @@ define DecisionAids:
 
 
 define HeaderString:
-  (RiskTableSummary.headers) h
-    return '{ "key": "' & h.key & '", "display": "' & h.display & '"}' 
+  Coalesce(
+    '[' & Combine(
+      RiskTableSummary.headers H return
+        '{ "key": "' & Coalesce(H.key, '') & '", "display": "' & Coalesce(H.display, '') & '" }',
+      ', '
+    ) & ']',
+    '[]'
+  )
+
 define AdjacentString:
-  (RiskTableSummary.adjacent) a
-    return '{"action": "' & a.action & '", ' & 
-    '"preColposcopyResult": "' & a.preColposcopyResult & '", ' &
-    '"postColposcopyPastHistory": "' & a.postColposcopyPastHistory & '", ' & 
-    '"history": "' & a.history & '", ' & 
-    '"prev2": "' & a.prev2 & '", ' & 
-    '"prev1": "' & a.prev1 & '", ' & 
-    '"referral": "' & a.referral & '", ' & 
-    '"biopsy": "' & a.biopsy & '", ' & 
-    '"hpv": "' & a.hpv & '", ' & 
-    '"cyto": "' & a.cyto & '", ' & 
-    '"riskNow": "' & ToString(a.riskNow) & '", ' & 
-    '"risk5yr": "' & ToString(a.risk5yr) & '"}'
+  Coalesce(
+    '[' & Combine(
+      RiskTableSummary.adjacent A return
+        '{' &
+          '"action": "' & Coalesce(A.action, '') & '", ' &
+          '"preColposcopyResult": "' & Coalesce(A.preColposcopyResult, '') & '", ' &
+          '"postColposcopyPastHistory": "' & Coalesce(A.postColposcopyPastHistory, '') & '", ' &
+          '"history": "' & Coalesce(A.history, '') & '", ' &
+          '"prev2": "' & Coalesce(A.prev2, '') & '", ' &
+          '"prev1": "' & Coalesce(A.prev1, '') & '", ' &
+          '"referral": "' & Coalesce(A.referral, '') & '", ' &
+          '"biopsy": "' & Coalesce(A.biopsy, '') & '", ' &
+          '"hpv": "' & Coalesce(A.hpv, '') & '", ' &
+          '"cyto": "' & Coalesce(A.cyto, '') & '", ' &
+          '"riskNow": "' & Coalesce(ToString(A.riskNow), '') & '", ' &
+          '"risk5yr": "' & Coalesce(ToString(A.risk5yr), '') & '"' &
+        '}',
+      ', '
+    ) & ']',
+    '[]'
+  )
 
 define RiskTableString:
   '{' &
-  '"title": "' & RiskTableSummary.title & '", ' &
-  '"subtitle": "' & RiskTableSummary.subtitle & '", ' &
-  '"headers": [' & Combine(HeaderString, ', ') & '],' &
-  '"relevant": {"action": "' & RiskTableSummary.relevant.action & '", ' & '"preColposcopyResult": "' & RiskTableSummary.relevant.preColposcopyResult & '", ' &
-  '"postColposcopyPastHistory": "' & RiskTableSummary.relevant.postColposcopyPastHistory & '", ' & 
-  '"history": "' & RiskTableSummary.relevant.history & '", ' & 
-  '"prev2": "' & RiskTableSummary.relevant.prev2 & '", ' & 
-  '"prev1": "' & RiskTableSummary.relevant.prev1 & '", ' & 
-  '"referral": "' & RiskTableSummary.relevant.referral & '", ' & 
-  '"biopsy": "' & RiskTableSummary.relevant.biopsy & '", ' & 
-  '"hpv": "' & RiskTableSummary.relevant.hpv & '", ' & 
-  '"cyto": "' & RiskTableSummary.relevant.cyto & '", ' & 
-  '"riskNow": "' & ToString(RiskTableSummary.relevant.riskNow) & '", ' & 
-  '"risk5yr": "' & ToString(RiskTableSummary.relevant.risk5yr) & '"}' &
-  '"adjacent": [' & Combine(AdjacentString, ', ') & '], ' &
+  '"title": "' & Coalesce(RiskTableSummary.title, '') & '", ' &
+  '"subtitle": "' & Coalesce(RiskTableSummary.subtitle, '') & '", ' &
+  '"headers": ' & HeaderString & ', ' &
+  '"relevant": ' &
+    '{' &
+      '"action": "' & Coalesce(RiskTableSummary.relevant.action, '') & '", ' &
+      '"preColposcopyResult": "' & Coalesce(RiskTableSummary.relevant.preColposcopyResult, '') & '", ' &
+      '"postColposcopyPastHistory": "' & Coalesce(RiskTableSummary.relevant.postColposcopyPastHistory, '') & '", ' &
+      '"history": "' & Coalesce(RiskTableSummary.relevant.history, '') & '", ' &
+      '"prev2": "' & Coalesce(RiskTableSummary.relevant.prev2, '') & '", ' &
+      '"prev1": "' & Coalesce(RiskTableSummary.relevant.prev1, '') & '", ' &
+      '"referral": "' & Coalesce(RiskTableSummary.relevant.referral, '') & '", ' &
+      '"biopsy": "' & Coalesce(RiskTableSummary.relevant.biopsy, '') & '", ' &
+      '"hpv": "' & Coalesce(RiskTableSummary.relevant.hpv, '') & '", ' &
+      '"cyto": "' & Coalesce(RiskTableSummary.relevant.cyto, '') & '", ' &
+      '"riskNow": "' & Coalesce(ToString(RiskTableSummary.relevant.riskNow), '') & '", ' &
+      '"risk5yr": "' & Coalesce(ToString(RiskTableSummary.relevant.risk5yr), '') & '"' &
+    '}, ' &
+  '"adjacent": ' & AdjacentString &
   '}'
 
 define DecisionAidsString:
   '{' &
-  '"recommendation": "' & DecisionAids.recommendation & '", ' &
-  '"recommendationId": "' & DecisionAids.recommendationId & '", ' &
-  '"recommendationGroup": "' & DecisionAids.recommendationGroup & '", ' &
-  '"recommendationDetails": ["' & Combine(DecisionAids.recommendationDetails, '", "') & '"], ' &
-  '"recommendationDate": "' & ToString(DecisionAids.recommendationDate) & '", ' &
-  '"errors": [' & Combine(DecisionAids.errors, ', ') & '],' & 
-  '"disclaimer": "' & DecisionAids.disclaimer & '", ' &
-  '"suggestedOrders":' & '[' & Combine(DecisionAids.suggestedOrders, ', ') & ']' & 
-  '"riskTable": ' & RiskTableString & '}'
+  '"recommendation": "' & Coalesce(DecisionAids.recommendation, '') & '", ' &
+  '"recommendationId": "' & Coalesce(DecisionAids.recommendationId, '') & '", ' &
+  '"recommendationGroup": "' & Coalesce(DecisionAids.recommendationGroup, '') & '", ' &
+  '"recommendationDetails": ' &
+    Coalesce(
+      '[' & Combine(
+        DecisionAids.recommendationDetails RD return '"' & RD & '"',
+        ', '
+      ) & ']',
+      '[]'
+    ) & ', ' &
+  '"recommendationDate": "' & Coalesce(ToString(DecisionAids.recommendationDate), '') & '", ' &
+  '"errors": ' &
+    Coalesce(
+      '[' & Combine(DecisionAids.errors, ', ') & ']',
+      '[]'
+    ) & ', ' &
+  '"disclaimer": "' & Coalesce(DecisionAids.disclaimer, '') & '", ' &
+  '"suggestedOrders": ' &
+    Coalesce(
+      '[' & Combine(
+        DecisionAids.suggestedOrders SO return '"' & SO & '"',
+        ', '
+      ) & ']',
+      '[]'
+    ) & ', ' &
+  '"riskTable": ' & Coalesce(RiskTableString, '{}') &
+'}'

@@ -1152,7 +1152,7 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
             return
               flatten(
                 (cC.coding) cCC
-                return cCC.display
+                return '"' + cCC.display + '"'
               )
           ), ', '), ''
         ) + '], ' +
@@ -1206,11 +1206,15 @@ define DiagnosticReportsSummaryString:
 
 define DiagnosticReportsSummaryStringFix:
   '[' & 
-    (if HpvDiagnosticReportsSummaryString is not null then '"' & HpvDiagnosticReportsSummaryString & '"' else '') &
-    (if HpvDiagnosticReportsSummaryString is not null and (CervicalCytologyReportsSummaryString is not null or HistologyDiagnosticReportsSummaryString is not null) then ', ' else '') &
-    (if CervicalCytologyReportsSummaryString is not null then '"' & CervicalCytologyReportsSummaryString & '"' else '') &
-    (if CervicalCytologyReportsSummaryString is not null and HistologyDiagnosticReportsSummaryString is not null then ', ' else '') &
-    (if HistologyDiagnosticReportsSummaryString is not null then '"' & HistologyDiagnosticReportsSummaryString & '"' else '') &
+    (if Coalesce(HpvDiagnosticReportsSummaryString, '') != '' then HpvDiagnosticReportsSummaryString else '') &
+    (if Coalesce(HpvDiagnosticReportsSummaryString, '') != '' 
+        and (Coalesce(CervicalCytologyReportsSummaryString, '') != '' or Coalesce(HistologyDiagnosticReportsSummaryString, '') != '') 
+     then ', ' else '') &
+    (if Coalesce(CervicalCytologyReportsSummaryString, '') != '' then CervicalCytologyReportsSummaryString else '') &
+    (if Coalesce(CervicalCytologyReportsSummaryString, '') != '' 
+        and Coalesce(HistologyDiagnosticReportsSummaryString, '') != '' 
+     then ', ' else '') &
+    (if Coalesce(HistologyDiagnosticReportsSummaryString, '') != '' then HistologyDiagnosticReportsSummaryString else '') &
   ']'
 
 define HighGradeOrCancerHistologyResults:
@@ -1705,13 +1709,13 @@ define CervicalCancerScreeningAndMedicalHistoryString:
     '"race": "' & RaceAndEthnicityString & '"' &
   '}, ' &
   '"patientHistory": {' &
-    '"conditions": "' & PertinentConditionsSummaryString & '", ' &
-    '"observations": "' & PertinentObservationsSummaryString & '", ' &
-    '"medications": "' & PertinentMedicationsSummaryString & '", ' &
-    '"procedures": "' & PertinentProceduresSummaryString & '", ' &
-    '"diagnosticReports": "' & DiagnosticReportsSummaryStringFix & '", ' &
-    '"encounters": "' & Combine(PertinentEncountersSummaryString, ', ') & '", ' &
-    '"immunizations": "' & Combine(PertinentImmunizationsSummaryString, ', ') & '", ' &
-    '"episodeOfCares": "' & Combine(PertinentEpisodesOfCareSummaryString, ', ') & '"' &
+    '"conditions": ' & PertinentConditionsSummaryString & ', ' &
+    '"observations": ' & PertinentObservationsSummaryString & ', ' &
+    '"medications": ' & PertinentMedicationsSummaryString & ', ' &
+    '"procedures": ' & PertinentProceduresSummaryString & ', ' &
+    '"diagnosticReports": ' & DiagnosticReportsSummaryStringFix & ', ' &
+    '"encounters": ' & Coalesce(Combine(PertinentEncountersSummaryString, ', '), '[]') & ', ' &
+    '"immunizations": ' & Coalesce(Combine(PertinentImmunizationsSummaryString, ', '), '[]') & ', ' &
+    '"episodeOfCares": ' & Coalesce(Combine(PertinentEpisodesOfCareSummaryString, ', '), '[]') &
   '}' &
   '}'
