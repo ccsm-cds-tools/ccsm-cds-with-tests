@@ -228,14 +228,33 @@ define DecisionAids:
   }
 
 define DecisionAidsString:
-  '{' +
-  '"recommendation": "' + DecisionAids.recommendation + '", ' +
-  '"recommendationId": "' & DecisionAids.recommendationId & '", ' &
-  '"recommendationGroup": "' + DecisionAids.recommendationGroup + '", ' +
-  '"recommendationDetails": "' + '[' + Combine(DecisionAids.recommendationDetails, ', ') + ']' + '", ' +
-  '"recommendationDate": "' + ToString(DecisionAids.recommendationDate) + '", ' +
-  '"errors": "' + '[' + Combine(DecisionAids.errors, ', ') + ']' + '", ' +
-  '"disclaimer": "' + DecisionAids.disclaimer + '", ' +
-  '"suggestedOrders": "' + '[' + Combine(DecisionAids.suggestedOrders, ', ') + ']' + '"' +
-  '}'
-
+  '{' &
+  '"recommendation": "' & Coalesce(DecisionAids.recommendation, '') & '", ' &
+  '"recommendationId": "' & Coalesce(DecisionAids.recommendationId, '') & '", ' &
+  '"recommendationGroup": "' & Coalesce(DecisionAids.recommendationGroup, '') & '", ' &
+  '"recommendationDetails": ' &
+    (if DecisionAids.recommendationDetails is null then '[]'
+     else
+      ('[' &
+       Combine(
+        DecisionAids.recommendationDetails RD return '"' & RD & '"',
+        ', '
+       ) &
+     ']')
+    ) & ', ' &
+  '"recommendationDate": "' & Coalesce(ToString(DecisionAids.recommendationDate), '') & '", ' &
+  '"errors": ' &
+    Coalesce(
+      '[' & Combine(DecisionAids.errors E return '"' & E & '"', ', ') & ']',
+      '[]'
+    ) & ', ' &
+  '"disclaimer": "' & Coalesce(DecisionAids.disclaimer, '') & '", ' &
+  '"suggestedOrders": ' &
+    Coalesce(
+      '[' & Combine(
+        DecisionAids.suggestedOrders SO return '"' & SO & '"',
+        ', '
+      ) & ']',
+      '[]'
+    ) &
+'}'
