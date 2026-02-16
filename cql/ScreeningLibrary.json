@@ -1069,8 +1069,24 @@
                                                                                              }, {
                                                                                                 "type" : "Coalesce",
                                                                                                 "operand" : [ {
-                                                                                                   "type" : "Coalesce",
-                                                                                                   "operand" : [ {
+                                                                                                   "type" : "If",
+                                                                                                   "condition" : {
+                                                                                                      "type" : "IsNull",
+                                                                                                      "operand" : {
+                                                                                                         "path" : "recommendationDetails",
+                                                                                                         "type" : "Property",
+                                                                                                         "source" : {
+                                                                                                            "name" : "DecisionAids",
+                                                                                                            "type" : "ExpressionRef"
+                                                                                                         }
+                                                                                                      }
+                                                                                                   },
+                                                                                                   "then" : {
+                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                      "value" : "[]",
+                                                                                                      "type" : "Literal"
+                                                                                                   },
+                                                                                                   "else" : {
                                                                                                       "type" : "Concatenate",
                                                                                                       "operand" : [ {
                                                                                                          "type" : "Coalesce",
@@ -1182,11 +1198,7 @@
                                                                                                             "type" : "Literal"
                                                                                                          } ]
                                                                                                       } ]
-                                                                                                   }, {
-                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                      "value" : "[]",
-                                                                                                      "type" : "Literal"
-                                                                                                   } ]
+                                                                                                   }
                                                                                                 }, {
                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                    "value" : "",

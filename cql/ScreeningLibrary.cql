@@ -233,12 +233,14 @@ define DecisionAidsString:
   '"recommendationId": "' & Coalesce(DecisionAids.recommendationId, '') & '", ' &
   '"recommendationGroup": "' & Coalesce(DecisionAids.recommendationGroup, '') & '", ' &
   '"recommendationDetails": ' &
-    Coalesce(
-      '[' & Combine(
+    (if DecisionAids.recommendationDetails is null then '[]'
+     else
+      ('[' &
+       Combine(
         DecisionAids.recommendationDetails RD return '"' & RD & '"',
         ', '
-      ) & ']',
-      '[]'
+       ) &
+     ']')
     ) & ', ' &
   '"recommendationDate": "' & Coalesce(ToString(DecisionAids.recommendationDate), '') & '", ' &
   '"errors": ' &
