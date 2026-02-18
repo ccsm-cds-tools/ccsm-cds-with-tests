@@ -113,7 +113,7 @@ define ManageCommonAbnormalityAnalytics:
   IsRarelyScreenedPatient: MCA.IsRarelyScreenedPatient,
   RelevantRow: MCA.RelevantRow,
   LastKnownHsilCytologyDate: ToString(MCA.LastKnownHsilCytology.date),
-  HasAnyAscusHpvPositiveCotest: MCA.AnyAscusHpvPositiveCotest is not null,
+  HasAnyAscusHpvPositiveCotest: Count(MCA.AnyAscusHpvPositiveCotest) > 0,
   DateOfLastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult: ToString(MCA.LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date),
   DateOfLastKnownLsilBeforeMostRecentMostRecentHpvReport: ToString(MCA.LastKnownLsilBeforeMostRecentMostRecentHpvReport.date),
   DateOfLastKnownCytologyInterpretedAsAscusOrAbove: ToString(MCA.LastKnownCytologyInterpretedAsAscusOrAbove.date)
