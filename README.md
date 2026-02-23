@@ -1,3 +1,11 @@
+# debug-main branch
+
+This is a special branch of ccsm-cds-with-tests meant exclusively for debugging. It is mean to be current with main, but includes additional expressions, debugging statements and test cases for the purpose of making investigating sample patient scenarios easier.
+
+This branch is never to be merged into main, and no branches made off of this one should be committed to any main or feature branches. 
+
+**Use this branch only for testing and debugging purposes**. This branch is **not** intended for feature development.
+
 # Cervical Cancer Screening and Management (CCSM) Clinical Decision Support (CDS) with Tests
 
 This repository contains clinical decision support (CDS) which provides recommendations for cervical cancer screening and management (CCSM). The CCSM CDS is expressed in a computer-interpretable format using health information technology (IT) interoperability standards. When used with health IT systems that support the underlying interoperability standards, the CCSM CDS is capable of providing patient-specific recommendations for cervical cancer screening and management decisions. The burden of implementing the CCSM CDS on such health IT systems can be less than what would be needed to develop similar capabilities "from scratch." To verify the correctness of the CCSM CDS, a set of automated tests have been included which use synthetic patient data.
