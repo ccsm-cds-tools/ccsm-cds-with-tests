@@ -24,6 +24,10 @@ const PertinentObservationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-
 const PertinentProcedureQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentProcedureQuestionnaire.json'));
 const PertinentVaccinationQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-PertinentVaccinationQuestionnaire.json'));
 const ScreeningAndManagementHistoryQuestionnaire = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Questionnaire-ScreeningAndManagementHistoryQuestionnaire.json'));
+const CervicalCancerAnalytics = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/PlanDefinition-CervicalCancerAnalytics.json'));
+const OutputAnalytics = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/ActivityDefinition-OutputAnalytics.json'));
+const AnalyticsLibrary = JSON.parse(readFileSync('fsh-tank/fsh-generated/resources/Library-AnalyticsLibrary.json'));
+
 
 // Bring in an example patient bundle from the test folder
 const examplePatientBundle = JSON.parse(readFileSync('test/ManagementTable4/test_results/ManageCommonAbnormality_v1.1.0/bundles/ASCUS_or_LSIL_Then_Less_Than_CIN2_Then_HPV_Negative_ASCUS_or_LSIL_Then_HPV_Negative_ASCUS_or_LSIL_-_1_Year_Follow_Up.json'));
@@ -47,7 +51,8 @@ const elmJsonDependencyArray = [
   JSON.parse(readFileSync('cql/ScreeningDesExposureLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningImmunocompromisedLibrary.json')),
   JSON.parse(readFileSync('cql/ScreeningLibrary.json')),
-  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json'))
+  JSON.parse(readFileSync('cql/ScreeningSymptomaticLibrary.json')),
+  JSON.parse(readFileSync('cql/AnalyticsLibrary.json'))
 ];
 
 // Reformat ELM JSON value set references to match what is expected by the 
@@ -108,6 +113,9 @@ let fhirJsonArray = [
   PertinentProcedureQuestionnaire,
   PertinentVaccinationQuestionnaire,
   ScreeningAndManagementHistoryQuestionnaire,
+  CervicalCancerAnalytics,
+  OutputAnalytics,
+  AnalyticsLibrary,
   ...examplePatientResources
 ];
 

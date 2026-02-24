@@ -1,0 +1,38 @@
+---
+name: Age 61 Will Be 65 at Next Screening - Cervical Cancer Screening
+
+# Patient is 61 years 4 months 18 days old at "run time" ("2021-06-02T00:00:00.000Z")
+# Last screening test was on 2021-01-14
+# Proposed Date of Screening will be 2021 + 5 years or 2026-01-14
+# Patient will be 65 years 11 months and 30 days old on that date, so should be screened
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1960-01-15
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $import: *AdequateScreening
+
+results:
+  IsIncludedAndNotExcluded: true
+  Age30Through65: true
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediatePrimaryHpv: false
+  RecommendImmediateCotesting: false
+  RecommendationText:
+  - 'Cervical cancer screening is next due on 2026-01-14.'
+  - 'The screening can be performed using one of the following screening approaches:'
+  - '1. hrHPV testing alone'
+  - '2. Cotesting with cervical cytology and hrHPV testing'
+  - '3. Cervical cytology testing alone'
+  ProposedScreeningDate: '2026-01-14T00:00:00.000+00:00'
+  WillBeAge65OrLessAtNextScreening: true

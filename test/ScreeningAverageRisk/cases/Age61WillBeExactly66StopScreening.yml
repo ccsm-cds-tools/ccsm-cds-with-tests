@@ -1,0 +1,36 @@
+---
+name: Age 61 Will Be Exactly 66 at Next Screening - Stop Screening
+
+# Patient is 61 years 4 months 19 days old at "run time" ("2021-06-02T00:00:00.000Z")
+# Last screening test was on 2021-01-14
+# Proposed Date of Screening will be 2021 + 5 years or 2026-01-14
+# Patient will be exactly 66 years 0 months and 0 days old on that date, so can stop screening.
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1960-01-14
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+- 
+  $import: *AdequateScreening
+
+results:
+  IsIncludedAndNotExcluded: true
+  Age30Through65: true
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediatePrimaryHpv: false
+  RecommendImmediateCotesting: false
+  RecommendationText:
+  - 'No cervical cancer screening is recommended.'
+  - 'Per USPSTF guidelines, this patient will be older than 65 by the time of their next screening, and has been adequately screened in the past. Therefore, they no longer require cervical cancer screening.'
+  - 'Adequate prior screening is defined as having either three consecutive negative cytology results, or two consecutive negative hrHPV or cotest results, within the past 10 years, with the most recent test occurring within the past 5 years, before stopping screening.'
+  ProposedScreeningDate: '2026-01-14T00:00:00.000+00:00'
+  WillBeAge65OrLessAtNextScreening: false

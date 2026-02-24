@@ -1,0 +1,36 @@
+---
+name: Histology Missing Result Code
+
+# DiagnosticReport with no conclusionCode
+
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+
+# Diagnostic Report coded as a biopsy without a conclusion code
+
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  effectiveDateTime: 2020-12-01  
+  
+- resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#309162003 Normal histology findings (finding)
+  effectiveDateTime: 2020-12-01  
+  
+results:
+  HistologyDiagnosticReports: $should have length 2
+  PertinentObservationsSummary: $should have length 0
+  HistologyDiagnosticReportsSummary: $should have length 2
+  DiagnosticReportsSummary: $should have length 2
+  ErrorDiagnosticReportWithNoConclusonCodes: 'A laboratory test was found without a result. Please review patient record to resolve.'

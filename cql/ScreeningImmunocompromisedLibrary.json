@@ -1474,7 +1474,7 @@
                } ]
             }
          }, {
-            "name" : "RecommendationText",
+            "name" : "WhichRecommendationApplies",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -1491,19 +1491,32 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "type" : "List",
+                        "type" : "Tuple",
                         "element" : [ {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For immunosuppressed individuals age 21 to 29, cervical cytology screening is recommended at the time of initial diagnosis, and should occur annually for 3 consecutive normal tests.",
-                           "type" : "Literal"
+                           "name" : "recommendation",
+                           "value" : {
+                              "type" : "List",
+                              "element" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "For immunosuppressed individuals age 21 to 29, cervical cytology screening is recommended at the time of initial diagnosis, and should occur annually for 3 consecutive normal tests.",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "If the results of 3 consecutive cytology tests are normal, follow-up cytology screening should occur every 3 years until the age of 30 (given normal results).",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "After 30, continue screening with cytology alone or cotesting every 3 years and continue throughout the patient's lifetime.",
+                                 "type" : "Literal"
+                              } ]
+                           }
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "If the results of 3 consecutive cytology tests are normal, follow-up cytology screening should occur every 3 years until the age of 30 (given normal results).",
-                           "type" : "Literal"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "After 30, continue screening with cytology alone or cotesting every 3 years and continue throughout the patient's lifetime.",
-                           "type" : "Literal"
+                           "name" : "id",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "3.ND.Y.0.0",
+                              "type" : "Literal"
+                           }
                         } ]
                      }
                   }, {
@@ -1512,19 +1525,32 @@
                         "type" : "ExpressionRef"
                      },
                      "then" : {
-                        "type" : "List",
+                        "type" : "Tuple",
                         "element" : [ {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "For immunosuppressed individuals age 30 or older, cervical cancer screening is recommended at the time of initial diagnosis using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone.",
-                           "type" : "Literal"
+                           "name" : "recommendation",
+                           "value" : {
+                              "type" : "List",
+                              "element" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "For immunosuppressed individuals age 30 or older, cervical cancer screening is recommended at the time of initial diagnosis using either 1) cotesting with cervical cytology and hrHPV tests, or 2) cervical cytology testing alone.",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "Cotesting should continue every 3 years throughout the patient's lifetime (given normal results).",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient's lifetime.",
+                                 "type" : "Literal"
+                              } ]
+                           }
                         }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "Cotesting should continue every 3 years throughout the patient's lifetime (given normal results).",
-                           "type" : "Literal"
-                        }, {
-                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                           "value" : "If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient's lifetime.",
-                           "type" : "Literal"
+                           "name" : "id",
+                           "value" : {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "3.ND.O.0.0",
+                              "type" : "Literal"
+                           }
                         } ]
                      }
                   } ],
@@ -1534,11 +1560,23 @@
                         "type" : "Null"
                      },
                      "asTypeSpecifier" : {
-                        "type" : "ListTypeSpecifier",
-                        "elementType" : {
-                           "name" : "{urn:hl7-org:elm-types:r1}String",
-                           "type" : "NamedTypeSpecifier"
-                        }
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "recommendation",
+                           "elementType" : {
+                              "type" : "ListTypeSpecifier",
+                              "elementType" : {
+                                 "name" : "{urn:hl7-org:elm-types:r1}String",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           }
+                        }, {
+                           "name" : "id",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
                      }
                   }
                },
@@ -1556,11 +1594,24 @@
                            "type" : "ExpressionRef"
                         },
                         "then" : {
-                           "type" : "List",
+                           "type" : "Tuple",
                            "element" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cervical cytology screening is recommended.",
-                              "type" : "Literal"
+                              "name" : "recommendation",
+                              "value" : {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cytology screening is recommended.",
+                                    "type" : "Literal"
+                                 } ]
+                              }
+                           }, {
+                              "name" : "id",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "3.I.Y.0.0",
+                                 "type" : "Literal"
+                              }
                            } ]
                         }
                      }, {
@@ -1569,27 +1620,40 @@
                            "type" : "ExpressionRef"
                         },
                         "then" : {
-                           "type" : "List",
+                           "type" : "Tuple",
                            "element" : [ {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Cervical cancer screening is recommended.",
-                              "type" : "Literal"
+                              "name" : "recommendation",
+                              "value" : {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cancer screening is recommended.",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "The screening can be performed using one of the following screening approaches:",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "1. Primary HPV testing",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "3. Cervical cytology testing alone",
+                                    "type" : "Literal"
+                                 } ]
+                              }
                            }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "The screening can be performed using one of the following screening approaches:",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "1. Primary HPV testing",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                              "type" : "Literal"
-                           }, {
-                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "3. Cervical cytology testing alone",
-                              "type" : "Literal"
+                              "name" : "id",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "3.I.O.0.0",
+                                 "type" : "Literal"
+                              }
                            } ]
                         }
                      } ],
@@ -1599,11 +1663,23 @@
                            "type" : "Null"
                         },
                         "asTypeSpecifier" : {
-                           "type" : "ListTypeSpecifier",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
+                           "type" : "TupleTypeSpecifier",
+                           "element" : [ {
+                              "name" : "recommendation",
+                              "elementType" : {
+                                 "type" : "ListTypeSpecifier",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }
+                           }, {
+                              "name" : "id",
+                              "elementType" : {
+                                 "name" : "{urn:hl7-org:elm-types:r1}String",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           } ]
                         }
                      }
                   },
@@ -1615,30 +1691,43 @@
                            "type" : "ExpressionRef"
                         },
                         "then" : {
-                           "type" : "List",
+                           "type" : "Tuple",
                            "element" : [ {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "Cervical cytology screening is next due on ",
-                                    "type" : "Literal"
-                                 }, {
-                                    "type" : "ToString",
-                                    "operand" : {
-                                       "type" : "ToDate",
-                                       "operand" : {
-                                          "name" : "ProposedDateOfNextScreening",
-                                          "type" : "ExpressionRef"
-                                       }
-                                    }
+                              "name" : "recommendation",
+                              "value" : {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "type" : "Concatenate",
+                                    "operand" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : "Cervical cytology screening is next due on ",
+                                          "type" : "Literal"
+                                       }, {
+                                          "type" : "ToString",
+                                          "operand" : {
+                                             "type" : "ToDate",
+                                             "operand" : {
+                                                "name" : "ProposedDateOfNextScreening",
+                                                "type" : "ExpressionRef"
+                                             }
+                                          }
+                                       } ]
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : ".",
+                                       "type" : "Literal"
+                                    } ]
                                  } ]
-                              }, {
+                              }
+                           }, {
+                              "name" : "id",
+                              "value" : {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : ".",
+                                 "value" : "3.F.Y.0.0",
                                  "type" : "Literal"
-                              } ]
+                              }
                            } ]
                         }
                      }, {
@@ -1653,73 +1742,99 @@
                               "type" : "ExpressionRef"
                            },
                            "then" : {
-                              "type" : "List",
+                              "type" : "Tuple",
                               "element" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
-                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "Cervical cancer screening is next due on ",
-                                       "type" : "Literal"
-                                    }, {
-                                       "type" : "ToString",
-                                       "operand" : {
-                                          "type" : "ToDate",
-                                          "operand" : {
-                                             "name" : "ProposedDateOfNextScreening",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedDateOfNextScreening",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
                                     } ]
-                                 }, {
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : ".",
+                                    "value" : "3.F.O.C.0",
                                     "type" : "Literal"
-                                 } ]
+                                 }
                               } ]
                            },
                            "else" : {
-                              "type" : "List",
+                              "type" : "Tuple",
                               "element" : [ {
-                                 "type" : "Concatenate",
-                                 "operand" : [ {
-                                    "type" : "Concatenate",
-                                    "operand" : [ {
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is recommended and next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedDateOfNextScreening",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                       "value" : "Cervical cancer screening is recommended and next due on ",
+                                       "value" : "The screening can be performed using one of the following screening approaches:",
                                        "type" : "Literal"
                                     }, {
-                                       "type" : "ToString",
-                                       "operand" : {
-                                          "type" : "ToDate",
-                                          "operand" : {
-                                             "name" : "ProposedDateOfNextScreening",
-                                             "type" : "ExpressionRef"
-                                          }
-                                       }
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "1. Primary HPV testing",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "3. Cervical cytology testing alone",
+                                       "type" : "Literal"
                                     } ]
-                                 }, {
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : ".",
+                                    "value" : "3.F.O.G.0",
                                     "type" : "Literal"
-                                 } ]
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "The screening can be performed using one of the following screening approaches:",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "1. Primary HPV testing",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "2. Cotesting with cervical cytology and hrHPV testing",
-                                 "type" : "Literal"
-                              }, {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "3. Cervical cytology testing alone",
-                                 "type" : "Literal"
+                                 }
                               } ]
                            }
                         }
@@ -1730,13 +1845,95 @@
                            "type" : "Null"
                         },
                         "asTypeSpecifier" : {
-                           "type" : "ListTypeSpecifier",
-                           "elementType" : {
-                              "name" : "{urn:hl7-org:elm-types:r1}String",
-                              "type" : "NamedTypeSpecifier"
-                           }
+                           "type" : "TupleTypeSpecifier",
+                           "element" : [ {
+                              "name" : "recommendation",
+                              "elementType" : {
+                                 "type" : "ListTypeSpecifier",
+                                 "elementType" : {
+                                    "name" : "{urn:hl7-org:elm-types:r1}String",
+                                    "type" : "NamedTypeSpecifier"
+                                 }
+                              }
+                           }, {
+                              "name" : "id",
+                              "elementType" : {
+                                 "name" : "{urn:hl7-org:elm-types:r1}String",
+                                 "type" : "NamedTypeSpecifier"
+                              }
+                           } ]
                         }
                      }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "recommendation",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "name" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "NamedTypeSpecifier"
+                     }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationId",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "id",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
                   }
                }
             }
@@ -1841,6 +2038,12 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
+                     "name" : "id",
+                     "value" : {
+                        "name" : "RecommendationId",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
                      "name" : "group",
                      "value" : {
                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -1876,6 +2079,12 @@
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
+                        }
+                     }, {
+                        "name" : "id",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",

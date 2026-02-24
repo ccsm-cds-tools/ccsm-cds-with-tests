@@ -321,7 +321,7 @@
                } ]
             }
          }, {
-            "name" : "RecommendationText",
+            "name" : "WhichRecommendationApplies",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
@@ -331,16 +331,79 @@
                   "type" : "ExpressionRef"
                },
                "then" : {
-                  "type" : "List",
+                  "type" : "Tuple",
                   "element" : [ {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "Consider individualized care for this patient.",
-                     "type" : "Literal"
+                     "name" : "recommendation",
+                     "value" : {
+                        "type" : "List",
+                        "element" : [ {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Consider individualized care for this patient.",
+                           "type" : "Literal"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ACOG guidelines recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.",
+                           "type" : "Literal"
+                        } ]
+                     }
                   }, {
-                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                     "value" : "ACOG guidelines recommended annual cervical cytology screening for individuals with DES exposure in utero, with tissue sampling that includes collection of endocervical and ectocervical cells, as well as cells from vaginal fornices.",
-                     "type" : "Literal"
+                     "name" : "id",
+                     "value" : {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "2.S.0.0.0",
+                        "type" : "Literal"
+                     }
                   } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "recommendation",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "id",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationText",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "recommendation",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
                },
                "else" : {
                   "type" : "As",
@@ -353,6 +416,38 @@
                         "name" : "{urn:hl7-org:elm-types:r1}String",
                         "type" : "NamedTypeSpecifier"
                      }
+                  }
+               }
+            }
+         }, {
+            "name" : "RecommendationId",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "WhichRecommendationApplies",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "path" : "id",
+                  "type" : "Property",
+                  "source" : {
+                     "name" : "WhichRecommendationApplies",
+                     "type" : "ExpressionRef"
+                  }
+               },
+               "else" : {
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
                   }
                }
             }
@@ -424,6 +519,12 @@
                         "type" : "ExpressionRef"
                      }
                   }, {
+                     "name" : "id",
+                     "value" : {
+                        "name" : "RecommendationId",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
                      "name" : "group",
                      "value" : {
                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -459,6 +560,12 @@
                               "name" : "{urn:hl7-org:elm-types:r1}String",
                               "type" : "NamedTypeSpecifier"
                            }
+                        }
+                     }, {
+                        "name" : "id",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
                         }
                      }, {
                         "name" : "group",
