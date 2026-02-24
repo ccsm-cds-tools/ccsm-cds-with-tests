@@ -12504,12 +12504,19 @@
                                                                         "type" : "Literal"
                                                                      } ]
                                                                   }, {
-                                                                     "path" : "riskTableInput",
-                                                                     "type" : "Property",
-                                                                     "source" : {
-                                                                        "name" : "HighestRanked",
-                                                                        "type" : "QueryLetRef"
-                                                                     }
+                                                                     "type" : "Coalesce",
+                                                                     "operand" : [ {
+                                                                        "path" : "riskTableInput",
+                                                                        "type" : "Property",
+                                                                        "source" : {
+                                                                           "name" : "HighestRanked",
+                                                                           "type" : "QueryLetRef"
+                                                                        }
+                                                                     }, {
+                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                        "value" : "",
+                                                                        "type" : "Literal"
+                                                                     } ]
                                                                   } ]
                                                                }, {
                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -12526,74 +12533,75 @@
                                                             "operand" : [ {
                                                                "type" : "Combine",
                                                                "source" : {
-                                                                  "type" : "Query",
-                                                                  "source" : [ {
-                                                                     "alias" : "X",
-                                                                     "expression" : {
-                                                                        "type" : "Flatten",
-                                                                        "operand" : {
-                                                                           "type" : "Query",
-                                                                           "source" : [ {
-                                                                              "alias" : "cC",
-                                                                              "expression" : {
-                                                                                 "name" : "CollatedCodes",
-                                                                                 "type" : "QueryLetRef"
-                                                                              }
-                                                                           } ],
-                                                                           "relationship" : [ ],
-                                                                           "return" : {
-                                                                              "expression" : {
-                                                                                 "type" : "Flatten",
-                                                                                 "operand" : {
+                                                                  "type" : "Flatten",
+                                                                  "operand" : {
+                                                                     "type" : "Query",
+                                                                     "source" : [ {
+                                                                        "alias" : "cC",
+                                                                        "expression" : {
+                                                                           "name" : "CollatedCodes",
+                                                                           "type" : "QueryLetRef"
+                                                                        }
+                                                                     } ],
+                                                                     "relationship" : [ ],
+                                                                     "return" : {
+                                                                        "expression" : {
+                                                                           "type" : "Flatten",
+                                                                           "operand" : {
+                                                                              "type" : "Query",
+                                                                              "source" : [ {
+                                                                                 "alias" : "X",
+                                                                                 "expression" : {
                                                                                     "type" : "Query",
                                                                                     "source" : [ {
-                                                                                       "alias" : "X",
+                                                                                       "alias" : "cCC",
                                                                                        "expression" : {
-                                                                                          "type" : "Query",
-                                                                                          "source" : [ {
-                                                                                             "alias" : "cCC",
-                                                                                             "expression" : {
-                                                                                                "path" : "coding",
-                                                                                                "scope" : "cC",
-                                                                                                "type" : "Property"
-                                                                                             }
-                                                                                          } ],
-                                                                                          "relationship" : [ ],
-                                                                                          "return" : {
-                                                                                             "expression" : {
-                                                                                                "path" : "display",
-                                                                                                "scope" : "cCC",
-                                                                                                "type" : "Property"
-                                                                                             }
-                                                                                          }
+                                                                                          "path" : "coding",
+                                                                                          "scope" : "cC",
+                                                                                          "type" : "Property"
                                                                                        }
                                                                                     } ],
+                                                                                    "relationship" : [ ],
                                                                                     "return" : {
-                                                                                       "distinct" : false,
                                                                                        "expression" : {
-                                                                                          "type" : "ToList",
-                                                                                          "operand" : {
-                                                                                             "name" : "X",
-                                                                                             "type" : "AliasRef"
-                                                                                          }
+                                                                                          "type" : "Concatenate",
+                                                                                          "operand" : [ {
+                                                                                             "type" : "Concatenate",
+                                                                                             "operand" : [ {
+                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                "value" : "\"",
+                                                                                                "type" : "Literal"
+                                                                                             }, {
+                                                                                                "name" : "ToString",
+                                                                                                "libraryName" : "FHIRHelpers",
+                                                                                                "type" : "FunctionRef",
+                                                                                                "operand" : [ {
+                                                                                                   "path" : "display",
+                                                                                                   "scope" : "cCC",
+                                                                                                   "type" : "Property"
+                                                                                                } ]
+                                                                                             } ]
+                                                                                          }, {
+                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                             "value" : "\"",
+                                                                                             "type" : "Literal"
+                                                                                          } ]
                                                                                        }
+                                                                                    }
+                                                                                 }
+                                                                              } ],
+                                                                              "return" : {
+                                                                                 "distinct" : false,
+                                                                                 "expression" : {
+                                                                                    "type" : "ToList",
+                                                                                    "operand" : {
+                                                                                       "name" : "X",
+                                                                                       "type" : "AliasRef"
                                                                                     }
                                                                                  }
                                                                               }
                                                                            }
                                                                         }
-                                                                     }
-                                                                  } ],
-                                                                  "return" : {
-                                                                     "distinct" : false,
-                                                                     "expression" : {
-                                                                        "name" : "ToString",
-                                                                        "libraryName" : "FHIRHelpers",
-                                                                        "type" : "FunctionRef",
-                                                                        "operand" : [ {
-                                                                           "name" : "X",
-                                                                           "type" : "AliasRef"
-                                                                        } ]
                                                                      }
                                                                   }
                                                                },
@@ -12717,6 +12725,106 @@
                "operandTypeSpecifier" : {
                   "name" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "JsonArrayOrEmpty",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "items",
+                        "type" : "OperandRef"
+                     }
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
+                           "name" : "items",
+                           "type" : "OperandRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               },
+               "then" : {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "[]",
+                  "type" : "Literal"
+               },
+               "else" : {
+                  "type" : "Concatenate",
+                  "operand" : [ {
+                     "type" : "Coalesce",
+                     "operand" : [ {
+                        "type" : "Concatenate",
+                        "operand" : [ {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "[",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Coalesce",
+                           "operand" : [ {
+                              "type" : "Combine",
+                              "source" : {
+                                 "name" : "items",
+                                 "type" : "OperandRef"
+                              },
+                              "separator" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : ", ",
+                                 "type" : "Literal"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Coalesce",
+                     "operand" : [ {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "]",
+                        "type" : "Literal"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "",
+                        "type" : "Literal"
+                     } ]
+                  } ]
+               }
+            },
+            "operand" : [ {
+               "name" : "items",
+               "operandTypeSpecifier" : {
+                  "type" : "ListTypeSpecifier",
+                  "elementType" : {
+                     "name" : "{urn:hl7-org:elm-types:r1}String",
+                     "type" : "NamedTypeSpecifier"
+                  }
                }
             } ]
          }, {
@@ -13088,58 +13196,27 @@
                                                    "condition" : {
                                                       "type" : "Not",
                                                       "operand" : {
-                                                         "type" : "IsNull",
-                                                         "operand" : {
-                                                            "name" : "HpvDiagnosticReportsSummaryString",
-                                                            "type" : "ExpressionRef"
-                                                         }
-                                                      }
-                                                   },
-                                                   "then" : {
-                                                      "type" : "Concatenate",
-                                                      "operand" : [ {
-                                                         "type" : "Coalesce",
+                                                         "type" : "Equal",
                                                          "operand" : [ {
-                                                            "type" : "Concatenate",
+                                                            "type" : "Coalesce",
                                                             "operand" : [ {
-                                                               "type" : "Coalesce",
-                                                               "operand" : [ {
-                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                  "value" : "\"",
-                                                                  "type" : "Literal"
-                                                               }, {
-                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                  "value" : "",
-                                                                  "type" : "Literal"
-                                                               } ]
+                                                               "name" : "HpvDiagnosticReportsSummaryString",
+                                                               "type" : "ExpressionRef"
                                                             }, {
-                                                               "type" : "Coalesce",
-                                                               "operand" : [ {
-                                                                  "name" : "HpvDiagnosticReportsSummaryString",
-                                                                  "type" : "ExpressionRef"
-                                                               }, {
-                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                  "value" : "",
-                                                                  "type" : "Literal"
-                                                               } ]
+                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                               "value" : "",
+                                                               "type" : "Literal"
                                                             } ]
                                                          }, {
                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                             "value" : "",
                                                             "type" : "Literal"
                                                          } ]
-                                                      }, {
-                                                         "type" : "Coalesce",
-                                                         "operand" : [ {
-                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                            "value" : "\"",
-                                                            "type" : "Literal"
-                                                         }, {
-                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                            "value" : "",
-                                                            "type" : "Literal"
-                                                         } ]
-                                                      } ]
+                                                      }
+                                                   },
+                                                   "then" : {
+                                                      "name" : "HpvDiagnosticReportsSummaryString",
+                                                      "type" : "ExpressionRef"
                                                    },
                                                    "else" : {
                                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -13166,31 +13243,64 @@
                                                 "operand" : [ {
                                                    "type" : "Not",
                                                    "operand" : {
-                                                      "type" : "IsNull",
-                                                      "operand" : {
-                                                         "name" : "HpvDiagnosticReportsSummaryString",
-                                                         "type" : "ExpressionRef"
-                                                      }
+                                                      "type" : "Equal",
+                                                      "operand" : [ {
+                                                         "type" : "Coalesce",
+                                                         "operand" : [ {
+                                                            "name" : "HpvDiagnosticReportsSummaryString",
+                                                            "type" : "ExpressionRef"
+                                                         }, {
+                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                            "value" : "",
+                                                            "type" : "Literal"
+                                                         } ]
+                                                      }, {
+                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                         "value" : "",
+                                                         "type" : "Literal"
+                                                      } ]
                                                    }
                                                 }, {
                                                    "type" : "Or",
                                                    "operand" : [ {
                                                       "type" : "Not",
                                                       "operand" : {
-                                                         "type" : "IsNull",
-                                                         "operand" : {
-                                                            "name" : "CervicalCytologyReportsSummaryString",
-                                                            "type" : "ExpressionRef"
-                                                         }
+                                                         "type" : "Equal",
+                                                         "operand" : [ {
+                                                            "type" : "Coalesce",
+                                                            "operand" : [ {
+                                                               "name" : "CervicalCytologyReportsSummaryString",
+                                                               "type" : "ExpressionRef"
+                                                            }, {
+                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                               "value" : "",
+                                                               "type" : "Literal"
+                                                            } ]
+                                                         }, {
+                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                            "value" : "",
+                                                            "type" : "Literal"
+                                                         } ]
                                                       }
                                                    }, {
                                                       "type" : "Not",
                                                       "operand" : {
-                                                         "type" : "IsNull",
-                                                         "operand" : {
-                                                            "name" : "HistologyDiagnosticReportsSummaryString",
-                                                            "type" : "ExpressionRef"
-                                                         }
+                                                         "type" : "Equal",
+                                                         "operand" : [ {
+                                                            "type" : "Coalesce",
+                                                            "operand" : [ {
+                                                               "name" : "HistologyDiagnosticReportsSummaryString",
+                                                               "type" : "ExpressionRef"
+                                                            }, {
+                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                               "value" : "",
+                                                               "type" : "Literal"
+                                                            } ]
+                                                         }, {
+                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                            "value" : "",
+                                                            "type" : "Literal"
+                                                         } ]
                                                       }
                                                    } ]
                                                 } ]
@@ -13223,58 +13333,27 @@
                                        "condition" : {
                                           "type" : "Not",
                                           "operand" : {
-                                             "type" : "IsNull",
-                                             "operand" : {
-                                                "name" : "CervicalCytologyReportsSummaryString",
-                                                "type" : "ExpressionRef"
-                                             }
-                                          }
-                                       },
-                                       "then" : {
-                                          "type" : "Concatenate",
-                                          "operand" : [ {
-                                             "type" : "Coalesce",
+                                             "type" : "Equal",
                                              "operand" : [ {
-                                                "type" : "Concatenate",
+                                                "type" : "Coalesce",
                                                 "operand" : [ {
-                                                   "type" : "Coalesce",
-                                                   "operand" : [ {
-                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                      "value" : "\"",
-                                                      "type" : "Literal"
-                                                   }, {
-                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                      "value" : "",
-                                                      "type" : "Literal"
-                                                   } ]
+                                                   "name" : "CervicalCytologyReportsSummaryString",
+                                                   "type" : "ExpressionRef"
                                                 }, {
-                                                   "type" : "Coalesce",
-                                                   "operand" : [ {
-                                                      "name" : "CervicalCytologyReportsSummaryString",
-                                                      "type" : "ExpressionRef"
-                                                   }, {
-                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                      "value" : "",
-                                                      "type" : "Literal"
-                                                   } ]
+                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                   "value" : "",
+                                                   "type" : "Literal"
                                                 } ]
                                              }, {
                                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                 "value" : "",
                                                 "type" : "Literal"
                                              } ]
-                                          }, {
-                                             "type" : "Coalesce",
-                                             "operand" : [ {
-                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                "value" : "\"",
-                                                "type" : "Literal"
-                                             }, {
-                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                "value" : "",
-                                                "type" : "Literal"
-                                             } ]
-                                          } ]
+                                          }
+                                       },
+                                       "then" : {
+                                          "name" : "CervicalCytologyReportsSummaryString",
+                                          "type" : "ExpressionRef"
                                        },
                                        "else" : {
                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -13301,20 +13380,42 @@
                                     "operand" : [ {
                                        "type" : "Not",
                                        "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "name" : "CervicalCytologyReportsSummaryString",
-                                             "type" : "ExpressionRef"
-                                          }
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "type" : "Coalesce",
+                                             "operand" : [ {
+                                                "name" : "CervicalCytologyReportsSummaryString",
+                                                "type" : "ExpressionRef"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "",
+                                                "type" : "Literal"
+                                             } ]
+                                          }, {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "",
+                                             "type" : "Literal"
+                                          } ]
                                        }
                                     }, {
                                        "type" : "Not",
                                        "operand" : {
-                                          "type" : "IsNull",
-                                          "operand" : {
-                                             "name" : "HistologyDiagnosticReportsSummaryString",
-                                             "type" : "ExpressionRef"
-                                          }
+                                          "type" : "Equal",
+                                          "operand" : [ {
+                                             "type" : "Coalesce",
+                                             "operand" : [ {
+                                                "name" : "HistologyDiagnosticReportsSummaryString",
+                                                "type" : "ExpressionRef"
+                                             }, {
+                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                "value" : "",
+                                                "type" : "Literal"
+                                             } ]
+                                          }, {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "",
+                                             "type" : "Literal"
+                                          } ]
                                        }
                                     } ]
                                  },
@@ -13346,58 +13447,27 @@
                            "condition" : {
                               "type" : "Not",
                               "operand" : {
-                                 "type" : "IsNull",
-                                 "operand" : {
-                                    "name" : "HistologyDiagnosticReportsSummaryString",
-                                    "type" : "ExpressionRef"
-                                 }
-                              }
-                           },
-                           "then" : {
-                              "type" : "Concatenate",
-                              "operand" : [ {
-                                 "type" : "Coalesce",
+                                 "type" : "Equal",
                                  "operand" : [ {
-                                    "type" : "Concatenate",
+                                    "type" : "Coalesce",
                                     "operand" : [ {
-                                       "type" : "Coalesce",
-                                       "operand" : [ {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "\"",
-                                          "type" : "Literal"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "",
-                                          "type" : "Literal"
-                                       } ]
+                                       "name" : "HistologyDiagnosticReportsSummaryString",
+                                       "type" : "ExpressionRef"
                                     }, {
-                                       "type" : "Coalesce",
-                                       "operand" : [ {
-                                          "name" : "HistologyDiagnosticReportsSummaryString",
-                                          "type" : "ExpressionRef"
-                                       }, {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : "",
-                                          "type" : "Literal"
-                                       } ]
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "",
+                                       "type" : "Literal"
                                     } ]
                                  }, {
                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                     "value" : "",
                                     "type" : "Literal"
                                  } ]
-                              }, {
-                                 "type" : "Coalesce",
-                                 "operand" : [ {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "\"",
-                                    "type" : "Literal"
-                                 }, {
-                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                    "value" : "",
-                                    "type" : "Literal"
-                                 } ]
-                              } ]
+                              }
+                           },
+                           "then" : {
+                              "name" : "HistologyDiagnosticReportsSummaryString",
+                              "type" : "ExpressionRef"
                            },
                            "else" : {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17053,30 +17123,9 @@
                                                                                                                                                                                                                                                                                                                                                    "operand" : [ {
                                                                                                                                                                                                                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                                                       "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                                         "type" : "Concatenate",
-                                                                                                                                                                                                                                                                                                                                                         "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                                            "type" : "Coalesce",
-                                                                                                                                                                                                                                                                                                                                                            "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                                               "value" : "{",
-                                                                                                                                                                                                                                                                                                                                                               "type" : "Literal"
-                                                                                                                                                                                                                                                                                                                                                            }, {
-                                                                                                                                                                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                                               "value" : "",
-                                                                                                                                                                                                                                                                                                                                                               "type" : "Literal"
-                                                                                                                                                                                                                                                                                                                                                            } ]
-                                                                                                                                                                                                                                                                                                                                                         }, {
-                                                                                                                                                                                                                                                                                                                                                            "type" : "Coalesce",
-                                                                                                                                                                                                                                                                                                                                                            "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                                               "value" : "\"patientInfo\": {",
-                                                                                                                                                                                                                                                                                                                                                               "type" : "Literal"
-                                                                                                                                                                                                                                                                                                                                                            }, {
-                                                                                                                                                                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                                               "value" : "",
-                                                                                                                                                                                                                                                                                                                                                               "type" : "Literal"
-                                                                                                                                                                                                                                                                                                                                                            } ]
-                                                                                                                                                                                                                                                                                                                                                         } ]
+                                                                                                                                                                                                                                                                                                                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                                                                                                         "value" : "{",
+                                                                                                                                                                                                                                                                                                                                                         "type" : "Literal"
                                                                                                                                                                                                                                                                                                                                                       }, {
                                                                                                                                                                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                                                          "value" : "",
@@ -17086,7 +17135,7 @@
                                                                                                                                                                                                                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                                                       "operand" : [ {
                                                                                                                                                                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                                         "value" : "\"name\": \"",
+                                                                                                                                                                                                                                                                                                                                                         "value" : "\"patientInfo\": {",
                                                                                                                                                                                                                                                                                                                                                          "type" : "Literal"
                                                                                                                                                                                                                                                                                                                                                       }, {
                                                                                                                                                                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17102,8 +17151,9 @@
                                                                                                                                                                                                                                                                                                                                              }, {
                                                                                                                                                                                                                                                                                                                                                 "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                                                 "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                                   "name" : "PatientName",
-                                                                                                                                                                                                                                                                                                                                                   "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                                                                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                                                                                                   "value" : "\"name\": \"",
+                                                                                                                                                                                                                                                                                                                                                   "type" : "Literal"
                                                                                                                                                                                                                                                                                                                                                 }, {
                                                                                                                                                                                                                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                                                    "value" : "",
@@ -17118,9 +17168,8 @@
                                                                                                                                                                                                                                                                                                                                        }, {
                                                                                                                                                                                                                                                                                                                                           "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                                           "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                             "value" : "\", ",
-                                                                                                                                                                                                                                                                                                                                             "type" : "Literal"
+                                                                                                                                                                                                                                                                                                                                             "name" : "PatientName",
+                                                                                                                                                                                                                                                                                                                                             "type" : "ExpressionRef"
                                                                                                                                                                                                                                                                                                                                           }, {
                                                                                                                                                                                                                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                                              "value" : "",
@@ -17136,7 +17185,7 @@
                                                                                                                                                                                                                                                                                                                                     "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                                     "operand" : [ {
                                                                                                                                                                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                                       "value" : "\"id\": ",
+                                                                                                                                                                                                                                                                                                                                       "value" : "\", ",
                                                                                                                                                                                                                                                                                                                                        "type" : "Literal"
                                                                                                                                                                                                                                                                                                                                     }, {
                                                                                                                                                                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17152,8 +17201,9 @@
                                                                                                                                                                                                                                                                                                                            }, {
                                                                                                                                                                                                                                                                                                                               "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                               "operand" : [ {
-                                                                                                                                                                                                                                                                                                                                 "name" : "PatientIdentifiersAsString",
-                                                                                                                                                                                                                                                                                                                                 "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                                                                                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                                                                                 "value" : "\"id\": ",
+                                                                                                                                                                                                                                                                                                                                 "type" : "Literal"
                                                                                                                                                                                                                                                                                                                               }, {
                                                                                                                                                                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                                  "value" : "",
@@ -17168,9 +17218,8 @@
                                                                                                                                                                                                                                                                                                                      }, {
                                                                                                                                                                                                                                                                                                                         "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                         "operand" : [ {
-                                                                                                                                                                                                                                                                                                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                           "value" : ", ",
-                                                                                                                                                                                                                                                                                                                           "type" : "Literal"
+                                                                                                                                                                                                                                                                                                                           "name" : "PatientIdentifiersAsString",
+                                                                                                                                                                                                                                                                                                                           "type" : "ExpressionRef"
                                                                                                                                                                                                                                                                                                                         }, {
                                                                                                                                                                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                            "value" : "",
@@ -17186,7 +17235,7 @@
                                                                                                                                                                                                                                                                                                                   "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                                   "operand" : [ {
                                                                                                                                                                                                                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                                     "value" : "\"isPregnant\": \"",
+                                                                                                                                                                                                                                                                                                                     "value" : ", ",
                                                                                                                                                                                                                                                                                                                      "type" : "Literal"
                                                                                                                                                                                                                                                                                                                   }, {
                                                                                                                                                                                                                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17202,11 +17251,9 @@
                                                                                                                                                                                                                                                                                                          }, {
                                                                                                                                                                                                                                                                                                             "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                             "operand" : [ {
-                                                                                                                                                                                                                                                                                                               "type" : "ToString",
-                                                                                                                                                                                                                                                                                                               "operand" : {
-                                                                                                                                                                                                                                                                                                                  "name" : "Pregnant",
-                                                                                                                                                                                                                                                                                                                  "type" : "ExpressionRef"
-                                                                                                                                                                                                                                                                                                               }
+                                                                                                                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                                                               "value" : "\"isPregnant\": \"",
+                                                                                                                                                                                                                                                                                                               "type" : "Literal"
                                                                                                                                                                                                                                                                                                             }, {
                                                                                                                                                                                                                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                                "value" : "",
@@ -17221,9 +17268,11 @@
                                                                                                                                                                                                                                                                                                    }, {
                                                                                                                                                                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                       "operand" : [ {
-                                                                                                                                                                                                                                                                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                         "value" : "\", ",
-                                                                                                                                                                                                                                                                                                         "type" : "Literal"
+                                                                                                                                                                                                                                                                                                         "type" : "ToString",
+                                                                                                                                                                                                                                                                                                         "operand" : {
+                                                                                                                                                                                                                                                                                                            "name" : "Pregnant",
+                                                                                                                                                                                                                                                                                                            "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                                                                         }
                                                                                                                                                                                                                                                                                                       }, {
                                                                                                                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                                          "value" : "",
@@ -17239,7 +17288,7 @@
                                                                                                                                                                                                                                                                                                 "type" : "Coalesce",
                                                                                                                                                                                                                                                                                                 "operand" : [ {
                                                                                                                                                                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                                   "value" : "\"dateOfBirth\": \"",
+                                                                                                                                                                                                                                                                                                   "value" : "\", ",
                                                                                                                                                                                                                                                                                                    "type" : "Literal"
                                                                                                                                                                                                                                                                                                 }, {
                                                                                                                                                                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17255,20 +17304,9 @@
                                                                                                                                                                                                                                                                                        }, {
                                                                                                                                                                                                                                                                                           "type" : "Coalesce",
                                                                                                                                                                                                                                                                                           "operand" : [ {
-                                                                                                                                                                                                                                                                                             "type" : "ToString",
-                                                                                                                                                                                                                                                                                             "operand" : {
-                                                                                                                                                                                                                                                                                                "name" : "ToDate",
-                                                                                                                                                                                                                                                                                                "libraryName" : "FHIRHelpers",
-                                                                                                                                                                                                                                                                                                "type" : "FunctionRef",
-                                                                                                                                                                                                                                                                                                "operand" : [ {
-                                                                                                                                                                                                                                                                                                   "path" : "birthDate",
-                                                                                                                                                                                                                                                                                                   "type" : "Property",
-                                                                                                                                                                                                                                                                                                   "source" : {
-                                                                                                                                                                                                                                                                                                      "name" : "Patient",
-                                                                                                                                                                                                                                                                                                      "type" : "ExpressionRef"
-                                                                                                                                                                                                                                                                                                   }
-                                                                                                                                                                                                                                                                                                } ]
-                                                                                                                                                                                                                                                                                             }
+                                                                                                                                                                                                                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                                             "value" : "\"dateOfBirth\": \"",
+                                                                                                                                                                                                                                                                                             "type" : "Literal"
                                                                                                                                                                                                                                                                                           }, {
                                                                                                                                                                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                              "value" : "",
@@ -17283,9 +17321,20 @@
                                                                                                                                                                                                                                                                                  }, {
                                                                                                                                                                                                                                                                                     "type" : "Coalesce",
                                                                                                                                                                                                                                                                                     "operand" : [ {
-                                                                                                                                                                                                                                                                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                       "value" : "\", ",
-                                                                                                                                                                                                                                                                                       "type" : "Literal"
+                                                                                                                                                                                                                                                                                       "type" : "ToString",
+                                                                                                                                                                                                                                                                                       "operand" : {
+                                                                                                                                                                                                                                                                                          "name" : "ToDate",
+                                                                                                                                                                                                                                                                                          "libraryName" : "FHIRHelpers",
+                                                                                                                                                                                                                                                                                          "type" : "FunctionRef",
+                                                                                                                                                                                                                                                                                          "operand" : [ {
+                                                                                                                                                                                                                                                                                             "path" : "birthDate",
+                                                                                                                                                                                                                                                                                             "type" : "Property",
+                                                                                                                                                                                                                                                                                             "source" : {
+                                                                                                                                                                                                                                                                                                "name" : "Patient",
+                                                                                                                                                                                                                                                                                                "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                                                             }
+                                                                                                                                                                                                                                                                                          } ]
+                                                                                                                                                                                                                                                                                       }
                                                                                                                                                                                                                                                                                     }, {
                                                                                                                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                                        "value" : "",
@@ -17301,7 +17350,7 @@
                                                                                                                                                                                                                                                                               "type" : "Coalesce",
                                                                                                                                                                                                                                                                               "operand" : [ {
                                                                                                                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                                 "value" : "\"sexAtBirth\": \"",
+                                                                                                                                                                                                                                                                                 "value" : "\", ",
                                                                                                                                                                                                                                                                                  "type" : "Literal"
                                                                                                                                                                                                                                                                               }, {
                                                                                                                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17317,8 +17366,9 @@
                                                                                                                                                                                                                                                                      }, {
                                                                                                                                                                                                                                                                         "type" : "Coalesce",
                                                                                                                                                                                                                                                                         "operand" : [ {
-                                                                                                                                                                                                                                                                           "name" : "BirthSexText",
-                                                                                                                                                                                                                                                                           "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                                           "value" : "\"sexAtBirth\": \"",
+                                                                                                                                                                                                                                                                           "type" : "Literal"
                                                                                                                                                                                                                                                                         }, {
                                                                                                                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                            "value" : "",
@@ -17333,9 +17383,8 @@
                                                                                                                                                                                                                                                                }, {
                                                                                                                                                                                                                                                                   "type" : "Coalesce",
                                                                                                                                                                                                                                                                   "operand" : [ {
-                                                                                                                                                                                                                                                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                                     "value" : "\", ",
-                                                                                                                                                                                                                                                                     "type" : "Literal"
+                                                                                                                                                                                                                                                                     "name" : "BirthSexText",
+                                                                                                                                                                                                                                                                     "type" : "ExpressionRef"
                                                                                                                                                                                                                                                                   }, {
                                                                                                                                                                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                                      "value" : "",
@@ -17351,7 +17400,7 @@
                                                                                                                                                                                                                                                             "type" : "Coalesce",
                                                                                                                                                                                                                                                             "operand" : [ {
                                                                                                                                                                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                               "value" : "\"age\": \"",
+                                                                                                                                                                                                                                                               "value" : "\", ",
                                                                                                                                                                                                                                                                "type" : "Literal"
                                                                                                                                                                                                                                                             }, {
                                                                                                                                                                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17367,19 +17416,9 @@
                                                                                                                                                                                                                                                    }, {
                                                                                                                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                                                                                                                       "operand" : [ {
-                                                                                                                                                                                                                                                         "type" : "ToString",
-                                                                                                                                                                                                                                                         "operand" : {
-                                                                                                                                                                                                                                                            "precision" : "Year",
-                                                                                                                                                                                                                                                            "type" : "CalculateAge",
-                                                                                                                                                                                                                                                            "operand" : {
-                                                                                                                                                                                                                                                               "path" : "birthDate.value",
-                                                                                                                                                                                                                                                               "type" : "Property",
-                                                                                                                                                                                                                                                               "source" : {
-                                                                                                                                                                                                                                                                  "name" : "Patient",
-                                                                                                                                                                                                                                                                  "type" : "ExpressionRef"
-                                                                                                                                                                                                                                                               }
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                         }
+                                                                                                                                                                                                                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                                         "value" : "\"age\": \"",
+                                                                                                                                                                                                                                                         "type" : "Literal"
                                                                                                                                                                                                                                                       }, {
                                                                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                          "value" : "",
@@ -17394,9 +17433,19 @@
                                                                                                                                                                                                                                              }, {
                                                                                                                                                                                                                                                 "type" : "Coalesce",
                                                                                                                                                                                                                                                 "operand" : [ {
-                                                                                                                                                                                                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                                   "value" : "\", ",
-                                                                                                                                                                                                                                                   "type" : "Literal"
+                                                                                                                                                                                                                                                   "type" : "ToString",
+                                                                                                                                                                                                                                                   "operand" : {
+                                                                                                                                                                                                                                                      "precision" : "Year",
+                                                                                                                                                                                                                                                      "type" : "CalculateAge",
+                                                                                                                                                                                                                                                      "operand" : {
+                                                                                                                                                                                                                                                         "path" : "birthDate.value",
+                                                                                                                                                                                                                                                         "type" : "Property",
+                                                                                                                                                                                                                                                         "source" : {
+                                                                                                                                                                                                                                                            "name" : "Patient",
+                                                                                                                                                                                                                                                            "type" : "ExpressionRef"
+                                                                                                                                                                                                                                                         }
+                                                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                                                   }
                                                                                                                                                                                                                                                 }, {
                                                                                                                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                                    "value" : "",
@@ -17412,7 +17461,7 @@
                                                                                                                                                                                                                                           "type" : "Coalesce",
                                                                                                                                                                                                                                           "operand" : [ {
                                                                                                                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                             "value" : "\"gender\": \"",
+                                                                                                                                                                                                                                             "value" : "\", ",
                                                                                                                                                                                                                                              "type" : "Literal"
                                                                                                                                                                                                                                           }, {
                                                                                                                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17428,8 +17477,9 @@
                                                                                                                                                                                                                                  }, {
                                                                                                                                                                                                                                     "type" : "Coalesce",
                                                                                                                                                                                                                                     "operand" : [ {
-                                                                                                                                                                                                                                       "name" : "GenderText",
-                                                                                                                                                                                                                                       "type" : "ExpressionRef"
+                                                                                                                                                                                                                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                                       "value" : "\"gender\": \"",
+                                                                                                                                                                                                                                       "type" : "Literal"
                                                                                                                                                                                                                                     }, {
                                                                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                        "value" : "",
@@ -17444,9 +17494,8 @@
                                                                                                                                                                                                                            }, {
                                                                                                                                                                                                                               "type" : "Coalesce",
                                                                                                                                                                                                                               "operand" : [ {
-                                                                                                                                                                                                                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                                 "value" : "\", ",
-                                                                                                                                                                                                                                 "type" : "Literal"
+                                                                                                                                                                                                                                 "name" : "GenderText",
+                                                                                                                                                                                                                                 "type" : "ExpressionRef"
                                                                                                                                                                                                                               }, {
                                                                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                                  "value" : "",
@@ -17462,7 +17511,7 @@
                                                                                                                                                                                                                         "type" : "Coalesce",
                                                                                                                                                                                                                         "operand" : [ {
                                                                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                                           "value" : "\"primaryLanguage\": \"",
+                                                                                                                                                                                                                           "value" : "\", ",
                                                                                                                                                                                                                            "type" : "Literal"
                                                                                                                                                                                                                         }, {
                                                                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17478,8 +17527,9 @@
                                                                                                                                                                                                                }, {
                                                                                                                                                                                                                   "type" : "Coalesce",
                                                                                                                                                                                                                   "operand" : [ {
-                                                                                                                                                                                                                     "name" : "LanguageText",
-                                                                                                                                                                                                                     "type" : "ExpressionRef"
+                                                                                                                                                                                                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                                     "value" : "\"primaryLanguage\": \"",
+                                                                                                                                                                                                                     "type" : "Literal"
                                                                                                                                                                                                                   }, {
                                                                                                                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                      "value" : "",
@@ -17494,9 +17544,8 @@
                                                                                                                                                                                                          }, {
                                                                                                                                                                                                             "type" : "Coalesce",
                                                                                                                                                                                                             "operand" : [ {
-                                                                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                               "value" : "\", ",
-                                                                                                                                                                                                               "type" : "Literal"
+                                                                                                                                                                                                               "name" : "LanguageText",
+                                                                                                                                                                                                               "type" : "ExpressionRef"
                                                                                                                                                                                                             }, {
                                                                                                                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                                "value" : "",
@@ -17512,7 +17561,7 @@
                                                                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                                                                       "operand" : [ {
                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                                         "value" : "\"race\": \"",
+                                                                                                                                                                                                         "value" : "\", ",
                                                                                                                                                                                                          "type" : "Literal"
                                                                                                                                                                                                       }, {
                                                                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17528,8 +17577,9 @@
                                                                                                                                                                                              }, {
                                                                                                                                                                                                 "type" : "Coalesce",
                                                                                                                                                                                                 "operand" : [ {
-                                                                                                                                                                                                   "name" : "RaceAndEthnicityString",
-                                                                                                                                                                                                   "type" : "ExpressionRef"
+                                                                                                                                                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                                                   "value" : "\"race\": \"",
+                                                                                                                                                                                                   "type" : "Literal"
                                                                                                                                                                                                 }, {
                                                                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                                    "value" : "",
@@ -17544,9 +17594,8 @@
                                                                                                                                                                                        }, {
                                                                                                                                                                                           "type" : "Coalesce",
                                                                                                                                                                                           "operand" : [ {
-                                                                                                                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                             "value" : "\"",
-                                                                                                                                                                                             "type" : "Literal"
+                                                                                                                                                                                             "name" : "RaceAndEthnicityString",
+                                                                                                                                                                                             "type" : "ExpressionRef"
                                                                                                                                                                                           }, {
                                                                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                                              "value" : "",
@@ -17562,7 +17611,7 @@
                                                                                                                                                                                     "type" : "Coalesce",
                                                                                                                                                                                     "operand" : [ {
                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                       "value" : "}, ",
+                                                                                                                                                                                       "value" : "\"",
                                                                                                                                                                                        "type" : "Literal"
                                                                                                                                                                                     }, {
                                                                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17579,7 +17628,7 @@
                                                                                                                                                                               "type" : "Coalesce",
                                                                                                                                                                               "operand" : [ {
                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                                 "value" : "\"patientHistory\": {",
+                                                                                                                                                                                 "value" : "}, ",
                                                                                                                                                                                  "type" : "Literal"
                                                                                                                                                                               }, {
                                                                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17596,7 +17645,7 @@
                                                                                                                                                                         "type" : "Coalesce",
                                                                                                                                                                         "operand" : [ {
                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                                           "value" : "\"conditions\": \"",
+                                                                                                                                                                           "value" : "\"patientHistory\": {",
                                                                                                                                                                            "type" : "Literal"
                                                                                                                                                                         }, {
                                                                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17612,8 +17661,9 @@
                                                                                                                                                                }, {
                                                                                                                                                                   "type" : "Coalesce",
                                                                                                                                                                   "operand" : [ {
-                                                                                                                                                                     "name" : "PertinentConditionsSummaryString",
-                                                                                                                                                                     "type" : "ExpressionRef"
+                                                                                                                                                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                                     "value" : "\"conditions\": ",
+                                                                                                                                                                     "type" : "Literal"
                                                                                                                                                                   }, {
                                                                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                      "value" : "",
@@ -17628,9 +17678,8 @@
                                                                                                                                                          }, {
                                                                                                                                                             "type" : "Coalesce",
                                                                                                                                                             "operand" : [ {
-                                                                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                               "value" : "\", ",
-                                                                                                                                                               "type" : "Literal"
+                                                                                                                                                               "name" : "PertinentConditionsSummaryString",
+                                                                                                                                                               "type" : "ExpressionRef"
                                                                                                                                                             }, {
                                                                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                                "value" : "",
@@ -17646,7 +17695,7 @@
                                                                                                                                                       "type" : "Coalesce",
                                                                                                                                                       "operand" : [ {
                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                                         "value" : "\"observations\": \"",
+                                                                                                                                                         "value" : ", ",
                                                                                                                                                          "type" : "Literal"
                                                                                                                                                       }, {
                                                                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17662,8 +17711,9 @@
                                                                                                                                              }, {
                                                                                                                                                 "type" : "Coalesce",
                                                                                                                                                 "operand" : [ {
-                                                                                                                                                   "name" : "PertinentObservationsSummaryString",
-                                                                                                                                                   "type" : "ExpressionRef"
+                                                                                                                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                                   "value" : "\"observations\": ",
+                                                                                                                                                   "type" : "Literal"
                                                                                                                                                 }, {
                                                                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                                    "value" : "",
@@ -17678,9 +17728,8 @@
                                                                                                                                        }, {
                                                                                                                                           "type" : "Coalesce",
                                                                                                                                           "operand" : [ {
-                                                                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                             "value" : "\", ",
-                                                                                                                                             "type" : "Literal"
+                                                                                                                                             "name" : "PertinentObservationsSummaryString",
+                                                                                                                                             "type" : "ExpressionRef"
                                                                                                                                           }, {
                                                                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                              "value" : "",
@@ -17696,7 +17745,7 @@
                                                                                                                                     "type" : "Coalesce",
                                                                                                                                     "operand" : [ {
                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                                       "value" : "\"medications\": \"",
+                                                                                                                                       "value" : ", ",
                                                                                                                                        "type" : "Literal"
                                                                                                                                     }, {
                                                                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17712,8 +17761,9 @@
                                                                                                                            }, {
                                                                                                                               "type" : "Coalesce",
                                                                                                                               "operand" : [ {
-                                                                                                                                 "name" : "PertinentMedicationsSummaryString",
-                                                                                                                                 "type" : "ExpressionRef"
+                                                                                                                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                                                 "value" : "\"medications\": ",
+                                                                                                                                 "type" : "Literal"
                                                                                                                               }, {
                                                                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                                  "value" : "",
@@ -17728,9 +17778,8 @@
                                                                                                                      }, {
                                                                                                                         "type" : "Coalesce",
                                                                                                                         "operand" : [ {
-                                                                                                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                           "value" : "\", ",
-                                                                                                                           "type" : "Literal"
+                                                                                                                           "name" : "PertinentMedicationsSummaryString",
+                                                                                                                           "type" : "ExpressionRef"
                                                                                                                         }, {
                                                                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                            "value" : "",
@@ -17746,7 +17795,7 @@
                                                                                                                   "type" : "Coalesce",
                                                                                                                   "operand" : [ {
                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                                     "value" : "\"procedures\": \"",
+                                                                                                                     "value" : ", ",
                                                                                                                      "type" : "Literal"
                                                                                                                   }, {
                                                                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17762,8 +17811,9 @@
                                                                                                          }, {
                                                                                                             "type" : "Coalesce",
                                                                                                             "operand" : [ {
-                                                                                                               "name" : "PertinentProceduresSummaryString",
-                                                                                                               "type" : "ExpressionRef"
+                                                                                                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                                               "value" : "\"procedures\": ",
+                                                                                                               "type" : "Literal"
                                                                                                             }, {
                                                                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                                "value" : "",
@@ -17778,9 +17828,8 @@
                                                                                                    }, {
                                                                                                       "type" : "Coalesce",
                                                                                                       "operand" : [ {
-                                                                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                         "value" : "\", ",
-                                                                                                         "type" : "Literal"
+                                                                                                         "name" : "PertinentProceduresSummaryString",
+                                                                                                         "type" : "ExpressionRef"
                                                                                                       }, {
                                                                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                                          "value" : "",
@@ -17796,7 +17845,7 @@
                                                                                                 "type" : "Coalesce",
                                                                                                 "operand" : [ {
                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                                   "value" : "\"diagnosticReports\": \"",
+                                                                                                   "value" : ", ",
                                                                                                    "type" : "Literal"
                                                                                                 }, {
                                                                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17812,8 +17861,9 @@
                                                                                        }, {
                                                                                           "type" : "Coalesce",
                                                                                           "operand" : [ {
-                                                                                             "name" : "DiagnosticReportsSummaryStringFix",
-                                                                                             "type" : "ExpressionRef"
+                                                                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                                             "value" : "\"diagnosticReports\": ",
+                                                                                             "type" : "Literal"
                                                                                           }, {
                                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                              "value" : "",
@@ -17828,9 +17878,8 @@
                                                                                  }, {
                                                                                     "type" : "Coalesce",
                                                                                     "operand" : [ {
-                                                                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                       "value" : "\", ",
-                                                                                       "type" : "Literal"
+                                                                                       "name" : "DiagnosticReportsSummaryStringFix",
+                                                                                       "type" : "ExpressionRef"
                                                                                     }, {
                                                                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                                        "value" : "",
@@ -17846,7 +17895,7 @@
                                                                               "type" : "Coalesce",
                                                                               "operand" : [ {
                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                                 "value" : "\"encounters\": \"",
+                                                                                 "value" : ", ",
                                                                                  "type" : "Literal"
                                                                               }, {
                                                                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17862,16 +17911,9 @@
                                                                      }, {
                                                                         "type" : "Coalesce",
                                                                         "operand" : [ {
-                                                                           "type" : "Combine",
-                                                                           "source" : {
-                                                                              "name" : "PertinentEncountersSummaryString",
-                                                                              "type" : "ExpressionRef"
-                                                                           },
-                                                                           "separator" : {
-                                                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                              "value" : ", ",
-                                                                              "type" : "Literal"
-                                                                           }
+                                                                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                                           "value" : "\"encounters\": ",
+                                                                           "type" : "Literal"
                                                                         }, {
                                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                            "value" : "",
@@ -17886,9 +17928,12 @@
                                                                }, {
                                                                   "type" : "Coalesce",
                                                                   "operand" : [ {
-                                                                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                                     "value" : "\", ",
-                                                                     "type" : "Literal"
+                                                                     "name" : "JsonArrayOrEmpty",
+                                                                     "type" : "FunctionRef",
+                                                                     "operand" : [ {
+                                                                        "name" : "PertinentEncountersSummaryString",
+                                                                        "type" : "ExpressionRef"
+                                                                     } ]
                                                                   }, {
                                                                      "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                                      "value" : "",
@@ -17904,7 +17949,7 @@
                                                             "type" : "Coalesce",
                                                             "operand" : [ {
                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                               "value" : "\"immunizations\": \"",
+                                                               "value" : ", ",
                                                                "type" : "Literal"
                                                             }, {
                                                                "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17920,16 +17965,9 @@
                                                    }, {
                                                       "type" : "Coalesce",
                                                       "operand" : [ {
-                                                         "type" : "Combine",
-                                                         "source" : {
-                                                            "name" : "PertinentImmunizationsSummaryString",
-                                                            "type" : "ExpressionRef"
-                                                         },
-                                                         "separator" : {
-                                                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                            "value" : ", ",
-                                                            "type" : "Literal"
-                                                         }
+                                                         "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                                         "value" : "\"immunizations\": ",
+                                                         "type" : "Literal"
                                                       }, {
                                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                          "value" : "",
@@ -17944,9 +17982,12 @@
                                              }, {
                                                 "type" : "Coalesce",
                                                 "operand" : [ {
-                                                   "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                                   "value" : "\", ",
-                                                   "type" : "Literal"
+                                                   "name" : "JsonArrayOrEmpty",
+                                                   "type" : "FunctionRef",
+                                                   "operand" : [ {
+                                                      "name" : "PertinentImmunizationsSummaryString",
+                                                      "type" : "ExpressionRef"
+                                                   } ]
                                                 }, {
                                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                                    "value" : "",
@@ -17962,7 +18003,7 @@
                                           "type" : "Coalesce",
                                           "operand" : [ {
                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                             "value" : "\"episodeOfCares\": \"",
+                                             "value" : ", ",
                                              "type" : "Literal"
                                           }, {
                                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
@@ -17978,16 +18019,9 @@
                                  }, {
                                     "type" : "Coalesce",
                                     "operand" : [ {
-                                       "type" : "Combine",
-                                       "source" : {
-                                          "name" : "PertinentEpisodesOfCareSummaryString",
-                                          "type" : "ExpressionRef"
-                                       },
-                                       "separator" : {
-                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                          "value" : ", ",
-                                          "type" : "Literal"
-                                       }
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "\"episodeOfCares\": ",
+                                       "type" : "Literal"
                                     }, {
                                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                        "value" : "",
@@ -18002,9 +18036,12 @@
                            }, {
                               "type" : "Coalesce",
                               "operand" : [ {
-                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                                 "value" : "\"",
-                                 "type" : "Literal"
+                                 "name" : "JsonArrayOrEmpty",
+                                 "type" : "FunctionRef",
+                                 "operand" : [ {
+                                    "name" : "PertinentEpisodesOfCareSummaryString",
+                                    "type" : "ExpressionRef"
+                                 } ]
                               }, {
                                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
                                  "value" : "",

@@ -1144,7 +1144,7 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
       '{' +
       '"name": "' + ReportType + '", ' +
       '"longName": "' + Common.ConceptText(D.code) + '", ' +
-      '"value": "' + HighestRanked.riskTableInput + '", ' +
+      '"value": "' + Coalesce(HighestRanked.riskTableInput, '') + '", ' +
       '"longValue": [' + 
         Coalesce(
           Combine(flatten(
@@ -1152,7 +1152,7 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
             return
               flatten(
                 (cC.coding) cCC
-                return cCC.display
+                return '"' + cCC.display + '"'
               )
           ), ', '), ''
         ) + '], ' +
@@ -1162,6 +1162,12 @@ define function FormatReportsString(DrList List<DiagnosticReport>, ObsList List<
       '}',
     ','
   )
+
+define function JsonArrayOrEmpty(items List<String>):
+  if items is null or Count(items) = 0 then
+    '[]'
+  else
+    '[' & Combine(items, ', ') & ']'
 
 define function Interpretation(CollatedCodes List<FHIR.CodeableConcept>, ReportType String):
   if ReportType = 'HPV Test' then HpvInterpretation(CollatedCodes)
@@ -1206,11 +1212,15 @@ define DiagnosticReportsSummaryString:
 
 define DiagnosticReportsSummaryStringFix:
   '[' & 
-    (if HpvDiagnosticReportsSummaryString is not null then '"' & HpvDiagnosticReportsSummaryString & '"' else '') &
-    (if HpvDiagnosticReportsSummaryString is not null and (CervicalCytologyReportsSummaryString is not null or HistologyDiagnosticReportsSummaryString is not null) then ', ' else '') &
-    (if CervicalCytologyReportsSummaryString is not null then '"' & CervicalCytologyReportsSummaryString & '"' else '') &
-    (if CervicalCytologyReportsSummaryString is not null and HistologyDiagnosticReportsSummaryString is not null then ', ' else '') &
-    (if HistologyDiagnosticReportsSummaryString is not null then '"' & HistologyDiagnosticReportsSummaryString & '"' else '') &
+    (if Coalesce(HpvDiagnosticReportsSummaryString, '') != '' then HpvDiagnosticReportsSummaryString else '') &
+    (if Coalesce(HpvDiagnosticReportsSummaryString, '') != '' 
+        and (Coalesce(CervicalCytologyReportsSummaryString, '') != '' or Coalesce(HistologyDiagnosticReportsSummaryString, '') != '') 
+     then ', ' else '') &
+    (if Coalesce(CervicalCytologyReportsSummaryString, '') != '' then CervicalCytologyReportsSummaryString else '') &
+    (if Coalesce(CervicalCytologyReportsSummaryString, '') != '' 
+        and Coalesce(HistologyDiagnosticReportsSummaryString, '') != '' 
+     then ', ' else '') &
+    (if Coalesce(HistologyDiagnosticReportsSummaryString, '') != '' then HistologyDiagnosticReportsSummaryString else '') &
   ']'
 
 define HighGradeOrCancerHistologyResults:
@@ -1705,13 +1715,13 @@ define CervicalCancerScreeningAndMedicalHistoryString:
     '"race": "' & RaceAndEthnicityString & '"' &
   '}, ' &
   '"patientHistory": {' &
-    '"conditions": "' & PertinentConditionsSummaryString & '", ' &
-    '"observations": "' & PertinentObservationsSummaryString & '", ' &
-    '"medications": "' & PertinentMedicationsSummaryString & '", ' &
-    '"procedures": "' & PertinentProceduresSummaryString & '", ' &
-    '"diagnosticReports": "' & DiagnosticReportsSummaryStringFix & '", ' &
-    '"encounters": "' & Combine(PertinentEncountersSummaryString, ', ') & '", ' &
-    '"immunizations": "' & Combine(PertinentImmunizationsSummaryString, ', ') & '", ' &
-    '"episodeOfCares": "' & Combine(PertinentEpisodesOfCareSummaryString, ', ') & '"' &
+    '"conditions": ' & PertinentConditionsSummaryString & ', ' &
+    '"observations": ' & PertinentObservationsSummaryString & ', ' &
+    '"medications": ' & PertinentMedicationsSummaryString & ', ' &
+    '"procedures": ' & PertinentProceduresSummaryString & ', ' &
+    '"diagnosticReports": ' & DiagnosticReportsSummaryStringFix & ', ' &
+    '"encounters": ' & JsonArrayOrEmpty(PertinentEncountersSummaryString) & ', ' &
+    '"immunizations": ' & JsonArrayOrEmpty(PertinentImmunizationsSummaryString) & ', ' &
+    '"episodeOfCares": ' & JsonArrayOrEmpty(PertinentEpisodesOfCareSummaryString) &
   '}' &
   '}'
