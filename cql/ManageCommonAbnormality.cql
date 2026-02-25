@@ -78,11 +78,15 @@ define DefaultLookupTableReturnValue:
     "risk5yr": null
   }
 
+ 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  if not AbnormalCytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory and
+     (Collate.MostRecentCytologyCotestResult in {'HSIL+'} or 
+      RiskTableLookup.HighGradePap(Collate.ThirdMostRecentCytologyCotestResult) = 'NULL')
+  then
     RiskTableLookup.GetGeneralScreeningManagement(
       Collate.SecondMostRecentHpvResult,
       Collate.SecondMostRecentCytologyCotestResult,
@@ -129,7 +133,7 @@ define LookUpTable2: // NOTE: Review whether we are correctly handling the multi
     DefaultLookupTableReturnValue
 
 define RowTable2:
-  RiskTableLookup.GetRowTable2(
+  RiskTableLookup.GetMatchingRowFromTable2(
     Collate.ThirdMostRecentHpvResult,
     Collate.ThirdMostRecentCytologyCotestResult,
     Collate.SecondMostRecentHpvResult,
@@ -148,9 +152,15 @@ define AdjacentRowsTable2:
     Collate.MostRecentCytologyCotestResult
   )
 
+// Handle Special case of HPV-/ASC-US, HPV/ALL
 define SurveillanceManagementRecommendation:
-  if LookUpTable2 is not null then LookUpTable2.action
-  else null
+  if RowTable2 is not null and
+      RowTable2.prev1 = 'HPV-negative/ASC-US' and
+      RowTable2.hpv = 'HPV-negative' and
+      RowTable2.cyto = 'ALL' then '3-year follow-up'
+  else
+    if LookUpTable2 is not null then LookUpTable2.action
+    else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results

@@ -324,11 +324,47 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "name" : "AbnormalCytologyAloneInRecentHistory",
-                     "type" : "ExpressionRef"
-                  }
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "name" : "AbnormalCytologyAloneInRecentHistory",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "name" : "MostRecentCytologyCotestResult",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HSIL+",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "HighGradePap",
+                           "libraryName" : "RiskTableLookup",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "ThirdMostRecentCytologyCotestResult",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "NULL",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  } ]
                },
                "then" : {
                   "name" : "GetGeneralScreeningManagement",
@@ -490,7 +526,7 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetRowTable2",
+               "name" : "GetMatchingRowFromTable2",
                "libraryName" : "RiskTableLookup",
                "type" : "FunctionRef",
                "operand" : [ {
@@ -560,25 +596,98 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
-                     "operand" : {
-                        "name" : "LookUpTable2",
-                        "type" : "ExpressionRef"
-                     }
-                  }
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "RowTable2",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "Equal",
+                           "operand" : [ {
+                              "path" : "prev1",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "RowTable2",
+                                 "type" : "ExpressionRef"
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV-negative/ASC-US",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "path" : "hpv",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "RowTable2",
+                              "type" : "ExpressionRef"
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-negative",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  }, {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "path" : "cyto",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "ALL",
+                        "type" : "Literal"
+                     } ]
+                  } ]
                },
                "then" : {
-                  "path" : "action",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "LookUpTable2",
-                     "type" : "ExpressionRef"
-                  }
+                  "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                  "value" : "3-year follow-up",
+                  "type" : "Literal"
                },
                "else" : {
-                  "type" : "Null"
+                  "asType" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "If",
+                     "condition" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "name" : "LookUpTable2",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     },
+                     "then" : {
+                        "path" : "action",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LookUpTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     },
+                     "else" : {
+                        "type" : "Null"
+                     }
+                  }
                }
             }
          }, {
@@ -1385,12 +1494,8 @@
                      "type" : "ExpressionRef"
                   }
                }, {
-                  "asType" : "{urn:hl7-org:elm-types:r1}String",
-                  "type" : "As",
-                  "operand" : {
-                     "name" : "SurveillanceManagementRecommendation",
-                     "type" : "ExpressionRef"
-                  }
+                  "name" : "SurveillanceManagementRecommendation",
+                  "type" : "ExpressionRef"
                }, {
                   "asType" : "{urn:hl7-org:elm-types:r1}String",
                   "type" : "As",
