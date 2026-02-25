@@ -324,11 +324,47 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "name" : "AbnormalCytologyAloneInRecentHistory",
-                     "type" : "ExpressionRef"
-                  }
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "name" : "AbnormalCytologyAloneInRecentHistory",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "In",
+                        "operand" : [ {
+                           "name" : "MostRecentCytologyCotestResult",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }, {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HSIL+",
+                              "type" : "Literal"
+                           } ]
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "HighGradePap",
+                           "libraryName" : "RiskTableLookup",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "ThirdMostRecentCytologyCotestResult",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "NULL",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  } ]
                },
                "then" : {
                   "name" : "GetGeneralScreeningManagement",

@@ -78,11 +78,15 @@ define DefaultLookupTableReturnValue:
     "risk5yr": null
   }
 
+ 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  if not AbnormalCytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory and
+     (Collate.MostRecentCytologyCotestResult in {'HSIL+'} or 
+      RiskTableLookup.HighGradePap(Collate.ThirdMostRecentCytologyCotestResult) = 'NULL')
+  then
     RiskTableLookup.GetGeneralScreeningManagement(
       Collate.SecondMostRecentHpvResult,
       Collate.SecondMostRecentCytologyCotestResult,

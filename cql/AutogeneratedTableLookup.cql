@@ -176,12 +176,26 @@ define function historyLeadingSpace(history String):
   else history
 
 define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
+  Coalesce(
+    ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
+    where R.action is not null
+      return {
+        action: R.action,
+        riskNow: R.riskNow,
+        risk5yr: R.risk5yr
+      },
+    (if ((HighGradeOrAscusLsilPap(prev2PapVal) = 'High Grade' or ( AnyHpv(prev2HpvVal) = 'HPV-positive' and HighGradeOrAscusLsilPap(prev2PapVal) = 'ASC-US/LSIL')) and 
+        (currPapVal != 'HSIL+')) then null 
+    else
+      ( GetRowTable2(null, null, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
+      where R.action is not null
+        return {
+          action: R.action,
+          riskNow: R.riskNow,
+          risk5yr: R.risk5yr
+        }
+    ) 
+  )
 
 define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
