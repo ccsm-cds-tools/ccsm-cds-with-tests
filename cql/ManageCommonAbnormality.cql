@@ -152,9 +152,15 @@ define AdjacentRowsTable2:
     Collate.MostRecentCytologyCotestResult
   )
 
+// Handle Special case of HPV-/ASC-US, HPV/ALL
 define SurveillanceManagementRecommendation:
-  if LookUpTable2 is not null then LookUpTable2.action
-  else null
+  if RowTable2 is not null and
+      RowTable2.prev1 = 'HPV-negative/ASC-US' and
+      RowTable2.hpv = 'HPV-negative' and
+      RowTable2.cyto = 'ALL' then '3-year follow-up'
+  else
+    if LookUpTable2 is not null then LookUpTable2.action
+    else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
