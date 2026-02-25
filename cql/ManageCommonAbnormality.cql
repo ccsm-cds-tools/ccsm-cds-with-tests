@@ -133,7 +133,7 @@ define LookUpTable2: // NOTE: Review whether we are correctly handling the multi
     DefaultLookupTableReturnValue
 
 define RowTable2:
-  RiskTableLookup.GetRowTable2(
+  RiskTableLookup.GetMatchingRowFromTable2(
     Collate.ThirdMostRecentHpvResult,
     Collate.ThirdMostRecentCytologyCotestResult,
     Collate.SecondMostRecentHpvResult,
