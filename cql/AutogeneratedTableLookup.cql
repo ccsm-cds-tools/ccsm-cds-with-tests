@@ -175,13 +175,46 @@ define function historyLeadingSpace(history String):
   if history = 'Cotest-negative' then ' Cotest-negative'
   else history
 
+// If Table2 lookup fails to match using prev2HpvVal and prev2PapVal, we can try again
+// without those values IF we they are not High Grade results OR the most recent Pap is 
+// not HSIL+. 
+define function excludeFromTable2(prev2HpvVal String, prev2PapVal String, currPapVal String):
+  (
+    (
+      HighGradeOrAscusLsilPap(prev2PapVal) = 'High Grade' or
+      (AnyHpv(prev2HpvVal) = 'HPV-positive' and HighGradeOrAscusLsilPap(prev2PapVal) = 'ASC-US/LSIL')
+    ) and currPapVal != 'HSIL+'
+  ) 
+        
 define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
+  Coalesce(
+    ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
+    where R.action is not null
+      return {
+        action: R.action,
+        riskNow: R.riskNow,
+        risk5yr: R.risk5yr
+      },
+    (if excludeFromTable2(prev2HpvVal, prev2PapVal, currPapVal) then null 
+    else
+      ( GetRowTable2(null, null, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
+      where R.action is not null
+        return {
+          action: R.action,
+          riskNow: R.riskNow,
+          risk5yr: R.risk5yr
+        }
+    ) 
+  )
+
+define function GetMatchingRowFromTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+  Coalesce(
+    _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal),
+    (if excludeFromTable2(prev2HpvVal, prev2PapVal, currPapVal) then null 
+    else
+       _GetRowTable2(null, null, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
+    )
+  )
 
 define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)

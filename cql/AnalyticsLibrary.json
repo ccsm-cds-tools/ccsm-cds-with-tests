@@ -781,15 +781,19 @@
                }, {
                   "name" : "HasAnyAscusHpvPositiveCotest",
                   "value" : {
-                     "type" : "Not",
-                     "operand" : {
-                        "type" : "IsNull",
-                        "operand" : {
+                     "type" : "Greater",
+                     "operand" : [ {
+                        "type" : "Count",
+                        "source" : {
                            "name" : "AnyAscusHpvPositiveCotest",
                            "libraryName" : "MCA",
                            "type" : "ExpressionRef"
                         }
-                     }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "0",
+                        "type" : "Literal"
+                     } ]
                   }
                }, {
                   "name" : "DateOfLastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult",
