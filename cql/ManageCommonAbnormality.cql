@@ -588,7 +588,7 @@ define ErrataRecommendation:
         id: '5.E3.2.3.a'
       }
     // Managing abnormal cervical cytology alone
-    when ( // Errata Recommendation 3.1.1: ASC-US Alone
+    when ( // Errata Recommendation 3.1.0: NILM Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsNormal and
       IsMostRecentTest(MostRecentCytologyAlone.date) and
