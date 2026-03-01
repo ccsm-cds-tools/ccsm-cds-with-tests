@@ -3625,6 +3625,36 @@
                "type" : "Case",
                "caseItem" : [ {
                   "when" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "hpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV16+",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "hpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV16-, HPV18+",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "High Grade",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
                      "type" : "And",
                      "operand" : [ {
                         "type" : "Equal",
@@ -4429,8 +4459,9 @@
                                  "name" : "HighOrLowGradeResults",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "name" : "currHpvVal",
-                                    "type" : "OperandRef"
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "N/A",
+                                    "type" : "Literal"
                                  }, {
                                     "name" : "currPapVal",
                                     "type" : "OperandRef"
@@ -5053,12 +5084,8 @@
                "name" : "_GetRowTable4",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "AnyHpv",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "preBiopsyHpvVal",
-                     "type" : "OperandRef"
-                  } ]
+                  "name" : "preBiopsyHpvVal",
+                  "type" : "OperandRef"
                }, {
                   "name" : "preBiopsyPapVal",
                   "type" : "OperandRef"
@@ -5301,12 +5328,8 @@
                               "name" : "HighOrLowGradeResults",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "AnyHpv",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "preBiopsyHpvVal",
-                                    "type" : "OperandRef"
-                                 } ]
+                                 "name" : "preBiopsyHpvVal",
+                                 "type" : "OperandRef"
                               }, {
                                  "name" : "preBiopsyPapVal",
                                  "type" : "OperandRef"
@@ -6339,8 +6362,9 @@
                               "name" : "HighOrLowGradeResults",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "currHpvVal",
-                                 "type" : "OperandRef"
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "N/A",
+                                 "type" : "Literal"
                               }, {
                                  "name" : "currPapVal",
                                  "type" : "OperandRef"
