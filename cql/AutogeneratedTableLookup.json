@@ -1186,6 +1186,95 @@
                }
             } ]
          }, {
+            "name" : "excludeFromTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "And",
+               "operand" : [ {
+                  "type" : "Or",
+                  "operand" : [ {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "HighGradeOrAscusLsilPap",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "prev2PapVal",
+                           "type" : "OperandRef"
+                        } ]
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "High Grade",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "AnyHpv",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "prev2HpvVal",
+                              "type" : "OperandRef"
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV-positive",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "HighGradeOrAscusLsilPap",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "name" : "prev2PapVal",
+                              "type" : "OperandRef"
+                           } ]
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "ASC-US/LSIL",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  } ]
+               }, {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "Equal",
+                     "operand" : [ {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                        "value" : "HSIL+",
+                        "type" : "Literal"
+                     } ]
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "prev2HpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prev2PapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
             "name" : "_GetRowTable2",
             "context" : "Unfiltered",
             "accessLevel" : "Public",
@@ -2107,11 +2196,78 @@
             "accessLevel" : "Public",
             "type" : "FunctionDef",
             "expression" : {
-               "type" : "Query",
-               "source" : [ {
-                  "alias" : "R",
-                  "expression" : {
-                     "name" : "GetRowTable2",
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "R",
+                     "expression" : {
+                        "name" : "GetRowTable2",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "prev2HpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "prev2PapVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "prevHpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "prevPapVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "currHpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "name" : "currPapVal",
+                           "type" : "OperandRef"
+                        } ]
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "path" : "action",
+                           "scope" : "R",
+                           "type" : "Property"
+                        }
+                     }
+                  },
+                  "return" : {
+                     "expression" : {
+                        "type" : "Tuple",
+                        "element" : [ {
+                           "name" : "action",
+                           "value" : {
+                              "path" : "action",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "value" : {
+                              "path" : "riskNow",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "value" : {
+                              "path" : "risk5yr",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        } ]
+                     }
+                  }
+               }, {
+                  "type" : "If",
+                  "condition" : {
+                     "name" : "excludeFromTable2",
                      "type" : "FunctionRef",
                      "operand" : [ {
                         "name" : "prev2HpvVal",
@@ -2120,8 +2276,308 @@
                         "name" : "prev2PapVal",
                         "type" : "OperandRef"
                      }, {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Null"
+                     },
+                     "asTypeSpecifier" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  },
+                  "else" : {
+                     "type" : "Query",
+                     "source" : [ {
+                        "alias" : "R",
+                        "expression" : {
+                           "name" : "GetRowTable2",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "asType" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "As",
+                              "operand" : {
+                                 "type" : "Null"
+                              }
+                           }, {
+                              "asType" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "As",
+                              "operand" : {
+                                 "type" : "Null"
+                              }
+                           }, {
+                              "name" : "prevHpvVal",
+                              "type" : "OperandRef"
+                           }, {
+                              "name" : "prevPapVal",
+                              "type" : "OperandRef"
+                           }, {
+                              "name" : "currHpvVal",
+                              "type" : "OperandRef"
+                           }, {
+                              "name" : "currPapVal",
+                              "type" : "OperandRef"
+                           } ]
+                        }
+                     } ],
+                     "relationship" : [ ],
+                     "where" : {
+                        "type" : "Not",
+                        "operand" : {
+                           "type" : "IsNull",
+                           "operand" : {
+                              "path" : "action",
+                              "scope" : "R",
+                              "type" : "Property"
+                           }
+                        }
+                     },
+                     "return" : {
+                        "expression" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "action",
+                              "value" : {
+                                 "path" : "action",
+                                 "scope" : "R",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "riskNow",
+                              "value" : {
+                                 "path" : "riskNow",
+                                 "scope" : "R",
+                                 "type" : "Property"
+                              }
+                           }, {
+                              "name" : "risk5yr",
+                              "value" : {
+                                 "path" : "risk5yr",
+                                 "scope" : "R",
+                                 "type" : "Property"
+                              }
+                           } ]
+                        }
+                     }
+                  }
+               } ]
+            },
+            "operand" : [ {
+               "name" : "prev2HpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prev2PapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "prevPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currHpvVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            }, {
+               "name" : "currPapVal",
+               "operandTypeSpecifier" : {
+                  "name" : "{urn:hl7-org:elm-types:r1}String",
+                  "type" : "NamedTypeSpecifier"
+               }
+            } ]
+         }, {
+            "name" : "GetMatchingRowFromTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "type" : "FunctionDef",
+            "expression" : {
+               "type" : "Coalesce",
+               "operand" : [ {
+                  "name" : "_GetRowTable2",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "AnyHpv",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "prev2HpvVal",
+                        "type" : "OperandRef"
+                     } ]
+                  }, {
+                     "name" : "prev2PapVal",
+                     "type" : "OperandRef"
+                  }, {
+                     "name" : "AnyHpv",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
                         "name" : "prevHpvVal",
                         "type" : "OperandRef"
+                     } ]
+                  }, {
+                     "name" : "prevPapVal",
+                     "type" : "OperandRef"
+                  }, {
+                     "name" : "currHpvVal",
+                     "type" : "OperandRef"
+                  }, {
+                     "name" : "currPapVal",
+                     "type" : "OperandRef"
+                  } ]
+               }, {
+                  "type" : "If",
+                  "condition" : {
+                     "name" : "excludeFromTable2",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "prev2HpvVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "name" : "prev2PapVal",
+                        "type" : "OperandRef"
+                     }, {
+                        "name" : "currPapVal",
+                        "type" : "OperandRef"
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "As",
+                     "operand" : {
+                        "type" : "Null"
+                     },
+                     "asTypeSpecifier" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  },
+                  "else" : {
+                     "name" : "_GetRowTable2",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "asType" : "{urn:hl7-org:elm-types:r1}String",
+                        "type" : "As",
+                        "operand" : {
+                           "type" : "Null"
+                        }
+                     }, {
+                        "name" : "AnyHpv",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "name" : "prevHpvVal",
+                           "type" : "OperandRef"
+                        } ]
                      }, {
                         "name" : "prevPapVal",
                         "type" : "OperandRef"
@@ -2133,35 +2589,7 @@
                         "type" : "OperandRef"
                      } ]
                   }
-               } ],
-               "relationship" : [ ],
-               "return" : {
-                  "expression" : {
-                     "type" : "Tuple",
-                     "element" : [ {
-                        "name" : "action",
-                        "value" : {
-                           "path" : "action",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     }, {
-                        "name" : "riskNow",
-                        "value" : {
-                           "path" : "riskNow",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     }, {
-                        "name" : "risk5yr",
-                        "value" : {
-                           "path" : "risk5yr",
-                           "scope" : "R",
-                           "type" : "Property"
-                        }
-                     } ]
-                  }
-               }
+               } ]
             },
             "operand" : [ {
                "name" : "prev2HpvVal",
@@ -3197,6 +3625,36 @@
                "type" : "Case",
                "caseItem" : [ {
                   "when" : {
+                     "type" : "Or",
+                     "operand" : [ {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "hpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV16+",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "Equal",
+                        "operand" : [ {
+                           "name" : "hpvVal",
+                           "type" : "OperandRef"
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "HPV16-, HPV18+",
+                           "type" : "Literal"
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "High Grade",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "when" : {
                      "type" : "And",
                      "operand" : [ {
                         "type" : "Equal",
@@ -4001,8 +4459,9 @@
                                  "name" : "HighOrLowGradeResults",
                                  "type" : "FunctionRef",
                                  "operand" : [ {
-                                    "name" : "currHpvVal",
-                                    "type" : "OperandRef"
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "N/A",
+                                    "type" : "Literal"
                                  }, {
                                     "name" : "currPapVal",
                                     "type" : "OperandRef"
@@ -4625,12 +5084,8 @@
                "name" : "_GetRowTable4",
                "type" : "FunctionRef",
                "operand" : [ {
-                  "name" : "AnyHpv",
-                  "type" : "FunctionRef",
-                  "operand" : [ {
-                     "name" : "preBiopsyHpvVal",
-                     "type" : "OperandRef"
-                  } ]
+                  "name" : "preBiopsyHpvVal",
+                  "type" : "OperandRef"
                }, {
                   "name" : "preBiopsyPapVal",
                   "type" : "OperandRef"
@@ -4873,12 +5328,8 @@
                               "name" : "HighOrLowGradeResults",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "AnyHpv",
-                                 "type" : "FunctionRef",
-                                 "operand" : [ {
-                                    "name" : "preBiopsyHpvVal",
-                                    "type" : "OperandRef"
-                                 } ]
+                                 "name" : "preBiopsyHpvVal",
+                                 "type" : "OperandRef"
                               }, {
                                  "name" : "preBiopsyPapVal",
                                  "type" : "OperandRef"
@@ -5911,8 +6362,9 @@
                               "name" : "HighOrLowGradeResults",
                               "type" : "FunctionRef",
                               "operand" : [ {
-                                 "name" : "currHpvVal",
-                                 "type" : "OperandRef"
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "N/A",
+                                 "type" : "Literal"
                               }, {
                                  "name" : "currPapVal",
                                  "type" : "OperandRef"

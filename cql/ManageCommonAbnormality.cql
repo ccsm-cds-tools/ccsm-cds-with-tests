@@ -78,11 +78,16 @@ define DefaultLookupTableReturnValue:
     "risk5yr": null
   }
 
+ 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #1: Abnormal Results
 // Tables 1A and 1B
 define LookUpTable1:
-  if not AbnormalCytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory and
+      not HasCytologyAloneAfterMostRecentCytologyCotest and
+     (Collate.MostRecentCytologyCotestResult in {'HSIL+'} or 
+      RiskTableLookup.HighGradePap(Collate.ThirdMostRecentCytologyCotestResult) = 'NULL')
+  then
     RiskTableLookup.GetGeneralScreeningManagement(
       Collate.SecondMostRecentHpvResult,
       Collate.SecondMostRecentCytologyCotestResult,
@@ -116,7 +121,8 @@ define GeneralScreeningManagementRecommendation:
 // COMMON ABNORMALITY #2: Surveillance following results not requiring immediate colposcopic referral
 // Tables 2A, 2B, and 2C
 define LookUpTable2: // NOTE: Review whether we are correctly handling the multiple negative cotests referenced in Table 2b and 2c
-  if not AbnormalCytologyAloneInRecentHistory then
+  if not AbnormalCytologyAloneInRecentHistory and
+    not HasCytologyAloneAfterMostRecentCytologyCotest then
     RiskTableLookup.GetSurveillanceManagement(
       Collate.ThirdMostRecentHpvResult,
       Collate.ThirdMostRecentCytologyCotestResult,
@@ -129,7 +135,7 @@ define LookUpTable2: // NOTE: Review whether we are correctly handling the multi
     DefaultLookupTableReturnValue
 
 define RowTable2:
-  RiskTableLookup.GetRowTable2(
+  RiskTableLookup.GetMatchingRowFromTable2(
     Collate.ThirdMostRecentHpvResult,
     Collate.ThirdMostRecentCytologyCotestResult,
     Collate.SecondMostRecentHpvResult,
@@ -148,9 +154,15 @@ define AdjacentRowsTable2:
     Collate.MostRecentCytologyCotestResult
   )
 
+// Handle Special case of HPV-/ASC-US, HPV/ALL
 define SurveillanceManagementRecommendation:
-  if LookUpTable2 is not null then LookUpTable2.action
-  else null
+  if RowTable2 is not null and
+      RowTable2.prev1 = 'HPV-negative/ASC-US' and
+      RowTable2.hpv = 'HPV-negative' and
+      RowTable2.cyto = 'ALL' then '3-year follow-up'
+  else
+    if LookUpTable2 is not null then LookUpTable2.action
+    else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // COMMON ABNORMALITY #3: Receipt of colposcopy/biopsy results
@@ -351,6 +363,9 @@ define SecondMostRecentCytologyAlone:
   else
     null
 
+define CytologyAloneInterpretedAsNormal:
+  MostRecentCytologyAlone.riskTableInput = 'NILM'
+  
 define CytologyAloneInterpretedAsAscus:
   MostRecentCytologyAlone.riskTableInput = 'ASC-US'
 
@@ -453,6 +468,10 @@ define LastKnownCytologyInterpretedAsAscusOrAbove:
 define function IsMostRecentTest(d System.DateTime):
   Collate.MostRecentReport = d
 
+define HasCytologyAloneAfterMostRecentCytologyCotest:
+  MostRecentCytologyAlone is not null and MostRecentCytologyAlone.date after Collate.MostRecentCytologyCotest.date
+  
+
 define ErrataRecommendation:
   case
     when ( // Errata Recommendation 3.2.2.a: Low grade cytology followed by persistent abnormality
@@ -497,35 +516,7 @@ define ErrataRecommendation:
         id: '5.E3.2.2.b'
       }
 
-    // Managing abnormal cervical cytology alone
-    when ( // Errata Recommendation 3.1.1: ASC-US Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsAscus and
-      IsMostRecentTest(MostRecentCytologyAlone.date) and
-      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
-    ) then
-      {
-        short: 'Reflex HPV',
-        date: Today(),
-        details: {
-          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.'
-        },
-        id: '5.E3.1.1.a'
-      }
-    when ( // Errata Recommendation 3.1.2: LSIL Alone
-      AgeInYears() >= 25 and
-      CytologyAloneInterpretedAsLsil and
-      IsMostRecentTest(MostRecentCytologyAlone.date) and
-      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
-    ) then
-      {
-        short: 'Colposcopy',
-        date: Today(),
-        details: {
-          'Colposcopy is recommended.'
-        },
-        id: '5.E3.1.2.a'
-      }
+
     when ( // Errata Recommendation 3.1.3: HSIL or SCC Alone
       AgeInYears() >= 25 and
       CytologyAloneInterpretedAsHsil and
@@ -596,6 +587,49 @@ define ErrataRecommendation:
         },
         id: '5.E3.2.3.a'
       }
+    // Managing abnormal cervical cytology alone
+    when ( // Errata Recommendation 3.1.0: NILM Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsNormal and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
+    ) then
+      {
+        short: 'Surveillance 3-year follow-up',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        details: {
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 3 years from date of most recent test.'
+        },
+        id: '5.E3.1.0.a'
+      }
+    when ( // Errata Recommendation 3.1.1: ASC-US Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsAscus and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
+    ) then
+      {
+        short: 'Reflex HPV',
+        date: Today(),
+        details: {
+          'Reflex HPV testing is preferred. If HPV testing is not feasible, repeat cytology in 1 year from date of most recent test.'
+        },
+        id: '5.E3.1.1.a'
+      }
+    when ( // Errata Recommendation 3.1.2: LSIL Alone
+      AgeInYears() >= 25 and
+      CytologyAloneInterpretedAsLsil and
+      IsMostRecentTest(MostRecentCytologyAlone.date) and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(MostRecentCytologyAlone.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended.'
+        },
+        id: '5.E3.1.2.a'
+      }  
     else
       null
   end
