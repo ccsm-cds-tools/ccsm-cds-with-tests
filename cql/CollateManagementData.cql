@@ -274,7 +274,13 @@ define SecondMostRecentCytologyReport:
     SortedCytologyReports[1]
   else
     null
-    
+
+define ThirdMostRecentCytologyReport:
+  if Count(SortedCytologyReports) > 2 then
+    SortedCytologyReports[2]
+  else
+    null
+
 define MostRecentCytologyReportWasWithinPastFiveYears:
   MostRecentCytologyReport.date >= Now() - 5 years
 

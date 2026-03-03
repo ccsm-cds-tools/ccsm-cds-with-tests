@@ -382,6 +382,13 @@ define CytologicHsil:
 define LastKnownHsilCytology:
   First(CytologicHsil)
 
+define HighGradeCytology:
+  Collate.SortedCytologyReports C
+    where C.riskTableInput in {'ASC-H','AGC','HSIL+'}
+
+define LastKnownHighGradeCytology:
+  First(HighGradeCytology)
+  
 define LastCervicalPrecancerTreatment:
   Last(Collate.CervicalPrecancerTreatmentsSorted)
 
@@ -488,6 +495,13 @@ define ErrataRecommendation:
         (
           LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult is not null and
           Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownAscusHpvPositiveCotestBeforeMostRecentPositiveResult.date)
+        ) or
+        (
+          AbnormalCytologyAloneInRecentHistory and
+          LastKnownCytologyAloneReport.date occurs before Collate.MostRecentHpvReport.date and
+          Collate.MostRecentCytologyCotest is not null and
+          RiskTableLookup.HighGradePap(Collate.ThirdMostRecentCytologyReport.riskTableInput) = 'NULL' and
+          Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyAloneReport.date)
         )
       )
     ) then
@@ -547,7 +561,20 @@ define ErrataRecommendation:
         },
         id: '5.E3.2.1.a'
       }
-
+    when ( // Errata Recommendation 3.2.1: High grade cytology and patient did not receive colposcopy
+      AgeInYears() >= 25 and
+      LastKnownHighGradeCytology is not null and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownHsilCytology.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        details: {
+          'Colposcopy is recommended if the previous result was high-grade cytology (ASC-H or a more severe cytologic interpretation) and the patient did not complete colposcopy.'
+        },
+        id: '5.E3.2.1.b'
+      }
+      
     when ( // Errata Recommendation 3.2.3: Low grade cytology followed by a negative HPV-based test
       AgeInYears() >= 25 and
       (
