@@ -965,6 +965,28 @@
                }
             }
          }, {
+            "name" : "HpvDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "H",
+                  "expression" : {
+                     "name" : "SortedHpvReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "H",
+                     "type" : "Property"
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentHpvReport",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1630,6 +1652,28 @@
                }
             }
          }, {
+            "name" : "CytologyDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "C",
+                  "expression" : {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "C",
+                     "type" : "Property"
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentCytologyCotest",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2268,6 +2312,69 @@
                }
             }
          }, {
+            "name" : "ThirdMostRecentCytologyReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Greater",
+                  "operand" : [ {
+                     "type" : "Count",
+                     "source" : {
+                        "name" : "SortedCytologyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  } ]
+               },
+               "then" : {
+                  "type" : "Indexer",
+                  "operand" : [ {
+                     "name" : "SortedCytologyReports",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                     "value" : "2",
+                     "type" : "Literal"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentCytologyReportWasWithinPastFiveYears",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2376,6 +2483,28 @@
                }
             }
          }, {
+            "name" : "BiopsyDates",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Query",
+               "source" : [ {
+                  "alias" : "B",
+                  "expression" : {
+                     "name" : "SortedBiopsyReports",
+                     "type" : "ExpressionRef"
+                  }
+               } ],
+               "relationship" : [ ],
+               "return" : {
+                  "expression" : {
+                     "path" : "date",
+                     "scope" : "B",
+                     "type" : "Property"
+                  }
+               }
+            }
+         }, {
             "name" : "MostRecentBiopsyReportDate",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -2447,6 +2576,39 @@
                   "source" : {
                      "name" : "MostRecentBiopsyReport",
                      "type" : "ExpressionRef"
+                  }
+               }
+            }
+         }, {
+            "name" : "FirstBiopsyAfterMostRecentHpvReport",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Last",
+               "source" : {
+                  "type" : "Query",
+                  "source" : [ {
+                     "alias" : "B",
+                     "expression" : {
+                        "name" : "SortedBiopsyReports",
+                        "type" : "ExpressionRef"
+                     }
+                  } ],
+                  "relationship" : [ ],
+                  "where" : {
+                     "type" : "After",
+                     "operand" : [ {
+                        "path" : "date",
+                        "scope" : "B",
+                        "type" : "Property"
+                     }, {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "MostRecentHpvReport",
+                           "type" : "ExpressionRef"
+                        }
+                     } ]
                   }
                }
             }

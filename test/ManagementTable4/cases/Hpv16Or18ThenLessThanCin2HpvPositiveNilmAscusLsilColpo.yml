@@ -1,0 +1,44 @@
+---
+name: HPV16+ or 18+ Then Less Than CIN2 Then HPV Positive NILM/ASC-US/LSIL - Colposcopy
+
+# High grade HPV16+/18+ re-colposcopy test result and any cytology
+# and any HPV with ASC-H, AGC or HSIL
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *HpvTypedResultsTwoYearsAgo
+-
+  $iterate: *PapAllResultsTwoYearsAgo
+-
+  $iterate: *LessThanCin2TwoYearsAgo
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
+  status: final
+  conclusionCode:
+    - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-05-01
+-
+  $iterate: *CurrentLowGradePap
+  
+results:
+  Recommendation:
+    short: 'Colposcopy'
+    date: '2021-06-02'
+    group: 'Post Colposcopy (Table 4)'
+    details:
+    - 'Colposcopy is recommended.'
+    id: '5.T.4.C.U'
+  WhichTableMadeTheRecommendation: 4
