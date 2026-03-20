@@ -1,0 +1,63 @@
+---
+name: NILM Alone Then HPV-negative ASC-US - 3-Year Follow-Up
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "White or Caucasian"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Not Hispanic or Latino"
+
+
+# ASC-US Pap Smear / HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-05-01
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-05-01
+
+# NILM Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2018-06-01
+
+results:
+  Recommendation:
+    short: 'Surveillance 3-year follow-up'
+    date: '2024-05-01'
+    group: 'General Screening (Table 1)'
+    details:
+    - 'Primary HPV testing or cotesting is recommended in 3 years from date of most recent test.'
+    - 'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 1-year intervals from date of most recent test.'
+    id: '5.T.1.3.Y'
+  WhichTableMadeTheRecommendation: 1

@@ -1,0 +1,118 @@
+---
+name: HPV-negative ASC-US 2x Then HPV-positive ASC-US - 1-Year follow-up
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1996-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "Black or African American"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Not Hispanic or Latino"
+
+
+# ASC-US Pap Smear / HPV+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-05-01
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#10828004 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2021-05-01
+
+# ASC-US Pap Smear / HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2019-03-23
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2019-03-23
+
+# ASC-US Pap Smear / HPV-
+# Note that this test requires a longer history, to test the Table2 lookup when 
+# prev2Hpv and prev2Pap are supplied but don't match values in the table.
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2017-07-01
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2017-07-01
+
+# <CIN1 Biopsy
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#165324008 Biopsy result normal (finding)
+  effectiveDateTime: 2016-10-19
+  
+  
+# ASC-US Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#441087007 Atypical squamous cells of undetermined significance on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2016-09-15
+  
+
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#720005005 Human papillomavirus deoxyribonucleic acid test positive, high risk on cervical specimen (finding)
+  effectiveDateTime: 2016-09-15
+    
+
+results:
+  Recommendation:
+    short: 'Surveillance 1-year follow-up'
+    date: '2022-05-01'
+    group: 'Surveillance (Table 2)'
+    details:
+    - 'Primary HPV testing or cotesting is recommended in 1 year from date of most recent test.'
+    - 'If HPV testing or cotesting is not available, Pap testing may be performed. This is recommended at 6-month intervals from date of most recent test.'
+    id: '5.T.2.1.Y'
+  WhichTableMadeTheRecommendation: 2
