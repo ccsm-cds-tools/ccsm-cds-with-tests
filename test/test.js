@@ -29,4 +29,5 @@ const targetDir = subdir
 
 if (subdir) console.log(`=========== Testing Directory: ${subdir}\n`);
 
-await Promise.resolve(cqlt.test(targetDir));
+//await Promise.resolve(cqlt.test(targetDir));
+cqlt.test(targetDir)

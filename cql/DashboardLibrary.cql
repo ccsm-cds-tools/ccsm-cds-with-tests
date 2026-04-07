@@ -1246,7 +1246,7 @@ define HasRecentAbnormalScreening:
 define RecentAbnormalHistology:
   Common.LookBack(
     HistologyDiagnosticReports D
-      where not (CollateConclusionCodes(D,HistologyObservations) includes ToConcept("Negative")),
+      where not (CollateConclusionCodes(D,HistologyObservations) in "Normal Histology Finding"),
     AbnormalTestLookbackPeriod
   )
 

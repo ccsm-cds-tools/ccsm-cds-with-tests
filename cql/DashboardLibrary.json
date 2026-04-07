@@ -11287,8 +11287,8 @@
                   "where" : {
                      "type" : "Not",
                      "operand" : {
-                        "type" : "Contains",
-                        "operand" : [ {
+                        "type" : "AnyInValueSet",
+                        "codes" : {
                            "type" : "Query",
                            "source" : [ {
                               "alias" : "X",
@@ -11316,13 +11316,11 @@
                                  } ]
                               }
                            }
-                        }, {
-                           "type" : "ToConcept",
-                           "operand" : {
-                              "name" : "Negative",
-                              "type" : "CodeRef"
-                           }
-                        } ]
+                        },
+                        "valueset" : {
+                           "name" : "Normal Histology Finding",
+                           "preserve" : true
+                        }
                      }
                   }
                }, {
