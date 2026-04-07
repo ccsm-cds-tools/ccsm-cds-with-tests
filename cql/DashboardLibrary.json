@@ -11458,6 +11458,32 @@
                } ]
             }
          }, {
+            "name" : "FirstImmunocompromisedObservation",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "type",
+                  "value" : {
+                     "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                     "value" : "Immunocompromised Observation",
+                     "type" : "Literal"
+                  }
+               }, {
+                  "name" : "date",
+                  "value" : {
+                     "name" : "DateOfFirstObservation",
+                     "libraryName" : "Common",
+                     "type" : "FunctionRef",
+                     "operand" : [ {
+                        "name" : "ImmunocompromisedObservations",
+                        "type" : "ExpressionRef"
+                     } ]
+                  }
+               } ]
+            }
+         }, {
             "name" : "FirstDiagnosisOfSolidOrganTransplant",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -11810,6 +11836,9 @@
                "type" : "List",
                "element" : [ {
                   "name" : "FirstDiagnosisOfHiv",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "FirstImmunocompromisedObservation",
                   "type" : "ExpressionRef"
                }, {
                   "name" : "FirstSolidOrganTransplant",

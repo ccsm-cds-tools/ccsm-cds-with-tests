@@ -91,27 +91,9 @@ define function RangeObject(r FHIR.Range):
       High: QuantityText(r.high)
     }
 
-define function ObservationDate(o FHIR.Observation):
-  Coalesce(
-    (o.effective as FHIR.dateTime).value,
-    (o.effective as FHIR.instant).value,
-    (o.effective as FHIR.Period)."end".value,
-    (o.effective as FHIR.Period)."start".value,
-    (o.issued as FHIR.instant).value
-  )
 
-// Returns a text representation of a date associated with an Observation, preferring `effectiveDateTime`, then
-// `effectivePeriod.start`, then `issued`.
-// @param o - a FHIR Observation to get the text date from
-// @returns {System.String} the text representation of a relevant date from the Observation
-define function ObservationDateString(o FHIR.Observation):
-  Coalesce(
-    DateTimeText(o.effective as FHIR.dateTime),
-    InstantText(o.effective as FHIR.instant),
-    DateTimeText((o.effective as FHIR.Period)."end"),
-    DateTimeText((o.effective as FHIR.Period)."start"),
-    InstantText(o.issued)
-  )
+
+
 
 // Returns a text representation of a date associated with a MedicationStatement, preferring `effectiveDateTime`, then
 // `.start`.
@@ -397,7 +379,58 @@ define function MedicationRequestsWithOrderIntent(MedList List<MedicationRequest
 * Observation Functions
 *******************************************************************************/
 
+define function ObservationDate(o FHIR.Observation):
+  Coalesce(
+    (o.effective as FHIR.dateTime).value,
+    (o.effective as FHIR.instant).value,
+    (o.effective as FHIR.Period)."end".value,
+    (o.effective as FHIR.Period)."start".value,
+    (o.issued as FHIR.instant).value
+  )
+  
+/**
+ * The oldest observation.  For each Observation, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: onsetDateTime, onsetPeriod.start, assertedDate, onsetPeriod.end.
+ * The found date will be used to compare Observations and determine the oldest one.
+ * @param ObsList - a list of Observations
+ * @returns {Observation} the oldest Observation from the list, or null if null was passed in
+ */
+define function OldestObservation(ObsList List<Observation>):
+  First(ObsList C sort by   Coalesce(
+    (effective as FHIR.dateTime).value,
+    (effective as FHIR.instant).value,
+    (effective as FHIR.Period)."end".value,
+    (effective as FHIR.Period)."start".value,
+    (issued as FHIR.instant).value)
+  )
 
+/**
+ * Date of the oldest observation in a list.  For each Observation, this algorithm will use the Coalesce function, which uses the
+ * first non-null result from these fields: effective.dateTime, effective.instant, effective.end, effective.start, issued.instant
+ * The found date will be used to compare Observations and determine the oldest one. The date of the oldest Observation
+ * will be returned.
+ * @param ObsList - a list of Observations
+ * @returns {System.String} the text representation of the Observations's date
+ */
+define function DateOfFirstObservation(ObsList List<Observation>):
+  ObservationDate(
+    OldestObservation(
+      ObsList
+    )
+  )
+
+// Returns a text representation of a date associated with an Observation, preferring `effectiveDateTime`, then
+// `effectivePeriod.start`, then `issued`.
+// @param o - a FHIR Observation to get the text date from
+// @returns {System.String} the text representation of a relevant date from the Observation
+define function ObservationDateString(o FHIR.Observation):
+  Coalesce(
+    DateTimeText(o.effective as FHIR.dateTime),
+    InstantText(o.effective as FHIR.instant),
+    DateTimeText((o.effective as FHIR.Period)."end"),
+    DateTimeText((o.effective as FHIR.Period)."start"),
+    InstantText(o.issued)
+  )
 /*******************************************************************************
 * Procedure Functions
 *******************************************************************************/

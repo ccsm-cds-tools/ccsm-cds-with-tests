@@ -220,6 +220,9 @@ define Age21Through29:
 
 define Age30AndOlder:
   AgeInYears() >= 30
+  
+define AgeOlderThan65:
+  AgeInYears() >= 66  
 
 define NeedFirstOfThreeAnnualCytologyTests:
   if (
@@ -345,6 +348,15 @@ define WhichRecommendationApplies:
           },
           id: '3.I.Y.0.0'
         }
+      when AgeOlderThan65 then
+        {
+          recommendation: {
+            'Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65.',
+            'Cotesting should continue every 3 years throughout the patient\'s lifetime (given normal results).',
+            'If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient\'s lifetime.'
+          },
+          id: '3.I.O.0.1'
+        }
       when Age30AndOlder then
         {
           recommendation: {
@@ -367,6 +379,27 @@ define WhichRecommendationApplies:
             'Cervical cytology screening is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.'
           },
           id: '3.F.Y.0.0'
+        }
+      when AgeOlderThan65 then
+        if LastCytologyWasCotest then
+        {
+          recommendation: {
+            'Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65 and is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.',
+            'Cotesting should continue every 3 years throughout the patient\'s lifetime (given normal results).'
+          },
+          id: '3.F.O.C.1'
+        }
+      else 
+        {
+          recommendation: {
+            'Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65 and is next due on ' + ToString(ToDate(ProposedDateOfNextScreening)) + '.',
+            'If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient\'s lifetime.',
+            'The screening can be performed using one of the following screening approaches:',
+            '1. Primary HPV testing',
+            '2. Cotesting with cervical cytology and hrHPV testing',
+            '3. Cervical cytology testing alone'            
+          },
+          id: '3.I.O.G.1'
         }
       when Age30AndOlder then
         if LastCytologyWasCotest then

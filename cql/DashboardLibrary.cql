@@ -1273,6 +1273,12 @@ define FirstDiagnosisOfHiv:
     date: Common.DateOfFirstCondition(HivDiagnoses)
   }
 
+define FirstImmunocompromisedObservation:
+  {
+    type: 'Immunocompromised Observation',
+    date: Common.DateOfFirstObservation(ImmunocompromisedObservations)
+  }
+
 define FirstDiagnosisOfSolidOrganTransplant:
   {
     type: 'Diagnosis Of Solid Organ Transplant',
@@ -1350,6 +1356,7 @@ define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
 
 define DistinctImmunocompromisedEvents:
   {FirstDiagnosisOfHiv,
+  FirstImmunocompromisedObservation,
   FirstSolidOrganTransplant,
   FirstDiagnosisOfSystemicLupusErythematosus,
   FirstHematopoieticStemCellTransplant,
