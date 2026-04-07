@@ -945,6 +945,29 @@
                } ]
             }
          }, {
+            "name" : "AgeOlderThan65",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "GreaterOrEqual",
+               "operand" : [ {
+                  "precision" : "Year",
+                  "type" : "CalculateAge",
+                  "operand" : {
+                     "path" : "birthDate.value",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "Patient",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               }, {
+                  "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                  "value" : "66",
+                  "type" : "Literal"
+               } ]
+            }
+         }, {
             "name" : "NeedFirstOfThreeAnnualCytologyTests",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -1616,6 +1639,40 @@
                         }
                      }, {
                         "when" : {
+                           "name" : "AgeOlderThan65",
+                           "type" : "ExpressionRef"
+                        },
+                        "then" : {
+                           "type" : "Tuple",
+                           "element" : [ {
+                              "name" : "recommendation",
+                              "value" : {
+                                 "type" : "List",
+                                 "element" : [ {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65.",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "Cotesting should continue every 3 years throughout the patient's lifetime (given normal results).",
+                                    "type" : "Literal"
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient's lifetime.",
+                                    "type" : "Literal"
+                                 } ]
+                              }
+                           }, {
+                              "name" : "id",
+                              "value" : {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "3.I.O.0.1",
+                                 "type" : "Literal"
+                              }
+                           } ]
+                        }
+                     }, {
+                        "when" : {
                            "name" : "Age30AndOlder",
                            "type" : "ExpressionRef"
                         },
@@ -1729,6 +1786,122 @@
                                  "type" : "Literal"
                               }
                            } ]
+                        }
+                     }, {
+                        "when" : {
+                           "name" : "AgeOlderThan65",
+                           "type" : "ExpressionRef"
+                        },
+                        "then" : {
+                           "type" : "If",
+                           "condition" : {
+                              "name" : "LastCytologyWasCotest",
+                              "type" : "ExpressionRef"
+                           },
+                           "then" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65 and is next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedDateOfNextScreening",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "Cotesting should continue every 3 years throughout the patient's lifetime (given normal results).",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "3.F.O.C.1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           },
+                           "else" : {
+                              "type" : "Tuple",
+                              "element" : [ {
+                                 "name" : "recommendation",
+                                 "value" : {
+                                    "type" : "List",
+                                    "element" : [ {
+                                       "type" : "Concatenate",
+                                       "operand" : [ {
+                                          "type" : "Concatenate",
+                                          "operand" : [ {
+                                             "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                             "value" : "Cervical cancer screening is recommended for immunosuppressed individuals over the age of 65 and is next due on ",
+                                             "type" : "Literal"
+                                          }, {
+                                             "type" : "ToString",
+                                             "operand" : {
+                                                "type" : "ToDate",
+                                                "operand" : {
+                                                   "name" : "ProposedDateOfNextScreening",
+                                                   "type" : "ExpressionRef"
+                                                }
+                                             }
+                                          } ]
+                                       }, {
+                                          "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                          "value" : ".",
+                                          "type" : "Literal"
+                                       } ]
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "If screening with cytology alone, screening should occur annually for 3 consecutive normal tests, then every 3 years throughout the patient's lifetime.",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "The screening can be performed using one of the following screening approaches:",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "1. Primary HPV testing",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "2. Cotesting with cervical cytology and hrHPV testing",
+                                       "type" : "Literal"
+                                    }, {
+                                       "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                       "value" : "3. Cervical cytology testing alone",
+                                       "type" : "Literal"
+                                    } ]
+                                 }
+                              }, {
+                                 "name" : "id",
+                                 "value" : {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                    "value" : "3.I.O.G.1",
+                                    "type" : "Literal"
+                                 }
+                              } ]
+                           }
                         }
                      }, {
                         "when" : {
