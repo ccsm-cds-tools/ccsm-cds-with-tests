@@ -1,0 +1,38 @@
+---
+name: Age under 25 Two Nilm Pap - Current
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1998-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-05-01
+
+-
+  $iterate: *PrevNilmCytologyReports
+  
+results:
+  IsIncludedAndNotExcluded: true
+  RecommendImmediateCervicalCytology: false
+  RecommendImmediateScreening: false
+  Recommendation:
+    short: 'Cervical Screening Up To Date'
+    date: '2024-05-01'
+    details: 
+    - 'Cervical cancer screening using cervical cytology testing alone is next due on 2024-05-01.'
+    id: '4.21.F.0.0'
+    group: 'Screening: Average Risk'

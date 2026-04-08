@@ -452,6 +452,24 @@ define RecommendationForRareCytology:
         },
         id: '5.G.1.1.a'
       }
+    // G.1 Evaluation of Cytology Interpreted as AGC or AIS for Pregnant Patients
+    when ( // G1.1b
+      AgeInYears() < 35 and
+      LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells is not null and
+      Dash.Pregnant and
+      Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date) and
+      HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells.date)
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        group: 'Rare Cytology (G.1.1)',
+        details: {
+          'Colposcopy is recommended.',
+          'Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy.'
+        },
+        id: '5.G.1.1.b'
+      }      
     when ( // G1.2
       AgeInYears() >= 35 and
       LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells is not null and
@@ -675,6 +693,7 @@ define HasNoCytologyInterpretedAsAgcAfterCytologyInterpretedAsAscH:
 define RecommendationForExceptionsToColposcopyThreshold:
   case
     when (
+      AgeInYears() >= 25 and
       LastKnownCytologyInterpretedAsAscHInPast10Years is not null and
       Collate.HasNoBiopsyOrTreatmentAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
       HasNoCytologyInterpretedAsHsilAfterDate(LastKnownCytologyInterpretedAsAscHInPast10Years.date) and
@@ -701,7 +720,7 @@ define RecommendationForExceptionsToColposcopyThreshold:
         date: Today(),
         group: 'Exception to Colposcopy Threshold (H.2)',
         details: {
-          'Colposcopy is recommended for all patients with HPV 16 or 18.'
+          'Colposcopy is recommended for all patients 25 or older with HPV 16 or 18.'
         },
         id: '5.H.2.2.a'
       }
@@ -1118,7 +1137,13 @@ define LastKnownCytologyInterpretedAsHsilInPast5Years: // TODO: Combine this wit
         return aC in "HSIL"
     )
   )
-  
+
+define LastKnownCytologyInterpretedAsHsilInPast10Years: // TODO: Combine this with expression above
+  if (LastKnownCytologyInterpretedAsHsil is not null and
+      LastKnownCytologyInterpretedAsHsil.date >= Now() - 10 years) then
+    LastKnownCytologyInterpretedAsHsil
+  else null
+    
 define CervixRemovalDateIsAfterLastKnownAisBiopsy:
   (CervixRemovalDate is not null) and 
   CervixRemovalDate after Collate.LastKnownAisBiopsy.date

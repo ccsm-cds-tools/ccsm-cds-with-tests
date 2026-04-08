@@ -3597,6 +3597,118 @@
                            "operand" : [ {
                               "type" : "And",
                               "operand" : [ {
+                                 "type" : "Less",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "35",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "type" : "Not",
+                                 "operand" : {
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              } ]
+                           }, {
+                              "name" : "Pregnant",
+                              "libraryName" : "Dash",
+                              "type" : "ExpressionRef"
+                           } ]
+                        }, {
+                           "name" : "HasNoBiopsyOrTreatmentAfterDate",
+                           "libraryName" : "Collate",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "date",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        } ]
+                     }, {
+                        "name" : "HasNoCytologyInterpretedAsHsilAfterDate",
+                        "type" : "FunctionRef",
+                        "operand" : [ {
+                           "path" : "date",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "LastKnownCytologyInterpretedAsAgcOrAisWithoutAtypicalEndometrialCells",
+                              "type" : "ExpressionRef"
+                           }
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Colposcopy",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "group",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Rare Cytology (G.1.1)",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Colposcopy is recommended.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "Endocervical curettage, endometrial biopsy, and treatment without biopsy are unacceptable during pregnancy.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "name" : "id",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "5.G.1.1.b",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "And",
+                              "operand" : [ {
                                  "type" : "GreaterOrEqual",
                                  "operand" : [ {
                                     "precision" : "Year",
@@ -4819,14 +4931,35 @@
                         "operand" : [ {
                            "type" : "And",
                            "operand" : [ {
-                              "type" : "Not",
-                              "operand" : {
-                                 "type" : "IsNull",
+                              "type" : "And",
+                              "operand" : [ {
+                                 "type" : "GreaterOrEqual",
+                                 "operand" : [ {
+                                    "precision" : "Year",
+                                    "type" : "CalculateAge",
+                                    "operand" : {
+                                       "path" : "birthDate.value",
+                                       "type" : "Property",
+                                       "source" : {
+                                          "name" : "Patient",
+                                          "type" : "ExpressionRef"
+                                       }
+                                    }
+                                 }, {
+                                    "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                    "value" : "25",
+                                    "type" : "Literal"
+                                 } ]
+                              }, {
+                                 "type" : "Not",
                                  "operand" : {
-                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
-                                    "type" : "ExpressionRef"
+                                    "type" : "IsNull",
+                                    "operand" : {
+                                       "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                       "type" : "ExpressionRef"
+                                    }
                                  }
-                              }
+                              } ]
                            }, {
                               "name" : "HasNoBiopsyOrTreatmentAfterDate",
                               "libraryName" : "Collate",
@@ -4978,7 +5111,7 @@
                            "type" : "List",
                            "element" : [ {
                               "valueType" : "{urn:hl7-org:elm-types:r1}String",
-                              "value" : "Colposcopy is recommended for all patients with HPV 16 or 18.",
+                              "value" : "Colposcopy is recommended for all patients 25 or older with HPV 16 or 18.",
                               "type" : "Literal"
                            } ]
                         }
@@ -8628,6 +8761,80 @@
                      } ]
                   }
                } ]
+            }
+         }, {
+            "name" : "LastKnownCytologyInterpretedAsHsilInPast10Years",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LastKnownCytologyInterpretedAsHsil",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "path" : "date",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "LastKnownCytologyInterpretedAsHsil",
+                           "type" : "ExpressionRef"
+                        }
+                     }, {
+                        "type" : "Subtract",
+                        "operand" : [ {
+                           "type" : "Now"
+                        }, {
+                           "value" : 10,
+                           "unit" : "years",
+                           "type" : "Quantity"
+                        } ]
+                     } ]
+                  } ]
+               },
+               "then" : {
+                  "name" : "LastKnownCytologyInterpretedAsHsil",
+                  "type" : "ExpressionRef"
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "TupleTypeSpecifier",
+                     "element" : [ {
+                        "name" : "riskTableInput",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}String",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     }, {
+                        "name" : "allConclusions",
+                        "elementType" : {
+                           "type" : "ListTypeSpecifier",
+                           "elementType" : {
+                              "name" : "{http://hl7.org/fhir}CodeableConcept",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }
+                     }, {
+                        "name" : "date",
+                        "elementType" : {
+                           "name" : "{urn:hl7-org:elm-types:r1}DateTime",
+                           "type" : "NamedTypeSpecifier"
+                        }
+                     } ]
+                  }
+               }
             }
          }, {
             "name" : "CervixRemovalDateIsAfterLastKnownAisBiopsy",

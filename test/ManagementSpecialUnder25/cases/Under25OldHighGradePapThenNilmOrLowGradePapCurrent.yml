@@ -1,0 +1,35 @@
+---
+name: Age under 25 Old ASC-US/LSIL Then NILM/ASC-US/LSIL then ASC-US/LSIL - Current
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2004-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *CurrentLowGradePap
+-
+  resourceType: DiagnosticReport
+  code: LOINC#10524-7 Microscopic observation [Identifier] in Cervix by Cyto stain
+  status: amended
+  conclusionCode:
+  - SNOMEDCT#62061000119107 High grade squamous intraepithelial lesion on cervical Papanicolaou smear (finding)
+  effectiveDateTime: 2021-05-01
+   
+results:
+  Recommendation:
+    short: 'Colposcopy'
+    date: '2026-06-02'
+    details: 
+    - 'Colposcopy is recommended if the previous result was high-grade cytology (ASC-H or a more severe cytologic interpretation) and the patient did not complete colposcopy.'
+    - 'Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.'
+    id: '5.K1.1.2.b'
+    group: 'Younger Than 25 (K.1.1)'
