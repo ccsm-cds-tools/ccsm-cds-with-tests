@@ -114,7 +114,7 @@ define AdjacentRowsTable1:
   )
 
 define GeneralScreeningManagementRecommendation:
-  if LookUpTable1 is not null then LookUpTable1.action
+  if AgeInYears() >= 25 and LookUpTable1 is not null then LookUpTable1.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -156,12 +156,12 @@ define AdjacentRowsTable2:
 
 // Handle Special case of HPV-/ASC-US, HPV/ALL
 define SurveillanceManagementRecommendation:
-  if RowTable2 is not null and
+  if AgeInYears() >= 25 and RowTable2 is not null and 
       RowTable2.prev1 = 'HPV-negative/ASC-US' and
       RowTable2.hpv = 'HPV-negative' and
       RowTable2.cyto = 'ALL' then '3-year follow-up'
   else
-    if LookUpTable2 is not null then LookUpTable2.action
+    if AgeInYears() >= 25 and LookUpTable2 is not null then LookUpTable2.action
     else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -192,7 +192,7 @@ define AdjacentRowsTable3:
   )
 
 define ColposcopyResultsManagementRecommendation:
-  if LookUpTable3 is not null then LookUpTable3.action
+  if AgeInYears() >= 25 and LookUpTable3 is not null then LookUpTable3.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -238,7 +238,7 @@ define AdjacentRowsTable4:
   )
 
 define PostColposcopyManagementRecommendation:
-  if LookUpTable4 is not null then LookUpTable4.action
+  if AgeInYears() >= 25 and LookUpTable4 is not null then LookUpTable4.action
   else null
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -278,7 +278,7 @@ define AdjacentRowsTable5:
   )
 
 define PostTreatmentManagementRecommendation:
-  if LookUpTable5 is not null then LookUpTable5.action
+  if AgeInYears() >= 25 and LookUpTable5 is not null then LookUpTable5.action
   else null
 
 define RarelyScreenedTreatmentRecommendation:
@@ -784,6 +784,22 @@ define PositiveHighRiskHpvGenotypes:
           'HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.'
         },
         id: '5.O.G.2.3'
+      }
+    when ( // HPV16+ or HPV18+ 
+      AgeInYears() < 25 and
+      (
+        Collate.MostRecentHpvResult is not null and
+        Collate.MostRecentHpvResult in {'HPV16+','HPV16-, HPV18+'}
+      )
+    ) then
+      {
+        short: 'Use Clinical Judgement',
+        date: Today(),
+        details: {
+          'There is no specific recommendation for HPV16+ or HPV18+ in a patient < 25 years of age.',
+          'HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.'
+        },
+        id: '5.O.G.2.4'
       }
     else
       null
