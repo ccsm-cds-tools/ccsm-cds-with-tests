@@ -917,6 +917,9 @@ define SecondMostRecentHistologyInterpretedAsCin1OrNormal:
 define MostRecentBiopsyReportWasWithinPast2Years:
   Collate.MostRecentBiopsyReport.date >= Now() - 2 years
 
+define MostRecentBiopsyReportWasWithinPast3Years:
+  Collate.MostRecentBiopsyReport.date >= Now() - 3 years
+  
 define TwoMostRecentBiopsyReportsWithin2YearsApart:
   SecondMostRecentBiopsyReport.date within 2 years of Collate.MostRecentBiopsyReport.date
 
@@ -1531,7 +1534,7 @@ define RecommendationForHistologyResults:
       (
         (
           (
-            MostRecentBiopsyReportWasWithinPast2Years and
+            MostRecentBiopsyReportWasWithinPast3Years and // was 2Years
             HistologyInterpretedAsNormal and
             TwoMostRecentBiopsyReportsWithin2YearsApart
           ) and
@@ -1559,7 +1562,10 @@ define RecommendationForHistologyResults:
           ) and
           (
             HistologyInterpretedAsCin1OrNormal and
-            PrecedingCytologyIsAscH
+            (
+              PrecedingCytologyIsHsil or
+              PrecedingCytologyIsAscH
+            )
           ) and
           (
             not (
@@ -1579,6 +1585,37 @@ define RecommendationForHistologyResults:
         },
         id: '5.I.4.3.a'
       }
+    when ( // I.4.4 with unsatisfactory cytology
+      AgeInYears() >= 25 and
+      MostRecentCytologyReportWasWithinPastFiveYears and
+      CytologyUnsatisfactory and
+      (
+        HistologyInterpretedAsCin1OrNormal and
+        (
+          PrecedingCytologyIsHsil or
+          PrecedingCytologyIsAscH
+        ) and
+        (
+          not (
+            MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date
+          ) or
+          MostRecentTreatment is null
+        )
+        ) and
+        (
+          not AnyHpvSinceMostRecentCytology or
+          NegativeOrUnknownHpvCotest
+        )
+      ) then
+      {
+        short: 'Repeat Screening',
+        date: Today() + 2 months,
+        group: 'Managing Histology (I.4.4)',
+        details: {
+          'Repeat age-based screening with cytology, cotesting or primary HPV testing in 2 to 4 months is recommended.'
+        },
+        id: '5.I.4.4.b'
+      }      
     when ( // I4.4
       AgeInYears() >= 25 and
       (
@@ -1637,6 +1674,36 @@ define RecommendationForHistologyResults:
           'Colposcopy is recommended.'
         },
         id: '5.I.4.4.a'
+      }
+    when ( // I4.4
+      AgeInYears() >= 25 and
+      (
+        HistologyInterpretedAsCin1OrNormal and
+        (
+          PrecedingCytologyIsHsil or
+          PrecedingCytologyIsAscH
+        ) and
+        (
+          MostRecentTreatment is null or
+          not ( MostRecentTreatmentDate 2 years or less after Collate.MostRecentBiopsyReport.date )
+        ) and
+        (
+          PositiveSurveillanceAfterMostRecentBiopsy is not null and
+          Collate.MostRecentHpvReport is not null and
+          Collate.MostRecentHpvReport.date less than 3.5 years after Collate.MostRecentBiopsyReport.date and
+          Collate.MostRecentHpvReport.date more than 6 months after Collate.MostRecentBiopsyReport.date
+        )
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        group: 'Managing Histology (I.4.4)',
+        details: {
+          'Colposcopy is recommended.',
+          'If any test is abnormal during the observation period after CIN1 or less preceded by ASC-H or HSIL cytology, repeat colposcopy is recommended.'
+        },
+        id: '5.I.4.4.b'
       }
     when ( // I4.1
       AgeInYears() >= 25 and
