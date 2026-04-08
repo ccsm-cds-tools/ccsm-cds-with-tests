@@ -1,12 +1,12 @@
 ---
-name: Under 25 NILM HPV Unknown
+name: Under 25 NILM HPV Negative
 
 data:
 - 
   resourceType: Patient
   name: Joanne Smith
   gender: female
-  birthDate: 1998-05-01
+  birthDate: 2004-05-01
   extension:
   -
     url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
@@ -18,24 +18,21 @@ data:
   status: amended
   conclusionCode:
   - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
-  effectiveDateTime: 2021-01-02
+  effectiveDateTime: 2025-01-02
 - 
   resourceType: DiagnosticReport
   code: LOINC#21440-3 Human papilloma virus 16+18+31+33+35+45+51+52+56 DNA [Presence] in Cervix by Probe
   status: final
   conclusionCode:
-  - NULL FLAVOR#UNK Unknown
-  effectiveDateTime: 2021-01-02
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2025-01-02
 
-# This is meant to fail CDS recommendation
 results:
-  HasRecentAbnormalScreening: false
-  HasRecommendation: false
-  RareAbnormalityRecommendation: null
-  SpecialPopulationRecommendation: null
-  CommonAbnormalityRecommendation:
-    short: null
-    date: null
-    details: null
-    id: null
-    group: "N/A"  
+  Recommendation:
+    short: 'Cytology'
+    date: '2028-01-02'
+    details: 
+    - 'Cervical cytology is recommended in 3 years from date of most recent test. If the patient will be age 25 at that time, use HPV testing or cotesting.'
+    - 'Primary HPV screening and cotesting are not recommended for patients younger than 25 years.'
+    id: '5.K1.1.1.e'
+    group: 'Younger Than 25 (K.1.1)'

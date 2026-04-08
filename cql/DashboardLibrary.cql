@@ -1457,7 +1457,7 @@ define HasRecentAbnormalScreening:
 define RecentAbnormalHistology:
   Common.LookBack(
     HistologyDiagnosticReports D
-      where not (CollateConclusionCodes(D,HistologyObservations) includes ToConcept("Negative")),
+      where not (CollateConclusionCodes(D,HistologyObservations) in "Normal Histology Finding"),
     AbnormalTestLookbackPeriod
   )
 
@@ -1482,6 +1482,12 @@ define FirstDiagnosisOfHiv:
   {
     type: 'Diagnosis Of HIV',
     date: Common.DateOfFirstCondition(HivDiagnoses)
+  }
+
+define FirstImmunocompromisedObservation:
+  {
+    type: 'Immunocompromised Observation',
+    date: Common.DateOfFirstObservation(ImmunocompromisedObservations)
   }
 
 define FirstDiagnosisOfSolidOrganTransplant:
@@ -1561,6 +1567,7 @@ define FirstDiagnosisOfIbdOrRheumatoidArthritisAndOnImmunosuppressant:
 
 define DistinctImmunocompromisedEvents:
   {FirstDiagnosisOfHiv,
+  FirstImmunocompromisedObservation,
   FirstSolidOrganTransplant,
   FirstDiagnosisOfSystemicLupusErythematosus,
   FirstHematopoieticStemCellTransplant,
