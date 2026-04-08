@@ -518,6 +518,32 @@ define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, bio
 
 define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   if biopsyVal = '<CIN1' or biopsyVal = 'CIN1' then
+    if (prevHpvVal is null and
+        currPapVal is null and
+        preBiopsyPapVal = 'ALL' and
+        preBiopsyHpvVal = 'HPV-negative') then // do not manage on prevPapVal
+     Coalesce( // Case 4: Current cytology might be specified as 'ALL'
+        PostColposcopyTable T
+          where T.preColposcopyResult = 'Low Grade'
+            and T.postColposcopyPastHistory = 'none'
+            and T.hpv = currHpvVal
+            and T.pap = 'ALL'
+            return {
+              action: T.management,
+              preColposcopyResult: T.preColposcopyResult,
+              postColposcopyPastHistory: T.postColposcopyPastHistory,
+              history: '',
+              prev2: '',
+              prev1: '',
+              referral: '',
+              biopsy: '',
+              hpv: T.hpv,
+              cyto: T.pap,
+              riskNow: convert T.value.immediate to Decimal,
+              risk5yr: convert T.value.five_year to Decimal
+            }
+      )
+    else
     Coalesce(
       Coalesce( // Case 1: Explicit current cytology
         PostColposcopyTable T

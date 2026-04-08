@@ -510,6 +510,7 @@ define RecommendationForPatientsYoungerThan25:
         id: '5.K1.1.2.b'
       }
     when ( // ASC-H or HSIL > 5 years ago and normal result
+      AgeInYears() < 25 and
       (
         Rare.LastKnownCytologyInterpretedAsAscHInPast10Years is not null or
         Rare.LastKnownCytologyInterpretedAsHsilInPast10Years is not null 
