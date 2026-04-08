@@ -866,6 +866,7 @@ define MostRecentPrimaryHpvPositive:
     )
 
 define MostRecentCytologyCotestWasAfterAge21:
+  Collate.MostRecentCytologyCotest is not null and
   Collate.MostRecentCytologyCotest.date >= Patient.birthDate + 21 years
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
