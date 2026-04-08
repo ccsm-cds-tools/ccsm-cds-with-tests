@@ -476,8 +476,9 @@ define function IsMostRecentTest(d System.DateTime):
   Collate.MostRecentReport = d
 
 define HasCytologyAloneAfterMostRecentCytologyCotest:
-  MostRecentCytologyAlone is not null and MostRecentCytologyAlone.date after Collate.MostRecentCytologyCotest.date
-  
+  MostRecentCytologyAlone is not null and
+  Collate.MostRecentCytologyCotest is not null and
+  MostRecentCytologyAlone.date after Collate.MostRecentCytologyCotest.date
 
 define ErrataRecommendation:
   case

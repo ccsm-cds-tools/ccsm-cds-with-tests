@@ -3407,27 +3407,48 @@
                   "when" : {
                      "type" : "And",
                      "operand" : [ {
-                        "type" : "Or",
+                        "type" : "And",
                         "operand" : [ {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
+                           "type" : "Less",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
                               "operand" : {
-                                 "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
-                           }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
                         }, {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
+                           "type" : "Or",
+                           "operand" : [ {
+                              "type" : "Not",
                               "operand" : {
-                                 "name" : "LastKnownCytologyInterpretedAsHsilInPast10Years",
-                                 "libraryName" : "Rare",
-                                 "type" : "ExpressionRef"
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsAscHInPast10Years",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
-                           }
+                           }, {
+                              "type" : "Not",
+                              "operand" : {
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "LastKnownCytologyInterpretedAsHsilInPast10Years",
+                                    "libraryName" : "Rare",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           } ]
                         } ]
                      }, {
                         "type" : "Or",

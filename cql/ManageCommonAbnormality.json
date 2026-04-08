@@ -454,14 +454,27 @@
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "MostRecentCytologyAlone",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyAlone",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
                }, {
                   "type" : "After",
                   "operand" : [ {
