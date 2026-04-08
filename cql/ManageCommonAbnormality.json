@@ -5237,37 +5237,50 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "GreaterOrEqual",
+               "type" : "And",
                "operand" : [ {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentCytologyCotest",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
-                  "type" : "ToDateTime",
-                  "operand" : {
-                     "type" : "Add",
-                     "operand" : [ {
-                        "name" : "ToDate",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "type" : "Add",
                         "operand" : [ {
-                           "path" : "birthDate",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "Patient",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "ToDate",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "birthDate",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "value" : 21,
+                           "unit" : "years",
+                           "type" : "Quantity"
                         } ]
-                     }, {
-                        "value" : 21,
-                        "unit" : "years",
-                        "type" : "Quantity"
-                     } ]
-                  }
+                     }
+                  } ]
                } ]
             }
          }, {
