@@ -1,0 +1,24 @@
+---
+name: Has Old Abnormal Histology
+data:
+-
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1980-01-01
+  extension:
+
+# Should not be included in AbnormalTestLookbackPeriod 8 years
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#285836003 Cervical intraepithelial neoplasia grade 1 (disorder)
+  effectiveDateTime: 2012-05-14
+
+results:
+  IsIncluded: true
+  Excluded: false
+  IsIncludedAndNotExcluded: true
+  HasRecentAbnormalHistology: false

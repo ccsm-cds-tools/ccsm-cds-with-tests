@@ -1,0 +1,33 @@
+---
+name: Age under 25 ASC-US/LSIL Then NILM/ASC-US/LSIL then ASC-US/LSIL - Current
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 2004-01-01
+  extension:
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+    valueCode: F
+-
+  $iterate: *AscusLsilPapThisYear
+- 
+  $iterate: *NilmAscusLsilPapLastYear
+- 
+  $iterate: *ASCUSOrLSILTwoYearsAgo
+  
+   
+results:
+  Recommendation: 
+    short: 'Colposcopy'
+    date: '2026-06-02'
+    group: 'Younger Than 25 (K.1.1)'
+    details:
+    - 'Colposcopy is recommended.'
+    id: '5.K1.1.1.c'
+  WhichPopulationMadeTheRecommendation: 5

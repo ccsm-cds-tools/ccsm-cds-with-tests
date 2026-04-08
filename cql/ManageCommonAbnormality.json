@@ -454,14 +454,27 @@
             "expression" : {
                "type" : "And",
                "operand" : [ {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "MostRecentCytologyAlone",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyAlone",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  }, {
+                     "type" : "Not",
+                     "operand" : {
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "MostRecentCytologyCotest",
+                           "libraryName" : "Collate",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
                }, {
                   "type" : "After",
                   "operand" : [ {
@@ -626,14 +639,35 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "precision" : "Year",
+                        "type" : "CalculateAge",
+                        "operand" : {
+                           "path" : "birthDate.value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "25",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "LookUpTable1",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable1",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  } ]
                },
                "then" : {
                   "path" : "action",
@@ -785,14 +819,35 @@
                      "operand" : [ {
                         "type" : "And",
                         "operand" : [ {
-                           "type" : "Not",
-                           "operand" : {
-                              "type" : "IsNull",
+                           "type" : "And",
+                           "operand" : [ {
+                              "type" : "GreaterOrEqual",
+                              "operand" : [ {
+                                 "precision" : "Year",
+                                 "type" : "CalculateAge",
+                                 "operand" : {
+                                    "path" : "birthDate.value",
+                                    "type" : "Property",
+                                    "source" : {
+                                       "name" : "Patient",
+                                       "type" : "ExpressionRef"
+                                    }
+                                 }
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                                 "value" : "25",
+                                 "type" : "Literal"
+                              } ]
+                           }, {
+                              "type" : "Not",
                               "operand" : {
-                                 "name" : "RowTable2",
-                                 "type" : "ExpressionRef"
+                                 "type" : "IsNull",
+                                 "operand" : {
+                                    "name" : "RowTable2",
+                                    "type" : "ExpressionRef"
+                                 }
                               }
-                           }
+                           } ]
                         }, {
                            "type" : "Equal",
                            "operand" : [ {
@@ -850,14 +905,35 @@
                   "operand" : {
                      "type" : "If",
                      "condition" : {
-                        "type" : "Not",
-                        "operand" : {
-                           "type" : "IsNull",
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "GreaterOrEqual",
+                           "operand" : [ {
+                              "precision" : "Year",
+                              "type" : "CalculateAge",
+                              "operand" : {
+                                 "path" : "birthDate.value",
+                                 "type" : "Property",
+                                 "source" : {
+                                    "name" : "Patient",
+                                    "type" : "ExpressionRef"
+                                 }
+                              }
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                              "value" : "25",
+                              "type" : "Literal"
+                           } ]
+                        }, {
+                           "type" : "Not",
                            "operand" : {
-                              "name" : "LookUpTable2",
-                              "type" : "ExpressionRef"
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "LookUpTable2",
+                                 "type" : "ExpressionRef"
+                              }
                            }
-                        }
+                        } ]
                      },
                      "then" : {
                         "path" : "action",
@@ -989,14 +1065,35 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "precision" : "Year",
+                        "type" : "CalculateAge",
+                        "operand" : {
+                           "path" : "birthDate.value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "25",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "LookUpTable3",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable3",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  } ]
                },
                "then" : {
                   "path" : "action",
@@ -1155,14 +1252,35 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "precision" : "Year",
+                        "type" : "CalculateAge",
+                        "operand" : {
+                           "path" : "birthDate.value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "25",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "LookUpTable4",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable4",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  } ]
                },
                "then" : {
                   "path" : "action",
@@ -1301,14 +1419,35 @@
             "expression" : {
                "type" : "If",
                "condition" : {
-                  "type" : "Not",
-                  "operand" : {
-                     "type" : "IsNull",
+                  "type" : "And",
+                  "operand" : [ {
+                     "type" : "GreaterOrEqual",
+                     "operand" : [ {
+                        "precision" : "Year",
+                        "type" : "CalculateAge",
+                        "operand" : {
+                           "path" : "birthDate.value",
+                           "type" : "Property",
+                           "source" : {
+                              "name" : "Patient",
+                              "type" : "ExpressionRef"
+                           }
+                        }
+                     }, {
+                        "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                        "value" : "25",
+                        "type" : "Literal"
+                     } ]
+                  }, {
+                     "type" : "Not",
                      "operand" : {
-                        "name" : "LookUpTable5",
-                        "type" : "ExpressionRef"
+                        "type" : "IsNull",
+                        "operand" : {
+                           "name" : "LookUpTable5",
+                           "type" : "ExpressionRef"
+                        }
                      }
-                  }
+                  } ]
                },
                "then" : {
                   "path" : "action",
@@ -2769,6 +2908,97 @@
                         "value" : {
                            "valueType" : "{urn:hl7-org:elm-types:r1}String",
                            "value" : "5.O.G.2.3",
+                           "type" : "Literal"
+                        }
+                     } ]
+                  }
+               }, {
+                  "when" : {
+                     "type" : "And",
+                     "operand" : [ {
+                        "type" : "Less",
+                        "operand" : [ {
+                           "precision" : "Year",
+                           "type" : "CalculateAge",
+                           "operand" : {
+                              "path" : "birthDate.value",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}Integer",
+                           "value" : "25",
+                           "type" : "Literal"
+                        } ]
+                     }, {
+                        "type" : "And",
+                        "operand" : [ {
+                           "type" : "Not",
+                           "operand" : {
+                              "type" : "IsNull",
+                              "operand" : {
+                                 "name" : "MostRecentHpvResult",
+                                 "libraryName" : "Collate",
+                                 "type" : "ExpressionRef"
+                              }
+                           }
+                        }, {
+                           "type" : "In",
+                           "operand" : [ {
+                              "name" : "MostRecentHpvResult",
+                              "libraryName" : "Collate",
+                              "type" : "ExpressionRef"
+                           }, {
+                              "type" : "List",
+                              "element" : [ {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16+",
+                                 "type" : "Literal"
+                              }, {
+                                 "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                                 "value" : "HPV16-, HPV18+",
+                                 "type" : "Literal"
+                              } ]
+                           } ]
+                        } ]
+                     } ]
+                  },
+                  "then" : {
+                     "type" : "Tuple",
+                     "element" : [ {
+                        "name" : "short",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "Use Clinical Judgement",
+                           "type" : "Literal"
+                        }
+                     }, {
+                        "name" : "date",
+                        "value" : {
+                           "type" : "Today"
+                        }
+                     }, {
+                        "name" : "details",
+                        "value" : {
+                           "type" : "List",
+                           "element" : [ {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "There is no specific recommendation for HPV16+ or HPV18+ in a patient < 25 years of age.",
+                              "type" : "Literal"
+                           }, {
+                              "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                              "value" : "HPV 16 or 18 infections have the highest risk for CIN 3 and occult cancer, so additional evaluation (e.g., colposcopy with biopsy) is necessary even when cytology results are negative.",
+                              "type" : "Literal"
+                           } ]
+                        }
+                     }, {
+                        "name" : "id",
+                        "value" : {
+                           "valueType" : "{urn:hl7-org:elm-types:r1}String",
+                           "value" : "5.O.G.2.4",
                            "type" : "Literal"
                         }
                      } ]
@@ -5020,37 +5250,50 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "type" : "GreaterOrEqual",
+               "type" : "And",
                "operand" : [ {
-                  "path" : "date",
-                  "type" : "Property",
-                  "source" : {
-                     "name" : "MostRecentCytologyCotest",
-                     "libraryName" : "Collate",
-                     "type" : "ExpressionRef"
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
                   }
                }, {
-                  "type" : "ToDateTime",
-                  "operand" : {
-                     "type" : "Add",
-                     "operand" : [ {
-                        "name" : "ToDate",
-                        "libraryName" : "FHIRHelpers",
-                        "type" : "FunctionRef",
+                  "type" : "GreaterOrEqual",
+                  "operand" : [ {
+                     "path" : "date",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "MostRecentCytologyCotest",
+                        "libraryName" : "Collate",
+                        "type" : "ExpressionRef"
+                     }
+                  }, {
+                     "type" : "ToDateTime",
+                     "operand" : {
+                        "type" : "Add",
                         "operand" : [ {
-                           "path" : "birthDate",
-                           "type" : "Property",
-                           "source" : {
-                              "name" : "Patient",
-                              "type" : "ExpressionRef"
-                           }
+                           "name" : "ToDate",
+                           "libraryName" : "FHIRHelpers",
+                           "type" : "FunctionRef",
+                           "operand" : [ {
+                              "path" : "birthDate",
+                              "type" : "Property",
+                              "source" : {
+                                 "name" : "Patient",
+                                 "type" : "ExpressionRef"
+                              }
+                           } ]
+                        }, {
+                           "value" : 21,
+                           "unit" : "years",
+                           "type" : "Quantity"
                         } ]
-                     }, {
-                        "value" : 21,
-                        "unit" : "years",
-                        "type" : "Quantity"
-                     } ]
-                  }
+                     }
+                  } ]
                } ]
             }
          }, {

@@ -1,0 +1,103 @@
+---
+name: I4.4 HSIL or AscH Cytology CIN1 Histology Then ASC-US/LSIL Then Negative Cotest
+
+externalData:
+- resources
+
+data:
+- 
+  resourceType: Patient
+  name: Joanne Smith
+  gender: female
+  birthDate: 1991-01-01
+  extension:
+  -
+    url: http://hl7.org/fh
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+    extension:
+    -
+      url: "text"
+      valueString: "White or Caucasian"
+  -
+    url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+    extension:
+    -
+      url: "text"
+      valueString: "Not Hispanic or Latino"
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2021-04-10
+
+# NILM Pap Smear
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#47527-7 Cytology report of Cervical or vaginal smear or scraping Cyto stain.thin prep
+  status: final
+  conclusionCode:
+  - SNOMEDCT#373887005 Negative for intraepithelial lesion or malignancy (finding)
+  effectiveDateTime: 2021-04-10
+
+
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2020-05-01
+
+- 
+ $iterate: *AscusOrLsilLastYear
+
+# <CIN1
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#165324008 Biopsy result normal (finding)
+  effectiveDateTime: 2018-12-29
+
+
+# HPV-
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#77379-6 Human papilloma virus 16 and 18 and 31+33+35+39+45+51+52+56+58+59+66+68 DNA [Interpretation] in Cervix
+  status: final
+  conclusionCode:
+  - SNOMEDCT#787724008 Human papillomavirus deoxyribonucleic acid test negative (finding)
+  effectiveDateTime: 2018-05-01
+
+-
+  $iterate: *HSILOrASCHCytologyFourYearsAgo
+
+
+# <CIN1
+- 
+  resourceType: DiagnosticReport
+  code: LOINC#65753-6 Cervix Pathology biopsy report
+  status: final
+  conclusionCode:
+  - SNOMEDCT#165324008 Biopsy result normal (finding)
+  effectiveDateTime: 2017-11-15
+
+
+
+results:
+  Recommendation:
+    short: 'Colposcopy'
+    date: '2021-06-02'
+    group: 'Managing Histology (I.4.4)'
+    details:
+    - 'Colposcopy is recommended.'
+    - 'If any test is abnormal during the observation period after CIN1 or less preceded by ASC-H or HSIL cytology, repeat colposcopy is recommended.'
+    id: '5.I.4.4.b'

@@ -79,6 +79,10 @@ define RecommendationForPatientsWithHistologicCancer:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // Special Populations Section K.1 Management of Patients Younger Than 25 Years
 
+define MostRecentCytologyCotestWasBeforeAge21:
+  Collate.MostRecentCytologyCotest.date is not null and
+  Collate.MostRecentCytologyCotest.date < Patient.birthDate + 21 years
+  
 define Associated18MonthHpvCotest:
   Coalesce(
     (Collate.SortedHpvReports) H
@@ -132,26 +136,69 @@ define Under25AndLowGradeCytologyResults:
       Collate.MostRecentCytologyCotestResult is null
     )
   )
+  
+define Under25AndNormalOrLowGradeCytologyResultsInPast3Years:
+  AgeInYears() < 25 and
+  Rare.MostRecentCytologyReport is not null and
+  Rare.MostRecentCytologyReport.date 3 years or less before Now() and
+  (
+    (
+       Rare.CytologyInterpretedAsLsil or
+       Rare.CytologyInterpretedAsAscus or
+       (Rare.CytologyInterpretedAsNilm and
+       Collate.MostRecentCytologyCotestResult is null)
+    ) or
+    (
+      Collate.MostRecentCytologyCotestResult = 'ASC-US' and
+      Collate.MostRecentHpvResult = 'HPV-positive'
+    )
+  )
+  
+define Under25AndPreviousNormalOrLowGradeCytologyResultsInPast3Years:
+  AgeInYears() < 25 and
+  Rare.SecondMostRecentCytologyReport is not null and
+  Rare.SecondMostRecentCytologyReport.date 3 years or less before Now() and
+  (
+    (
+       Rare.SecondMostRecentCytologyInterpretedAsLsil or
+       Rare.SecondMostRecentCytologyInterpretedAsAscus or
+       Rare.SecondMostRecentCytologyInterpretedAsNilm
+    ) or 
+    (
+      Rare.SecondMostRecentCytologyInterpretedAsAscus and
+      Associated18MonthHpvCotest.riskTableInput = 'HPV-positive'
+    )
+  )
 
 define Under25AndLowGradeCytologyResultsInPast3Years:
   AgeInYears() < 25 and
+  Rare.MostRecentCytologyReport is not null and
+  Rare.MostRecentCytologyReport.date 3 years or less before Now() and
   (
-    ( 
-      Rare.CytologyInterpretedAsLsil and
-      Rare.MostRecentCytologyReport is not null and
-      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    Rare.CytologyInterpretedAsLsil or
+    Rare.CytologyInterpretedAsAscus
+  )
+
+define Under25AndLowGradeCytologyResultsInPast5Years:
+  AgeInYears() < 25 and
+  Collate.ThirdMostRecentCytologyReport is not null and
+  Collate.ThirdMostRecentCytologyReport.date 5 years or less before Now() and
+  Collate.ThirdMostRecentCytologyReport.riskTableInput in {'ASC-US','LSIL'}
+
+define Under25AndNormalOrLowGradeCytologyResultsMoreThan3YearsAgo:
+  AgeInYears() < 25 and
+  Rare.MostRecentCytologyReport is not null and
+  Rare.MostRecentCytologyReport.date 3 years or more before Now() and
+  (
+    (
+       Rare.CytologyInterpretedAsLsil or
+       Rare.CytologyInterpretedAsAscus or
+       Rare.CytologyInterpretedAsNilm
     ) or
     (
-      Collate.MostRecentCytologyCotest is not null and
       Collate.MostRecentCytologyCotestResult = 'ASC-US' and
       Collate.MostRecentHpvResult = 'HPV-positive' and
-      Collate.MostRecentCytologyCotest.date 3 years or less before Now()
-    ) or
-    (
-      Rare.CytologyInterpretedAsAscus and
-      Collate.MostRecentCytologyCotestResult is null and
-      Rare.MostRecentCytologyReport is not null and
-      Rare.MostRecentCytologyReport.date 3 years or less before Now()
+      Collate.MostRecentCytologyCotest.date 3 years or more before Now()
     )
   )
 
@@ -236,6 +283,23 @@ define ShouldSwitchToRiskAt25Text:
 
 define RecommendationForPatientsYoungerThan25:
   case
+    when ( // Handle Special Case < 21 NILM & hrHPV positive
+      AgeInYears() < 21 and
+      MostRecentCytologyCotestWasBeforeAge21 and
+      Dash.MostRecentNilmCytology is not null and
+      Dash.MostRecentPositiveHpv is not null and 
+      CCF.CoincidentDiagnosticReports(Dash.MostRecentNilmCytology, Dash.MostRecentPositiveHpv)
+    ) then
+      {
+        short: 'Use Clinical Judgement',
+        date: Today(),
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'There is no specific recommendation for a NILM cytology and HPV + in a patient < 21 years of age. Use clinical judgement.',
+          'Routine screening should begin at age 21 with cytology alone every 3 years.'
+        },
+        id: '5.O.UNH.1.2'
+      }
     // Heading 3: Management of Histology of Less than CIN2 Preceded by Cytology ASC-H and HSIL in Patients Younger than 25 Year
     when ( // Heading 3.3
       AgeInYears() < 25 and
@@ -418,6 +482,54 @@ define RecommendationForPatientsYoungerThan25:
           },
         id: '5.K1.1.2.a'
       }
+    when ( // ASC-H or HSIL > 5 years ago and normal result
+      Under25AndNormalOrLowGradeCytologyResultsInPast3Years and
+      (
+        (
+          Rare.LastKnownCytologyInterpretedAsAscHInPast5Years is null and
+          Rare.LastKnownCytologyInterpretedAsAscHInPast10Years is not null
+        ) or
+        (
+          Rare.LastKnownCytologyInterpretedAsHsilInPast5Years is null and
+          Rare.LastKnownCytologyInterpretedAsHsilInPast10Years is not null 
+        )
+      ) and
+      (
+        Collate.MostRecentBiopsyReport is null or
+        Collate.MostRecentBiopsyReport.date before Rare.LastKnownCytologyInterpretedAsAscHInPast10Years.date
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Colposcopy is recommended if the previous result was high-grade cytology (ASC-H or a more severe cytologic interpretation) and the patient did not complete colposcopy.',
+          'Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.'
+          },
+        id: '5.K1.1.2.b'
+      }
+    when ( // ASC-H or HSIL > 5 years ago and normal result
+      AgeInYears() < 25 and
+      (
+        Rare.LastKnownCytologyInterpretedAsAscHInPast10Years is not null or
+        Rare.LastKnownCytologyInterpretedAsHsilInPast10Years is not null 
+      ) and
+      (
+        Collate.MostRecentBiopsyReport is null or
+        Collate.MostRecentBiopsyReport.date before Rare.LastKnownCytologyInterpretedAsAscHInPast10Years.date
+      )
+    ) then
+      {
+        short: 'Colposcopy',
+        date: Today(),
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Colposcopy is recommended if the previous result was high-grade cytology (ASC-H or a more severe cytologic interpretation) and the patient did not complete colposcopy.',
+          'Immediate treatment without histologic confirmation is not recommended for cytology HSIL or ASC-H.'
+        },
+        id: '5.K1.1.2.c'
+      }
     when ( // 4
       AgeInYears() < 25 and
       Rare.MostRecentCytologyReportWasWithinPastFiveYears and
@@ -461,8 +573,9 @@ define RecommendationForPatientsYoungerThan25:
         id: '5.K1.1.5.b'
       }
     when ( // 1.c
-      Under25AndLowGradeCytologyResults and
-      Under25And18MonthsAgoLowGradeCytologyResults
+      Under25AndLowGradeCytologyResultsInPast3Years and  // ASC-US or LSIL or ASC-US/HPV+
+      Under25AndPreviousNormalOrLowGradeCytologyResultsInPast3Years and   // NILM, ASC-US or LSIL
+      Under25AndLowGradeCytologyResultsInPast5Years   // ASC-US or LSIL
     ) then
       {
         short: 'Colposcopy',
@@ -473,17 +586,85 @@ define RecommendationForPatientsYoungerThan25:
           },
         id: '5.K1.1.1.c'
       }
+   when ( // 1.d
+      Under25AndNormalOrLowGradeCytologyResultsInPast3Years and
+      Collate.HasNoTreatmentAfterDate(Rare.MostRecentCytologyReport.date) and
+      not BiopsySinceMostRecentCytology and
+      Rare.SecondMostRecentCytologyReport is not null and
+      (
+        Rare.SecondMostRecentCytologyInterpretedAsLsil or
+        Rare.SecondMostRecentCytologyInterpretedAsAscus or
+        Rare.SecondMostRecentCytologyInterpretedAsNilm
+      ) and
+      Rare.SecondMostRecentCytologyReport.date less than 5 years before Now()
+    ) then
+      {
+        short: 'Cytology',
+        date: ToDate(Collate.MostRecentCytologyReportDate) + 1 year,
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Cervical cytology is recommended in 1 year from date of most recent test. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
+          },
+        id: '5.K1.1.1.d'
+      }                 
     when ( // 1.a
       Under25AndLowGradeCytologyResultsInPast3Years
     ) then
       {
         short: 'Cytology',
-        date: Collate.DateOfMostRecentReport + 1 year,
+        date: ToDate(Collate.MostRecentCytologyReportDate) + 1 year,
         group: 'Younger Than 25 (K.1.1)',
         details: {
           'Cervical cytology is recommended in 1 year from date of most recent test. If the patient will be age 25 in 1 year, use HPV testing or cotesting.'
           },
         id: '5.K1.1.1.a'
+      }
+    when ( // 1.e - special case for cotest with NILM cytology or NILM with old cytology
+      AgeInYears() < 25 and
+          Collate.MostRecentCytologyCotestResult is not null and
+          not Rare.PositiveHpv16or18Cotest and
+          Dash.MostRecentNilmCytology is not null and
+          Rare.MostRecentCytologyReport.date 3 years or less before Now()
+    ) then
+      {
+        short: 'Cytology',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Cervical cytology is recommended in 3 years from date of most recent test. If the patient will be age 25 at that time, use HPV testing or cotesting.',
+          'Primary HPV screening and cotesting are not recommended for patients younger than 25 years.'
+          },
+        id: '5.K1.1.1.e'
+      }
+    when ( // 1.f - special case for NILM cytology with old prior cytology 
+      AgeInYears() < 25 and
+      Dash.MostRecentNilmCytology is not null and
+      Rare.MostRecentCytologyReport.date 3 years or less before Now() and 
+      Rare.SecondMostRecentCytologyReport is not null and
+      Rare.SecondMostRecentCytologyReport.date more than 5 years before Now()
+    ) then
+      {
+        short: 'Cytology',
+        date: Collate.DateOfMostRecentReport + 3 years,
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Cervical cytology is recommended in 3 years from date of most recent test. If the patient will be age 25 at that time, use HPV testing or cotesting.'
+          },
+        id: '5.K1.1.1.f'
+      }
+    when ( // 1.b
+      Under25AndNormalOrLowGradeCytologyResultsMoreThan3YearsAgo and
+      Collate.HasNoTreatmentAfterDate(Rare.MostRecentCytologyReport.date) and
+      Collate.MostRecentBiopsyReport is null
+    ) then
+      {
+        short: 'Cytology',
+        date: Today(),
+        group: 'Younger Than 25 (K.1.1)',
+        details: {
+          'Cervical cytology is due now.'
+          },
+        id: '5.K1.1.1.b'
       }
     else
       null
@@ -777,18 +958,18 @@ define RecommendationForManagingPatientsAfterHysterectomy:
 define Recommendation:
   Coalesce(
     RecommendationForPatientsWithHistologicCancer,
-    RecommendationForPatientsYoungerThan25,
-    RecommendationForPregnantPatients,
+    RecommendationForPregnantPatients,    
     RecommendationForImmunosuppressedPatients,
+    RecommendationForPatientsYoungerThan25,
     RecommendationForManagingPatientsAfterHysterectomy
   )
 
 define WhichPopulationMadeTheRecommendation:
   case
     when RecommendationForPatientsWithHistologicCancer is not null then 6
-    when RecommendationForPatientsYoungerThan25 is not null then 5
     when RecommendationForPregnantPatients is not null then 4
     when RecommendationForImmunosuppressedPatients is not null then 3
+    when RecommendationForPatientsYoungerThan25 is not null then 5
     when RecommendationForManagingPatientsAfterHysterectomy is not null then 2
     else null
   end
