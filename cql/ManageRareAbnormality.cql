@@ -1614,7 +1614,7 @@ define RecommendationForHistologyResults:
         details: {
           'Repeat age-based screening with cytology, cotesting or primary HPV testing in 2 to 4 months is recommended.'
         },
-        id: '5.I.4.4.b'
+        id: '5.I.4.4.c'
       }      
     when ( // I4.4
       AgeInYears() >= 25 and
