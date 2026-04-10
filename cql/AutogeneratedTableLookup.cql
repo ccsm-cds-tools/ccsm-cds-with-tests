@@ -73,15 +73,7 @@ define function ScreeningText(hpvResult String, cytoResult String, spacerString 
     else
       noHistoryString
 
-define function GetGeneralScreeningManagement(prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  ( GetRowTable1(prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
-
-define function GetRowTable1(prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+define function GetRowTable1GeneralScreeningManagement(prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
     Coalesce( // Case 1: Current cytology is fully specified
       GeneralScreeningTable T
@@ -186,28 +178,8 @@ define function excludeFromTable2(prev2HpvVal String, prev2PapVal String, currPa
     ) and currPapVal != 'HSIL+'
   ) 
         
-define function GetSurveillanceManagement(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  Coalesce(
-    ( GetRowTable2(prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    where R.action is not null
-      return {
-        action: R.action,
-        riskNow: R.riskNow,
-        risk5yr: R.risk5yr
-      },
-    (if excludeFromTable2(prev2HpvVal, prev2PapVal, currPapVal) then null 
-    else
-      ( GetRowTable2(null, null, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-      where R.action is not null
-        return {
-          action: R.action,
-          riskNow: R.riskNow,
-          risk5yr: R.risk5yr
-        }
-    ) 
-  )
 
-define function GetMatchingRowFromTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+define function GetRowTable2SurveillanceManagement(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
     _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal),
     (if excludeFromTable2(prev2HpvVal, prev2PapVal, currPapVal) then null 
@@ -215,9 +187,6 @@ define function GetMatchingRowFromTable2(prev2HpvVal String, prev2PapVal String,
        _GetRowTable2(null, null, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
     )
   )
-
-define function GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  _GetRowTable2(AnyHpv(prev2HpvVal), prev2PapVal, AnyHpv(prevHpvVal), prevPapVal, currHpvVal, currPapVal)
 
 define function _GetRowTable2(prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
@@ -337,15 +306,7 @@ define function AnyHpv(hpvVal String):
   else if hpvVal = 'HPV16-, HPV18+' then 'HPV-positive'
   else hpvVal
 
-define function GetColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
-  ( GetRowTable3(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
-
-define function GetRowTable3(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
+define function GetRowTable3ColposcopyResultsManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String):
   Coalesce(
     Coalesce( // Case 1: Combined HPV and Cytology results separated by a space
       ColposcopyResultsTable T
@@ -505,15 +466,7 @@ define function AscusLsilPap(currPapVal String):
   else 
     'NULL'
 
-define function GetPostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  ( GetRowTable4(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
-
-define function GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+define function GetRowTable4PostColposcopyManagement(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   _GetRowTable4(preBiopsyHpvVal, preBiopsyPapVal, biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, AnyHpv(currHpvVal), currPapVal)
 
 define function _GetRowTable4(preBiopsyHpvVal String, preBiopsyPapVal String, biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
@@ -677,15 +630,7 @@ define function LongTermSurveillance(prev2HpvVal String, prev2PapVal String, pre
     else null
   end
 
-define function GetPostTreatmentManagement(biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
-  ( GetRowTable5(biopsyVal, prev2HpvVal, prev2PapVal, prevHpvVal, prevPapVal, currHpvVal, currPapVal) ) R
-    return {
-      action: R.action,
-      riskNow: R.riskNow,
-      risk5yr: R.risk5yr
-    }
-
-define function GetRowTable5(biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
+define function GetRowTable5PostTreatmentManagement(biopsyVal String, prev2HpvVal String, prev2PapVal String, prevHpvVal String, prevPapVal String, currHpvVal String, currPapVal String):
   Coalesce(
     Coalesce( // Case 1: Long-term surveillance
       PostTreatmentTable T

@@ -483,6 +483,32 @@
                } ]
             }
          }, {
+            "name" : "RowTable1",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetRowTable1GeneralScreeningManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "SecondMostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "LookUpTable1",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -541,7 +567,62 @@
                   } ]
                },
                "then" : {
-                  "name" : "GetGeneralScreeningManagement",
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "action",
+                     "value" : {
+                        "path" : "action",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable1",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "riskNow",
+                     "value" : {
+                        "path" : "riskNow",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable1",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "risk5yr",
+                     "value" : {
+                        "path" : "risk5yr",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable1",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "AdjacentRowsTable1",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "LookUpTable1",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "GetAdjacentRowsTable1",
                   "libraryName" : "RiskTableLookup",
                   "type" : "FunctionRef",
                   "operand" : [ {
@@ -563,61 +644,90 @@
                   } ]
                },
                "else" : {
-                  "name" : "DefaultLookupTableReturnValue",
-                  "type" : "ExpressionRef"
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
                }
-            }
-         }, {
-            "name" : "RowTable1",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetRowTable1",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "SecondMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "AdjacentRowsTable1",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetAdjacentRowsTable1",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "SecondMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "GeneralScreeningManagementRecommendation",
@@ -648,6 +758,40 @@
                }
             }
          }, {
+            "name" : "RowTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetRowTable2SurveillanceManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ThirdMostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ThirdMostRecentCytologyCotestResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "SecondMostRecentCytologyCotestResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentCytologyCotestResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "LookUpTable2",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -670,7 +814,62 @@
                   } ]
                },
                "then" : {
-                  "name" : "GetSurveillanceManagement",
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "action",
+                     "value" : {
+                        "path" : "action",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "riskNow",
+                     "value" : {
+                        "path" : "riskNow",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "risk5yr",
+                     "value" : {
+                        "path" : "risk5yr",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable2",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "AdjacentRowsTable2",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "LookUpTable2",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "GetAdjacentRowsTable2",
                   "libraryName" : "RiskTableLookup",
                   "type" : "FunctionRef",
                   "operand" : [ {
@@ -700,77 +899,90 @@
                   } ]
                },
                "else" : {
-                  "name" : "DefaultLookupTableReturnValue",
-                  "type" : "ExpressionRef"
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
                }
-            }
-         }, {
-            "name" : "RowTable2",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetMatchingRowFromTable2",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ThirdMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "AdjacentRowsTable2",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetAdjacentRowsTable2",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ThirdMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyCotestResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "SurveillanceManagementRecommendation",
@@ -897,6 +1109,28 @@
                }
             } ]
          }, {
+            "name" : "RowTable3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "name" : "GetRowTable3ColposcopyResultsManagement",
+               "libraryName" : "RiskTableLookup",
+               "type" : "FunctionRef",
+               "operand" : [ {
+                  "name" : "ReferringHpvResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "ReferringCytologyResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               }, {
+                  "name" : "MostRecentBiopsyResult",
+                  "libraryName" : "Collate",
+                  "type" : "ExpressionRef"
+               } ]
+            }
+         }, {
             "name" : "LookUpTable3",
             "context" : "Patient",
             "accessLevel" : "Public",
@@ -916,7 +1150,62 @@
                   } ]
                },
                "then" : {
-                  "name" : "GetColposcopyResultsManagement",
+                  "type" : "Tuple",
+                  "element" : [ {
+                     "name" : "action",
+                     "value" : {
+                        "path" : "action",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable3",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "riskNow",
+                     "value" : {
+                        "path" : "riskNow",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable3",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  }, {
+                     "name" : "risk5yr",
+                     "value" : {
+                        "path" : "risk5yr",
+                        "type" : "Property",
+                        "source" : {
+                           "name" : "RowTable3",
+                           "type" : "ExpressionRef"
+                        }
+                     }
+                  } ]
+               },
+               "else" : {
+                  "name" : "DefaultLookupTableReturnValue",
+                  "type" : "ExpressionRef"
+               }
+            }
+         }, {
+            "name" : "AdjacentRowsTable3",
+            "context" : "Patient",
+            "accessLevel" : "Public",
+            "expression" : {
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "LookUpTable3",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "GetAdjacentRowsTable3",
                   "libraryName" : "RiskTableLookup",
                   "type" : "FunctionRef",
                   "operand" : [ {
@@ -934,53 +1223,90 @@
                   } ]
                },
                "else" : {
-                  "name" : "DefaultLookupTableReturnValue",
-                  "type" : "ExpressionRef"
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
                }
-            }
-         }, {
-            "name" : "RowTable3",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetRowTable3",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
-            }
-         }, {
-            "name" : "AdjacentRowsTable3",
-            "context" : "Patient",
-            "accessLevel" : "Public",
-            "expression" : {
-               "name" : "GetAdjacentRowsTable3",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
             }
          }, {
             "name" : "ColposcopyResultsManagementRecommendation",
@@ -1011,11 +1337,11 @@
                }
             }
          }, {
-            "name" : "LookUpTable4",
+            "name" : "RowTable4",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetPostColposcopyManagement",
+               "name" : "GetRowTable4PostColposcopyManagement",
                "libraryName" : "RiskTableLookup",
                "type" : "FunctionRef",
                "operand" : [ {
@@ -1057,49 +1383,41 @@
                } ]
             }
          }, {
-            "name" : "RowTable4",
+            "name" : "LookUpTable4",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetRowTable4",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "action",
+                  "value" : {
+                     "path" : "action",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable4",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+                  "name" : "riskNow",
+                  "value" : {
+                     "path" : "riskNow",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable4",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+                  "name" : "risk5yr",
+                  "value" : {
+                     "path" : "risk5yr",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable4",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                } ]
             }
          }, {
@@ -1107,46 +1425,144 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetAdjacentRowsTable4",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "ReferringHpvResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ReferringCytologyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultPostBiopsy",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "LookUpTable4",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "GetAdjacentRowsTable4",
+                  "libraryName" : "RiskTableLookup",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "ReferringHpvResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ReferringCytologyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentHpvResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentHpvResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentHpvResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentCytologyResultPostBiopsy",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
+               }
             }
          }, {
             "name" : "PostColposcopyManagementRecommendation",
@@ -1181,11 +1597,11 @@
                }
             }
          }, {
-            "name" : "LookUpTable5",
+            "name" : "RowTable5",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetPostTreatmentManagement",
+               "name" : "GetRowTable5PostTreatmentManagement",
                "libraryName" : "RiskTableLookup",
                "type" : "FunctionRef",
                "operand" : [ {
@@ -1219,41 +1635,41 @@
                } ]
             }
          }, {
-            "name" : "RowTable5",
+            "name" : "LookUpTable5",
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetRowTable5",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+               "type" : "Tuple",
+               "element" : [ {
+                  "name" : "action",
+                  "value" : {
+                     "path" : "action",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable5",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                }, {
-                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+                  "name" : "riskNow",
+                  "value" : {
+                     "path" : "riskNow",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable5",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                }, {
-                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
+                  "name" : "risk5yr",
+                  "value" : {
+                     "path" : "risk5yr",
+                     "type" : "Property",
+                     "source" : {
+                        "name" : "RowTable5",
+                        "type" : "ExpressionRef"
+                     }
+                  }
                } ]
             }
          }, {
@@ -1261,38 +1677,136 @@
             "context" : "Patient",
             "accessLevel" : "Public",
             "expression" : {
-               "name" : "GetAdjacentRowsTable5",
-               "libraryName" : "RiskTableLookup",
-               "type" : "FunctionRef",
-               "operand" : [ {
-                  "name" : "MostRecentBiopsyResult",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "ThirdMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "SecondMostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentHpvResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               }, {
-                  "name" : "MostRecentCytologyResultAfterTreatment",
-                  "libraryName" : "Collate",
-                  "type" : "ExpressionRef"
-               } ]
+               "type" : "If",
+               "condition" : {
+                  "type" : "Not",
+                  "operand" : {
+                     "type" : "IsNull",
+                     "operand" : {
+                        "name" : "LookUpTable5",
+                        "type" : "ExpressionRef"
+                     }
+                  }
+               },
+               "then" : {
+                  "name" : "GetAdjacentRowsTable5",
+                  "libraryName" : "RiskTableLookup",
+                  "type" : "FunctionRef",
+                  "operand" : [ {
+                     "name" : "MostRecentBiopsyResult",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "ThirdMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "SecondMostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentHpvResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  }, {
+                     "name" : "MostRecentCytologyResultAfterTreatment",
+                     "libraryName" : "Collate",
+                     "type" : "ExpressionRef"
+                  } ]
+               },
+               "else" : {
+                  "type" : "As",
+                  "operand" : {
+                     "type" : "Null"
+                  },
+                  "asTypeSpecifier" : {
+                     "type" : "ListTypeSpecifier",
+                     "elementType" : {
+                        "type" : "TupleTypeSpecifier",
+                        "element" : [ {
+                           "name" : "action",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "history",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev2",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "prev1",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "preColposcopyResult",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "postColposcopyPastHistory",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "referral",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "biopsy",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "hpv",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "cyto",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}String",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "riskNow",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        }, {
+                           "name" : "risk5yr",
+                           "elementType" : {
+                              "name" : "{urn:hl7-org:elm-types:r1}Decimal",
+                              "type" : "NamedTypeSpecifier"
+                           }
+                        } ]
+                     }
+                  }
+               }
             }
          }, {
             "name" : "PostTreatmentManagementRecommendation",
