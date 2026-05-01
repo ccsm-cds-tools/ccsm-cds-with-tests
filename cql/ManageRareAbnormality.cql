@@ -1521,7 +1521,7 @@ define RecommendationForHistologyResults:
     ) then
       {
         short: 'Surveillance 3-year follow-up',
-        date: Today(),
+        date: ToDate(Collate.MostRecentHpvReport.date) + 3 years,
         group: 'Managing Histology (I.4.3.2)',
         details: {
           'Primary hrHPV testing or cotesting every 3 years is recommended for at least 25 years, even if this is beyond the age of 65 years. Surveillance may continue for as long as the patient remains in good health.'
@@ -1578,7 +1578,7 @@ define RecommendationForHistologyResults:
     ) then
       {
         short: 'Surveillance 1-year follow-up',
-        date: Today(),
+        date: ToDate(Collate.MostRecentHpvReport.date) + 1 year,
         group: 'Managing Histology (I.4.3.1)',
         details: {
           'Primary hrHPV testing or cotesting is recommended in 1 year from date of most recent test.'
@@ -2090,7 +2090,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
     ) then
       {
         short: 'Surveillance 6-month follow-up',
-        date: Today(),
+        date: ToDate(MostRecentTreatmentDate) + 6 months,
         group: 'Management Surveillance (J.2.1)',
         details: {
           'Primary HPV testing or cotesting is preferred at 6 months regardless of the margin status of the excisional specimen.',
@@ -2127,7 +2127,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
     ) then
       {
         short: 'Surveillance 3-year follow-up',
-        date: Today(),
+        date: ToDate(Collate.MostRecentHpvReport.date) + 3 years,
         group: 'Management Surveillance (J.3.2)',
         details: {
           'Primary HPV testing or cotesting at 3-year intervals is recommended for at least 25 years after treatment of high-grade histology.',
@@ -2142,7 +2142,7 @@ define RecommendationForSurveillanceAfterAbnormalities:
     ) then
       {
         short: 'Surveillance 3-year follow-up',
-        date: Today(),
+        date: ToDate(Collate.MostRecentHpvReport.date) + 3 years,
         group: 'Management Surveillance (J.3.2)',
         details: {
           'Continued surveillance with HPV testing or cotesting at 3-year intervals is recommended and may continue as long as the patient is in reasonably good health.'
